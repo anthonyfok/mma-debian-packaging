@@ -1,0 +1,4 @@
+mma usr/bin
+lib usr/share/mma
+includes usr/share/mma
+modules/*.py usr/share/mma/modules

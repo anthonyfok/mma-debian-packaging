@@ -1,0 +1,74 @@
+.TH MMA 1
+.SH NAME
+mma \- musical midi accompaniment generator
+.SH SYNOPSIS
+.PP
+.B mma
+[
+.I options
+]
+.I INFILE
+[
+.I options
+]
+.SH DESCRIPTION
+MMA creates midi tracks for a soloist to perform over from a user
+supplied file containing chords and MMA directives.
+.SH OPTIONS
+.TP
+\fB\-d\fR
+Enable LOTS of debugging messages
+.TP
+\fB\-p\fR
+Display patterns as they are defined
+.TP
+\fB\-s\fR
+Display sequence info during run
+.TP
+\fB\-r\fR
+Display running progress
+.TP
+\fB\-w\fR
+Disable warning messages
+.TP
+\fB\-n\fR
+Disable generation of midi output
+.TP
+\fB\-e\fR
+Show parsed/expanded lines
+.TP
+\fB\-c\fR
+Display default channel assignments
+.HP
+\fB\-m\fR<x> Set maxBars (default == 500)
+.TP
+\fB\-o\fR
+Show complete filenames when opened
+.TP
+\fB\-g\fR
+create Groove dependency files
+.TP
+\fB\-v\fR
+Display version number
+.HP
+\fB\-D\fR<> Extract documentation
+.IP
+<x> extract doc blocks from file
+.IP
+<n> Note/chord table
+.IP
+<dm> Midi drum names (by MIDI value)
+.IP
+<da> Midi drum names (alphabetical)
+.IP
+<im> Inst. names (ab MIDI value)
+.IP
+<ia> Inst. names (alphabetical)
+.TP
+\fB\-f\fR<file>
+Set output Filename
+.SH AUTHOR
+Bob van der Poel <bvdp@universe.com>
+.SH LICENSE
+mma is released under the GNU General Public License.
+

@@ -1,0 +1,16 @@
+Source: mma
+Section: sound
+Priority: optional
+Maintainer: Raphael Goulais <rafou@debian.org>
+Build-Depends-Indep: debhelper (>= 4.1.67), python, python2.3
+Standards-Version: 3.6.1
+
+Package: mma
+Architecture: all
+Depends: ${python:Depends}
+Description: Musical Midi Accompaniment generator
+ MMA creates midi tracks for a soloist to perform over from a user
+ supplied file containing chords and MMA directives.
+ .
+ Homepage: http://mypage.uniserve.com/~bvdp/mma/
+
