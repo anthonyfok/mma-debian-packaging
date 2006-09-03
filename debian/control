@@ -2,8 +2,9 @@ Source: mma
 Section: sound
 Priority: optional
 Maintainer: Raphael Goulais <rafou@debian.org>
-Build-Depends-Indep: debhelper (>= 4.1.67), python, python2.3
-Standards-Version: 3.6.1
+Build-Depends: debhelper (>= 4.1.67)
+Build-Depends-Indep: python-dev, python-support (>= 0.4)
+Standards-Version: 3.7.2
 
 Package: mma
 Architecture: all
