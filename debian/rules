@@ -5,8 +5,6 @@
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
-export DH_COMPAT=4
-export DH_OPTIONS
 
 build: build-stamp
 
@@ -35,8 +33,6 @@ binary-indep: build install
 	dh_installchangelogs CHANGES
 	dh_installdocs
 	dh_installexamples
-#	dh_install
-#	dh_installmime
 	dh_installman
 	dh_link
 	dh_strip

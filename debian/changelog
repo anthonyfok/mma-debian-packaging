@@ -1,3 +1,16 @@
+mma (0.12-2) unstable; urgency=low
+
+  * QA upload.
+    + Set maintainer to Debian QA Group <packages@qa.debian.org>
+  * Acknowledge NMUs.
+  * Remove unused debhelper commands from rules.
+  * Move Homepage from package description to control header.
+  * Bump debhelper build-dep to 5.
+  * Move DH_COMPAT to debian/compat and set to 5.
+  * Bump Standards Version to 3.7.3.
+
+ -- Barry deFreese <bddebian@comcast.net>  Sun, 10 Feb 2008 20:02:26 -0500
+
 mma (0.12-1.1) unstable; urgency=low
 
   * Non-maintainer upload.
