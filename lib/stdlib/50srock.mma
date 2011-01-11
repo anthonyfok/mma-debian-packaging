@@ -1,0 +1,170 @@
+// 50srock
+
+Begin Doc
+
+	Most older rock tunes accept these. Try it with songs like 
+    "There's a Kind Of Hush".
+
+End
+
+Author Bob van der Poel 
+
+SeqClear
+Time 4
+Timesig 4 4
+Include stdpats
+
+//////// Additional patterns
+
+
+/////////////
+
+SeqSize 2
+
+Begin Drum-Kick
+	Tone KickDrum1
+	Sequence D1234 
+	Volume mp
+	Rvolume 5
+	Rtime 5
+End
+
+Begin Drum-Clap
+	Tone HandClap
+	Sequence D24
+	Volume pp
+	Rskip 5
+	Rvolume 5
+	Rtime 5
+End
+
+Begin Drum-Snare
+	Tone SnareDrum2
+	Sequence D24 { D24; 3.75 0 80}
+	SeqRnd
+	Volume p
+	Rvolume 5
+	Rtime 5
+End
+
+Begin Drum-HH
+	Tone ClosedHiHat
+	Sequence { D1234; 2.75 0 90; 4.75 0 90}
+	Volume mp
+	Rvolume 5
+	Rtime 5
+	Volume mf
+End
+
+Begin Walk
+	Voice AcousticBass
+	Sequence    W1234  { W1234; 4.75 8 90 }
+	Octave 3
+	Articulate 50
+	Accent 1 10 3 10
+	Rvolume 20
+	Rtime 10
+	Volume mf
+End
+
+Begin Bass-Sax
+	Voice TenorSax
+	Sequence     B1    B3
+	Articulate 90
+	Octave 4
+	Rvolume 30
+	Volume mp
+	Rtime 10
+End
+
+
+Begin Chord-Piano
+	Voice Piano3
+	Sequence  { C1234; 1.75 8 90 ; 3.75 8 90} { C14; 1.75 8 90; 3.75 8 90 }
+	Accent 1 20 3 20
+	Voicing   Mode=Optimal
+	DupRoot -1
+	Articulate 74
+	Rvolume 20
+	Rskip 10
+	Rtime 10
+	Volume mp
+	Octave 5
+End
+
+Begin Chord-Sax
+	Voice TenorSax
+	Sequence    { C2; C3 Shift .75 }   { C1; C3 Shift .75 }
+	Voicing  Mode=Optimal
+	SeqRnd
+	Articulate 60
+	Octave 5
+	Rvolume 30
+	Volume mp
+	Rtime 10
+	Rskip 10
+End
+
+
+DefGroove 50sRock               Your basic rock beat from the 50s.
+
+
+//////// Add in sustained strings
+
+Begin Bass-Sus
+	Voice TremoloStrings
+	Sequence Sus1 Sus5
+	Unify On
+	SeqRnd
+	Volume mp
+	Articulate 100
+End
+
+DefGroove 50sRockSus           Sustained strings added.
+
+
+Groove 50sRock
+
+Begin Drum-Clap
+	Tone HandClap
+	Sequence   D24
+	Rskip 20
+	Rvolume 10
+	Rtime 10
+	Volume mp
+End
+
+Drum-Snare 	Sequence  D24 { D24; 3.5 0 80}
+Drum-HH     Sequence  { D1234 ; 2.5 0 90; 4.5 0 90}
+Walk        Sequence  W1234  { W1234; 4.5 8 90 }
+Chord-Piano	Sequence  C134 C14
+Chord-Sax   Sequence  C23  C13
+
+DefGroove 50sRock1   Cut out most of the shuffle. Good for short \
+                     contrast sections.
+
+Bass-Sus  Groove 50sRockSus
+
+DefGroove 50sRock1Sus   Unshuffled 50s with sustained strings.
+
+
+////////// Simple Ending
+
+Groove 50sRock
+
+Drum-Snare 	 Sequence D24 
+Drum-HH      Sequence D1234
+Walk         Sequence -
+Chord-Sax    Sequence C13
+Bass-Sax     Sequence -
+
+Begin Bass
+	Voice AcousticBass
+	Sequence B13
+	Volume ff
+	Articulate 80
+End
+
+DefGroove 50sRockEnd          Simple, single bar ending.
+
+

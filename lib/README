@@ -1,0 +1,22 @@
+
+This directory should contain all of the library files (or templates)
+which MMA uses. The directory 'stdlib' should always be present. It
+contains the templates distributed with MMA.
+
+Other, user supplied, template files should be placed in
+separate directories. For example, if you create your
+own polka library file, you might want to create the
+directory 'mymma' and place the file(s) there.
+
+If you do this, make sure that you update the mma library
+database with the mma -g command, or force the processing
+of your files with the Use directive.
+
+The file MMADIR is a binary database file produced with:
+
+	mma -g
+	
+don't try to modify it on your own :)
+
+June/2004, bvdp
+

@@ -1,0 +1,470 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Sequences</TITLE>
+<META NAME="description" CONTENT="Sequences">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html337"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html335"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html329"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html338"
+  HREF="node6.html">Grooves</A>
+<B> Up:</B> <A NAME="tex2html336"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html330"
+  HREF="node4.html">Patterns</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html339"
+  HREF="node5.html#SECTION00510000000000000000">SeqClear</A>
+<LI><A NAME="tex2html340"
+  HREF="node5.html#SECTION00520000000000000000">SeqRnd</A>
+<LI><A NAME="tex2html341"
+  HREF="node5.html#SECTION00530000000000000000">SeqNoRnd</A>
+<LI><A NAME="tex2html342"
+  HREF="node5.html#SECTION00540000000000000000">SeqSize</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00500000000000000000"></A>
+<A NAME="sec-seqs"></A>
+<BR>
+Sequences
+</H1> 
+
+<P>
+Patterns by themselves don't do much good. They have to be combined into
+sequences to be of any use to you or to <I><B>MMA</B></I>.
+
+<P>
+A <I>Sequence</I> command sets the pattern(s) used in creating 
+each track in your song:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Track Sequence Pattern1 Pattern2 ... </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+``Track'' can be any valid track name: ``Chord'', ``Walk'', ``Walk-Sus'', ``Arpeggio-88'', etc.
+
+<P>
+All pattern names used when setting a sequence need to be defined
+when this command is issued; or you can use what appears to be
+a pattern definition right in the sequence command by enclosing the pattern definition in a set of  curly brackets ``{ }''.
+
+<P>
+
+<DIV ALIGN="CENTER">
+
+<P><A NAME="eg:seq1"></A></P>      
+	<TABLE CELLSPACING=0 CELLPADDING=10" BGCOLOR="#dddddd" BORDER=3><TR> <TD>
+	
+      	<TABLE  WIDTH="100%"><CAPTION ALIGN="BOTTOM"><STRONG><B>Example</B> 5.1:</STRONG>
+Simple Sequence</CAPTION>
+<TR><TD> 
+      	    <BR>
+<BR>
+      	    
+	
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SeqClear 
+<BR>
+SeqSize 2 
+<BR>
+Begin Drum 
+<BR>	&nbsp;&nbsp;&nbsp; Sequence Snare4 
+<BR>	&nbsp;&nbsp;&nbsp; Tone Snaredrum1 
+<BR>
+End 
+<BR>
+Begin Drum-1 
+<BR>	&nbsp;&nbsp;&nbsp; Sequence Bass1 Bass2 
+<BR>	&nbsp;&nbsp;&nbsp; Tone KickDrum2 
+<BR>
+End 
+<BR>
+Chord Sequence Broken8  
+<BR>
+Bass Sequence Broken8 
+<BR>
+Arpeggio Sequence { 1 1 100 * 8 } { 1 1 80 * 4 }  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+      	    <BR>
+<BR>
+      	    </TD></TR>
+</TABLE>
+
+<P>
+ 
+
+	</TD></TR></TABLE> 
+ 
+</DIV>
+
+<P>
+Example <A HREF="#eg:seq1">5.1</A> creates a 2 bar pattern. The Drum, Chord and Bass patterns repeat on every bar; the Drum-1 sequence repeats after 2 bars. Note how the Arpeggio pattern is defined at run-time. <A NAME="tex2html29"
+  HREF="#foot1727"><SUP>5.1</SUP></A>
+<P>
+If there are fewer patterns than <I>SeqSize</I>,  the sequence will be filled
+out to correct size. If the number of patterns used is greater than <I>SeqSize</I> (see Chapter <A HREF="node17.html#sec-directives">17</A>) a warning message will be printed and the pattern list will be truncated.
+
+<P>
+When defining longer sequences, you can use the ``repeat'' symbol, a single ``/'', to save typing. For example, the following two lines are equivalent:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Sequence Bass1 Bass1 Bass2 Bass2 
+<BR>
+Bass Sequence Bass1 / Bass2 /  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+<A NAME="sequence-clear"></A>
+<P>
+The special pattern name ``-'' (no quotes, just a single hyphen), or a single
+``z'' can be used to turn a track off. For example, if we have set the
+sequences in example <A HREF="#eg:seq1">5.1</A> and decide to delete the Bass halfway
+though the song we could:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Sequence -  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The special sequences, ``-'' or``z'', are also the equivalent of a rest or
+``tacet'' sequence. For example, in defining a 4 bar sequence with a 1-5 bass
+pattern on the first 3 bars and a walking bass on bar 4 we might do something
+like:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Sequence Bass4-13 / / z 
+<BR>
+Walk Sequence z  / / Walk4-4  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+When a sequence is created a series of pointers to the existing patterns
+are created. If you change the definition of a particular pattern
+later in your file the new definition will have <I>no</I> effect
+on your exisiting sequences.
+
+<P>
+Sequences are the workhorse of <I><B>MMA</B></I>. With them you can set up many interesting
+patterns and variations. This chapter should certainly give more detail and
+many more examples.
+
+<P>
+The following commands help manipulate sequences in your creations:
+
+<P>
+
+<H1><A NAME="SECTION00510000000000000000"></A>  <A NAME="sec-seqclear"></A>
+<BR>
+SeqClear
+</H1>
+
+<P>
+This command clears all existing sequences from memory. It is useful
+when defining a new sequence and you want to be sure that no ``leftover''
+sequences are active. The command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SeqClear </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+deletes all sequence information.
+
+<P>
+Alternately, the command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum SeqClear </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+deletes <B>all</B> drum sequences. This includes the track ``Drum'', ``Drum1'', etc.
+
+<P>
+If you use a sub-track:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-Piano SeqClear </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+only the sequence for that track is cleared.<A NAME="tex2html30"
+  HREF="#foot1782"><SUP>5.2</SUP></A>
+<P>
+In addition to clearing the sequence pattern, the following other settings are
+restored to a default condition:
+
+<P>
+
+<UL>
+<LI>Track Invert setting,
+</LI>
+<LI>Track Sequence Rnd setting,
+</LI>
+<LI>Track MidiSeq setting,
+</LI>
+<LI>Track octave,
+</LI>
+<LI>Track voice,
+</LI>
+<LI>Track Rvolume,
+</LI>
+<LI>Track Volume,
+</LI>
+<LI>Track RTime,
+</LI>
+<LI>Track Strum.
+</LI>
+</UL>
+
+<P>
+CAUTION: It is not possible to clear only <I>Drum</I>, <I>Chord</I>, etc. using  this command. Use the ``-'' option. 
+
+<P>
+
+<H1><A NAME="SECTION00520000000000000000">
+SeqRnd</A>
+</H1> 
+
+<P>
+Normally, the patterns used for each bar are selected in order. For example, if you had a sequence:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum-2 Sequence P1 P2 P3 z </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+bar 1 would use ``P1'', bar 2 ``P2'', etc. However, if you set <I>SeqRnd</I> for a specific track, the pattern used <I>for that track</I> will be selected at random from the sequence list. Note that 'Z' bars <B>are</B> included in the selection. Due to the nature of random selection, it is quite possible to get a several bars with the same (or in the above case, no) pattern.
+
+<P>
+You can only use this command in a track or in a global context:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum SeqRnd </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+or
+	
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SeqRnd </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The latter example is interesting. Let us assume you have the following sequences defined (the contents of the patterns don't matter for the purpose of the example):
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord C1 C2 C3 C4 
+<BR>
+Bass  B1 B2 B3 z 
+<BR>
+Walk  z / / W1  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The idea of the <I>Bass</I> and <I>Walk</I> sequences is to play <I>either</I> one of the patterns, never both. If you were to randomize the tracks you might get a bar with no bass at all, one of the two, or none. However, if you set <I>SeqRnd</I> outside the tracks, then you will have one of the following patterns:
+
+<P>
+<BLOCKQUOTE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">C1</TD>
+<TD ALIGN="LEFT">B1</TD>
+<TD ALIGN="LEFT">z</TD>
+</TR>
+<TR><TD ALIGN="LEFT">C2</TD>
+<TD ALIGN="LEFT">B2</TD>
+<TD ALIGN="LEFT">z</TD>
+</TR>
+<TR><TD ALIGN="LEFT">C3</TD>
+<TD ALIGN="LEFT">B3</TD>
+<TD ALIGN="LEFT">z</TD>
+</TR>
+<TR><TD ALIGN="LEFT">C4</TD>
+<TD ALIGN="LEFT">z</TD>
+<TD ALIGN="LEFT">W1</TD>
+</TR>
+</TABLE>
+</BLOCKQUOTE>
+
+<P>
+A <I>SeqRnd</I> is cleared by a <I>SeqClear</I> or a <I>SeqNoRnd</I> directive.
+
+<P>
+If you have set <I>Invert</I> for a track, the inversions will follow the patterns. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Sequence C1 C2 C3 C4 
+<BR>
+Invert 0 1 2 3
+		SeqRnd
+	 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Whenever pattern ``C1'' is selected it will be used with inversion 0, ``C2'' will always be inversion 1, etc.
+
+<P>
+
+<H1><A NAME="SECTION00530000000000000000">
+SeqNoRnd</A>
+</H1> 
+
+<P>
+This command sets the sequence order for the specified track to normal. It undoes the effect of the <I>SeqRnd</I> directive.  Example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum-3 SeqNoRnd </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H1><A NAME="SECTION00540000000000000000">
+SeqSize</A>
+</H1> 
+
+<P>
+The number of bars in a sequence are set with the ``SeqSize'' command. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SeqSize 4 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+sets it to 4 bars. The SeqSize applies to all tracks.
+
+<P>
+This command resets the <B>sequence counter</B> to 1.
+
+<P>
+If some sequences have already been defined, they will be truncated or expanded to the new size. Truncation is done by removing patterns from the end of the sequence; expansion is done by duplicating the sequence until it is long enough.
+
+<P>
+<BR><HR><H4>Footnotes</H4>
+<DL>
+<DT><A NAME="foot1727">... run-time.</A><A
+ HREF="node5.html#tex2html29"><SUP>5.1</SUP></A></DT>
+<DD>If you run <I><B>MMA</B></I> with the ``-s''  option you'll see pattern names in the format  ``_1''. The leading underscore indicates that the pattern was dynamically created in the sequence.
+
+</DD>
+<DT><A NAME="foot1782">...</A><A
+ HREF="node5.html#tex2html30"><SUP>5.2</SUP></A></DT>
+<DD>It is probably easier to use the command:
+		
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-Piano Sequence - </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+	if that is what you want to do. In this case <B>only</B> 
+	sequence pattern is cleared. 
+
+</DD>
+</DL><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html337"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html335"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html329"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html338"
+  HREF="node6.html">Grooves</A>
+<B> Up:</B> <A NAME="tex2html336"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html330"
+  HREF="node4.html">Patterns</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,156 @@
+
+// slowblues
+
+
+Begin Doc
+
+	A variation of "blues.mma" for slower tempos.
+
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 4
+Timesig 4 4
+Include stdpats
+
+////////////////////////////
+/// Pattern definitions
+
+Begin Walk Define
+	W1+34   1 4 80; 2.5 8 70; 3 4 80; 4 4 80 
+End
+
+
+/// SlowBlues
+
+SeqSize 4
+
+Begin Chord
+	Sequence	  C1234  {C124; 3.5 8 70 }  C1234  {C13 ; 3.5 8 70; 4 4 80}
+	Voice JazzGuitar
+	Voicing    Mode=Optimal
+	RVolume 10
+	Volume mp 
+	Octave 5
+	Strum          5           0                5        0
+	Articulate    80
+	Accent 1 20 3 10
+End
+
+Begin Bass
+	Sequence     B13  B11  B13  z
+	Octave 3
+	Volume mp
+	Articulate 70
+	Voice AcousticBass
+End
+
+Begin Walk
+	Sequence     z  z  z  W1+34
+	Volume mp
+	Octave 3
+	Articulate 70
+	Voice AcousticBass
+End
+
+Begin Drum-OHH
+	Sequence     D8
+	Rvolume 5
+	RSKip  30
+	Tone ClosedHiHat
+	Volume pp
+End
+
+Begin Drum-Side
+	Tone SideKick
+	Sequence     D1
+	Volume pp
+	Rtime 5
+	Rvolume 10
+End
+
+Begin Drum-PHH
+	Sequence     D24
+	Tone PedalHiHat
+	Volume mp
+End
+
+DefGroove SlowBlues    Simple guitar chords.
+
+Begin Bass-Sus
+	Sequence    Sus1  Sus3  Sus5   z
+	SeqRnd
+	Volume pp
+	Octave 5
+	Articulate 100
+	Unify On
+	Voice ChoirAahs
+End
+
+DefGroove SlowBluesSus  Our simple blues with the choir added.
+
+
+////  4 to the bar walking bassline
+
+Groove SlowBlues
+
+Bass Sequence -
+
+Begin Walk
+	Sequence  W1234  / / W1+34 
+	Articulate 65
+End
+
+DefGroove SlowBluesWalk4	Same as SlowBlues but with \
+                            a strong quarter note walking bass.
+                            
+Bass-Sus Groove SlowBluesSus
+
+DefGroove SlowBluesWalk4Sus  Choir added to Walk4.
+
+///////  8 to bar walk
+
+Groove SlowBlues
+
+Begin Chord
+	Articulate 80
+	Volume p
+End
+
+Begin Walk
+  Sequence  W8 / / W1234
+  Articulate 60
+  Volume mp
+End
+
+DefGroove SlowBluesWalk8	Same as SlowBlues but with a strong eight \
+                            note walking bass. This works nicely with \
+                            SlowBluesWalk4 in an A-A-B-A selection with \
+                            the B section using this groove and the A \
+                            using SlowBLuesWalk4.
+
+Bass-Sus Groove SlowBLuesWalk4Sus
+
+DefGroove SlowBluesWalk8Sus  Choir added to Walk8.
+
+/// SlowBluesEnd
+
+Groove SlowBlues
+
+Begin Drum-OHH
+   Sequence  D16  D8 D1234 D13
+   RSkip 0
+End
+Drum-PHH  Sequence  D13
+Chord     Sequence  C1234 / C13 /
+Bass-Sus  Sequence  Sus1    /  z  /
+Bass      Sequence  B11
+Walk      Sequence  -
+
+DefGroove SlowBluesEnd  Quite a dull  ending. The High Hats play 16 \
+                        notes on the first bar, 8 on the second, \
+                        4 on the third and 2 on the fourth. Set the \
+                        SEQ point appropiately for your ending.
+

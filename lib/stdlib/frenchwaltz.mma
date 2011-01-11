@@ -1,0 +1,141 @@
+
+// frenchwaltz
+
+Doc  These try to do the "French Cafe" sound.
+
+Author Bob van der Poel
+
+SeqClear
+Time 3
+Timesig 3 4
+Include stdpats34
+
+//////////////////////////////////////////////
+/////   FrenchWaltz	Cheezy 3/4 with accordion
+
+
+SeqSize 8
+
+// This combination of chord and bass is supposed to
+// duplicate the left hand of an accordion. There are
+// block cords on beats 2/3 on the first 3 bars, and
+// a longer chord on beat 2 of the 4th/8th bars.
+
+// The bass track has root/5 on beat 1, with a little
+// walk on the 8th bar. 
+
+Begin Chord
+	Sequence	C23    /    /    L2    C23  /     /    L2
+	Voice     Accordion  
+	Articulate      80     /    /    99    80   /     /    99
+	Invert          0      1    2    3     3    2     1     0
+	Volume p
+	Octave 4
+End
+
+Begin Bass
+	Sequence	B1   B1/5   B1   B1/5  B1  B1/5  B1  B123
+	Voice Accordion
+	Articulate 70
+	Volume mf
+	Octave 4
+End
+
+// Chunck/chunck/chunck guitar on 1/2/3
+
+Begin Chord-Guitar
+	Sequence C123
+	Invert 0 1 2 0
+	SeqRnd
+	Strum 5
+	Voice NylonGuitar
+	Accent 1 10
+	Octave 5
+	Volume pp
+	Articulate 90
+End
+
+Begin Drum-Tam
+	Sequence	D23
+	Tone Tambourine
+	Volume p
+	Rvolume 10
+	Rskip 5
+	Rtime 10
+End
+
+Begin Drum-Tri
+	Sequence	D1
+	Tone OpenTriangle
+	Volume p
+	Rskip 50
+	Rvolume 30
+	Rtime 10
+End
+
+DefGroove FrenchWaltz        Accordion umm-paa. Ya either love it or hate it!
+
+
+////////////////////////////////////////////////////
+// Alternate adds a light 1/8th and 1/4 note aprs 
+
+Groove FrenchWaltz
+
+Chord         Sequence C123
+Chord-Guitar  Sequence -
+
+Begin Arpeggio
+	Sequence	A6   /   A12   A3
+	SeqRnd
+	Accent  1 10
+	Range 2
+	Articulate 70
+	Voice Accordion
+	Octave 5
+	Volume p
+	Rvolume 10
+	Rskip		5	5	30	1
+	Rtime 2
+End
+
+DefGroove FrenchWaltz1    FrenchWaltz with with accordion apreggios.
+
+
+/////////////////////////////////
+//// Ending
+
+Groove FrenchWaltz
+Seqsize 4
+
+Chord-Guitar  Sequence   -
+Chord         Sequence   C23    /    /    L1
+Bass          Sequence   B1   B1/5   B1   B1
+Drum-Tam      Sequence   D23   /     /    D1
+
+Begin Scale
+	SeqClear
+	Sequence S12  S6   S3  S1
+	Direction Up
+	Voice Strings
+	Octave 5
+	Articulate 99
+End
+
+DefGroove FrenchWaltzEnd         A scale with the strings to end \
+                                 the FrenchWaltz. The scales run from \
+                                 16, 8, 4 and whole notes.
+
+
+// Variation
+
+Begin Scale
+	Voice Accordion
+	Direction Down
+	Range 4
+	Octave 5
+End
+
+DefGroove FrenchWaltz1End    Same ending as FrenchWaltzEnd but with \
+                             an accordion instead of strings.
+
+

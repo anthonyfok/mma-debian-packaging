@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
+<META NAME="keywords" CONTENT="mma-lib">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma-lib.css">
+
+<LINK REL="next" HREF="node2.html">
+<LINK REL="previous" HREF="mma-lib.html">
+<LINK REL="up" HREF="mma-lib.html">
+<LINK REL="next" HREF="node2.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node2.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html328"
+  HREF="mma-lib.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html322"
+  HREF="mma-lib.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node2.html">Standard Files</A>
+<B> Up:</B> <A NAME="tex2html329"
+  HREF="mma-lib.html">The Standard Library</A>
+<B> Previous:</B> <A NAME="tex2html323"
+  HREF="mma-lib.html">The Standard Library</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00100000000000000000">
+Introduction</A>
+</H1> 
+
+<P>
+This document is provided as a supplement to the <I><B>MMA</B></I> Reference Manual.
+The manual is a fairly stable document which you probably don't want to reprint
+with every minor update to <I><B>MMA</B></I>; however, the standard library is a rapidly
+evolving set of files--a current reference to this is quite essential.
+
+<P>
+The following list of predefined grooves has been generated from
+the library files included in the standard distribution. Each
+section, below, uses the filename as a header and then
+lists the various defined grooves.
+
+<P>
+You should be able to use any of these grooves in your files without
+using other directives. However, if you have files in non-standard
+locations you may need to properly set the library path in a <I>MmaRC</I> file
+with the <I>SetLibPath</I> directive or by explicitly loading the library
+file(s) with a <I>Use</I> directive.
+
+<P>
+The filenames are, mostly, in all lowercase. These are the
+actual filenames used in the library. If you are loading files with
+the <I>Use</I> directive you must use the same case.
+
+<P>
+Following the groove description is a boxed number in the
+form <B>(4)</B>. This
+indicates the sequence size of the groove. Next, is a list
+of tracks and instrument names. This shows the first voice or
+drum note defined for each track--it is quite possible that the
+track uses other voices. This data is included so that you can
+see what tracks are active.
+
+<P>
+The data has been extracted from the library files using the <B>-Dx</B>
+<I><B>MMA</B></I> command line option. This option directly generates L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X source
+which generates this document. The following information is extracted
+from each library file:
+
+<P>
+
+<UL>
+<LI>The filename from the ``Doc File'' directive.
+
+<P>
+</LI>
+<LI>The file description from the ``Doc Note'' directive.
+
+<P>
+</LI>
+<LI>Each groove description: This is the optional text following
+		a <I>DefGroove</I> directive.
+
+<P>
+</LI>
+<LI>The sequence size. This is extracted from the current groove information
+		and was set with the <I>SeqSize</I> directive. It is displayed in a
+		small box after the groove description.
+
+<P>
+</LI>
+<LI>A ``summary'' of the voices used in the groove. Note that a different
+		voice or MIDI note is possible for each bar in the sequence size; however,
+		this listing only lists the selection for the first bar.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<DIV ALIGN="CENTER">
+
+	<TABLE CELLSPACING=0 CELLPADDING=10" BGCOLOR="#dddddd" BORDER=3><TR> <TD>
+	<IMG
+ WIDTH="504" HEIGHT="159" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$\textstyle \parbox{.9\textwidth}{
+\vspace{1ex}
+\par
+The library files, at this ...
+...it is probably due to
+the actual library file, and not \textit{\textbf{MMA}}. }$">  
+
+	</TD></TR></TABLE> 
+
+</DIV>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node2.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html328"
+  HREF="mma-lib.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html322"
+  HREF="mma-lib.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node2.html">Standard Files</A>
+<B> Up:</B> <A NAME="tex2html329"
+  HREF="mma-lib.html">The Standard Library</A>
+<B> Previous:</B> <A NAME="tex2html323"
+  HREF="mma-lib.html">The Standard Library</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

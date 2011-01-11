@@ -1,0 +1,27 @@
+
+The files in this directory just illustrate various features
+of MMA. Hopefully, the will help in creating some very cool
+user donated library files.  They are presented only as
+"proof-of-concept" examples.
+
+Unless someone can point to a definitive text showing that
+publishing chords for a song is NOT a violation of copyright
+we will only distribute mma songs in the main distribution which
+are clearly public domain. This really does limit things!
+
+However, a gzip file of many songs is available on the main
+MMA website:
+
+	http://mypage.uniserve.com/~bvdp/mma/mma.html
+	
+
+
+The Python program 'mkall' will recurse though all the directories
+and attempt to compile any '.mma' files it finds. The resulting
+'.mid' file will be created in the same directory as the '.mma'
+file.
+
+Have fun!!!!!
+
+November/2004, bvdp
+

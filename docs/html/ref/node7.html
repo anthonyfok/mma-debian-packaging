@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Riffs</TITLE>
+<META NAME="description" CONTENT="Riffs">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node8.html">
+<LINK REL="previous" HREF="node6.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node8.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html365"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html363"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html357"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html366"
+  HREF="node8.html">Musical Data Format</A>
+<B> Up:</B> <A NAME="tex2html364"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html358"
+  HREF="node6.html">Grooves</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html367"
+  HREF="node7.html#SECTION00710000000000000000">Riff</A>
+<LI><A NAME="tex2html368"
+  HREF="node7.html#SECTION00720000000000000000">Multiple Riffs</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00700000000000000000"></A>
+<A NAME="sec-riffs"></A>
+<BR>
+Riffs
+</H1> 
+
+<P>
+In previous chapters we learned how to create a <I>Pattern</I> which
+becomes a part of a <I>Sequence</I>. And how to set a musical style
+by defining a <I>Groove</I>.
+
+<P>
+These predfined <I>Grooves</I> are wonderful things. And, yes, entire
+accompaniment tracks can be created with just some chords and few <I>Grooves</I>.
+But, often we want a bit of variety in the track. 
+
+<P>
+
+<H1><A NAME="SECTION00710000000000000000">
+Riff</A>
+</H1>
+
+<P>
+The <I>Riff</I> command permits the setting of an alternate pattern for any
+track for a single bar-this overrides the current <I>Sequence</I> for that
+track.
+
+<P>
+The syntax for <I>Riff</I> is very similar to that of <I>Define</I>, with the
+execption that no pattern name is used. You might think of <I>Riff</I> as
+the setting of an <I>Sequence</I> with an anonymous pattern.
+
+<P>
+A <I>Riff</I> is set with the command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Track Riff Pattern </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+where:
+
+<P>
+<DL>
+<DT><STRONG>Track</STRONG></DT>
+<DD>is any valid <I><B>MMA</B></I> track name,
+	
+</DD>
+<DT><STRONG>Pattern</STRONG></DT>
+<DD>is any existing pattern name defined for the specified
+		track, or a pattern definition following the same syntax as
+		a <I>Define</I>. In addition the pattern can be a single ``z'', indicating
+		no pattern for the specified track.
+
+<P>
+</DD>
+</DL>
+
+<P>
+Following is a short example using <I>Riff</I> to change the Chord Pattern:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Groove Rhumba 
+<BR>
+1	Fm7 
+<BR>
+2	Bb7 
+<BR>
+3	EbM7 
+<BR>
+Chord Riff 1 4 100; 3 8 90; 3.666 8 80; 4.333 8 70 
+<BR>
+4	Eb6 / Eb 
+<BR>
+5	Fm7  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In this case we have a Rhumba Groove for the song. But, in bar 4 we
+want to emphasize the melodic pattern by chording a quarter-note triplet
+over beats 3 and 4. In this case we have defined the pattern right in the
+<I>Riff</I> command.
+
+<P>
+Our next example shows that <I>Riff</I> patterns can be defined just like
+the patterns used in a sequence.
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Drum
+<BR>	&nbsp;&nbsp;Define Emph1 1 0 128
+<BR>	&nbsp;&nbsp;Define Emph8 Emph1 * 8
+<BR>
+End
+<BR>	&nbsp;
+<BR>
+Groove Blues 
+<BR>	&nbsp;
+<BR>
+1  C 
+<BR>
+2  G 
+<BR>
+Drum1 Riff Emph8
+<BR>
+3  G 
+<BR>
+4  F 
+<BR>
+5  C  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In this case we have defined the <B>Emph8</B> pattern as a series of
+eighth notes. We then apply this for the 3rd bar. If you compile and
+play this example you will hear a sporadic handclap on bar 3. The <B>Drum1</B>
+track is using a handclap tone with a random skip factor (previously defined in the
+Blues groove).
+
+<P>
+The special pattern ``z'' can be used to turn off a track for a single
+bar. This is similar to using a ``z'' in the <I>Sequence</I> directive.
+
+<P>
+A few things to keep in mind when using <I>Riffs</I>:
+
+<P>
+
+<UL>
+<LI>A <I>Riff</I> is in effect for only one bar.
+
+<P>
+</LI>
+<LI><I>Riff</I> sequences are always enabled. Even if there
+		is no sequence for a track, or if the ``z'' sequence is
+		being used, the pattern specified in <I>Riff</I> will apply.
+
+<P>
+</LI>
+<LI>The existing voicing, articulation, etc. for the track will
+		apply to the <I>Riff</I>.
+
+<P>
+</LI>
+<LI>It's quite possible to use a macro for repeated <I>Riff</I>s.
+		In example <A HREF="#eg-riff">7.1</A> we have		
+		created a macro which sets the <I>Volume</I>,
+		<I>Articulate</I>, etc. as well as the pattern. Note how the pattern
+		is initially set as single whole note, but redfined in the <I>Riff</I>
+		as a run controlled by another macro. In bar 2 an eight note run is
+		played and in bar 5 this is changed to a run of triplets.
+
+<P>
+
+<DIV ALIGN="CENTER">
+
+<P><A NAME="eg-riff"></A></P>      
+	<TABLE CELLSPACING=0 CELLPADDING=10" BGCOLOR="#dddddd" BORDER=3><TR> <TD>
+	
+      	<TABLE  WIDTH="100%"><CAPTION ALIGN="BOTTOM"><STRONG><B>Example</B> 7.1:</STRONG>
+Using Macros and Riffs</CAPTION>
+<TR><TD> 
+      	    <BR>
+<BR>
+      	    
+		
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Mset CRiff
+<BR>		&nbsp;&nbsp;Begin Scale 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Define Run 1 1 120
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Riff Run * $SSpeed
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Voice AltoSax
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Volume f
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Articulate 80
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Rskip 5
+<BR>		&nbsp;&nbsp;End
+<BR>
+MsetEnd
+<BR>
+Groove Blues
+<BR>
+1  C 
+<BR>
+Set SSpeed 8
+<BR>		$CRiff
+<BR>
+2  G 
+<BR>
+3  G 
+<BR>
+Set SSpeed 12 
+<BR>		$CRIFF
+<BR>
+5  C   </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+	
+      	    <BR>
+<BR>
+      	    </TD></TR>
+</TABLE>
+
+<P>
+ 
+
+	</TD></TR></TABLE> 
+ 
+</DIV>
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>Riff</I>s can also be used to specify a bar of music in a <I>Solo</I> or <I>Melody</I> track. Please see the ``Solo and Melody'' chapter (<A HREF="node10.html#chap-solo"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+
+<H1><A NAME="SECTION00720000000000000000">
+Multiple Riffs</A>
+</H1>
+
+<P>
+Use the syntax described above you can reset the sequence or set the
+melody notes for a single bar--the bar which follows the <I>Riff</I> command.
+As an alternate, you can set a number of lines at once using the <I>Riffs</I>
+command (the only difference here is the trailing ``s''). This command
+``stacks'' its argument on a special stack; each line is ``pulled'' from the
+stack as successive chord lines are processed.
+
+<P>
+Recycling an earlier example, lets assume that we want to use
+a customized pattern for bars 4 and 5 in our mythical song:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Groove Rhumba 
+<BR>
+1	Fm7 
+<BR>
+2	Bb7 
+<BR>
+3	EbM7 
+<BR>
+Chord Riffs 1 4 100; 3 8 90; 3.666 8 80; 4.333 8 70 
+<BR>
+Chord Riffs 1 2 100; 3 8 90; 
+<BR>
+4	Eb6 / Eb 
+<BR>
+5	Fm7  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In this example the first <I>Chord Riff</I> will be used in bar 4; the
+second in bar 5. For an example of this see the sample file <TT><A NAME="tex2html33"
+  HREF="egs/riffs.mma">egs/riffs.mma</A></TT>.
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html365"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html363"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html357"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html366"
+  HREF="node8.html">Musical Data Format</A>
+<B> Up:</B> <A NAME="tex2html364"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html358"
+  HREF="node6.html">Grooves</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

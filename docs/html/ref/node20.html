@@ -1,0 +1,614 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Paths, Files and Libraries</TITLE>
+<META NAME="description" CONTENT="Paths, Files and Libraries">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node21.html">
+<LINK REL="previous" HREF="node19.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html590"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html588"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html582"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html591"
+  HREF="node21.html">Creating Effects</A>
+<B> Up:</B> <A NAME="tex2html589"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html583"
+  HREF="node19.html">Documentation Strings</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html592"
+  HREF="node20.html#SECTION002010000000000000000">File Extensions</A>
+<LI><A NAME="tex2html593"
+  HREF="node20.html#SECTION002020000000000000000">Eof</A>
+<LI><A NAME="tex2html594"
+  HREF="node20.html#SECTION002030000000000000000">LibPath</A>
+<LI><A NAME="tex2html595"
+  HREF="node20.html#SECTION002040000000000000000">OutPath</A>
+<LI><A NAME="tex2html596"
+  HREF="node20.html#SECTION002050000000000000000">Include</A>
+<LI><A NAME="tex2html597"
+  HREF="node20.html#SECTION002060000000000000000">IncPath</A>
+<LI><A NAME="tex2html598"
+  HREF="node20.html#SECTION002070000000000000000">Use</A>
+<LI><A NAME="tex2html599"
+  HREF="node20.html#SECTION002080000000000000000">MmaStart</A>
+<LI><A NAME="tex2html600"
+  HREF="node20.html#SECTION002090000000000000000">MmaEnd</A>
+<LI><A NAME="tex2html601"
+  HREF="node20.html#SECTION0020100000000000000000">RC Files</A>
+<LI><A NAME="tex2html602"
+  HREF="node20.html#SECTION0020110000000000000000">Library Files</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION002000000000000000000"></A>
+<A NAME="sec-paths"></A>
+<BR>
+Paths, Files and Libraries
+</H1>
+
+<P>
+This chapter covers <I><B>MMA</B></I> filenames, extensions and a variety of commands and/or directives which effect the way in which files are read and processed. 
+
+<P>
+But, first a few comments on the location of the <I><B>MMA</B></I> Python modules.
+
+<P>
+The Python language (which was used to write <I><B>MMA</B></I>) has a very useful feature: it can include other files and refer to functions and data defined in these files. A large number of these files or modules are included in every Python distribution. The program <I><B>MMA</B></I> consists of a short ``main'' program and several ``module'' files. Without these additional modules <I><B>MMA</B></I> will not work.
+
+<P>
+The only sticky problem in a program intended for a wider audience is where to place these modules. We've decided that they should be in one of three locations:
+
+<P>
+
+<UL>
+<LI>/usr/local/share/mma/modules
+</LI>
+<LI>/usr/share/mma/modules
+</LI>
+<LI>./modules
+</LI>
+</UL>
+
+<P>
+If, when initializing itself, <I><B>MMA</B></I> cannot find one of the above directories, it will terminate with an error message.
+
+<P>
+
+<H1><A NAME="SECTION002010000000000000000"></A> <A NAME="file-extensions"></A>
+<BR>
+File Extensions
+</H1>
+
+<P>
+For most files the use of a the filename extension ``.mma'' is optional. However, we suggest that most files (with the exceptions listed below) have the extension present. It makes it much easier to identify <I><B>MMA</B></I> song and library files and to do selective processing on these files.
+
+<P>
+In processing an input song file <I><B>MMA</B></I> can encounter several different types of input files. For all files, the initial search is done by adding the filename extension ``.mma'' to filename (unless it is already present), then a search for the file as given is done.
+
+<P>
+For files included with the <I>Use</I> directive, the directory set with <I>setLibPath</I> is first checked, followed by the current directory.
+
+<P>
+For files included with the <I>Include</I> directive, the directory set with <I>setIncPath</I> is first checked, followed by the current directory.
+
+<P>
+Following is a summary of the different files supported:
+
+<P>
+<DL>
+<DT><STRONG>Song Files</STRONG></DT>
+<DD>The input file specified on the command line should 	always be named with the ``.mma'' extension. When <I><B>MMA</B></I> searches for the file it will automatically add the extension if the file name specified does not exist and doesn't have the extension.
+
+<P>
+</DD>
+<DT><STRONG>Library Files</STRONG></DT>
+<DD>Library files <I>really should</I> all be named with the extension. <I><B>MMA</B></I> will find non-extension names when used in a <I>Use</I> or <I>Include</I> directive. However, it will not process these files when creating indexes with the ``-g'' command line option--these index files are used by the <I>Groove</I> commands to  automatically find and include libraries.
+
+<P>
+</DD>
+<DT><STRONG>RC Files</STRONG></DT>
+<DD>As noted in the RC-File discussion (<A HREF="node20.html#sec-rc"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>)  <I><B>MMA</B></I> will automatically include a variety of ``RC'' files. You can use the extension on these files, but common usage suggests that these files are probably better without.
+
+<P>
+</DD>
+<DT><STRONG>MMAstart and MMAend</STRONG></DT>
+<DD><I><B>MMA</B></I> will automatically include a file at the beginning or end of processing (<A HREF="node20.html#sec-mmaend"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>). Typically these files are named <I>MMAstart</I> and <I>MMAend</I>. Common usage is to <I>not</I> use the extension if the file is in the current directory; use the file if it is in an ``includes'' directory.
+
+<P>
+</DD>
+</DL>
+
+<P>
+One further point to remember is that filenames specified on the command line are subject to wildcard expansion via the shell you are using.
+
+<P>
+
+<H1><A NAME="SECTION002020000000000000000">
+Eof</A>
+</H1> 
+
+<P>
+Normally, a file is processed until its end. However, you can short-circuit this behavior with the <I>Eof</I> directive. If <I><B>MMA</B></I> finds a line starting with <I>Eof</I> no further processing will be done on that file ... it's just as if the real end of file was encountered. Anything on the same line, after the <I>Eof</I> is also discarded.
+
+<P>
+You may find this handy if you want to test process only a part of a file, or if you making large edits to a library file. It is often used to quit when using the <I>Label</I> and <I>Goto</I> directives to simulate constructs like <B>D.C. al Coda</B>, etc.
+
+<P>
+
+<H1><A NAME="SECTION002030000000000000000"></A>  <A NAME="libpath"></A>
+<BR>
+LibPath
+</H1>
+
+<P>
+The search for library files can be set with the LibPath variable. To set <B>LibPath</B>:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SetLibPath PATH </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+You can have only one path in the <I>SetLibPath</I> directive.
+
+<P>
+When <I><B>MMA</B></I> starts up it sets the library path to the first valid directory in the list:
+
+<P>
+
+<UL>
+<LI>/usr/local/share/mma/lib
+</LI>
+<LI>/usr/share/mma/lib
+</LI>
+<LI>./lib
+</LI>
+</UL>
+
+<P>
+The last choice lets you run <I><B>MMA</B></I> directly from the distribution directory.
+
+<P>
+You are free to change this to any other location in a RCFile  (<A HREF="node20.html#sec-rc"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+The LibPath is used by the routine which auto-loads grooves from the library, and the <I>Use</I> directive. The -g command line option is used to maintain the library database (<A HREF="node2.html#g-option"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+You can include a leading ``&nbsp;/'' in the path. In this case the path will be expanded to a complete pathname.
+
+<P>
+
+<H1><A NAME="SECTION002040000000000000000">
+OutPath</A>
+</H1> 
+
+<P>
+MIDI file generation is to an automatically generated filename (<A HREF="node2.html#sec-running"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>). If the <B>OutPath</B> variable is set, that value will be prepended to the  output filename. To set the value:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SetOutPath PATH </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Just make sure that ``PATH'' is a simple pathname with <B>no</B> spaces in it. The variable is case sensitive (assuming that your operating system supports case sensitive filenames). This is a common directive in a RC file (<A HREF="node20.html#sec-rc"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>). By default, it has no value.
+
+<P>
+You can disable the <B>OutPath</B> variable by not using an argument in the <I>SetOutPath</I> directive.
+
+<P>
+The PATH used in this command is processed though the Python <I>os.path.expanduser()</I> library routine, so it is permissible to include a leading ``~'' in the name (which expands, on Unix and Linux systems, to the name of the user's home directory).
+
+<P>
+If the name set by this command begins with a ``.'', ``/'' or `` &#92;'' it is prepended to the complete filename specified on the command line. For example, if you have the input filename <TT><A NAME="tex2html65"
+  HREF="test.mma">test.mma</A></TT> and the output path is <TT><A NAME="tex2html66"
+  HREF="~/mids">~/mids</A></TT>--the output file will be <TT><A NAME="tex2html67"
+  HREF="/home/bob/mids/test.mid">/home/bob/mids/test.mid</A></TT>.
+
+<P>
+If the name doesn't start with the special characters noted in the preceeding paragraph the contents of the path will be inserted before the filename portion of the input filename. Again, an example: the input filename is <TT><A NAME="tex2html68"
+  HREF="mma/rock/crying">mma/rock/crying</A></TT> and the output path is ``midi''--the output file will be <TT><A NAME="tex2html69"
+  HREF="mma/rock/midi/crying.mid">mma/rock/midi/crying.mid</A></TT>.
+
+<P>
+
+<H1><A NAME="SECTION002050000000000000000">
+Include</A>
+</H1>  
+
+<P>
+Other files with sequence, pattern or music data can be included at any point in your input file. There is no limit to the level of includes.
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Include Filename </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+A search for the file is done in the <B>IncPath</B> directory (see below) and the current directory. The ``.mma'' filename extension is optional.
+
+<P>
+The use of this command should be quite rare in user files. We use it extensively in our library files to include standard patterns.
+
+<P>
+
+<H1><A NAME="SECTION002060000000000000000"></A>   <A NAME="incpath"></A>
+<BR>
+IncPath
+</H1>
+
+<P>
+The search for include files can be set with the <B>IncPath</B> variable. To set <B>IncPath</B>:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SetIncPath PATH </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+You can have only one path in the <I>SetIncPath</I> directive.
+
+<P>
+When <I><B>MMA</B></I> initializes it sets the include path to first found directory in:
+
+<P>
+
+<UL>
+<LI>/usr/local/share/mma/includes
+</LI>
+<LI>/usr/share/mma/includes
+</LI>
+<LI>./includes
+</LI>
+</UL>
+
+<P>
+The last location lets you run <I><B>MMA</B></I> from the distribution directory.
+
+<P>
+If this value is not appropriate for your system, you are free to change it in a RC File. You can include a leading ``&nbsp;/'' in the path. In this case the path will be expanded to a complete pathname.
+
+<P>
+
+<H1><A NAME="SECTION002070000000000000000"></A>  <A NAME="lib-use"></A>
+<BR>
+Use
+</H1> 
+
+<P>
+Similar to <I>Include</I>, but a bit more useful. The <I>Use</I> command is used to include library files and their predefined grooves.
+
+<P>
+Compared to <I>Include</I>, <I>Use</I> has important features:
+
+<P>
+
+<UL>
+<LI>The search for the file is done in the paths specified by the LibPath variable,
+
+<P>
+</LI>
+<LI>The current state of the program is saved before the library 		file is read and restored when the operation is complete.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Let's examine each feature in a bit more detail.
+
+<P>
+When a <I>Use</I> directive is issued, eg:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>use stdlib/swing  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+<I><B>MMA</B></I> first attempts to locate the file ``stdlib/swing'' in the directory specified by <I>LibPath</I> or the current directory. As mentioned above, <I><B>MMA</B></I> automatically added the ``.mma'' extension to the file and checks for the non-extension filename if that can't be found.
+
+<P>
+If things aren't working out quite right, check to see if the filename is correct. Problems you can encounter include:
+
+<P>
+
+<UL>
+<LI>Search order: you might be expecting the file in the current directory to be used, but the same filename exists in the <I>LibPath</I>, in which case that file is used.
+
+<P>
+</LI>
+<LI>Not using extensions: Remember that files <I>with</I> the extension added are first checked.
+
+<P>
+</LI>
+<LI>Case: The filename is <B>case sensitive</B>. The files ``Swing'' and
+	``swing'' are not the same. Since most things in <I><B>MMA</B></I> are case insensitive,
+	this can be an easy mistake to make.
+
+<P>
+</LI>
+<LI>The file is in a subdirectory of the <I>LibPath</I>. In a standard 	distribution the actual library files are in /usr/local/share/mma/lib/stdlib, but the libpath is set to /usr/local/share/mma/lib. In this case you must name the file to be used as <I>stdlib/rhumba</I> <B>not</B>  <I>rhumba</I>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+As mentioned above, the current state of the compiler is saved during a <I>Use</I>. <I><B>MMA</B></I> accomplishes this by issuing a slightly modified <I>DefGroove</I> and <I>Groove</I> command before and after the reading of the file. Please note that <I>Include</I> doesn't do this. But, don't let this feature fool you--since the effects of defining grooves are cumulative you <I>really should</I> have <I>SeqClear</I> statements at the top of all your library files. If you don't you'll end up with unwanted tracks in the grooves you are defining.
+
+<P>
+<B>In most cases you will not need to use the <I>Use</I> directive in your music files.</B> If you have properly installed <I><B>MMA</B></I> and keep the MMADIR files up-to-date by using the command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>mma -g </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+grooves from library files will be automatically found and loaded. Internally, the <I>Use</I> directive is used, so existing states are saved. 
+
+<P>
+If you are developing new or alternate library files you will find the <I>Use</I> directive handy.
+
+<P>
+
+<H1><A NAME="SECTION002080000000000000000"></A>  <A NAME="MMAstart"></A>
+<BR>
+MmaStart
+</H1>
+
+<P>
+If you wish to process a certain file or files before your main input file, set the <I>MmaStart</I> filename in an RCFile. For example, we have a number of files in a directory which we wish certain <I>Pan</I> settings. In that directory, we have a file mmarc which contains the following command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>MmaStart setpan </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The actual file setpan has the following directives:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Pan 0 
+<BR>
+Bass1 Pan 0 
+<BR>
+Bass2 Pan 0 
+<BR>
+Walk Pan 0 
+<BR>
+Walk1 Pan 0 
+<BR>
+Walk2 Pan 0  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+So, before each file in that directory is processed, the <I>Pan</I> for the bass and walking bass voices are set to the left channel.
+
+<P>
+If the file specified by a <I>MmaStart</I> directive does not exist a warning message will be printed (this is not an error).
+
+<P>
+Also useful is the ability to include a generic file with all the MIDI files you create. For example, we like to have a MIDI reset at the start of our files, so we have the following in our mmarc file:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>MMAstart reset </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+This includes the file reset.mma located in the ``includes'' directory (<A HREF="node20.html#incpath"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+Because it is not uncommon to have multiple <B>mmarc</B> files, each with a different <I>MMAstart</I> directive, the files are appended to  the existing list. Each file will be processed in the order it is declared. You can have multiple filenames on a <I>MMAstart</I> line.
+
+<P>
+
+<H1><A NAME="SECTION002090000000000000000"></A> 
+<A NAME="sec-mmaend"></A>
+<BR>
+MmaEnd
+</H1>
+
+<P>
+Just the opposite of <I>MmaStart</I>, this command specifies a file to be included at the end of a main input file. See our comments above for more details.
+
+<P>
+To continue our example, in our mmarc file we have:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>MmaEnd nopan </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+and in the file nopan we have:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Pan 64 
+<BR>
+Bass1 Pan 64 
+<BR>
+Bass2 Pan 64 
+<BR>
+Walk Pan 64 
+<BR>
+Walk1 Pan 64 
+<BR>
+Walk2 Pan 64  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+If the file specified  by a <I>MmaEnd</I> directive does not exist a warning message will be printed (this is not an error).
+
+<P>
+Because it is not uncommon to have multiple <B>mmarc</B> files, each with a different <I>MMAend</I> directive, the files are appended to  the existing list. Each file will be processed in the order it is declared. You can have multiple filenames on a <I>MMAend</I> line.
+
+<P>
+
+<H1><A NAME="SECTION0020100000000000000000"></A>
+<A NAME="sec-rc"></A>
+<BR>
+RC Files
+</H1>
+
+<P>
+When <I><B>MMA</B></I> starts it checks for initialization files. Only the first found file is processed. 
+
+<P>
+The following files  are checked (in order):
+
+<P>
+
+<OL>
+<LI>mmarc
+</LI>
+<LI>&nbsp;/.mmarc
+</LI>
+<LI>/usr/local/etc/mmarc
+</LI>
+<LI>/etc/mmarc
+	
+</LI>
+</OL>
+
+<P>
+<B>All</B> found files will be processed.
+
+<P>
+Note that the second file is an ``invisible'' file due to the leading ``.'' in the filename.
+
+<P>
+By default, no rc files are installed.
+
+<P>
+The rc file is processed as a <I><B>MMA</B></I> input file. As such, it can contain anything a normal input file can, including music commands. However, we suggest you limit the contents of your RC files to things like:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SetOutPath 
+<BR>
+SetLibPath 
+<BR>
+MMAStart 
+<BR>
+MMAEnd  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+A useful setup is to have your source files in one directory and MIDI files saved into a different directory. Having the file mmarc in the directory with the source files permits setting <B>OutPath</B> to the MIDI path.
+
+<P>
+
+<H1><A NAME="SECTION0020110000000000000000">
+Library Files</A>
+</H1>
+
+<P>
+Included in this distribution are a number of predefined patterns, sequences and grooves. They are in different files in the ``lib'' directory.
+
+<P>
+The library files should be self-documenting. A list of standard file and the grooves they define is included in the separate document, supplied in this distribution as ``<B>mma-lib.ps</B>''.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html590"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html588"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html582"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html591"
+  HREF="node21.html">Creating Effects</A>
+<B> Up:</B> <A NAME="tex2html589"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html583"
+  HREF="node19.html">Documentation Strings</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

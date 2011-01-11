@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Begin/End Blocks</TITLE>
+<META NAME="description" CONTENT="Begin/End Blocks">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node19.html">
+<LINK REL="previous" HREF="node17.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node19.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html566"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html564"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html558"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html567"
+  HREF="node19.html">Documentation Strings</A>
+<B> Up:</B> <A NAME="tex2html565"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html559"
+  HREF="node17.html">Other Commands and Directives</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html568"
+  HREF="node18.html#SECTION001810000000000000000">Begin</A>
+<LI><A NAME="tex2html569"
+  HREF="node18.html#SECTION001820000000000000000">End</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION001800000000000000000"></A>
+<A NAME="sec-blocks"></A>
+<BR>
+Begin/End Blocks
+</H1>  
+
+<P>
+Entering a series of directives for a specific track can get quite tedious.  To make the creation of library files a bit easier, you can create a block. For example, the following:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum Define X 0 2 100; 50 2  90  
+<BR>
+Drum Define Y 0 2 100  
+<BR>
+Drum Sequence X Y  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Can be replaced with:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum Begin 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Define X 0 2 100; 50 2 90  
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Define Y 0 2  100  
+	End 
+<BR>
+Drum Sequence X Y  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Or, even more simply, with:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum Begin Define
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;X 0 2 100; 50 2 90  
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Y 0 2 100 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+If you examine some of the library files you will see that we use this shortcut a lot.
+
+<P>
+
+<H1><A NAME="SECTION001810000000000000000">
+Begin</A>
+</H1>
+
+<P>
+The <I>Begin</I> command requires any number of arguments. Valid examples include:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Drum 
+<BR>
+Begin Chord2 
+<BR>
+Begin Walk Define  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Once a <I>Begin</I> block has been entered, all subsequent lines have the words from the <I>Begin</I> command prepended to each line of data. There is not much magic here--<I>Begin</I>/<I>End</I> is really just some syntactic sugar.
+
+<P>
+
+<H1><A NAME="SECTION001820000000000000000">
+End</A>
+</H1>
+
+<P>
+To finish off a <I>Begin</I> block, use a single <I>End</I> on a line by itself.
+
+<P>
+Defining musical data, repeats, or other <I>Begin</I>s inside a block (other than COMMENT blocks) will not work.
+
+<P>
+Nesting is permitted. Eg:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Scale Begin  
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Begin Define 
+<BR>			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</B></BLOCKQUOTE><I>stuff</I><BLOCKQUOTE><B>  
+<BR>       	&nbsp;&nbsp;&nbsp;&nbsp;End  
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Sequence </B></BLOCKQUOTE><I>stuff</I><BLOCKQUOTE><B> 
+<BR>
+End </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+A <I>Begin</I> must be competed with a <I>End</I> before the end of a file, otherwise an error will be generated. The <I>Use</I> and <I>Include</I> commands are not permitted inside a block.
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html566"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html564"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html558"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html567"
+  HREF="node19.html">Documentation Strings</A>
+<B> Up:</B> <A NAME="tex2html565"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html559"
+  HREF="node17.html">Other Commands and Directives</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

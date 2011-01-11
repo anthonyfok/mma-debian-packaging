@@ -1,0 +1,140 @@
+
+// softrock
+
+Begin Doc
+
+ Seems to work nicely for relatively fast 
+ (ie. not "slow dance"), older rock tunes. 
+ I use the SoftRock1 for "Blame It On The Bossa Nova".
+  
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 4
+Timesig 4 4
+Include stdpats
+
+////// Additional Patterns
+
+
+Begin Drum Define
+	D12+34 D134 ; 2.5 0 90 
+End
+
+
+Begin Chord Define
+	C1+34	C134; C2 Shift 2.5 
+End
+
+/////////////////////////////////////////////////
+////// SoftRock
+
+SeqSize 4
+
+Begin Drum-Snare
+	Sequence	D12+34
+	Tone SnareDrum1 SnareDrum2
+	SeqRnd
+	Volume p
+	Rvolume 10
+End
+
+Begin Drum-HH
+	Sequence	D8
+	Tone ClosedHiHat
+	Volume mf
+	Rvolume 10
+	Rtime 10
+End
+
+Begin Drum-Tri
+	Sequence	D12 / / z
+	Tone OpenTriangle
+	Rskip 50
+	Volume pp
+	Rvolume 10
+	RTime 20
+End
+
+Begin Chord
+	Sequence	C1+34 C13 C1+34 C134
+	Voicing   Mode=Optimal
+	SeqRnd
+	Voice Piano3
+	Volume mf
+	Octave 5
+	Articulate 90
+End
+
+Begin Bass
+	Sequence	B13 z  B13
+	Octave 3
+	Volume mp
+	Articulate 80
+	Voice FretlessBass
+End
+
+Begin Walk
+	Sequence	z  W13 z  \
+	            {1 4 90 ;  2.5 8 70 ; 3 8 90 ; 3.5 8 70 ; 4 8 70 }
+	Octave 3
+	Volume mp
+	Articulate 80
+	Voice FretlessBass
+End
+
+DefGroove SoftRock   Basic Soft-rock for 60's tunes.
+
+Begin Bass-Sus
+	Sequence     Sus1  Sus3  Sus5 Sus1
+	Rskip 10
+	Harmony OpenAbove
+	SeqRnd
+	Octave 4
+	Volume mp
+	Articulate 100
+	Unify On
+	Voice TremoloStrings
+End
+
+DefGroove SoftRockSus   Strings with the rock.
+
+//// SoftRock1  Add in a latiny sounding arp
+
+
+Groove SoftRock    // Start with the basic
+
+Begin Arpeggio
+	Voice Flute
+	Sequence	A8  A8  A4  {A1 * 6} 
+	SeqRnd
+	RSkip 25
+	Rvolume 15
+	Rtime 6
+	Range 3
+	Accent 1 10 3 10
+	Articulate 80
+	Volume p
+	Octave 6
+End
+
+DefGroove SoftRock1   Adds a latin-pop touch by using flute arpeggios.
+
+Bass-Sus Groove SoftRockSus
+
+DefGroove SoftRock1Sus
+
+////////////////////////////////////
+/// SoftRockEnd  Change to straight 4s
+
+Groove SoftRock
+
+Chord       Sequence  C1234
+Drum-Snare 	Sequence  D1234
+Walk        Sequence  -
+Bass        Sequence  B11
+
+DefGroove SoftRockEnd   Simple 4 beats to the bar ending.
+

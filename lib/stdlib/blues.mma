@@ -1,0 +1,128 @@
+
+// blues
+
+
+Begin Doc
+
+	If you don't understand the Blues, don't use these grooves 
+   	... they will make you way too sad.
+
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 4		// All these patterns are 4/4
+Timesig 4 4
+Include stdpats
+
+////////////////////////////
+/// Pattern definitions
+
+Begin Walk Define
+	W1+34   1 4 80; 2.5 8 70; 3 4 80; 4 4 80 
+End
+
+
+///////////////////////////
+/// Groove definitons
+
+// Blues
+
+SeqSize 4
+
+Begin Drum		
+	Sequence D1234
+	Tone SnareDrum1 
+	Rvolume 10
+	Rskip 50
+	Rtime 4
+	Volume ppp
+End
+
+Begin Drum-Clap
+	Sequence D24 
+	Tone HandClap
+	SeqRnd
+	Rvolume 10
+	RSkip 50
+	Rtime 4
+	Volume pp
+End
+
+Begin Drum-HH
+	Sequence D1234
+	Tone ClosedHiHat
+	RVolume 10
+	Volume mp
+End
+
+Begin Walk
+	Sequence W1234 / / z
+	Voice AcousticBass
+	Octave 3
+	Volume mp
+	Articulate 80
+End
+
+Begin Bass
+	Sequence z / / B11
+	Voice FretlessBass
+	Octave 3
+	Volume mp
+	Articulate 80
+End
+
+Begin Chord
+	Sequence C13 / /  C1234
+	Voicing   Mode=Optimal
+	Voice Piano1
+	Octave 4
+	Volume mp
+	Articulate 99
+End	
+	
+DefGroove Blues   Straight-ahead blues.
+
+Begin Chord
+	Sequence  {C1234 * 3}
+	Octave 5
+End
+
+DefGroove BluesTriple   Change the piano chords to triplets. Nice for \
+                        a transition bar.
+
+
+Groove Blues
+
+Begin Bass-Sus
+	Voice Harmonica
+	Sequence Sus1 Sus3 Sus5 Sus1
+	SeqRnd
+	Volume ppp
+	Octave 6
+	Harmony Open
+	Articulate 100
+	Unify On	
+End
+
+DefGroove BluesSus      Add a sustained harmonica. Annoying.
+
+Chord Groove BluesTriple
+
+DefGroove BluesTripleSus   Sustained 'arp and chord triplets.
+
+	
+/// Ending
+
+
+Chord     Sequence C1234 / C13 /
+Bass      Sequence B11
+Walk      Sequence -
+Drum-Clap Sequence D13
+Drum      Sequence D1234 / D13 /
+Drum-HH   Sequence D1234 / D13 /
+
+DefGroove BluesEnd  A 4 bar ending. First 2 bars have 4 "hits", \
+                    the last 2 have 2.
+                    

@@ -1,0 +1,1262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Other Commands and Directives</TITLE>
+<META NAME="description" CONTENT="Other Commands and Directives">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node18.html">
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node18.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html533"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html531"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html525"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html534"
+  HREF="node18.html">Begin/End Blocks</A>
+<B> Up:</B> <A NAME="tex2html532"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html526"
+  HREF="node16.html">Low Level MIDI Commands</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html535"
+  HREF="node17.html#SECTION001710000000000000000">Articulate</A>
+<LI><A NAME="tex2html536"
+  HREF="node17.html#SECTION001720000000000000000">Copy</A>
+<LI><A NAME="tex2html537"
+  HREF="node17.html#SECTION001730000000000000000">Comment</A>
+<LI><A NAME="tex2html538"
+  HREF="node17.html#SECTION001740000000000000000">Debug</A>
+<LI><A NAME="tex2html539"
+  HREF="node17.html#SECTION001750000000000000000">Delete</A>
+<LI><A NAME="tex2html540"
+  HREF="node17.html#SECTION001760000000000000000">Direction</A>
+<LI><A NAME="tex2html541"
+  HREF="node17.html#SECTION001770000000000000000">Duplicate</A>
+<LI><A NAME="tex2html542"
+  HREF="node17.html#SECTION001780000000000000000">Harmony</A>
+<LI><A NAME="tex2html543"
+  HREF="node17.html#SECTION001790000000000000000">HarmonyOnly</A>
+<LI><A NAME="tex2html544"
+  HREF="node17.html#SECTION0017100000000000000000">Octave</A>
+<LI><A NAME="tex2html545"
+  HREF="node17.html#SECTION0017110000000000000000">Off</A>
+<LI><A NAME="tex2html546"
+  HREF="node17.html#SECTION0017120000000000000000">On</A>
+<LI><A NAME="tex2html547"
+  HREF="node17.html#SECTION0017130000000000000000">Print</A>
+<LI><A NAME="tex2html548"
+  HREF="node17.html#SECTION0017140000000000000000">PrintActive</A>
+<LI><A NAME="tex2html549"
+  HREF="node17.html#SECTION0017150000000000000000">RSkip</A>
+<LI><A NAME="tex2html550"
+  HREF="node17.html#SECTION0017160000000000000000">RTime</A>
+<LI><A NAME="tex2html551"
+  HREF="node17.html#SECTION0017170000000000000000">ScaleType</A>
+<LI><A NAME="tex2html552"
+  HREF="node17.html#SECTION0017180000000000000000">Seq</A>
+<LI><A NAME="tex2html553"
+  HREF="node17.html#SECTION0017190000000000000000">Strum</A>
+<LI><A NAME="tex2html554"
+  HREF="node17.html#SECTION0017200000000000000000">Transpose</A>
+<LI><A NAME="tex2html555"
+  HREF="node17.html#SECTION0017210000000000000000">Unify</A>
+<LI><A NAME="tex2html556"
+  HREF="node17.html#SECTION0017220000000000000000">Voice</A>
+<LI><A NAME="tex2html557"
+  HREF="node17.html#SECTION0017230000000000000000">VoiceTr</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION001700000000000000000"></A>
+<A NAME="sec-directives"></A>
+<BR>
+Other Commands and Directives
+</H1>
+
+<P>
+In addition to the ``Pattern'', ``Sequence'', ``Groove'' and ``Repeat'' and other directives discussed earlier,  and chord data, <I><B>MMA</B></I> supports a number of directives which affect the flavor of your music.
+
+<P>
+The subjects presented in this chapter are ordered alphabetically. 
+
+<P>
+
+<H1><A NAME="SECTION001710000000000000000"></A>  <A NAME="articulate"></A>
+<BR>
+Articulate
+</H1>
+
+<P>
+When <I><B>MMA</B></I> processes a music file, all the note lengths specified in a pattern are converted to MIDI lengths.
+
+<P>
+For example in:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Define BB 1 4 1 100; 2 4 5 90; 3 4 1 80; 4 4 5 90   </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+we define bass notes on beats 1, 2, 3 and 4. All these notes are defined as quarter notes. <I><B>MMA</B></I>, being quite literal about things, will make each note exactly 192 MIDI ticks long--which means that the note on beat 2 will start at the same time as the note on beat 1 ends.
+
+<P>
+<I><B>MMA</B></I> has an articulate setting for each voice. This value is applied to shorten the note length. By default, the setting is 90. Each generated note duration is taken to be a percentage of this setting,  So, a quarter note with a MIDI tick duration of 192 will become 172 ticks long.
+
+<P>
+If articulate is applied to a short note, you are guaranteed that the note will never be less than 1 MIDI tick in length.
+
+<P>
+To set the value, use a line like:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-1 Articulate 96  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Articulate values must be greater than 0 and less than or equal to 100.
+
+<P>
+You can specify a different <I>Articulate</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Articulate 50 60 / 30  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Notes: The full values for the notes are saved with the pattern definition. The articulate adjustment is applied at runtime. The articulate setting is saved with a <I>groove</I>.
+
+<P>
+
+<H1><A NAME="SECTION001720000000000000000"></A>  <A NAME="copy"></A>
+<BR>
+Copy
+</H1>
+
+<P>
+Sometimes it is useful to duplicate the settings from one voice to another. The <I>Copy</I> command does just that:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass-1 Copy Bass </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+will copy the settings from the <I>Bass</I> track to the <I>Bass-1</I> track.
+
+<P>
+The <I>Copy</I> command only works between tracks of the same type.
+
+<P>
+The following settings are copied:
+
+<P>
+
+<UL>
+<LI>Volume  (<I><FONT SIZE="-1"><A HREF="node13.html#volume"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>RVolume (<I><FONT SIZE="-1"><A HREF="node13.html#rvolume"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>RSkip    (<I><FONT SIZE="-1"><A HREF="node17.html#rskip"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>RTime   (<I><FONT SIZE="-1"><A HREF="node17.html#rtime"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Strum   (<I><FONT SIZE="-1"><A HREF="node17.html#strum"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Octave   (<I><FONT SIZE="-1"><A HREF="node17.html#octave"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Harmony (<I><FONT SIZE="-1"><A HREF="node17.html#harmony"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Direction	 (<I><FONT SIZE="-1"><A HREF="node17.html#scale-direction"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>ScaleType  (<I><FONT SIZE="-1"><A HREF="node17.html#scale-type"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Voice or Tone (<I><FONT SIZE="-1"><A HREF="node17.html#set-voice"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A> or <A HREF="node4.html#drum-tone"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Invert	(<I><FONT SIZE="-1"><A HREF="node11.html#chord-invert"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Articulate (<I><FONT SIZE="-1"><A HREF="node17.html#articulate"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+</LI>
+<LI>Compress (<I><FONT SIZE="-1"><A HREF="node11.html#compress"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A></FONT></I>)
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION001730000000000000000"></A>  <A NAME="comment"></A>
+<BR>
+Comment
+</H1>
+
+<P>
+As previously discussed, a comment in <I><B>MMA</B></I> is anything following a ``//'' in a line. A second way of marking a comment is with the <I>Comment</I> directive. This is quite useful in combination the <I>Begin</I> and <I>End</I> directives. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Comment 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;This is a description spanning 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;several lines which will be
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ignored by MMA. 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+You could achieve the same with:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>// This is a description spanning 
+<BR>		// several lines which will be
+<BR>		// ignored by MMA.  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+or even:
+	
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Comment This is a description spanning 
+<BR>
+Comment several lines which will be
+<BR>
+Comment ignored by MMA.  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+One minor difference between <B>//</B> and <I>Comment</I> is that the first is discarded when the input stream is read; the more verbose version is discarded during line processing. 
+
+<P>
+We find that <I>Begin Comment/End</I> is handy to delete large sections of a song we are writing on a temporary basis.
+
+<P>
+
+<H1><A NAME="SECTION001740000000000000000"></A>  <A NAME="debug"></A>
+<BR>
+Debug
+</H1>
+
+<P>
+To enable you to find problems in your song files (and, perhaps, even find problems with <I><B>MMA</B></I> itself) various debugging messages can be displayed. These are normally set from the command line (<A HREF="node2.html#sec-running"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+However, it is possible to enable various debugging messages dynamically in a song file using the <I>Debug</I> directive. In a debug statement you can enable or disable any of a variety of messages. A typical directive is:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Debug Debug=On Expand=Off Patterns=On </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Each section of the debug directive consists of a <I>mode</I> and the command word <I>ON</I> or <I>Off</I>. The two parts must be joined by a single ``<I><IMG
+ WIDTH="19" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img23.png"
+ ALT="$=$"></I>''. You may use the values ``0'' for ``Off'' and ``1'' for ``On'' if desired.
+
+<P>
+The available modes with the equivalent command line switches  are:
+
+<P>
+<BLOCKQUOTE>
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="LEFT"><I>Mode</I></TD>
+<TD ALIGN="LEFT" COLSPAN=2><I>Command Line Equivalent</I></TD>
+</TR>
+<TR><TD ALIGN="LEFT">Debug</TD>
+<TD ALIGN="LEFT">-d</TD>
+<TD ALIGN="LEFT">debugging messages</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Filenames</TD>
+<TD ALIGN="LEFT">-o</TD>
+<TD ALIGN="LEFT">display filenames</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Patterns</TD>
+<TD ALIGN="LEFT">-p</TD>
+<TD ALIGN="LEFT">pattern creation</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Sequence</TD>
+<TD ALIGN="LEFT">-s</TD>
+<TD ALIGN="LEFT">sequence creation</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Runtime</TD>
+<TD ALIGN="LEFT">-r</TD>
+<TD ALIGN="LEFT">running progress</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Warnings</TD>
+<TD ALIGN="LEFT">-w</TD>
+<TD ALIGN="LEFT">warning messages</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Expand</TD>
+<TD ALIGN="LEFT">-e</TD>
+<TD ALIGN="LEFT">display expanded lines</TD>
+</TR>
+</TABLE>
+</BLOCKQUOTE>
+
+<P>
+The modes and command are case-insensitive (although the command line switches are not).
+
+<P>
+The current state of the debug flags is saved in the variable $_Debug and the state prior to a change is saved in $_LastDebug.
+
+<P>
+
+<H1><A NAME="SECTION001750000000000000000"></A>  <A NAME="sec-delete"></A>
+<BR>
+Delete
+</H1>
+
+<P>
+If you are using a track in only one part of your song, especially if it is at the start, it may be wise to free that track's resources when you are done with it. The <I>Delete</I> command does just that:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Solo Delete </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+If a MIDI channel has been assigned to that track, it is marked as ``available'' and the track is deleted. Any data already saved in the MIDI track will be written when <I><B>MMA</B></I> is finished processing the song file.
+
+<P>
+
+<H1><A NAME="SECTION001760000000000000000"></A>  <A NAME="scale-direction"></A>
+<BR>
+Direction
+</H1>
+
+<P>
+In tracks using chords or scales you can change the direction in which they are applied:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Scale Direction UP </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The effects differ in differnt track types. For <I>Scale</I> and <I>Arpeggio</I> tracks:
+
+<P>
+<BLOCKQUOTE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="RIGHT">UP</TD>
+<TD ALIGN="LEFT">Plays in upward direction only</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">DOWN</TD>
+<TD ALIGN="LEFT">Plays in downward direction only</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">BOTH</TD>
+<TD ALIGN="LEFT">Plays  upward and downward (<B>default</B>)</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">RANDOM</TD>
+<TD ALIGN="LEFT">Plays notes from the chord or scale randomly</TD>
+</TR>
+</TABLE> 
+</BLOCKQUOTE>
+<P>
+<BLOCKQUOTE>When this command is encountered in a <I>Scale</I> track the start point of the scale is reset.
+
+</BLOCKQUOTE>
+
+<P>
+A <I>Walk</I> track recognizes the following option settings:
+
+<P>
+<BLOCKQUOTE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="RIGHT">BOTH</TD>
+<TD ALIGN="LEFT">The default. The bass pattern will go up and down a partial scale. Some notes may be repeated.</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">UP</TD>
+<TD ALIGN="LEFT">Notes will be chosen sequentially from an accending, parial scale.</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">DOWN</TD>
+<TD ALIGN="LEFT">Notes will be chosen sequentially from a decending, partial scale.</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">RANDOM</TD>
+<TD ALIGN="LEFT">Notes will be chosen in a random direction from a parital scale.</TD>
+</TR>
+</TABLE>
+</BLOCKQUOTE>
+<P>
+<BLOCKQUOTE>All four patterns are useful and create quite different effects.
+
+</BLOCKQUOTE>
+
+<P>
+In a <I>Chord</I> track the command is only used when <I>Strum</I> is set. The default setting is <I>Up</I>; any setting other than <I>Down</I> is treated as  <I>Up</I>.
+
+<P>
+You can specify a different <I>Direction</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Arpeggio Direction Up Down / Both </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The setting is ignored by  <I>Bass</I>, <I>Drum</I> and <I>Solo</I> tracks.
+
+<P>
+
+<H1><A NAME="SECTION001770000000000000000"></A>  <A NAME="duplicate"></A>
+<BR>
+Duplicate
+</H1>
+
+<P>
+Judicious use of the <I>Duplicate</I> directive can do much to make a composition sound ``fuller''. Essentially what it does is to duplicate all the notes played to a specified octave. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Bass 
+<BR>	&nbsp;&nbsp;Define B1234 0 4 1 90; 1 4 5 90; 2 4 1 90; 3 4 5 90 
+<BR>	&nbsp;&nbsp;Sequence B1234 
+<BR>	&nbsp;&nbsp;Octave 4 
+<BR>	&nbsp;&nbsp;Duplicate -1 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Creates a <I>Bass</I> line which plays a single note on beats 1, 2, 3 and 4 (the root and fifth of the chord). The <I>Duplicate</I> directive forces the notes to be played in the specified octave and one octave below that.
+
+<P>
+Notes: <I>Duplicate</I> takes any value between -9 and 9 as arguments--but, if the resulting note is forced out of the MIDI range, the note will not sound.
+
+<P>
+You can specify a different <I>Duplicate</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Duplicate  -1 1 / 0  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+To restore to its normal (off) setting, use a ``0'' as the argument.
+
+<P>
+This command has no effect on a <I>Drum</I>, <I>Solo</I> and <I>Melody</I> tracks (no warnings or errors  are generated). For a similar command see <I>DupRoot</I> (<A HREF="node11.html#duproot"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+
+<H1><A NAME="SECTION001780000000000000000"></A>  <A NAME="harmony"></A>
+<BR>
+Harmony
+</H1>
+
+<P>
+<I><B>MMA</B></I> can generate harmony notes for you ...just like hitting two or more keys on the piano! And you don't have to take lessons.
+
+<P>
+Automatic harmonies are available for the following track types: Bass, Walk, Apreggio, Scale, Solo and Melody. To enable harmony notes, use a command like:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Solo Harmony 2 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+You can set a different harmony method for each bar in your sequence.
+
+<P>
+The following are valid harmony methods:
+
+<P><DL>
+<DT><STRONG>2</STRONG></DT>
+<DD>Two part harmony. The harmony note selected is lower (on the scale).
+
+<P>
+</DD>
+<DT><STRONG>3</STRONG></DT>
+<DD>Three part harmony. The harmony notes selected are lower.
+
+<P>
+</DD>
+<DT><STRONG>OPEN</STRONG></DT>
+<DD>Two part harmony, however the gap between the two notes
+		is larger than in ``2''.
+
+<P>
+</DD>
+<DT><STRONG>2Above</STRONG></DT>
+<DD>The same as ``2'', but the harmony note is raised an octave.
+
+<P>
+</DD>
+<DT><STRONG>3Above</STRONG></DT>
+<DD>The same as ``3'', but both notes are raised an octave.
+
+<P>
+</DD>
+<DT><STRONG>OpenAbove</STRONG></DT>
+<DD>The same as ``Open'', but the note is raised an octave.
+
+<P>
+</DD>
+<DT><STRONG>8 or 8BELOW</STRONG></DT>
+<DD>A single note one octave below is added.
+
+<P>
+</DD>
+<DT><STRONG>8ABOVE</STRONG></DT>
+<DD>A single note one octave above is added.
+
+<P>
+</DD>
+<DT><STRONG>16 or 16BELOW</STRONG></DT>
+<DD>A single note two octaves below are added.
+
+<P>
+</DD>
+<DT><STRONG>16ABOVE</STRONG></DT>
+<DD>A single note two octaves above are added.
+
+<P>
+</DD>
+<DT><STRONG>8BOTH</STRONG></DT>
+<DD>Notes an octave above and below are added.
+
+<P>
+</DD>
+<DT><STRONG>16BOTH</STRONG></DT>
+<DD>Notes two octaves above and below are added.	
+
+<P>
+</DD>
+</DL>
+
+<P>
+All harmonies are created using the current chord.
+
+<P>
+To disable harmony use a ``0'' or a ``-''.
+
+<P>
+Be careful in using harmonies. They can make your song sound heavy,
+especially with <I>Bass</I> notes.
+
+<P>
+Just in case you are thinking that <I><B>MMA</B></I> is a wonderful musical creator when it comes to harmonies, don't be fooled. <I><B>MMA</B></I>'s ideas of harmony are quite facile. It determines harmony notes by finding a note lower than the current note being sounded in the chord. And its notion of ``open'' is certainly not that of traditional music theory. But, the sound isn't too bad.
+
+<P>
+The command has no effect on <I>Drum</I> or <I>Chord</I> tracks.
+
+<P>
+
+<H1><A NAME="SECTION001790000000000000000"></A>  <A NAME="harmonyonly"></A>
+<BR>
+HarmonyOnly
+</H1>
+
+<P>
+As a added feature to the automatic harmony generation discussed in the previous section, it is possible to set a track so that it <I>only</I> plays the harmony notes. For example, you might want to set up two arpeggio tracks with one playing quarter notes on a piano and a harmony track playing half notes on a violin. The following snippet is extracted from the song file ``Cry Me A River'' and sets up 2 different choir voices:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Arpeggio 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Sequence A4 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Voice ChoirAahs  
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Invert 0 1  2 3 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;SeqRnd 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;RSkip 40 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Volume p 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Articulate 99 
+<BR>
+End 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<BR>
+Begin Arpeggio-2 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Sequence A4 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Voice VoiceOohs 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;RSkip 40 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Volume p 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Articulate 99 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;HarmonyOnly Open 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Just like the <I>Harmony</I> command, above, you can have different settings for each bar in your sequence. Setting a bar (or the entire sequence) to '`-'' or ``0'' disables both the <I>Harmony</I> and <I>HarmonyOnly</I> settings.
+
+<P>
+The command has no effect on <I>Drum</I> or <I>Chord</I> tracks.
+
+<P>
+If you want to use this feature with <I>Solo</I> or <I>Melody</I> tracks you can duplicate the notes in your <I>Riff</I> or inline notation <I>or</I> set the voices to use via the <I>AutoHarmonyTracks</I> command (see  <A HREF="node10.html#autosolotracks"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+
+<H1><A NAME="SECTION0017100000000000000000"></A>  <A NAME="octave"></A>
+<BR>
+Octave
+</H1>
+
+<P>
+When <I><B>MMA</B></I> initializes and after the <I>SeqClear</I> command all track octaves are set to ``4''. This will place most chord and bass notes in the region of middle C.
+
+<P>
+You can change the octave for any voice with <I>Octave</I> command. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass-1 Octave 3 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Sets the notes used in the ``Bass-1'' track one octave lower than normal.
+
+<P>
+The octave specification can be any value from 0 to 10. Various combinations of <I>Invert</I>, <I>Transpose</I> and <I>Octave</I>  can force notes to be out of the valid MIDI range. In this case the lowest or  highest available note will be used.
+
+<P>
+You can specify a different <I>Octave</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Octave 4 5 / 4 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H1><A NAME="SECTION0017110000000000000000"></A>  <A NAME="set-off"></A>
+<BR>
+Off
+</H1>
+
+<P>
+To disable the generation of MIDI output on a specific track:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass Off </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+This can be used anywhere in a file. Use it to override the effect of a predefined groove, if you wish. This is simpler than resetting a voice in a groove. The only way to reset this command is with a <I>On</I> directive.
+
+<P>
+
+<H1><A NAME="SECTION0017120000000000000000"></A>  <A NAME="set-on"></A>
+<BR>
+On
+</H1>
+
+<P>
+To enable the generation of MIDI output on a specific track which has been disabled with an <I>Off</I> directive:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Bass On </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H1><A NAME="SECTION0017130000000000000000">
+Print</A>
+</H1> 
+
+<P>
+The <I>Print</I> directive will display its argument to the screen when it is encountered. For example, if you want to print the filename of the input file while processing, you could insert:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Print Making beautiful music for MY SONG </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+No control characters are supported.
+
+<P>
+This can be useful in debugging input files.
+
+<P>
+
+<H1><A NAME="SECTION0017140000000000000000">
+PrintActive</A>
+</H1> 
+
+<P>
+The <I>PrintActive</I> directive will the currently active <I>Groove</I> and the active tracks. This can be quite useful when writing groove files and you want to modify and existing groove.
+
+<P>
+Any parameters given are printed as single comment at the end of the header line. 
+
+<P>
+This is strictly a debugging tool. No <I>PrintActive</I> statements should appear in finalized grooves or song files.
+
+<P>
+
+<H1><A NAME="SECTION0017150000000000000000"></A>  <A NAME="rskip"></A>
+<BR>
+RSkip
+</H1>
+
+<P>
+To aid in creating syncopated sounding patterns, you can use the <I>RSkip</I> directive to randomly silence or skip notes. The command takes a value in the range 0 to 99. The ``0'' argument disables skipping. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Drum 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Define  D1   1 0 90  
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Define  D8   D1 * 8 
+<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Sequence D8 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Tone OpenHiHat  
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;RSkip 40  
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In this case we have defined a drum pattern to hit short notes 8 per bar and have set up a sequence to play this with ``OpenHiHat''. The <I>RSkip</I> argument of ``40'' will  cause the note to be NOT sounded (randomly) only 40% of the time.
+
+<P>
+Using a  value of ``10'' will cause notes to be skipped 10% for the time (they are played 90% of the time), ``90'' means to skip the notes 90% of the time, etc.
+
+<P>
+You can specify a different <I>RSkip</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Scale RSkip 40 90 / 40 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+If you use the <I>RSkip</I> in a chord track, the entire chord <I>will not</I> be silenced. The option will be applied to the individual notes of each chord. This may or may not be what you are after. You cannot use this option to generate entire chords randomly. For this effect you need to create several chord patterns and select them with <I>SeqRnd</I>.
+
+<P>
+You can use <I>RSkip</I> without a track argument. This is useful when used with an argument of ``0'' to (temporarily) disable the setting for all tracks.
+
+<P>
+
+<H1><A NAME="SECTION0017160000000000000000"></A>  <A NAME="rtime"></A>
+<BR>
+RTime
+</H1>
+
+<P>
+One of the biggest problem with computer generated drum and rhythm tracks is that, unlike real musicians, the beats are precise and ``on the beat''. The <I>RTime</I> directive attempts to solve this.
+
+<P>
+The command can be applied to all tracksfootnote:The best use of using <I>RTime</I> for all tracks is with a ``0'' argument to (temporarily) disable the setting for all tracks.
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>RTime 5 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+or a specified one:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Drum4 Rtime 4 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The value passed to the RTime directive are the number of MIDI ticks with which to vary the start time of the notes. For example, if you specify ``5'' the start times will vary from -5 to +5 ticks) on each note for the specified track. There are 192 MIDI ticks in each quarter note.
+
+<P>
+Any value from 0 to 100 can be used; however values in the range 0 to 10 are most commonly used. Exercise caution in using large values!
+
+<P>
+You can specify a different <I>RTime</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord RTime 4 10 / 4 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H1><A NAME="SECTION0017170000000000000000"></A>  <A NAME="scale-type"></A>
+<BR>
+ScaleType
+</H1>
+
+<P>
+This option is only used by  <I>Scale</I> tracks. It can be set for other tracks, but the setting is not  used.
+
+<P>
+By default, the <I>ScaleType</I> is set to <I>Auto</I>. The settings permissible are:
+
+<P>
+<BLOCKQUOTE>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="RIGHT">CHROMATIC</TD>
+<TD ALIGN="LEFT">Forces use of a chromatic scale</TD>
+</TR>
+<TR><TD ALIGN="RIGHT">AUTO</TD>
+<TD ALIGN="LEFT">Uses scale based on the current chord (default)</TD>
+</TR>
+</TABLE>
+</BLOCKQUOTE>
+
+<P>
+When this command is encountered in a <I>Scale</I> track the start point of the scale is reset.
+
+<P>
+
+<H1><A NAME="SECTION0017180000000000000000">
+Seq</A>
+</H1> 
+
+<P>
+If your sequence, or groove, has more than one pattern (ie. you have set SeqSize to a value other than 1), you can use this directive to force a particular pattern point to be used. The directive:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Seq </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+resets the <B>sequence counter</B> to 1. This means that the next bar will use the first pattern in the current sequence. You can force a specific pattern point by using an optional value after the directive. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Seq 8 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+forces the use of pattern point 8 for the next bar. This can be quite useful if you have a multibar sequence and, perhaps, the eight bar is variation which you want used every eight bars, but also for a transition bar, or the final bar. Just put a <B>seq 8</B> at those points. You might also want to put a <I>seq</I> at the start of sections to force the restart of the count.
+
+<P>
+This command will also disable the effects of <I>SeqRnd</I>. One difference between <I>SeqNoRnd</I> and <I>Seq</I> is that the current sequence point is set with the latter; with <I>SeqNoRnd</I> it is left at a random point.
+
+<P>
+Note: Using a value greater than the  current <I>SeqSize</I> is not permitted.
+
+<P>
+This is a very useful command! For example, look at the four bar introduction of the song ``Exactly Like You'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Groove BossanovaEnd 
+<BR>
+seq 3 
+<BR>
+1       C     
+<BR>
+seq 2 
+<BR>
+2       Am7  
+<BR>
+seq 1 
+<BR>
+3       Dm7  
+<BR>
+seq 3 
+<BR>
+4       G7    /     G7#5  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Here we have used the four bar ending groove to create an interesting introduction.
+
+<P>
+
+<H1><A NAME="SECTION0017190000000000000000"></A>  <A NAME="strum"></A>
+<BR>
+Strum
+</H1>
+
+<P>
+By default <I><B>MMA</B></I> plays all the notes in a chord at the same time. To make the chord more like something a guitar or banjo might play, use the <I>Strum</I> directive. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-1 Strum 5 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+sets the strumming factor to 5 for track Chord-1. 
+
+<P>
+Setting the <I>Strum</I> in any track other than a <I>Chord</I> track will generate a warning message and the command will be ignored.
+
+<P>
+The strum factor is specified in MIDI ticks. Usually values around 10 to 15 work just fine. The valid range for <I>Strum</I> is 0 to 100.
+
+<P>
+You can specify a different <I>Strum</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Strum 20 5 / 10 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Note: When chords have both a <I>strum</I> and <I>invert</I> applied, the order of the notes played will not necessarily be root, third, etc. The notes are sorted into ascending order, so for a C major scale with and <I>invert</I> of 1 the notes played would be ``E G C''. That is, unless the <I>Direction</I> (<A HREF="node17.html#scale-direction"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>) has been set to ``DOWN'' in which case the order would be reversed (but the notes would be the same).
+
+<P>
+
+<H1><A NAME="SECTION0017200000000000000000">
+Transpose</A>
+</H1> 
+
+<P>
+You can change the key of a piece with the ``Transpose'' command. For example, if you have a piece notated in the key of ``C'' and you want it played back in the key of ``D'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Transpose 2 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+will raise the playback by 2 semi-tones. Since I play tenor saxophone, I quite often do:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Transpose -2 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+which puts the MIDI keyboard into the same key as my horn.
+
+<P>
+You can use any value between -12 and 12. All tracks (with the logical exception of the drum tracks) are effected by this command.
+
+<P>
+
+<H1><A NAME="SECTION0017210000000000000000">
+Unify</A>
+</H1>  
+
+<P>
+The <I>Unify</I> command is used to force multiple notes of the same voice and pitch to be combined into a single, long, tone. This is very useful when creating a sustained voice track. For example, consider the following which might be used in real groove file:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Bass-Sus 
+<BR>
+Sequence  1 1 1 90  4  
+<BR>
+Articulate 100 
+<BR>
+Unify On 
+<BR>
+Voice TremoloStrings 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Without the <I>Unify On</I> command the strings would be sounded (or hit) four times during each bar; with it enabled the four hits are combined into one long tone. This tone can span several bars if the note(s) remain the same.
+
+<P>
+The use of this command depends on a number of items:
+
+<P>
+
+<UL>
+<LI>The <I>Voice</I> being used. It makes sense to use enable the setting if using a sustained tone like ``Strings"; it probably doesn't make sense if using a tone like ``Piano1''.
+
+<P>
+</LI>
+<LI>For tones to be combined you will need to have <I>Articulate</I> set to a value of 100. Otherwise the on/off events will have small gaps in them which will cancel the effects of <I>Unify</I>.
+
+<P>
+</LI>
+<LI>Ensure that <I>Rtime</I> is not set for <I>Unify</I> tracks since the start times may cause gaps.
+
+<P>
+</LI>
+<LI>If your pattern or sequence has different volumes in different beats (or bars) the effect of a <I>Unify</I> will be to igore volumes other than the first. Only the first <I>Note On</I> and the last <I>Note Off</I> events will appear in the MIDI file.
+
+<P>
+</LI>
+</UL>
+
+<P>
+You can specify a different <I>Unify</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Unify  On / / Off </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+But, we're not sure why you'd want to.
+
+<P>
+Valid arguments are ``On'' or ``1'' to enable; ``Off'' or ``0'' to disable.
+
+<P>
+
+<H1><A NAME="SECTION0017220000000000000000"></A>  <A NAME="set-voice"></A>
+<BR>
+Voice
+</H1>
+
+<P>
+The MIDI instrument or voice used for a track is set with:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-2 Voice Piano1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Voices apply only to the specified track. The actual instrument can be specified via the MIDI instrument number, or with the symbolic name. See the tables in the MIDI voicing section (<A HREF="node23.html#sec-voicenames"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>) for lists of the recognized names.
+
+<P>
+You can create interesting effects by varying the voice used with drum tracks. By default ``Voice 0'' is used. However, you can change the drum voices. Our library files do not change the voices since this appears to be highly dependent on the MIDI synth you are using.
+
+<P>
+You can specify a different <I>Voice</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Voice Piano1 / / Piano2 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H1><A NAME="SECTION0017230000000000000000"></A>  <A NAME="set-voicetr"></A>
+<BR>
+VoiceTr
+</H1>
+
+<P>
+In previous section we saw how to set a voice for a track by using its standard MIDI name. The <I>VoiceTr</I> command sets up a translation table that can be used in two different situations:
+
+<P>
+
+<UL>
+<LI>It permits creation of your own names for voices (perhaps for a foreign language),
+
+<P>
+</LI>
+<LI>It lets you override or change  voices used in standard library files.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>VoiceTr</I> works by setting up a simple translation table of ``name'' and ``alias'' pairs. Whenever <I><B>MMA</B></I> encounters a voice name in a track command it first attempts to translate this name though the alias table.
+
+<P>
+To set a translation (or series of translations):
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>VoiceTr  Piano1=Clavinet  Hmmm=18  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Note that you additional <I>VoiceTr</I> commands will add entries to the existing table. To clear the table use the command with no arguments:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>VoiceTr  // Empty table </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Assuming the first command, the following will occur:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-Main Voice Hmmm </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The <I>Voice</I> for the <I>Chord-Main</I> track will be set to ``18'' or ``Organ3''.
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-2 Voice Piano1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The <I>Voice</I> for the <I>Chord-2</I> track will be set to ``Clavinet''.
+
+<P>
+If your synth does not follow standard GM-MIDI voice naming conventions you can create a translation table which can be included in all your <I><B>MMA</B></I> song files via an RC file. But, do note that the resulting files will not play properly on a synth conforming to the GM-MIDI specification.
+
+<P>
+Following is an abbreviated and untested example for using an obsolete and unnamed synth:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>VoiceTr  Piano1=3   &#92;
+<BR>
+Piano2=4  &#92;
+<BR>
+Piano3=5  &#92;
+<BR>			  ...  &#92;
+<BR>
+Strings=55  &#92;
+<BR>			  ...  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Notes: the translation is only done one time and no verification is done when the table is created.
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html533"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html531"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html525"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html534"
+  HREF="node18.html">Begin/End Blocks</A>
+<B> Up:</B> <A NAME="tex2html532"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html526"
+  HREF="node16.html">Low Level MIDI Commands</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

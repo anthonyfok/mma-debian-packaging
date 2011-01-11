@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Repeats</TITLE>
+<META NAME="description" CONTENT="Repeats">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node15.html">
+<LINK REL="previous" HREF="node13.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node15.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html481"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html479"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html473"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html482"
+  HREF="node15.html">Variables, Conditionals and Jumps</A>
+<B> Up:</B> <A NAME="tex2html480"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html474"
+  HREF="node13.html">Volume and Dynamics</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION001400000000000000000"></A>
+<A NAME="sec-repeat"></A>
+<BR>
+Repeats
+</H1>
+
+<P>
+<I><B>MMA</B></I> attempts to be as comfortable to use as standard sheet music. This includes <B>repeats</B> and <B>endings</B>.
+
+<P>
+More complex structures like <B>D.S.</B>, <B>Coda</B>, etc. are <I>not</I> directly supported. But, they are easily simulated with by using some simple variables, conditionals and <I>Goto</I>s. See chapter <A HREF="node15.html#sec-variables">15</A> for details. Often as not, it may be easier to use your editor to cut, paste and duplicate. Another, alternate, method of handling complicated repeats is to set sections of code in <I>Mset</I> (<A HREF="node15.html#sec-mset"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>) variables and simply expand those.
+
+<P>
+A section of music to be repeated is indicated with a <I>Repeat</I> and <I>Repeatend</I> or <I>EndRepeat</I><A NAME="tex2html56"
+  HREF="#foot4942"><SUP>14.1</SUP></A> In addition, you can have <I>RepeatEndings</I>.
+
+<P>
+
+<DIV ALIGN="CENTER">
+
+<P><A NAME="eg-repeat"></A></P>      
+	<TABLE CELLSPACING=0 CELLPADDING=10" BGCOLOR="#dddddd" BORDER=3><TR> <TD>
+	
+      	<TABLE  WIDTH="100%"><CAPTION ALIGN="BOTTOM"><STRONG><B>Example</B> 14.1:</STRONG>
+Repeats</CAPTION>
+<TR><TD> 
+      	    <BR>
+<BR>
+
+<P>
+<IMG
+ WIDTH="497" HEIGHT="73" ALIGN="BOTTOM" BORDER="0"
+ SRC="img21.png"
+ ALT="\includegraphics[width=.9\textwidth]{mupex/repeat.ps}">	<BR>
+<BR>
+<BR>
+<BR>
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Repeat 
+<BR>
+1	 Am  
+<BR>
+2 	 C  
+<BR>
+RepeatEnding 2
+<BR>
+3 	D7 
+<BR>
+RepeatEnding 
+<BR>
+4 	 D7 / Dm 
+<BR>
+RepeatEnd 
+<BR>
+5	 G7 
+<BR>
+6 	 A  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+      	    <BR>
+<BR>
+      	    </TD></TR>
+</TABLE>
+
+<P>
+ 
+
+	</TD></TR></TABLE> 
+ 
+</DIV>
+
+<P>
+In example <A HREF="#eg-repeat">14.1</A> <I><B>MMA</B></I> produces music with bars:
+
+<P>
+<BLOCKQUOTE>
+1, 2, 3, 
+<BR>
+1, 2, 3, 
+<BR>
+1, 2, 4, 
+<BR>
+1, 2, 5, 6
+
+</BLOCKQUOTE>
+
+<P>
+This works just like standard sheet music. Note that both <I>RepeatEnding</I> and <I>RepeatEnd</I> can take an optional argument indicating the number of times to use the ending or to repeat the block. The effect of an optional count for <I>RepeatEnding</I> is illustrated in the example, above. The following simple example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Repeat 
+<BR>
+1&nbsp; Am 
+<BR>
+2&nbsp; Cm 
+<BR>
+RepeatEnd 3  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Will expand to:
+<BLOCKQUOTE>
+1, 2, 
+<BR>
+1, 2, 
+<BR>
+1, 2
+
+</BLOCKQUOTE>
+
+<P>
+Note that the optional argument ``3'' produces a total of three copies. The default argument for <I>Repeat</I> is ``2'' (values less than 2 are not permitted).
+
+<P>
+Combining optional counts with both <I>RepeatEnding</I> and <I>RepeatEnd</I> is permitted. However, the final repeats will not include the endings. Another example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Repeat 
+<BR>
+1	 Am  
+<BR>
+2 	 C  
+<BR>
+RepeatEnding 2
+<BR>
+3 	D7 
+<BR>
+RepeatEnd 2  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Produces:
+<BLOCKQUOTE>
+1, 2, 3, 
+<BR>
+1, 2, 3,
+<BR>
+1, 2, 
+<BR>
+1, 2
+
+</BLOCKQUOTE>
+
+<P>
+<I><B>MMA</B></I> processes repeats by reading the input file and creating duplicates of the repeated material. This means that a directive in the repeated material would be processed multiple times. Unless you know what you are doing, directives should not be inserted in repeat sections. Be especially careful if you define a pattern inside a repeat. Using <I>Tempo</I> with a ``+'' or ``-'' will be problematic as well.
+
+<P>
+Repeats can be nested to any level.
+
+<P>
+There must be one <I>RepeatEnd</I> or <I>EndRepeat</I> for every <I>Repeat</I>. Any number of <I>RepeatEndings</I> can be included before the <I>RepeatEnd</I>.
+<BR><HR><H4>Footnotes</H4>
+<DL>
+<DT><A NAME="foot4942">...EndRepeat</A><A
+ HREF="node14.html#tex2html56"><SUP>14.1</SUP></A></DT>
+<DD>The reason for both <I>EndRepeat</I> and <I>RepeatEnd</I> is that we have both <I>IfEnd</I> and <I>EndIf</I>.
+
+</DD>
+</DL><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html481"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html479"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html473"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html482"
+  HREF="node15.html">Variables, Conditionals and Jumps</A>
+<B> Up:</B> <A NAME="tex2html480"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html474"
+  HREF="node13.html">Volume and Dynamics</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

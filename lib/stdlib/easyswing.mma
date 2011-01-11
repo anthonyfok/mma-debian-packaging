@@ -1,0 +1,175 @@
+
+// easyswing
+
+Begin Doc
+
+ Soft guitar strumming. Great of tunes like "Beyond The Sea"
+ and "Summertime".
+  
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 4		// All these patterns are 4/4
+Timesig 4 4
+Include stdpats
+
+
+///////////////////////////
+/// EasySwing
+
+
+SeqSize 4
+
+
+Begin Chord
+	Sequence	C1234	/  /  C13
+	Voicing Mode=Optimal Rmove=10
+	Voice JazzGuitar
+	Volume mf
+	Articulate 90
+	Strum 5
+	RVolume 10
+	Octave 5
+End
+
+Begin Bass
+	Sequence	B13	  /  / 	z
+	Octave 3
+	Articulate 80
+	Volume mp
+	Voice AcousticBass
+End
+
+Begin Walk
+	Sequence	z	z	z	W1234
+	Octave 3
+	Articulate 80
+	Volume mp
+	Voice AcousticBass
+End
+
+Begin Drum-HH
+	Sequence   D1234
+	Rvolume 5
+	RSkip 40
+	Tone OpenHihat
+	Volume p
+End	
+Begin Drum-PHH
+	Sequence	D24
+	Tone PedalHiHat
+	Volume p
+End
+
+DefGroove EasySwing       Nice/simple jazz guitar in 4.
+
+Begin Bass-Sus
+	Sequence  Sus1 Sus3
+	Volume p
+	Harmony 3
+	Voice TremoloStrings
+	Octave 5
+	Articulate 100
+	Unify On
+End
+
+DefGroove EasySwingSus    Adds a sustained violin to EasySwing.
+
+
+// EasySwingWalk
+// Same as above with with constant walking bass line
+
+Groove EasySwing
+
+Begin Walk
+	Sequence W1234
+	Articulate 70
+	Volume f
+End
+	
+Bass SeqClear
+
+DefGroove EasySwingWalk    The EasySwing Groove with a full walking \
+                           bass line. The bass volume has been increased \
+                           as well.
+
+Bass-Sus Groove EasySwingSus
+
+DefGroove EasySwingWalkSus   The EasySwing with a walking bass line and \
+                             a sustained string.
+
+////////////////////////////////////////////////////////
+///// Easy Swing1  - Same, but with 1 chord per bar
+
+Groove EasySwing	// Just modify the easyswing pattern
+
+Begin Chord
+	Sequence	L1
+	Strum 20
+End
+
+DefGroove EasySwing1    One strum per bar. Okay if the tempo is \
+                        quite fast, or as an introduction.
+
+Bass-Sus Groove EasySwingSus
+DefGroove EasySwing1Sus     Adds sustained strings to EasySwing1.
+
+
+////////////////////////////////////////////////////////
+///// Easy Swing2  - Same, but with 2 chords per bar
+
+Groove EasySwing
+
+Begin Chord
+	Sequence	L2
+	Strum 10
+End
+
+DefGroove EasySwing2      Same EasySwing, but with 2 strums per bar.
+
+Bass-Sus Groove EasySwingSus
+DefGroove EasySwing2Sus      Adds ChoirAahs to EasySwing2.
+
+/////////////////////////////////////////////
+/// EasySwing42  - alternate 4 and 2 strum bars
+
+Groove EasySwing
+Chord Sequence C1234 L2
+DefGroove EasySwing42      For faster rhythms, a bar of 4 followed \
+                           by a bar of 2.
+
+Bass-Sus Groove EasySwingSus
+DefGroove EasySwing42Sus     Add sustained strings to the 4-2 pattern.
+
+Groove EasySwingWalk
+Chord Groove EasySwing42
+DefGroove EasySwing42Walk    A 4-2 pattern with a walking bass.
+
+Bass-Sus Groove EasySwingSus
+DefGroove EasySwing42WalkSus  The 4-2 pattern with walking bass and \
+                              sustained strings.
+
+
+///////////////////////////////////////////////
+// EasySwingEnd  - a 2 bar ending
+
+
+SeqClear
+Groove EasySwing	// Just modify the easyswing pattern
+SeqSize 2
+
+Drum-HH  Sequence D16 D8
+
+Begin Chord
+	Sequence 	C1234
+	Articulate 50
+End
+
+Walk Sequence	-
+Bass Sequence 	B13	B1234
+
+DefGroove EasySwingEnd     Simple ending.
+
+

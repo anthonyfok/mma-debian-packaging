@@ -1,0 +1,54 @@
+I'm pleased to announce the release of my program
+
+	mma - Musical MIDI Accompaniment
+	version: Beta 0.12
+	
+MMA is a accompaniment generator -- it creates midi tracks
+for a soloist to perform over from a user supplied file
+containing chords and MMA directives.
+
+MMA is very versatile and generates excellent tracks. It comes
+with an extensive user-extendable library with a variety of
+patterns for various popular rhythms, an extensive user manual,
+and several demo songs.
+
+MMA is a command line driven program. It creates MIDI files
+which need a sequencer or MIDI file play program.
+
+MMA is written in Python. You'll need Python 2.3 (or later)
+for MMA to function.
+
+MMA is supplied in 4 tar.gz archives. Included:
+
+	mma-bin   -- the main script and library files.
+	mma-html  -- documentation in HTML format.
+	mma-pdf   -- documentation in PDF format.
+	mma-songs -- a collection of about 120 songs in MMA format.
+   
+If you get all four download packages the total size is still
+less than 1.5 megabytes.
+
+MMA is currently in final BETAs. We are hoping for a 1.0 release
+early in 2005. Right now we need help in debugging the program,
+creating songs for distribution, and new and improved
+library files.
+
+Best of all, MMA is free. It is released under the terms of the GNU
+General Public License. It has been developed on a Linux platform,
+but should be usable on just about any system. A detailed page now
+exists on our web site on how-to install on a Windows system.
+
+MMA is available on my personal home page:
+
+	http://mypage.uniserve.com/~bvdp/mma/mma.html
+	
+If you have any questions or comments, please send them
+to: bvdp@uniserve.com
+	
+Beta 0.12: Bass patterns expanded, minor improvements to Scale and
+Walk tracks, harmony improvements, a new MIDI INCLUDE directive,
+improved solo voice methods, and general cleanups/fixes.
+
+
+Comments appreciated!
+

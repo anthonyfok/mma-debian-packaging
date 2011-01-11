@@ -1,0 +1,114 @@
+
+// rockballad
+
+Begin Doc
+
+	Written for slowish/doo-wop things like "You Belong To Me".
+      
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 4
+Timesig 4 4
+Include stdpats
+
+///////////////////////////////////////
+////// Additional patterns
+
+
+/////////////////////////////////////////////////
+////// RockBallad
+
+SeqSize 4
+
+Begin Drum
+	Sequence	{ D4 * 3 }
+	Tone ClosedHiHat
+	Volume mf
+	Rskip 1
+	Rvolume 10
+End
+
+Begin Drum-Snare
+	Sequence   D1234
+	Tone SnareDrum1
+	Volume p
+	Rvolume 20
+End
+
+Begin Drum-Kick
+	Sequence D1
+	Tone KickDrum1
+	Volume mp
+	Rvolume 20
+End
+
+Begin Bass
+	Sequence B13 / / z
+	Voice FretlessBass
+	Octave 3
+	Volume mf
+	Articulate 80
+End
+
+Begin Walk
+	Sequence z z z W1234
+	Voice FretlessBass
+	Octave 3
+	Volume mf
+	Articulate 80
+End
+
+Begin Chord
+	Sequence  C1234  /   /  { C1234 * 3 }
+	Accent 1 20 3 20
+	Voice JazzGuitar
+	Volume mp
+	Articulate 80
+End
+
+DefGroove RockBallad   Basic beat with triplet Hi-Hats.
+
+/////////////////////////////
+// RockBalladVoice
+// Adds some hamonious voices
+
+Groove RockBallad
+
+Begin Bass-Sus
+	Sequence     Sus1  Sus3 Sus5 Sus1
+	Rskip 10
+	Harmony Open
+	SeqRnd
+	Octave 4
+	Volume p
+	Articulate 100
+	Unify On
+	Voice ChoirAahs
+End
+
+DefGroove RockBalladVoice   Adds some cheese with choir voices.
+
+
+///////////////////////////////////////////////
+/// 4 bar ending
+
+
+Groove RockBallad
+
+Chord Sequence  C1234
+Bass Sequence B13
+Walk SeqClear
+Begin Scale
+	Sequence Scale16 Scale8 Scale4 Scale2
+	Volume mp
+	Voice TenorSax
+	Articulate 99
+End
+
+DefGroove RockBalladEnd    Ending with a scaling tenor sax. Use Seq 1 \
+                           to 4 for 16ths, 8th, 4th or 1/2 note runs.
+	
+

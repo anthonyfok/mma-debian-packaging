@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Creating Effects</TITLE>
+<META NAME="description" CONTENT="Creating Effects">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node22.html">
+<LINK REL="previous" HREF="node20.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node22.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html611"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html609"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html603"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html612"
+  HREF="node22.html">Frequency Asked Questions</A>
+<B> Up:</B> <A NAME="tex2html610"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html604"
+  HREF="node20.html">Paths, Files and Libraries</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html613"
+  HREF="node21.html#SECTION002110000000000000000">Overlapping Notes</A>
+<LI><A NAME="tex2html614"
+  HREF="node21.html#SECTION002120000000000000000">Jungle Birds</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION002100000000000000000"></A>
+<A NAME="sec-effects"></A>
+<BR>
+Creating Effects
+</H1>
+
+<P>
+It's really quite amazing how easy and effective it is to create different patterns, sequences and special effects. As we develop the program we try lots of silly things...this chapter is an attempt to display and preserve some of them.
+
+<P>
+The examples don't show any music to apply the patterns or sequences to. We assume that if you've gotten this far in the manual you'll know that you should have something like:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>1  C 
+<BR>
+2  G 
+<BR>
+3  G 
+<BR>
+4  C  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+as a simple test piece to apply tests to.
+
+<P>
+
+<H1><A NAME="SECTION002110000000000000000">
+Overlapping Notes</A>
+</H1>
+
+<P>
+We've mentioned earlier that you should create patterns so that notes don't overlap. However, here's an interesting effect which relies on ignoring that advice:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Begin Scale 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;define S1 1 1+1+1+1 90  
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;define S32 S1 * 32 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Sequence S32 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;ScaleType  
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Direction Both 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Voice Accordion 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 
+<BR>
+End  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+We define ``S1'' with a note length of 4 whole notes (1+1+1+1) so that when we multiply it for S32 we end up with a pattern of 32 8th notes. Of course, the notes overlap. Running this up and down a chromatic scale is ``interesting.'' 
+You might want to play with this a bit and try changing ``S1'' to:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>define S1 1 1 90  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+to see what the effect is of the notes overlapping.
+
+<P>
+
+<H1><A NAME="SECTION002120000000000000000">
+Jungle Birds</A>
+</H1>
+
+<P>
+Here's another use for <I>Scale</I>s. We decided that some jungle sounds  would be perfect as an introduction to ``Yellow Bird''.
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>groove Rhumba 
+<BR>
+Begin Scale 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;define S1 1 1 90  
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;define S32 S1 * 32 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Sequence S32 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;ScaleType Chromatic 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Direction  Random 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Voice BirdTweet 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 6 4 5 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;RVolume 30 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Rtime 2 3 4 5 
+<BR>	&nbsp;&nbsp;&nbsp;&nbsp;Volume pp pp ppp ppp 
+<BR>
+End 
+<BR>
+DefGroove BirdRumba 	 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The above is an extract from the <I><B>MMA</B></I> score. The entire song is included in the ``songs'' directory of this distribution.
+
+<P>
+A neat trick is to  create the bird sound track and then add it to the existing Rhumba groove. Then we define a new groove. Now we can select either the library ``rhumba'' or our enhanced ``BirdRhumba'' with a simple <I>Groove</I> directive.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html611"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html609"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html603"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html612"
+  HREF="node22.html">Frequency Asked Questions</A>
+<B> Up:</B> <A NAME="tex2html610"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html604"
+  HREF="node20.html">Paths, Files and Libraries</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,178 @@
+
+// countrywaltz
+
+Begin Doc
+
+  These waltzes are good for "old-time" things like 
+  "Que Sera Sera".
+  
+End
+
+Author Bob van der Poel
+
+SeqClear
+Time 3
+Timesig 3 4
+Include stdpats34
+
+
+/////////////////////////////////////////////
+// Country/Old-time 
+
+
+Seqsize 4
+
+Begin Bass
+	Sequence  B1   B1/5
+	Voice AcousticBass
+	Octave 3
+	Articulate 90
+	Volume mp
+End
+	
+Begin Chord
+	Sequence C23 
+	Voice NylonGuitar
+	Voicing    Mode=Optimal
+	Octave 4
+	Strum 10
+	Volume mp
+	Articulate 99
+End
+
+// Same voice as the strumming guitar we play a decending 5/3/1 line
+// on the 2nd, 6th, etc. bar, and the same accending on 4, 8, etc.
+
+Begin Bass-Chord
+	Sequence   z   {1 4 5 90; 2 4 3 90; 3 4 1 90}  z  B123
+	Voice NylonGuitar
+	Octave 4
+	Volume mp
+	Articulate 99
+End
+
+
+Begin Drum
+	Sequence D23
+	Tone ClosedHiHat
+	Rtime 10
+	Rvolume 10
+	Rskip 10
+	Volume mp
+End
+
+Begin Drum-Kick
+	Sequence D1
+	Tone KickDrum1
+	Rtime 10
+	Rvolume 10
+	Volume pp
+End
+	
+DefGroove CountryWaltz  Doris Day would like this! A string \
+                        bass on beat 1 with a strummed guitar on 2 \
+                        and 3, and a light-feeling drum. 
+		
+/// Add a sustained string to our CountryWaltz
+
+Begin Bass-Sus
+	Sequence Sus1 Sus3 Sus5 Sus1
+	SeqRnd
+	Harmony Open
+	Voice TremoloStrings
+	Octave 5
+	Volume pp
+	Articulate 100
+	Unify On
+End
+
+DefGroove   CountryWaltzSus  The CountryWaltz with a sustained string.
+
+///////////////////////////////////////
+/// CountryWaltz with a decending flute line
+
+Groove CountryWaltz
+
+Begin Arpeggio
+	Sequence   A6   A3 
+	Octave 5
+	Invert 0 1 2 1
+	Voice Flute
+	Direction Down
+	Rskip 30
+	SeqRnd
+	Rvolume 30
+	Volume ppp
+	Articulate 90
+End
+
+DefGroove CountryWaltz1   Same old waltz with an arpeggiating flute. Nice.
+
+Bass-Sus  Groove CountryWaltzsus
+
+DefGroove CountryWaltz1Sus The old waltz with a flute and sustained string.
+
+
+/// CountryWaltz with a arpeggiating guitar
+
+Groove CountryWaltz
+
+Begin Arpeggio
+	Sequence   A3 / / A6
+	Octave 4
+	Range 2
+	Voice NylonGuitar
+	Direction Up / / Down
+	Rvolume 10
+	Accent 1 10
+	Volume p
+	Articulate 99
+End
+
+Bass-Chord Sequence -
+
+DefGroove CountryWaltz2       Waltz with arpeggiating guitar.
+
+Bass-Sus  Groove CountryWaltzsus
+
+DefGroove CountryWaltz2Sus    Waltz with arpeggiating guitar and \
+                              sustained string.
+
+
+//// Ending
+
+
+SeqClear
+Seqsize 4
+
+Begin Chord
+	Sequence C23  /  L2 L1
+	Articulate 99
+	Voice NylonGuitar
+	Strum 10
+	Volume mp
+End
+
+Begin Bass
+	Sequence B1  B1/5  B123  B1
+	Voice AcousticBass
+	Articulate 99
+	Volume mp
+End
+
+Begin Drum
+	Sequence   D12   /  /  D1
+	Tone RideCymbal2 
+	Volume    ppp   pp  p  mf
+End
+
+Begin Drum-Kick
+	Sequence D1
+	Tone KickDrum1
+	Volume p
+End
+	
+DefGroove CountryWaltzEnd 	A good ending with a cymbal roll. The \
+                            4th bar just hits on the first beat.
+
+	

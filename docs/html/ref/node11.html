@@ -1,0 +1,578 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Chord Voicing</TITLE>
+<META NAME="description" CONTENT="Chord Voicing">
+<META NAME="keywords" CONTENT="mma">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="mma.css">
+
+<LINK REL="next" HREF="node12.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="mma.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html427"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html425"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html419"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html428"
+  HREF="node12.html">Tempo and Timing</A>
+<B> Up:</B> <A NAME="tex2html426"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html420"
+  HREF="node10.html">Solo and Melody Tracks</A>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html429"
+  HREF="node11.html#SECTION001110000000000000000">Voicing</A>
+<UL>
+<LI><A NAME="tex2html430"
+  HREF="node11.html#SECTION001111000000000000000">Voicing Mode</A>
+<LI><A NAME="tex2html431"
+  HREF="node11.html#SECTION001112000000000000000">Voicing Range</A>
+<LI><A NAME="tex2html432"
+  HREF="node11.html#SECTION001113000000000000000">Voicing Center</A>
+<LI><A NAME="tex2html433"
+  HREF="node11.html#SECTION001114000000000000000">Voicing Move</A>
+<LI><A NAME="tex2html434"
+  HREF="node11.html#SECTION001115000000000000000">Voicing Dir</A>
+<LI><A NAME="tex2html435"
+  HREF="node11.html#SECTION001116000000000000000">Voicing Rmove</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html436"
+  HREF="node11.html#SECTION001120000000000000000">Compress</A>
+<LI><A NAME="tex2html437"
+  HREF="node11.html#SECTION001130000000000000000">DupRoot</A>
+<LI><A NAME="tex2html438"
+  HREF="node11.html#SECTION001140000000000000000">Invert</A>
+<LI><A NAME="tex2html439"
+  HREF="node11.html#SECTION001150000000000000000">Limit</A>
+<LI><A NAME="tex2html440"
+  HREF="node11.html#SECTION001160000000000000000">Range</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION001100000000000000000"></A>
+<A NAME="chord-voicing"></A>
+<BR>
+Chord Voicing
+</H1>
+
+<P>
+In music, a chord is simply defined as two more notes played simultaneously. Now, this doesn't mean that you can play just any two or three notes and get a chord which sounds nice--but whatever you do get will be a chord of some type. And, to further confuse the unwary, different arrangements of the same notes sound better (or worse) in different musical situations.
+
+<P>
+As a simple example, consider a C major chord. Built on the first, third and fifth notes of a C major scale it can be manipulated into a variety of sounds:
+
+<P>
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="441" HEIGHT="90" ALIGN="BOTTOM" BORDER="0"
+ SRC="img16.png"
+ ALT="\includegraphics[width=.8\textwidth]{mupex/cmajor}">
+
+</DIV>
+
+<P>
+These are all C major chords ...but they all have a different sound or color. The different forms a chord can take are called ``voicings''. Again, this manual is not intended to be a primer on musical theory--that's a subject way beyond our abilities, and (again) we really recommend your favorite music teacher and the study of basic music theory if you want to understand how and why <I><B>MMA</B></I> creates its tracks.
+
+<P>
+The different options in this chapter effect not only the way chords are constructed, but also the way bass lines and other tracks are formed. 
+
+<P>
+There are generally two ways in <I><B>MMA</B></I> to take care of voicings.
+
+<P>
+
+<OL>
+<LI>use <I><B>MMA</B></I>'s extensive <I>Voicing</I> options, most likely with the <I>''Optimal''</I> voicing algorithm,
+
+<P>
+</LI>
+<LI>do everything by yourself	with the commands <I>Invert</I> and <I>Compress</I>.
+
+<P>
+</LI>
+</OL>
+
+<P>
+The commands <I>Limit</I> and <I>DupRoot</I>  may be used independently for both variants.
+
+<P>
+
+<H1><A NAME="SECTION001110000000000000000">
+Voicing</A>
+</H1> 
+
+<P>
+The <I>Voicing</I> command is use to set the voicing mode and several other options relating to the selected mode. The command needs to have a <I>Chord</I> track specified and a series of Option=Value pairs. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-Piano Voicing  Mode=Optimal Rmove=10 Range=9 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In the following sections we will cover all the options available.
+
+<P>
+
+<H2><A NAME="SECTION001111000000000000000">
+Voicing Mode</A>
+</H2>
+
+<P>
+The easiest way to deal with chord voicings is to via the <I>Voicing Mode=XX</I> option.
+
+<P>
+When choosing the inversion of a chord to play an accompanist will take into consideration the style of the piece and the chord sequences. In a general sense, this is referred to as ``voicing''.
+
+<P>
+A large number of the library files have been written to take advantage of the following voicing commands. However, not all styles of music take well to the concept. And, don't forget about the other commands since they are useful in manipulating bass lines, as well as other chord tracks (eg. sustained strings).
+
+<P>
+<I><B>MMA</B></I> has a variety of sophisticated, intelligent algorithms<A NAME="tex2html46"
+  HREF="#foot3682"><SUP>11.1</SUP></A> to deal with voicing.
+
+<P>
+As a general rule you should not use the <I>Invert</I> and <I>Compress</I> commands in conjunction with the <I>Voicing</I> command. If you do, you may create beautiful sounds. But, the results are more likely to be less-than-pleasing. Use of voicing and other combinations will display various warning messages.
+
+<P>
+The main command to enable voicings is:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Voicing  Mode=Type  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+As mentioned above, this command can only be applied to <I>Chord</I> tracks. Also note that this effects all bars in the sequence ...you cannot have different voicings for different bars in the sequence (attempting to do this would make no sense).
+
+<P>
+The following MODE types are available:
+
+<P>
+<DL>
+<DT><STRONG>Optimal</STRONG></DT>
+<DD>A basic algorithm which automatically chooses the best sounding voicing depending on the voicing played before. Always try this option before anything else. It might work just fine without further work.
+
+<P>
+The idea behind this algorithm is to keep voicings in a sequence close together. A  pianist leaves his or her fingers where they are, if they still fit the next chord. Then, the notes closest to the fingers are selected for the next chord. This way characteristic notes are emphasized.
+
+<P>
+</DD>
+<DT><STRONG>Root</STRONG></DT>
+<DD>This Option may for example be used to turn off <I>Voicing</I> 	within a song. <I>Voicing Mode=Root</I> means nothing else than doing nothing, leaving all chords 	in root position. 
+
+<P>
+</DD>
+<DT><STRONG>None</STRONG></DT>
+<DD>This is the same as the <I>Root</I> option.
+
+<P>
+</DD>
+<DT><STRONG>Invert</STRONG></DT>
+<DD>Rather than basing the inversion selection on an analysis of 	past chords, this method quite stupidly tries to keep chords around the 	base point of ``C'' by inverting ``G'' and ``A'' chords upward and 	``D'', ``E'' and ``F'' downward. The chords are also compressed. Certainly not an ideal algorithm, but it can be used to add variety in a piece.
+
+<P>
+</DD>
+<DT><STRONG>Compressed</STRONG></DT>
+<DD>Does the same as the stand-alone <I>Compress</I> command. Like <I>Root</I>, it is only added to be used in some parts of a song where <I>Voicing Mode=Optimal</I> is used.
+
+<P>
+</DD>
+</DL>
+
+<P>
+
+<H2><A NAME="SECTION001112000000000000000">
+Voicing Range</A>
+</H2> 
+
+<P>
+To get wider or closer voicings, you may define a range for the voicings. This can be adjusted with the <I>Range</I> option:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-Guitar Voicing Mode=Optimal Range=12 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In most cases the default value of 12 should work just fine. But, you may want to fine tune ...it's all up to you. This command only effects chords
+created with <I>Mode=Optimal</I>.
+
+<P>
+
+<H2><A NAME="SECTION001113000000000000000">
+Voicing Center</A>
+</H2>
+
+<P>
+Just minimizing the Euclidean distance between chords doesn't do the trick as there could be runaway progressions that let the voicings drift up or down infinitely.
+
+<P>
+When a chord is ``voiced'' or moved to a new position, a ``center point'' must be used as a base. By default, the fourth degree of the scale corresponding  to the chord is a reasonable choice. However, you can change this with:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-1 Voicing Center=&lt;value&gt; </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The <I>value</I> in this command can be any number in the range 0 to 12.		
+Try different values. The color of your whole song might change.
+
+<P>
+Note that the value is the note in the scale, not a chord-note position.
+
+<P>
+This command only effects chords created with <I>Mode=Optimal</I>.
+
+<P>
+
+<H2><A NAME="SECTION001114000000000000000">
+Voicing Move</A>
+</H2>
+
+<P>
+To intensify a chord progression you may want to have ascending or descending
+movement of voicings. This option, in conjunction with the <I>Dir</I> optional (see below) sets the number of bars over which a movment is done. 
+
+<P>
+For the <I>Move</I> option to have any effect you must also set the direction to either -1 or 1. Be careful that you don't force the chord too high or low on the scale. Use of this command in a <I>Repeat</I> section can cause unexpected results. For this reason we suggest that you include an <I>Seq</I> command at the beginning of repeated sections of your songs.
+
+<P>
+In most cases the use of this command is limited to a section of a song, its use is not recommended in groove files. You might want to do something like this in a song:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>..select groove with voicing
+<BR>
+chords..
+<BR>
+Chord-Piano Voicing Move=5 Dir=1 
+<BR>
+more chords..
+<BR>
+Chord-Piano Voicing Move=5 Dir=-1 
+<BR>
+more chords.. </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+
+<H2><A NAME="SECTION001115000000000000000">
+Voicing Dir</A>
+</H2>
+
+<P>
+This option is used in conjunction with the <I>Move</I> option to set the direction (-1 or 1) of the movement.
+
+<P>
+
+<H2><A NAME="SECTION001116000000000000000">
+Voicing Rmove</A>
+</H2>
+
+<P>
+As an alternate to movement in a specified direction, random movement can add some color and variety to your songs. The command option is quite useful (and safe to use) in groove files. The argument for this option is a percentage value specifying the frequency to apply a move in a random direction.
+
+<P>
+For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-3 Voicing Mode=Optimal Rmove=20 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+would cause a movement (randomly up or down) in 20% of the bars. As noted earlier, using explicit movement instructions can move the chord into an undesirable range or even ``off the keyboard''; however, the algorithm used in RMOVE has a sanity check to ensure that the chord center position remains, approximately, in a two octave range.
+
+<P>
+
+<H1><A NAME="SECTION001120000000000000000"></A>  <A NAME="compress"></A>
+<BR>
+Compress
+</H1>
+
+<P>
+When <I><B>MMA</B></I> grabs the notes for a chord, the notes are spread out from the root position. This means that if you specify a ``C13'' you will have an ``A'' nearly 2 octaves above the root note as part of the chord. Depending on your instrumentation, pattern, and the chord structure of your piece, notes outside of the ``normal'' single octave range for a chord <I>may</I> sound strange. 
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Compress 1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Forces <I><B>MMA</B></I> to put all chord notes in a single octave range.
+
+<P>
+This command is only effective in <I>Chord</I> and <I>Arpeggio</I> tracks. A warning message is printed if it is used in other contexts.
+
+<P>
+Notes: <I>Compress</I> takes any value between 1 and 5 as arguments (however, some values will have no effect as detailed above). You can specify a different <I>Compress</I> for each bar in a sequence. Repeated values can be represented with a ``/'':
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Compress 1 / 0 / </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+To restore to its default (off) setting, use a ``0'' as the argument.
+
+<P>
+For a similar command, with different results, see the <I>Limit</I> command (<A HREF="node11.html#limit"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+
+<H1><A NAME="SECTION001130000000000000000"></A>  <A NAME="duproot"></A>
+<BR>
+DupRoot
+</H1>
+
+<P>
+To add a bit of fullness to chords, it is quite common of keyboard players to duplicate the root tone of a chord into a lower (or higher) octave. This is accomplished in <I><B>MMA</B></I> with the command:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>DupRoot -1 1 -1 1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+The command determines whether or not the root tone of a chord is duplicated in another octave. By default notes are not added. A value of -1 will add a note one octave lower than the root note, -2 will add the tone 2 octaves lower, etc. Similarly, the value of 1 will add a note one octave higher than the root tone, etc.
+
+<P>
+Only the values -9 to 9 are permitted.
+
+<P>
+Different values can be used in each bar of the sequence.
+
+<P>
+The option is reset to 0 after all <I>Sequence</I> or <I>SeqClear</I> commands.
+
+<P>
+The <I>DupRoot</I> command is only valid in <I>Chord</I> tracks. A similar
+command is <I>Duplicate</I> (<A HREF="node17.html#duplicate"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>).
+
+<P>
+
+<H1><A NAME="SECTION001140000000000000000"></A>  <A NAME="chord-invert"></A>
+<BR>
+Invert
+</H1>
+
+<P>
+By default <I><B>MMA</B></I> uses chords in the root position. By example, the notes of a C major chord are C, E and G. Chords can be inverted (something musicians do all the time). Sticking with our C major chord, the first inversion shifts the root note up an octave and the chord becomes E, G and C. The second inversion is G, C and E.
+
+<P>
+<I><B>MMA</B></I> extends the concept of inversion a bit by permitting the shift to be to the left or right, and the number of shifts is not limited. So, you could shift a chord up several octaves by using large invert values.<A NAME="tex2html47"
+  HREF="#foot3683"><SUP>11.2</SUP></A> 
+
+<P>
+Inversions apply to each bar of a sequence. So, the following is a good example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>SeqSize 4 
+<BR>
+Chord-1 Sequence STR1 
+<BR>
+Chord-1 Invert 0 1 0 1  </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+Here we set the sequence pattern size to 4 bars and set the pattern for each bar
+in the Chord-1 track to ``STR1''. Without the next line, this would result in a rather boring, repeating pattern. But, the Invert command forces the chord to be in the root position for the first bar, the first inversion for the second, etc.
+
+<P>
+You can use a negative Invert value:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord-1 Invert -1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+In this case the C major chord becomes G, C and E.
+
+<P>
+Note that using fewer Invert arguments than the current sequence size is permitted. <I><B>MMA</B></I> simply expands the number of arguments to the current sequence size. You may use a ``/'' for a repeated value.
+
+<P>
+A <I>Sequence</I> or <I>ClearSeq</I> command resets <I>Invert</I> to 0.
+
+<P>
+This command on has an effect in <I>Chord</I> and <I>Apreggio</I> tracks. And, frankly, <I>Arpeggio</I>s sound a bit odd with inversions.  
+
+<P>
+If you use a large value for <I>Invert</I> you can force the notes out of the normal MIDI range. In this case the lowest or highest possible MIDI note value will be used.
+
+<P>
+
+<H1><A NAME="SECTION001150000000000000000"></A>  <A NAME="limit"></A>
+<BR>
+Limit
+</H1>
+
+<P>
+If you use ``jazz'' chords in your piece, some people might not like the results. To some folks, chords like 11th, 13th, and variations have a dissonant sound. And, sometimes they are in a chart, but don't really make sense. The <I>Limit</I> command can be used to set the number of notes of a chord used.
+
+<P>
+For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Chord Limit 4 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+will limit any chords used in the <I>Chord</I> track to the first 4 notes of a chord. So, if you have a C11 chord which is C, E, G, B<IMG
+ WIDTH="12" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$\flat$">, D, and F, the
+chord will be truncated to C, E, G and B<IMG
+ WIDTH="12" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$\flat$">.
+
+<P>
+This command only applies to <I>Chord</I> and <I>Arpeggio</I> tracks. It can be set for other tracks, but the setting will have no effect.
+
+<P>
+Notes: <I>Limit</I> takes any value between 0 and 8 as an argument. The ``0'' argument will disable the command. This command applies to all chords in the sequence--only one value can be given in the command.
+
+<P>
+To restore to its default (off) setting, use a ``0'' as the argument.
+
+<P>
+For a similar command, with different results, see the <I>Compress</I> command
+(<A HREF="node11.html#compress"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>). 	
+
+<P>
+
+<H1><A NAME="SECTION001160000000000000000"></A>  <A NAME="sec-range"></A>
+<BR>
+Range
+</H1>
+
+<P>
+For <I>Arpeggio</I> and <I>Scale</I> tracks you can specify the number of octave used. The effects of the <I>Range</I> command is slightly different between the two.
+
+<P>
+<I>Scale</I>: Scale tracks, by default, create three octave scales. The <I>Range</I> value will modify this to the number of octaves specified. For example:
+
+<P>
+
+	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
+<BLOCKQUOTE><B>Scale Range 1 </B></BLOCKQUOTE>
+
+	</TD></TR></TABLE> 
+
+<P>
+will force the scales to one octave. A value of 4 would create 4 octave scales, etc.
+
+<P>
+<I>Arpeggio</I>: Normally, arpeggios use a single octave (really, they use whatever notes are in the chord, which might exceed the octave). Using the <I>Range</I> command we specify the number of octaves to use. The values of ``0'' and ''1'' have the same effect.
+
+<P>
+<BR><HR><H4>Footnotes</H4>
+<DL>
+<DT><A NAME="foot3682">... algorithms</A><A
+ HREF="node11.html#tex2html46"><SUP>11.1</SUP></A></DT>
+<DD>Great thanks are due to Alain Brenzikofer who not only pressured me into including the <I>Voicing</I> options, but wrote a great deal of the actual code.
+
+</DD>
+<DT><A NAME="foot3683">... values.</A><A
+ HREF="node11.html#tex2html47"><SUP>11.2</SUP></A></DT>
+<DD>	We've used the term ``shift'' here, but that's not quite what <I><B>MMA</B></I> does. The order of the notes in the internal buffer stays the same, just the octave for the notes is changed. So, if the chord notes are ``C E G'' with the MIDI values ``0, 4, 7'' an invert of 1 would change the notes to ``C<IMG
+ WIDTH="12" HEIGHT="21" ALIGN="BOTTOM" BORDER="0"
+ SRC="img17.png"
+ ALT="$^{2}$"> E G'' and the MIDI values to ``12, 4, 7''.
+
+</DD>
+</DL><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html427"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
+<A NAME="tex2html425"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
+<A NAME="tex2html419"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html428"
+  HREF="node12.html">Tempo and Timing</A>
+<B> Up:</B> <A NAME="tex2html426"
+  HREF="mma.html">Reference Manaul</A>
+<B> Previous:</B> <A NAME="tex2html420"
+  HREF="node10.html">Solo and Melody Tracks</A>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Bob
+2004-12-02
+</ADDRESS>
+</BODY>
+</HTML>

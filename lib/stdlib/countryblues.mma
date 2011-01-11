@@ -1,0 +1,131 @@
+
+// countryblues
+
+
+Doc    I use this on some country tunes like "I Fall To Pieces".
+
+Author Bob van der Poel
+
+SeqClear
+Time 4		// All these patterns are 4/4
+Timesig 4 4
+Include stdpats
+
+////////////////////////////
+/// Pattern definitions
+
+
+Begin Bass Define
+	B134	1 4 1 90; 3 8+16 3 80; 4 4 5 85 
+End
+
+
+////////////////////////////////////////////////////
+
+
+SeqSize 4
+
+Begin Drum-Snare
+	Sequence D8 
+	Tone SnareDrum1
+	Rskip 10
+	Rtime 2
+	Volume pp
+End
+
+Begin Drum-HH
+	Sequence { D8 Shift .5 }
+	Tone OpenHiHat
+	Rskip 40
+	Rtime 2
+	Volume ppp
+End
+
+Begin Drum-Clap
+	Sequence D24 
+	Tone HandClap
+	Volume mp
+	Rvolume 10
+	RSkip 50
+	SeqRnd
+End
+
+Begin Chord
+	ChShare Chord-1
+	Sequence   C1234  
+	Voice Piano3
+	Voicing   Mode=Optimal
+	RVolume 5
+	Octave 5
+	Volume mf
+	Articulate 99
+End
+
+Begin Chord-1
+	Copy Chord
+	ChShare Chord
+	Octave 6
+	Sequence   {C13 Shift .666}
+	Articulate 80
+	Volume mp
+End
+
+Begin Bass 
+	Sequence    B134    B13    B134   z
+	Voice FretlessBass
+	Octave 3
+	Volume mp
+	Articulate 80
+End
+
+Begin Walk
+	Sequence     z       z     z    W1234
+	Voice FretlessBass
+	Octave 3
+	Volume mp
+	Articulate 80
+End
+
+
+DefGroove CountryBlues   Somewhat lamentive blues.
+
+Begin Bass-Sus
+	Sequence     Sus1  /  Sus3  Sus5 
+	SeqRnd
+	Harmony OpenAbove
+	Octave 4
+	Volume mp
+	Articulate 100
+	Unify On
+	Voice Slowstrings
+End
+
+DefGroove CountryBluesSus   Adds  sustained strings.
+
+//////////////////////////////////////////////
+// CountryBlues1
+// Change chord for a random Triplet/Triplet/Chord/Chord
+
+Groove CountryBlues
+
+Begin Chord
+	Sequence  C1234  { C1234 * 3 }
+	Volume    mp      p
+End
+
+Chord-1  Sequence  {C13 Shift .66} C13
+
+DefGroove CountryBlues1  Add piano triplets every 4 bars.
+
+Bass-Sus Groove CountryBluesSus
+
+DefGroove CountryBlues1Sus  Sustained version.
+
+//////////////////////////////////////
+
+Chord Sequence C1234
+Bass  Sequence B1234
+
+Defgroove CountryBluesEnd  Simple ending.
+
+

@@ -1,0 +1,16 @@
+
+This file will attempt to list those who have helped in the development
+of MMA. If you've been missed, let me know! Each and every contribution
+is truly appreciated.
+
+
+Alain Brenzikofer <brenzi@student.ethz.ch> -- pushed the development of the
+	chord voicing routines and contributed most of the code for this.
+	
+Raphael Goulais <raphael@nicedays.net> -- official Debian maintainter.
+
+Michael Mlivoncic <michael.mlivoncic@gmx.net> -- pushed me into do adding
+	the MIDIvoice and MIDIseq commands. Plus some general debugging and
+	wrote the WINDOWS installation web page.
+	
+	
