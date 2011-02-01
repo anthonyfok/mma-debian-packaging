@@ -77,7 +77,7 @@ SeqSize 4
 
 Begin Drum
 	Sequence D13 / / D1234
-	SeqRnd
+	SeqRnd On
 	Tone SnareDrum1
 	Volume mp
 End
@@ -90,7 +90,7 @@ End
 
 Begin Drum-Tri
 	Sequence D1  D13 
-	SeqRnd
+	SeqRnd On
 	Tone OpenTriangle
 	Rvolume 5
 	RSkip 20
@@ -98,17 +98,17 @@ Begin Drum-Tri
 End
 
 Begin Chord
+	Voice Trumpet
 	Sequence C13 / / C13+
 	Accent 1 10
-	Voice Trumpet
 	Octave 6
 	Articulate 90
 	Volume mp
 End
 
 Begin Chord-TBone
-	Sequence C13
 	Voice Trombone
+	Sequence C13
 	Octave 5
 	Articulate 60
 	Volume mp
@@ -117,9 +117,9 @@ Begin Chord-TBone
 End
 
 Begin Bass
+	Voice Tuba
 	Sequence B13 / /  B11
 	Articulate 60
-	Voice Tuba
 	Octave 3
 	Volume ff
 End
@@ -134,6 +134,7 @@ DefGroove March   Standard march pattern. Boring, but it works.
 Chord-Tbone Sequence -
 
 Begin Chord-Piano
+	Voice Piano1
 	SeqClear
 	Sequence C13 
 	Accent 1 10
@@ -141,14 +142,13 @@ Begin Chord-Piano
 	Articulate 80
 	Volume mf
 	RVolume 5
-	Voice Piano1
 End
 
 Bass Sequence    B13   z 
 
 Begin Walk
-	Sequence     z   W1234 
 	Voice  Tuba
+	Sequence     z   W1234 
 	Articulate 60
 	Octave 3
 	Rvolume 10
@@ -198,7 +198,7 @@ Groove March1
 Begin Arpeggio
 	SeqClear
 	Sequence A8 / A4+ z
-	SeqRnd
+	SeqRnd On
 	Voice Flute
 	Octave 8
 	Invert 0 1 2
@@ -218,7 +218,7 @@ Groove March2
 Begin Arpeggio
 	SeqClear
 	Sequence A8 A4+ A4 z
-	SeqRnd
+	SeqRnd On
 	Voice Flute
 	Octave 8
 	Articulate 90
@@ -253,21 +253,14 @@ DefGroove March4  Add sustained  strings and apreggiating piccolo to March2.
 
 Groove March
 
-Begin Drum
-    Sequence D8  /  D1234  D1
-	SeqNoRnd
-End
+Alltracks SeqRnd Off
 
-Drum-Tom  Sequence D1  / D13 D1
-
-Begin Drum-Tri
-	Sequence D1  D13 D1 /
-	SeqNoRnd
-End
-
+Drum         Sequence D8  /  D1234  D1
+Drum-Tom     Sequence D1  / D13 D1
+Drum-Tri     Sequence D1  D13 D1 /
 Chord        Sequence C13 / / C1
 Chord-TBone  Sequence C13 / / C1
 Bass         Sequence B13 / B1 /
 
 
-DefGroove  MarchEnd
+DefGroove  MarchEnd     Four bar ending.

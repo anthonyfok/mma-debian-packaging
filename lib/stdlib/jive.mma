@@ -1,4 +1,5 @@
-// Jive
+
+// jive
 
 Begin Doc
 
@@ -13,11 +14,6 @@ Time 4
 Timesig 4 4
 Include stdpats
 
-//////// Additional patterns
-
-Bass Define Bsync 1 4 1 90; 2.5 8 5 90; 3.5 8 3 90; 4 8 1 90
-
-Arpeggio Define Async  1 4 90; 2 8 80; 2.5 8 90;  4 8 90
 
 /////////////
 
@@ -49,13 +45,13 @@ End
 
 Begin Bass
 	Voice AcousticBass
-	Sequence  B13 / / Bsync
+	Sequence  B13 / / {1 4 1 90; 2.5 8 5 90; 3.5 8 3 90; 4 8 1 90}
 	Octave 3
-	Articulate 80
+	Articulate 75
 	Accent 1 10 3 10
 	Rvolume 20
 	Rtime 10
-	Volume mf
+	Volume f
 End
 
 Begin Bass-Sax
@@ -71,7 +67,7 @@ Begin Bass-Sax
 End
 
 
-Begin Chord-Piano
+Begin Chord
 	Voice Piano2
 	Sequence  C24  {C2; C3 Shift .5 }
 	Accent 1 20 3 10
@@ -90,7 +86,7 @@ DefGroove Jive       A simple jive-dance beat.
 Begin Drum-Clap
 	Tone HandClap
 	Sequence  D24 / / D124
-	SeqRnd
+	SeqRnd On
 	Volume f
 	Rskip 10
 	Rvolume 5
@@ -102,15 +98,14 @@ DefGroove JiveClap   Adds a handclap to the Jive beat, mostly on 2 and 4.
 
 Groove Jive
 
-Begin Bass-Sus
-	Sequence     Sus1  Sus3  Sus5 Sus1
-	SeqRnd
+Begin Chord-Sus
+	Voice Strings
+	Sequence  { 1 1 90 0 80 0 * 2}  // Root and fifth notes only.
+	Voicing mode=optimal
+	Volume mp
 	Octave 5
-	Harmony 2
-	Volume mf
 	Articulate 100
 	Unify On
-	Voice Strings
 End
 
 DefGroove JiveSus    Harmonic strings added.
@@ -126,7 +121,7 @@ Groove Jive
 
 Begin Arpeggio
 	Voice Tenorsax
-	Sequence    Async
+	Sequence  {1 4 90; 2 8 80; 2.5 8 90;  4 8 90 }
 	Range 3
 	Octave 4
 	Harmony Open
@@ -138,11 +133,11 @@ Begin Arpeggio
 	Rskip 5
 End
 
-DefGroove JivePlus          Add some additional apreggios.
+DefGroove JivePlus          Add some additional arpeggios.
 
-Bass-Sus Groove JiveSus
+Chord-Sus Groove JiveSus
 
-DefGroove JiveSusPlus       Apreggios plus strings.
+DefGroove JiveSusPlus       Arpeggios plus strings.
  
 
 /////// This is a little less shuffle-style
@@ -153,7 +148,7 @@ Groove Jive
 Drum-Kick   Sequence  { D13; D2 Shift .5 }
 Drum-HH     Sequence  { D1234; D1234 Shift .5 }
 Bass-Sax    Sequence  B11 / / {1 4. 1 90; 2.5 4 5 99}
-Chord-Piano Sequence  C24  {C2; C3 Shift .5 }
+Chord       Sequence  C24  {C2; C3 Shift .5 }
 
 DefGroove Jive1       Our jive-dance with less shuffle.
 
@@ -161,7 +156,7 @@ Drum-Clap Groove JiveClap
 DefGroove Jive1Clap          Handclap added to Jive1 beat.
 
 Groove Jive1
-Bass-Sus Groove JiveSus
+Chord-Sus Groove JiveSus
 DefGroove Jive1Sus    Harmonic strings added.
 
 Drum-Clap Groove JiveClap
@@ -170,10 +165,44 @@ DefGroove Jive1ClapSus    Sustained strings with handclaps.
 Groove Jive1
 Arpeggio Groove JivePlus
 DefGroove Jive1Plus         The un-push version with arpeggios.
-Bass-Sus Groove JiveSus
+Chord-Sus Groove JiveSus
 DefGroove Jive1SusPlus      No push with strings and arpeggios.
  
+////////////////////////
+/// Intro
 
+Groove Jive
+
+AllTracks SeqRnd Off
+AllTracks Rskip 0
+
+Drum-Kick  Sequence  D13 / / D1
+Drum-Snare Sequence  D24 / / D1
+Drum-HH    Sequence  D1234  / / D1
+Bass       Sequence  B13 / / {1 4 1 90; 2 4 3 90; 3 2 1 90}
+Bass-Sax   Sequence  B11 / / {1 2 1 90}
+Chord      Sequence  C24  / / L1
+Drum-Clap  Sequence  D1234 / / D1
+
+DefGroove JiveIntro    4 bar intro.
+
+
+Groove Jive
+AllTracks SeqRnd Off
+AllTracks Rskip 0
+Seqsize 8
+
+Drum-Kick  Sequence  D13    / / / / / / D1
+Drum-Snare Sequence  D24    / / / / / / D1
+Drum-HH    Sequence  D1234  / / / / / / D1
+Bass       Sequence  B13    / / / / / / {1 4 1 90; 2 4 3 90; 3 2 1 90}
+Bass-Sax   Sequence  B11    / / / / / / {1 2 1 90}
+Chord      Sequence  C24    / / / / / / L1
+Drum-Clap  Sequence  D1234  / / / / / / D1
+
+DefGroove JiveIntro8   8 bar intro.
+
+////////////////////////
 /// Ending
 
 Groove Jive
@@ -182,7 +211,7 @@ SeqSize 2
 
 Bass         Sequence  B13      B13
 Bass-Sax     Sequence  B13      B11
-Chord-piano  Sequence  C24      C13
+Chord        Sequence  C24      C13
 Drum-HH      Sequence  D8       D13
 Drum-Kick    Sequence  D24      D13
 Drum-Snare   Sequence  D1234    D13

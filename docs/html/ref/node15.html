@@ -1,19 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
-<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+<!--Converted with LaTeX2HTML 2008 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Variables, Conditionals and Jumps</TITLE>
-<META NAME="description" CONTENT="Variables, Conditionals and Jumps">
+<TITLE>Harmony</TITLE>
+<META NAME="description" CONTENT="Harmony">
 <META NAME="keywords" CONTENT="mma">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="mma.css">
@@ -24,745 +25,361 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <LINK REL="next" HREF="node16.html">
 </HEAD>
 
-<BODY >
-<!--Navigation Panel-->
-<A NAME="tex2html491"
+<BODY  bgcolor="#ffffff">
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A NAME="tex2html627"
   HREF="node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html489"
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html625"
   HREF="mma.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html483"
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html619"
   HREF="node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html492"
-  HREF="node16.html">Low Level MIDI Commands</A>
-<B> Up:</B> <A NAME="tex2html490"
-  HREF="mma.html">Reference Manaul</A>
-<B> Previous:</B> <A NAME="tex2html484"
-  HREF="node14.html">Repeats</A>
+<B> Next:</B> <A NAME="tex2html628"
+  HREF="node16.html">Tempo and Timing</A>
+<B> Up:</B> <A NAME="tex2html626"
+  HREF="mma.html">Reference Manual</A>
+<B> Previous:</B> <A NAME="tex2html620"
+  HREF="node14.html">Chord Voicing</A>
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
-<LI><A NAME="tex2html493"
-  HREF="node15.html#SECTION001510000000000000000">Variables</A>
-<UL>
-<LI><A NAME="tex2html494"
-  HREF="node15.html#SECTION001511000000000000000">Set [string]</A>
-<LI><A NAME="tex2html495"
-  HREF="node15.html#SECTION001512000000000000000">Mset [lines] MsetEnd/EndMset</A>
-<LI><A NAME="tex2html496"
-  HREF="node15.html#SECTION001513000000000000000">UnSet VariableName</A>
-<LI><A NAME="tex2html497"
-  HREF="node15.html#SECTION001514000000000000000">ShowVars</A>
-<LI><A NAME="tex2html498"
-  HREF="node15.html#SECTION001515000000000000000">Inc and Dec</A>
-<LI><A NAME="tex2html499"
-  HREF="node15.html#SECTION001516000000000000000">VExpand On or Off</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html500"
-  HREF="node15.html#SECTION001520000000000000000">Predefined Variables</A>
-<LI><A NAME="tex2html501"
-  HREF="node15.html#SECTION001530000000000000000">Conditionals</A>
-<LI><A NAME="tex2html502"
-  HREF="node15.html#SECTION001540000000000000000">Goto</A>
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html629"
+  HREF="node15.html#SECTION001510000000000000000">Harmony</A>
+<LI><A NAME="tex2html630"
+  HREF="node15.html#SECTION001520000000000000000">HarmonyOnly</A>
+<LI><A NAME="tex2html631"
+  HREF="node15.html#SECTION001530000000000000000">HarmonyVolume</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
 
 <H1><A NAME="SECTION001500000000000000000"></A>
-<A NAME="sec-variables"></A>
+<A NAME="sec-harmony"></A>
 <BR>
-Variables, Conditionals and Jumps
+Harmony
 </H1>
 
 <P>
-To make the processing of your music easier, <I><B>MMA</B></I> supports a very primitive set for variable manipulations along with some conditional testing and the oft-frowned-upon <I>goto</I> command.
+
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  can generate harmony notes for you ... just like hitting two
+or more keys on the piano! And you don't have to take lessons.
+
+<P>
+Automatic harmonies are available for the following track types: Bass,
+Walk, Arpeggio, Scale, Solo and Melody.
+
+<P>
+Just in case you are thinking that 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is a wonderful musical
+creator when it comes to harmonies, don't be fooled. 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 's ideas of
+harmony are quite facile. It determines harmony notes by finding a
+note lower or higher than the current note being sounded within the
+current chord. And its notion of &#8220;open&#8221; is certainly not that of
+traditional music theory. But, the sound isn't too bad.
 
 <P>
 
-<H1><A NAME="SECTION001510000000000000000">
-Variables</A>
-</H1>
-
-<P>
-<I><B>MMA</B></I> lets you set a variable, much like in other programming languages and to do some basic manipulations on them. Variables are most likely to be used for two reasons:
-
-<P>
-
-<UL>
-<LI>For use in setting up conditional segments of your file,
-
-<P>
-</LI>
-<LI>As a shortcut to entering complex chord sequences.
-
-<P>
-</LI>
-</UL>
-
-<P>
-To begin, the following list shows the available commands to set and manipulate variables:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set VariableName <I>String</I> 
+<H1><A NAME="SECTION001510000000000000000"></A> <A NAME="harmony"></A>
 <BR>
-Mset VariableName ... MsetEnd 
-<BR>
-UnSet VariableName 
-<BR>
-ShowVars 
-<BR>
-Inc Variablename [value] 
-<BR>
-Dec Variablename [value] 
-<BR>
-Vexpand ON/Off   </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-All variable names are case-insensitive. Any characters can be used in a variable name. The only exceptions are that a variable name cannot start with a ``$'' or a ``_'' (an underscore--this is reserved for internal variables, see below).
-
-<P>
-Variables are set and manipulated by using their names. Variables are expanded when their name is prefaced by a space followed by single ``$'' sign. For example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set Silly Am / Bm / 
-<BR>
-1 $Silly  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-The first line creates the variable ``Silly''; the second creates a bar of music with the chords ``Am / Bm /''.
-
-<P>
-Note that the ``$'' must be the first item on a line or follow a space character. For example, the following will NOT work:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set Silly 4a;b;c;d; 
-<BR>
-1  Am  {$Silly}  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-However:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>1 Am { $Silly}  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE>  
-
-<P>
-will work fine.
-
-<P>
-Following are details on all the available variable commands:
-
-<P>
-
-<H2><A NAME="SECTION001511000000000000000">
-Set [string]</A>
-</H2> 
-
-<P>
-Set or create a variable. You can skip the <I>String</I> if you do want to assign an empty string to the variable. A valid example is:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set PassCount 1 </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-
-<H2><A NAME="SECTION001512000000000000000"></A>
-	   
-	<A NAME="sec-mset"></A>
-<BR>
-Mset [lines] MsetEnd/EndMset
-</H2>
-
-<P>
-This command is quite similar to <I>Set</I>, but <I>Mset</I> expects multiple 	lines. An example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>MSet LongVar 
-<BR>
-1 Cm 
-<BR>
-2 Gm 
-<BR>
-3 G7 
-<BR>
-MsetEnd  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-It is quite possible to set a variable to hold an entire section of music (perhaps a chorus) and insert this via macro expansion at various places in your file.			   
-
-<P>
-Each <I>Mset</I> must be terminated by a <I>EndMset</I> or <I>MsetEnd</I> 	command (on its own separate line).
-
-<P>
-
-<H2><A NAME="SECTION001513000000000000000">
-UnSet VariableName</A>
-</H2> 	
-
-<P>
-Removes the variable. This can be useful if you have conditional tests which simply rely on a certain variable being ``defined''.
-
-<P>
-
-<H2><A NAME="SECTION001514000000000000000">
-ShowVars</A>
-</H2> 
-
-<P>
-Displays the names of the defined variables and their contents. Mainly used for debugging. The display will preface each variable name with a ``$''. Note that internal <I><B>MMA</B></I> variable are also displayed with this command.
-
-<P>
-
-<H2><A NAME="SECTION001515000000000000000">
-Inc and Dec</A>
-</H2>  
-
-<P>
-These commands increment or decrement a variable. If no argument is given, a value of 1 is used; otherwise, the value specified is used. The value can be an integer or a floating point number. 
-
-<P>
-A short example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set PassCount 1 
-<BR>
-Set Foobar 4 
-<BR>
-Showvars 
-<BR>
-Inc FooBar 4 
-<BR>
-Inc PassCount 
-<BR>
-ShowVars  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-This command is quite useful for creating conditional tests for proper handling of codas or groove changes in repeats.
-
-<P>
-
-<H2><A NAME="SECTION001516000000000000000">
-VExpand On or Off</A>
-</H2>
-
-<P>
-Normally variable expansion is enabled. These two options will turn expansion on or off. Why would you want to do this? Well, here's a simple example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set LeftC Am Em 
-<BR>
-Set RightC G / 
-<BR>
-VExpand Off 
-<BR>
-Set Full $LeftC $RightC 
-<BR>
-VExpand  On  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-In this case the actual contents of the variable ``Full'' is ``$LeftC $RightC''. If the <I>Off/On</I> option lines had not been used, the contents would be  ``Am Em G /''. You can easily verify this with the <I>ShowVars</I> 	option. 
-
-<P>
-When <I><B>MMA</B></I> processes a file it expands variables in a recursive manner. This means that, in the above example, the line:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>1 $Full </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-will be changed to:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>1 Am Em G / </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-However, if later in the file, you change the definition of one of the 	variables ...for example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set LeftC Am / </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-the same line will now be ``1 Am / G /''.
-
-<P>
-Most of <I><B>MMA</B></I>'s internal commands <I>can</I> be redefined with variables. However, we really don't think you should use this feature. It's been left for two reasons: it might be useful, and, it's hard to disable.
-
-<P>
-However, not all commands can be redefined. The following is short list of things which will work (but, again, we're not suggesting you do this):
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set Rate Tempo 120 
-<BR>		$Rate 
-<BR>
-Set  R Repeat 
-<BR>		$R  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-But, the following will <I>not</I> work:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set B Begin 
-<BR>
-Set  E End 
-<BR>		$B Arpeggio Define 
-<BR>		.... 
-<BR>		$E  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-This fails since the Begin/End constructs are expanded before variable expansion. However:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set A Define Arpeggio 
-<BR>
-Begin $a
-		...
-		End  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-is quite alright.
-
-<P>
-Even though you can use a variable to substitute for the <I>Repeat</I> or <I>If</I> directives, using one for <I>RepeatEnd/EndRepeat</I>, <I>RepeatEnding</I>. <I>Label</I> or <I>IfEnd/EndIf</I> will fail.
-
-<P>
-Variable expansion should usually not be a concern. In most normal files, <I><B>MMA</B></I> will expand variables as they are encountered. However, when reading the data in a <I>Repeat</I>, <I>If</I> or <I>Mset</I> section the expansion function is skipped--but, when the lines are processed, after being stored in an internal queue, variables are expanded. 
-
-<P>
-
-<H1><A NAME="SECTION001520000000000000000">
-Predefined Variables</A>
-</H1>
-
-<P>
-For your convenience <I><B>MMA</B></I> tracks a number of internal settings and saves their values in variables you can access just like you would a user defined variable. All of these ``internal'' variables are prefaced with a single underscore. For example, the current tempo is saved in the variable <I>_TEMPO</I>; this can be accessed in your script with the notation <I>$_TEMPO</I>.
-
-<P>
-<DL>
-<DT><STRONG>_Groove</STRONG></DT>
-<DD>Name of the currently selected groove. May be empty if no groove has been selected.
-
-<P>
-</DD>
-<DT><STRONG>_LastGroove</STRONG></DT>
-<DD>Name of the groove selected <I>before</I> the currently selected groove. 
-
-<P>
-</DD>
-<DT><STRONG>_SeqSize</STRONG></DT>
-<DD>Current <I>SeqSize</I> setting.
-
-<P>
-</DD>
-<DT><STRONG>_Tempo</STRONG></DT>
-<DD>Current <I>Tempo</I>. Note that if you have used the optional <I>bar count</I> in setting the tempo this will be the target tempo.
-
-<P>
-</DD>
-<DT><STRONG>_Time</STRONG></DT>
-<DD>The current <I>Time</I> (beats per bar) setting.
-
-<P>
-</DD>
-<DT><STRONG>_Transpose</STRONG></DT>
-<DD>Current <I>Transpose</I> setting.
-
-<P>
-</DD>
-<DT><STRONG>_Volume</STRONG></DT>
-<DD>Current global volume setting.
-
-<P>
-</DD>
-<DT><STRONG>_LastVolume</STRONG></DT>
-<DD>Previously set global volume setting.
-
-<P>
-</DD>
-<DT><STRONG>_Debug</STRONG></DT>
-<DD>Current debug settings.
-
-<P>
-</DD>
-<DT><STRONG>_LastDebug</STRONG></DT>
-<DD>Debug settings prior to last <I>Debug</I> command. This setting can be used to restore settings, ie:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Debug Warnings=off 
-<BR>		   ... stuff generating annoying warnings
-<BR>
-Debug $_LastDebug  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-</DD>
-</DL>
-
-<P>
-
-<H1><A NAME="SECTION001530000000000000000">
-Conditionals</A>
-</H1>   
-
-<P>
-The most important reason we created variables in <I><B>MMA</B></I> was to use them in conditionals. In <I><B>MMA</B></I> a conditional consists of a line starting with an <I>If</I> directive, a test, a series of lines to process (depending upon the result of the test), and a closing <I>EndIf</I> or <I>IfEnd</I><A NAME="tex2html58"
-  HREF="#foot5094"><SUP>15.1</SUP></A>  directive. An optional <I>Else</I> statement may be included.
-
-<P>
-The first set of tests are unary (they take no arguments):
-
-<P>
-<DL>
-<DT><STRONG>Def VariableName</STRONG></DT>
-<DD>Returns true if the variable has been defined.
-
-<P>
-</DD>
-<DT><STRONG>Ndef VariableName</STRONG></DT>
-<DD>Returns true if the variable has not been defined.
-
-<P>
-</DD>
-</DL>
-
-<P>
-In the above tests you must supply the name of a variable--don't make the mistake of including a ``$'' which will invoke expansion and result in something you were not expecting.
-
-<P>
-A simple example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If Def InCoda 
-<BR>		&nbsp;&nbsp;5 Cm 
-<BR>		&nbsp;&nbsp;6 / 
-<BR>
-Endif </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-The other tests are binary (they take two arguments):
-
-<P>
-<DL>
-<DT><STRONG>LT Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>Str1</I> is less than <I>Str2</I>. (Please see the discussion below on how the tests are done.)
-
-<P>
-</DD>
-<DT><STRONG>LE Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>str1</I> is less than or equal to <I>Str2</I>.
-
-<P>
-</DD>
-<DT><STRONG>EQ Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>str1</I> is equal to <I>Str2</I>.
-
-<P>
-</DD>
-<DT><STRONG>NE Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>str1</I> is not equal to <I>Str2</I>.
-
-<P>
-</DD>
-<DT><STRONG>GT Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>str1</I> is greater than <I>Str2</I>.
-
-<P>
-</DD>
-<DT><STRONG>GE Str1 Str2</STRONG></DT>
-<DD>Returns true if <I>str1</I> is greater than or equal to <I>Str2</I>.
-
-<P>
-</DD>
-</DL>
-
-<P>
-In the above tests you have several choices in specifying <I>Str1</I> and <I>Str2</I>. At some point, when <I><B>MMA</B></I> does the actual comparison, two strings or numeric values are expected. So, you really could do:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If EQ abc ABC </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-and get a ``true'' result. The reason that ``abc'' equals ``ABC'' is that all the comparisons in <I><B>MMA</B></I> are case-insensitive. 
-
-<P>
-You can also compare a variable to a string:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If GT $foo abc </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-will evaluate to ``true'' if the <I>contents</I> of the variable ``foo'' evaluates to something ``greater than'' ``abc''. But, there is a bit of a ``gotcha' here. If you have set ``foo'' to a two word string, then <I><B>MMA</B></I> will choke on the command. In the following example:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set Foo A B 
-<BR>
-If GT $Foo abc  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-the comparison is passed the line:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If GT A B abc </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-and <I><B>MMA</B></I> seeing three arguments generates an error. If you want the comparison done on a variable which might be more than one word, use the ``$$'' syntax. This delays the expansion of the variable until the <I>If</I> directive is entered. So:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If $$foo abc </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE>  
-
-<P>
-would generate a comparison between ``A B'' and ``ABC''.
-
-<P>
-Delayed expansion can be applied to either variable. It only works in an <I>If</I> directive.
-
-<P>
-Strings and numeric values can be confusing in comparisons. For example, if you have the strings ``22'' and ''3'' and compare them as strings, ``3'' is greater than ``22''; however, if you compare them as values then 3 is less than 22. 
-
-<P>
-The rule in <I><B>MMA</B></I> is quite simple: If either string in a comparison is a numeric value, both strings are converted to values. Otherwise they are compared as strings. <A NAME="tex2html59"
-  HREF="#foot5123"><SUP>15.2</SUP></A>
-<P>
-This lets you do consistent comparisons in situations like:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Set Count 1 
-<BR>
-If LE $$Count 4 
-<BR>		&nbsp;&nbsp;.... 
-<BR>
-IfEnd </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-Note that in the above example we could have used ``$Count'', but you should probably always use the ``$$'' in tests.
-
-<P>
-Much like other programming languages, an optional <I>Else</I> condition may be used:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If Def Coda 
-<BR>		&nbsp;&nbsp;Groove Rhumba1 
-<BR>
-Else 
-<BR>		&nbsp;&nbsp;Groove Rhumba 
-<BR>
-Endif  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-The <I>Else</I> statement(s) are processed only if the test for the <I>If</I> test is false. 
-
-<P>
-Nesting of <I>If</I>s is permitted:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>If ndef Foo 
-<BR>		&nbsp;&nbsp;Print Foo has been defined. 
-<BR>
-Else 
-<BR>		&nbsp;&nbsp;If def bar 
-<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Print bar has been defined. Cool. 
-<BR>		&nbsp;&nbsp;Else 
-<BR>		&nbsp;&nbsp;&nbsp;&nbsp;Print no bar...go thristy. 
-<BR>		&nbsp;&nbsp;Endif 
-<BR>
-Endif  </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-works just fine. We've used indentation in our examples to clearly show the nesting and conditions. We suggest you do the same.
-
-<P>
-
-<H1><A NAME="SECTION001540000000000000000">
-Goto</A>
+Harmony
 </H1> 
 
 <P>
-The <I>Goto</I> command redirects the execution order of you script to the point at which a <I>Label</I> has been defined. There are really two parts to this:
+To enable harmony notes, use a command like:
 
 <P>
 
-<OL>
-<LI>A command defining a label, and,
-</LI>
-<LI>The <I>Goto</I> command.
-</LI>
-</OL>
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Solo Harmony 2  </B> 
+   
+	    </td></tr>
+      </Table>
 
 <P>
+You can set a different harmony method for each bar in your sequence.
 
 <P>
-A label is set with the <I>Label</I> directive:
+The following are valid harmony methods:
+
+<P><DL>
+<DT><STRONG>2 or 2Below</STRONG></DT>
+<DD>Two part harmony. The harmony note
+    selected is lower (on the scale).
 
 <P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Label Point1 </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-The string defining the label can be any sequence of characters. Labels are case-insensitive. You can not set two points in your file to the same label.
-
-<P>
-
-<P>
-To cause execution to jump to a labeled point:
-
-<P>
-
-	<TABLE CELLSPACING=0 CELLPADDING=5" BGCOLOR="OldLace" BORDER=3><TR> <TD>
-<BLOCKQUOTE><B>Goto Point1 </B></BLOCKQUOTE>
-
-	</TD></TR></TABLE> 
-
-<P>
-This causes an immediate jump. Any remaining lines in a repeat or conditional segment are discarded.
-
-<P>
-<I><B>MMA</B></I> does not check to see if you are jumping into a repeat or conditional section of code--but doing so will usually cause an error. Jumping out of these sections is usually safe.
-
-<P>
-For an example of how to use some simple labels to simulate a ``DS al Coda'' examine the file ``lullaby-of-Broadway'' in the sample songs directory.
-<BR><HR><H4>Footnotes</H4>
-<DL>
-<DT><A NAME="foot5094">...IfEnd</A><A
- HREF="node15.html#tex2html58"><SUP>15.1</SUP></A></DT>
-<DD>We probably suffer from mild dyslexia and can't remember if the command is IFEND or ENDIF, so both are permitted. Use whichever is more comfortable for you.
-
 </DD>
-<DT><A NAME="foot5123">... strings.</A><A
- HREF="node15.html#tex2html59"><SUP>15.2</SUP></A></DT>
-<DD>An attempt is made to convert each string to a float. If conversion of both strings is successful, the comparison is made between two floats, otherwise two strings are used.
+<DT><STRONG>28Below</STRONG></DT>
+<DD>Two part harmony, the harmony note is lowered by an
+    additional octave.
 
+<P>
 </DD>
-</DL><HR>
-<!--Navigation Panel-->
-<A NAME="tex2html491"
-  HREF="node16.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="file:/usr/lib/latex2html/icons/next.png"></A> 
-<A NAME="tex2html489"
-  HREF="mma.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="file:/usr/lib/latex2html/icons/up.png"></A> 
-<A NAME="tex2html483"
-  HREF="node14.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="file:/usr/lib/latex2html/icons/prev.png"></A>   
+<DT><STRONG>2Above</STRONG></DT>
+<DD>The same as &#8220;2&#8221;, but the harmony note is raised an
+    octave.
+
+<P>
+</DD>
+<DT><STRONG>28Above</STRONG></DT>
+<DD>The same as &#8220;2Above&#8221;, but the harmony note is raised by
+    two octaves.
+
+<P>
+</DD>
+<DT><STRONG>3 or 3Below</STRONG></DT>
+<DD>Three part harmony. The harmony notes
+    selected are lower.
+
+<P>
+</DD>
+<DT><STRONG>3Above</STRONG></DT>
+<DD>The same as &#8220;3&#8221;, but both notes are raised an
+    octave.
+
+<P>
+</DD>
+<DT><STRONG>38Above</STRONG></DT>
+<DD>Same as &#8220;3&#8221;, but the two harmony notes are raised
+    by two octaves.
+
+<P>
+</DD>
+<DT><STRONG>38Below</STRONG></DT>
+<DD>Same as &#8220;3&#8221;, but the two harmomy notes are lowered
+    by two octaves.
+
+<P>
+</DD>
+<DT><STRONG>Open or OpenBelow</STRONG></DT>
+<DD>Two part harmony, however the gap
+    between the two notes is larger than in &#8220;2&#8221;.
+
+<P>
+</DD>
+<DT><STRONG>Open8Below</STRONG></DT>
+<DD>Same as &#8220;OpenBelow&#8221;, but the harmony note is lowered by
+    an additional octave.
+
+<P>
+</DD>
+<DT><STRONG>OpenAbove</STRONG></DT>
+<DD>Same as &#8220;Open&#8221;, but the added note is above the
+    original.
+
+<P>
+</DD>
+<DT><STRONG>Open8Above</STRONG></DT>
+<DD>Same as &#8220;OpenAbove&#8221;, but the added note is
+    raised by an additional octave.
+
+<P>
+</DD>
+<DT><STRONG>8 or 8Below</STRONG></DT>
+<DD>A note 1 octave lower is added.
+
+<P>
+</DD>
+<DT><STRONG>8Above</STRONG></DT>
+<DD>A note 2 octave higher is added.
+
+<P>
+</DD>
+<DT><STRONG>16 or 16Below</STRONG></DT>
+<DD>A single note two octaves below is
+    added.
+
+<P>
+</DD>
+<DT><STRONG>16Above</STRONG></DT>
+<DD>A single note two octaves above are added.
+
+<P>
+</DD>
+<DT><STRONG>24 or 24Below</STRONG></DT>
+<DD>A single note three octaves below is
+    added.
+
+<P>
+</DD>
+<DT><STRONG>24Above</STRONG></DT>
+<DD>A single note three octaves above is added.
+
+<P>
+</DD>
+</DL>
+
+<P>
+You can combine any of the above harmony modes by using a &#8220;+&#8221;. For
+example:
+
+<P><DL>
+<DT><STRONG>OPEN+8Below</STRONG></DT>
+<DD>will produce harmony notes with an &#8220;Open&#8221;
+    harmony and a note an octave below the current note.
+
+<P>
+</DD>
+<DT><STRONG>3Above+16</STRONG></DT>
+<DD>will generate 2 harmony notes above the current
+    note plus a note 2 octaves below.
+
+<P>
+</DD>
+<DT><STRONG>8Below+8Above+16Below</STRONG></DT>
+<DD>will generate 3 notes: one 2 octaves
+    below the current, one an octave below, and one an octave above.
+
+<P>
+</DD>
+</DL>
+
+<P>
+There is no limit to the number of modes you can concatenate. Any
+duplicate notes generated will be ignored.
+
+<P>
+All harmonies are created using the current chord.
+
+<P>
+To disable harmony use a &#8220;0&#8221;, &#8220;-&#8221; or &#8220;None&#8221;.
+
+<P>
+Be careful in using harmonies. They can make your song sound heavy,
+especially with B<SMALL>ASS</SMALL> notes (applying a different volume may
+help).
+
+<P>
+The command has no effect in D<SMALL>RUM</SMALL> or C<SMALL>HORD</SMALL> tracks.
+
+<P>
+
+<H1><A NAME="SECTION001520000000000000000"></A> <A NAME="harmonyonly"></A>
 <BR>
-<B> Next:</B> <A NAME="tex2html492"
-  HREF="node16.html">Low Level MIDI Commands</A>
-<B> Up:</B> <A NAME="tex2html490"
-  HREF="mma.html">Reference Manaul</A>
-<B> Previous:</B> <A NAME="tex2html484"
-  HREF="node14.html">Repeats</A>
+HarmonyOnly
+</H1> 
+
+<P>
+As a added feature to the automatic harmony generation discussed in
+the previous section, it is possible to set a track so that it
+<SPAN  CLASS="textit">only</SPAN> plays the harmony notes. For example, you might want to
+set up two arpeggio tracks with one playing quarter notes on a piano
+and a harmony track playing half notes on a violin. The following
+snippet is extracted from the song file &#8220;Cry Me A River&#8221; and sets up
+2 different choir voices:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Begin Arpeggio 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Sequence A4 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Voice ChoirAahs  
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Invert 0 1  2 3 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;SeqRnd 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;RSkip 40 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Volume p 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Articulate 99 
+<BR>
+End 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<BR>
+Begin Arpeggio-2 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Sequence A4 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Voice VoiceOohs 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Octave 5 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;RSkip 40 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Volume p 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Articulate 99 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;HarmonyOnly Open 
+<BR>
+End   </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+Just like the H<SMALL>ARMONY</SMALL> command, above, you can have different
+settings for each bar in your sequence. Setting a bar (or the entire
+sequence) to '`-&#8221; or &#8220;0&#8221; disables both the H<SMALL>ARMONY</SMALL> and
+H<SMALL>ARMONY</SMALL>O<SMALL>NLY</SMALL> settings.
+
+<P>
+The command has no effect in D<SMALL>RUM</SMALL> or C<SMALL>HORD</SMALL> tracks.
+
+<P>
+If you want to use this feature with S<SMALL>OLO</SMALL> or M<SMALL>ELODY</SMALL>
+tracks you can duplicate the notes in your R<SMALL>IFF</SMALL> or in-line
+notation <SPAN  CLASS="textit">or</SPAN> with the <A HREF="node10.html#autosolotracks">A<SMALL>UTO</SMALL>H<SMALL>ARMONY</SMALL>T<SMALL>RACKS
+    COMMAND</SMALL></A>.
+
+<P>
+
+<H1><A NAME="SECTION001530000000000000000"></A> <A NAME="harmonyvolumne"></A>
+<BR>
+HarmonyVolume
+</H1> 
+
+<P>
+By default, 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  will use a volume (velocity) of 80% of that used by
+the original note for all harmony notes it generates. You can change
+this with the the H<SMALL>ARMONY</SMALL>V<SMALL>OLUME</SMALL> command. For example:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Begin Solo 
+<BR>&nbsp;&nbsp;Voice JazzGuitar 
+<BR>&nbsp;&nbsp;Harmony Open 
+<BR>&nbsp;&nbsp;HarmonyVolume 80 
+<BR>
+End   </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+You can specify different values for each bar in the sequence. The
+values are percentages and must be greater than 0 (large values works
+just fine if you want the harmony louder than the original).  The
+command has no effect in D<SMALL>RUM</SMALL> or C<SMALL>HORD</SMALL> tracks.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html627"
+  HREF="node16.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html625"
+  HREF="mma.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html619"
+  HREF="node14.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
+<BR>
+<B> Next:</B> <A NAME="tex2html628"
+  HREF="node16.html">Tempo and Timing</A>
+<B> Up:</B> <A NAME="tex2html626"
+  HREF="mma.html">Reference Manual</A>
+<B> Previous:</B> <A NAME="tex2html620"
+  HREF="node14.html">Chord Voicing</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-Bob
-2004-12-02
+bob
+2010-11-07
 </ADDRESS>
 </BODY>
 </HTML>

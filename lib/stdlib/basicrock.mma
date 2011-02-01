@@ -70,11 +70,10 @@ Begin Bass
 End
 
 Begin Chord-Clean
-	ChShare Chord-Clean2
 	Voice CleanGuitar
 	Sequence  {1 8 90; 1.5 8 90; 2.5 8 90; 3 8 90; 4 8 90}
 	Octave 5
-	Volume mf
+	Volume m
 	Articulate 80
 	Rtime 5
 	Rvolume 10
@@ -82,7 +81,6 @@ End
 
 Begin Chord-Clean2
 	Copy Chord-Clean
-	ChShare Chord-Clean
 	Sequence  {2 8 90; 3.5 8 90; 4.5 8 90}
 	Invert 1
 End
@@ -102,15 +100,14 @@ End
 
 DefGroove BasicRock       A very basic rock beat in 4.
 
-Begin Bass-Sus
+Begin Chord-Sus
 	Voice Strings
-	Harmony 3Above
+	Voicing Mode=Optimal
 	Volume mp
 	Articulate 100
 	Unify On
 	Octave 5
-	Sequence  Sus1 Sus5
-	SeqRnd
+	Sequence  {1 1 90 0 90 0 * 4 }
 End
 
 DefGroove  BasicRockSus   Even rockers like strings!
@@ -123,14 +120,14 @@ Groove BasicRock
 Begin Chord-Clean
 	Sequence  C1234
 	Articulate 90
-	Volume f
+	Volume mf
 End
 
 Chord-Clean2   Sequence -
 
 Begin Bass
 	Sequence { B13; 3.5 8 5 90}  {B13; 4.5 8 5 90}
-	SeqRnd
+	SeqRnd On
 End
 
 DefGroove BasicRock4   Same rock with more of a 4/4 emphasis. Good for \
@@ -138,11 +135,28 @@ DefGroove BasicRock4   Same rock with more of a 4/4 emphasis. Good for \
                        
 
              
-Bass-Sus Groove BasicRock
+Chord-Sus Groove BasicRockSus
 
 DefGroove BasicRock4Sus   Our 4/4 version with strings.                    
 
+///////////////////////////////////////////
+/// 4 bar intro
 
+Groove BasicRock
+Seqsize 4
+
+Drum-Kick    Sequence  *    *    *   D13
+Drum-Snare   Sequence  *    *    *   D123
+// Drum-OHH
+Drum-Tam     Sequence  *    *    *   {D12; D12 shift .25; D12 shift .5; D12 shift .75}
+Bass         Sequence  *    *    *   B13
+Chord-Clean  Sequence  *    *    *   C13
+Chord-Clean2 Sequence  *    *    *   L1
+Chord-Dist   Sequence  *    *    *   L1
+
+DefGroove    BasicRockIntro   4 bar intro.
+
+////////////////////////////////
 /// Ending
 
 Groove BasicRock

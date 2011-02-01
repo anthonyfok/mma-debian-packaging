@@ -25,9 +25,6 @@ Begin Walk Define
 	W1+23	W123; 1.5 8 80 
 End
 
-Begin Arpeggio Define
-	Ajazz   1 4 90; 2 3+3 70; 2.667 3 80; 3 3+3 70; 3.667 3 80
-End
 
 //////////////////////////////////////////////
 /////   Jazzwaltz
@@ -35,16 +32,6 @@ End
 
 SeqSize 4
 
-Rtime 4
-
-Begin Drum-HH
-	Sequence 	D6
-	Tone PedalHiHat
-	RSkip 40
-	Volume mp
-	Rvolume 10
-	Rtime 10
-End
 
 Begin Drum-Snare
 	Sequence	D1
@@ -86,7 +73,7 @@ End
 Begin Chord-Guitar
 	Sequence	C3      /     C1   C12
 	Voice JazzGuitar
-	SeqRnd
+	SeqRnd On
 	Strum 10
 	Rvolume 8
 	Volume mp
@@ -99,8 +86,8 @@ End
 	// then a bit of a walk on bar 4.
 
 Begin Bass
-	Sequence          B1     B1+     B1     z
 	Voice AcousticBass
+	Sequence          B1     B1+     B1     z
 	Articulate 80
 	Volume mf
 	Rvolume 4
@@ -108,14 +95,14 @@ Begin Bass
 End
 
 Begin Walk
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Sequence          z      z       z    W1+23
-	Voice AcousticBass 
 	Articulate 80
 	Accent 1 20
 	Volume mf	 
 	Rvolume 5
 	Rskip 10
-	Octave 3
 End
 
 DefGroove JazzWaltz     Basic jazz waltz.
@@ -123,12 +110,12 @@ DefGroove JazzWaltz     Basic jazz waltz.
 
 ////////// Sustain
 
-Begin Bass-Sus
-	Sequence	Sus1 Sus3 Sus5 Sus1
+Begin Chord-Sus
+	Sequence	{ 1 2. 90 0 90 0 * 3 }
 	Voice TremoloStrings
 	Octave 5
-	SeqRnd
-	Volume  mp
+	Voicing Mode=Optimal
+	Volume  p
 	Rvolume 5
 	Rskip 5		
 	Articulate 100
@@ -144,7 +131,7 @@ Groove JazzWaltz
 
 Begin Arpeggio
 	Voice Celesta
-	Sequence Ajazz
+	Sequence  {1 4 90; 2 3+3 70; 2.667 3 80; 3 3+3 70; 3.667 3 80 }
 	Harmony Open
 	Octave 6
 	Volume mp
@@ -153,13 +140,99 @@ Begin Arpeggio
 	Rskip 20
 	Rvolume 20
 	Rtime 10
-End
+	End
 
 DefGroove JazzWaltz1    Add arpeggio runs.
 
-Bass-Sus Groove JazzWaltzSus
+Chord-Sus Groove JazzWaltzSus
 
 DefGroove JazzWaltz1Sus   Sustained strings and arpeggios.
+
+////////
+
+Groove JazzWaltz
+
+Begin Arpeggio
+	Voice VoiceOohs
+	Sequence  {1 2 90; 3.66 8 100}  A3  A1  {A3 Shift .66}
+	Harmony OpenBelow
+	Octave 5
+	Volume m
+	Range .9
+	Direction Down
+	Articulate 70
+	Rskip 20
+	Rvolume 20
+	Rtime 10
+End
+
+DefGroove JazzWaltz2    Add VoiceOohs.
+
+Chord-Sus Groove JazzWaltzSus
+
+DefGroove JazzWaltz2Sus   Sustained strings and DUH voices.
+
+////////////////////////////
+// Intros
+
+Groove JazzWaltz
+
+
+Drum-Snare     Sequence    D1
+Drum-HH        Sequence    {D123 shift .5} / /     z
+Begin Drum-Cym
+               Sequence    D123     /      /       {D1 * 24}
+               RSkip       20
+End
+Chord          Sequence    C1+23    /      C123    L1
+Chord-Guitar   Sequence    C3       /      C1      L1
+Bass           Sequence    B1       B1+    B1      z
+Walk           Sequence    z        z      z       W123
+
+
+DefGroove JazzWaltzIntro   4 bar intro.
+
+SeqSize 8
+
+Drum-HH        Sequence    {D123 shift .5} / /     /       /    /      /      z
+
+Begin Drum-Cym  
+               Sequence    D123     /      /       /       /    /      /      {D1 * 24}
+               RSkip       20 
+End
+Chord          Sequence    C1+23    /      C123    C1+23   /    C123   C1+23  L1
+Chord-Guitar   Sequence    C3       /      C1      C12     C3   /      C12    L1
+Bass           Sequence    B1       B1+    B1      B1+     B1   B1+    B1     z
+Walk           Sequence    z        z      z       z        z    z      z     W123
+
+DefGroove JazzWaltzIntro8  8 bar intro.
+
+//////////////////////////
+/// Fill
+
+Groove JazzWaltz
+
+SeqSize 1
+
+Alltracks SeqRnd Off
+
+Drum-HH       Sequence 	D6 
+Begin Drum-Snare
+    Sequence	D123
+	Volume f
+End
+Drum-HH       Sequence  {D123 shift .5}
+Begin Drum-Cym 
+     Sequence	D123
+     Volume f
+End
+Chord         Sequence 	{C123 * 2}
+Chord-Guitar  Sequence	C123
+Bass          Sequence  {1 4 5 100; 3 8 3 110; 3 4 1 100}
+Walk          Sequence   -
+
+DefGroove JazzWaltzFill  Single bar fill, can be used in endings.
+
 
 
 //////////////////////////
@@ -169,16 +242,15 @@ Groove JazzWaltz
 
 SeqSize 2
 
+Alltracks SeqRnd Off
+
 Drum-HH       Sequence 	D6   D1
 Drum-Snare    Sequence	D1
 Drum-HH       Sequence  {D123 shift .5}  z
 Drum-Cym      Sequence	D123 D1
 
 Chord         Sequence 	C123   {1 1 90}
-Begin Chord-Guitar
-              Sequence	C3     {1 1 90} 
-       SeqNoRnd
-End
+Chord-Guitar  Sequence	C3     {1 1 90} 
 Bass          Sequence  B1   
 Walk          Sequence   -
 

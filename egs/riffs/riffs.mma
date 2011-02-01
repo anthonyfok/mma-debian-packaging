@@ -24,7 +24,7 @@ Begin Arpeggio
 	MidiVoice {1 ReleaseTime 80 }
 	MidiClear 1 ReleaseTime 0 
 
-	Begin Riffs
+	Begin Riff
 		1 1 90 * 8
 		1 1 90 * 4
 		1 1 90 * 2
@@ -43,7 +43,7 @@ Begin Solo
 	Accent 1 10 3 10
 	Articulate 99
 	
-	Begin Riffs 
+	Begin Riff
 		8e;f;g;a;b;a;g;f;
 		8e;f;g;a;4g;f;
 		8f;g;a;b;4a;f;
