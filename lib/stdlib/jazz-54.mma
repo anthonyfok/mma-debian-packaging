@@ -61,7 +61,7 @@ End
 	
 Begin Chord
 	Sequence C25 / / C245
-	SeqRnd
+	SeqRnd On
 	Voicing    Mode=Optimal  Rmove=20
 	DupRoot -1
 	Octave 4
@@ -77,9 +77,9 @@ DefGroove Jazz54        Basic 5/4 jazz rhythm.
 Bass Sequence -
 
 Begin Walk
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Sequence  W12345
-	Voice AcousticBass
-	Octave 3
 	Rskip 5
 	Rvolume 10
 	Rtime 3

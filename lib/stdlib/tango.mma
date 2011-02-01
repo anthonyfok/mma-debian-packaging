@@ -93,7 +93,7 @@ Begin Walk
 	Rskip 10
 	Rtime 5
 	Octave 3
-	Volume f
+	Volume mf
 	Articulate 60
 	Voice AcousticBass
 End
@@ -102,7 +102,7 @@ Begin Arpeggio
 	Sequence AR1 AR2 AR3 z
 	Voice Bandoneon
 	Octave 6
-	SeqRnd
+	SeqRnd On
 	Articulate 70
 	Rskip 5
 	Rvolume 20
@@ -112,10 +112,11 @@ Begin Arpeggio
 End
 
 Begin Chord
+	Voice Bandoneon
+	Voicing Mode=Optimal
 	Sequence C1234  OffBeat1  C134  OffBeat2
 	Articulate 40
 	Volume mp
-	Voice Bandoneon
 	Octave 5
 End
 
@@ -142,9 +143,10 @@ Begin Chord
 	SeqClear
 	Sequence C1234   OffBeat1  C1234   OffBeat2
 	Articulate 70
+	Voicing Mode=Optimal
 	Voice Piano1
-	Octave 4
-	Volume mf
+	Octave 5
+	Volume mp
 End
 
 Begin Arpeggio
@@ -154,7 +156,7 @@ End
 
 Begin Bass-Violin
 	Volume p
-	SeqRnd
+	SeqRnd On
 	Octave 5
 	Rskip 50
 End

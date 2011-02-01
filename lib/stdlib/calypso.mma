@@ -80,7 +80,7 @@ End
 Begin Walk
 	Sequence  W13  /   W1'3   W13'
 	Accent 1 10
-	SeqRnd
+	SeqRnd On
 	Octave 3
 	Voice AcousticBass
 	Articulate 90
@@ -91,17 +91,15 @@ End
 
 DefGroove Calypso	A nice, simple Calypos beat with lots of tom-drums.
 
-Begin Bass-Sus
+Begin Chord-Sus
 	Voice SynthVox
-	Sequence    Sus1 Sus3 Sus5 Sus1
-	Octave 5
-	Harmony Open
+	Sequence  { 1 1 90 0 80 0 * 2}  // Root and fifth notes only.
+	Voicing mode=optimal
 	Volume mp
-	SeqRnd
+	Octave 5
 	Articulate 100
 	Unify On
 End
-
 
 DefGroove CalypsoSus   A synth voice sustained under the beat.
 
@@ -120,7 +118,7 @@ End
 
 DefGroove Calypso1   Walking Bass changed to 4-in-a-bar. 
 	
-Bass-Sus Groove CalypsoSus
+Chord-Sus Groove CalypsoSus
 
 DefGroove Calypso1Sus   4-in-a-bar bass with sustained, artifical voices.
 
@@ -131,14 +129,13 @@ DefGroove Calypso1Sus   4-in-a-bar bass with sustained, artifical voices.
 Groove Calypso
 SeqSize 1
 
+Alltracks Rskip 0
+
 Drum-LowBongo  Sequence D1234
 Drum-LowConga  Sequence D1234
-Begin Drum-Cym
-	Sequence D12
-	Rskip 0
-End
-Walk    Sequence W1234
-Chord   Sequence C1234
+Drum-Cym       Sequence D12
+Walk           Sequence W1234
+Chord          Sequence C1234
 
 DefGroove CalypsoEnd    A very simple, finalized ending. All \
                         the same instruments as Calypso, but \

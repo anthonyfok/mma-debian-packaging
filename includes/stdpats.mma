@@ -14,7 +14,7 @@ Endif
 Begin Drum Define
 
 	// All drum notes use single MIDI tick (duration==0)
-	
+
     D1       1 0 90          // Hit on 1
     D2       D1 Shift 1      // Hit on 2
     D3       D1 Shift 2      // Hit on 3
@@ -33,12 +33,26 @@ Begin Drum Define
     D8       D1 * 8          // 8 hits
     D16      D1 * 16         // 16ths ... a roll?
     Droll    D1 * 32         // 32nds ... certainly a roll
+
+	Triple6  D1 * 6          // 6 8th note triplets
+
+	// For latin we often need clave. This defines the 2 and 3 patterns
+
+	Clave2   D23
+	Clave3   D14; D2 Shift .5
+
+	// These give 2, 4 or 8 hits on beat 1; use shift to expand to beat 2,3,4
+
+	2S       1 0 90; 1.5 0 90
+	4S       2S; 2S Shift .25
+	8S       4S; 4S Shift .125
+
 End
 
 // Define runs to use in scales. Whole notes to 32nds.
 
 Begin Scale Define
-    Scale        1 1 90 
+    Scale        1 1 90
     Scale2       Scale * 2
     Scale4       Scale * 4
     Scale8       Scale * 8
@@ -55,7 +69,7 @@ Begin Bass Define
     B1234   B13; B13 Shift 1       // Root, 5, Root, 5
 
     // These are used as sustained strings on root, 3rd, 5th
-    
+
     Sus1   1 1 1 90 * 4
     Sus3   1 1 3 90 * 4
     Sus5   1 1 5 90 * 4
@@ -66,8 +80,9 @@ End
 
 Begin Arpeggio Define
     A1       1 1 90
-    A2       A1 * 2 
-    A4       A1 * 4 
+    A2       A1 * 2
+    A4       A1 * 4
+    A6       A1 * 6
     A8       A1 * 8
     A16      A1 * 16
 End
@@ -89,9 +104,12 @@ Begin Chord Define
     C234   C23; C4          // quarters on 2, 3 and 4
     C1234  1 1 90 * 4       // quarters on 1, 2, 3 and 4
     C8     C1234 * 2        // 8 eights
-    
-    L1     1 1 90           // Whole note 
+
+    L1     1 1 90           // Whole note
     L2     L1 * 2           // 2 half notes
+
+	Triple3  L1 * 3         // 3 1/4 triplets
+	Triple6  L1 * 6         // 6 8th triplets
 End
 
 
@@ -101,4 +119,18 @@ Begin Walk Define
     W8        W1234 * 2            // Eights
 End
 
+///////// Swing patterns
 
+
+StackValue $_SwingMode
+SwingMode On
+
+Begin Drum Define
+	Swing8 1 0 90 * 8
+End
+
+Begin Arpeggio Define
+	Swing8   1 1  90 * 8
+End
+
+SwingMode $_StackValue

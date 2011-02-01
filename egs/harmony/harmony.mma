@@ -19,19 +19,19 @@ begin Solo-1
 end
 
 begin Solo-2
-	   volume f
+	   Volume f
 	   Voice Marimba
-	   harmonyonly 3above
+	   HarmonyOnly 3above
 	   Mallet Rate=16 Decay=-2
-	   octave 4
+	   Octave 5
 end
 
 begin Solo-3
-	   volume f
-	   Voice Piano1
-	   harmonyonly 16Above
-	   octave 4
-	   articulate 90
+	   Volume f
+	   Voice AltoSax
+	   HarmonyOnly Open
+	   Octave 5
+	   Articulate 90
 end
 
 keysig 2b
@@ -39,9 +39,9 @@ keysig 2b
 // And here's a few bars of melody.
 
 groove Swing
-	   z   z   /  F7#5    {2r;f;} {1r;}
+	   z   z  F7#5        {2r;f;} 
 	   Bb  F+ Bb          {1+2.f~;}
-	   Bb  F+ Bb
+	   Bb  F+ Bb          
 	   /   /  Cm7 C#dim   {4r;d;e;en;}
 	   Bb  /  Dbdim       {4f;2a;4g;} 
 	   F7  /  Fm7b5       {1+2.e~;} 

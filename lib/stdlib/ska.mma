@@ -141,12 +141,11 @@ DefGroove Ska1   Change Piano to SteelDrums and add \
 
 Groove Ska
 
-Begin Bass-Sus
+Begin Chord-Sus
 	Voice SynthVox
-	Sequence    Sus1 Sus3
-	Octave 4
-	Harmony Open
-	SeqRnd
+	Sequence   { 1 1 90 0 90 0 * 4 }
+	Octave 5
+	Voicing Mode=Optimal
 	Articulate 100
 	Unify On
 End
@@ -154,7 +153,7 @@ End
 DefGroove SkaSus	Adds sustained voices to Ska.
 
 Groove Ska1
-Bass-Sus Groove SkaSus
+Chord-Sus Groove SkaSus
 DefGroove Ska1Sus	Adds sustained voices to Ska1.
 
 

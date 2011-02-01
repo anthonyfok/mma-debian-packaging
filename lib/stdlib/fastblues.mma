@@ -112,10 +112,9 @@ End
 
 DefGroove FastBlues   Fast blues with a bit of R&B.
 
-Begin Bass-Sus
-	Sequence     Sus1  /  Sus3  Sus5 
-	SeqRnd
-	Harmony OpenAbove
+Begin Chord-Sus
+	Sequence  {1 1 90 0 90 0 * 4 }
+	Voicing Mode=Optimal
 	Octave 5
 	Volume mp
 	Articulate 100
@@ -132,17 +131,17 @@ Groove FastBlues
 Bass Sequence -
 
 Begin Walk
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Sequence Wsuffle
-	Voice FingeredBass
 	Articulate 80
 	Volume mp
-	Octave 3
 End
 
 
 DefGroove FastBluesWalk  Change bass line from 1/5 to walking.
 
-Bass-Sus Groove FastBlues
+Chord-Sus Groove FastBluesSus
 
 DefGroove FastBluesWalkSus   Walking bass version with sustained strings.
 
@@ -194,7 +193,7 @@ End
 DefGroove FastBlues1    A more rowdy version, with alternating bars of \
                         a distorted guitar riff.
 
-Bass-Sus Groove FastBluesSus
+Chord-Sus Groove FastBluesSus
 
 DefGroove FastBlues1Sus   Who invited the violin guys to the blues party?
 

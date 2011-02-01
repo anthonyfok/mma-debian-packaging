@@ -19,8 +19,8 @@ Begin Chord Define
 	C23    C12 Shift 1        // 2 and 3
 	C123   C12; C3            // 1, 2 and 3
 
-	L1     1 1 90             // Sustained Chord on 1 		
-	L2     2 2 90             // Sustained chord on 2
+	L1     1 2. 90            // Sustained 3 beat chord on 1 		
+	L2     1 2 90             // Sustained 2 beat chord on 2
 End
 
 Begin Drum Define
@@ -33,6 +33,12 @@ Begin Drum Define
 	D123   D1 * 3             // hits on 1, 2 and 3
 	D6     D1 * 6             // 8th note roll
 	D12    D1 * 6             // 16th note roll
+
+	// These give 2, 4 or 8 hits on beat 1; use shift to expand to beat 2 or 3.
+
+	2S       1 0 90; 1.5 0 90
+	4S       2S; 2S Shift .25
+	8S       4S; 4S Shift .125
 End
 
 Begin Bass Define

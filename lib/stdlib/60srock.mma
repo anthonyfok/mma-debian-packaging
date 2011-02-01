@@ -54,9 +54,9 @@ Begin Bass
 End
 
 Begin Walk
-	Voice FretlessBass
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Volume mf
-	Octave 3
 	Articulate 70
 	Rtime 10
 	Rvolume 10
@@ -122,12 +122,12 @@ DefGroove 60sRock1          Bridge version of 60sRock.
 
 Groove 60sRock
 
-Begin Bass-Sus
+Begin Chord-Sus
 	Voice Strings
 	Articulate 100
+	Voicing Mode=Optimal
 	Unify On
-	Sequence Sus1 Sus5
-	Harmony Open
+	Sequence { 1 1 90 0 90 0 * 4 }
 	Octave 5
 	Volume mp
 End
@@ -135,8 +135,29 @@ End
 DefGroove 60sRockSus    60s Rock with strings.
 
 Groove 60sRock1
-Bass-Sus Groove 60sRockSus
+Chord-Sus Groove 60sRockSus
 DefGroove 60sRock1Sus   Alternate 60s Rock with strings.
+
+//////////////////////
+/// Intro
+
+Groove 60sRock
+
+Begin Drum-Kick
+	Sequence * * * D13
+	Rtime 0
+	Rvolume 0
+End
+// Drum-Snare
+Drum-OHH Sequence * * * D13
+
+Bass  Sequence -
+Walk  Sequence W13 / /  W1234
+
+Chord Sequence *  *  * L1
+Chord-Straight Sequence *  *  * C13
+
+DefGroove 60sRockIntro   4 bar intro.
 
 //////////////
 // Ending

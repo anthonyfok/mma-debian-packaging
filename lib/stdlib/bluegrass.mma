@@ -30,22 +30,22 @@ End
 SeqSize 4
 
 Begin Chord
+	Voice NylonGuitar
 	Sequence        C1234 / / C13
 	Accent 1 20  3 10
 	RSkip 10
 	Voicing  Mode=Optimal
-	Voice NylonGuitar
 	Octave 5
 	Strum 2
 	Articulate 90
 End
 
 Begin Chord-Banjo
+	Voice Banjo
 	Sequence      C8 / / C1234
 	RSkip 20
-	SeqRnd
+	SeqRnd On
 	Voicing   Mode=Invert
-	Voice Banjo
 	Octave 5
 	Strum 30
 	Articulate 50
@@ -53,20 +53,20 @@ Begin Chord-Banjo
 End
 
 Begin Bass
+	Voice AcousticBass
 	Sequence B13  / / z
 	Accent 1 20
-	Voice AcousticBass
 	Octave 3
 	Articulate 80
 	Volume f
 End
 
 Begin Walk
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Sequence z z z W1234
 	Accent 1 20
-	Voice AcousticBass
 	Articulate 80
-	Octave 3
 	Volume f
 End
 
@@ -107,12 +107,12 @@ DefGroove BlueGrassClap   Bluegrass with added handclaps.
 /// Add in the good-old bottle section
 
 Begin Arpeggio
-	Sequence Arp4
 	Voice BottleBlow
+	Sequence Arp4
 	Articulate 50 60 70 80
 	Octave 5 4 5 4
 	Volume mf
-	SeqRnd
+	SeqRnd On
 	Rskip 20 30 10 20
 	Rvolume 30
 End
@@ -123,6 +123,48 @@ DefGroove BlueGrassBottle  Adds in a blow-bottle which no blue grass group \
 Drum-Clap Groove BlueGrassClap
 
 DefGroove BlueGrassBottleClap  Bottles and handclaps...where will it stop!
+
+///////////////////////////////
+// Sustained strings with bluegrass? Sure
+// Note the sequence used in the sustain. A full half note
+// on beat 1 and a half note minus 1 midi tick on beat 3.
+// This, with "Articulate 100" forces same-chords within
+// the bar to be joined, but a short break at the bar ends.
+
+Groove BlueGrass
+
+Begin Chord-Sus
+	Sequence { 1 2 90 0 90 0; 3 2-0 90 0 90 0}
+	Octave     5
+	Voice      Accordion
+	Voicing   Mode=Optimal
+	Articulate 100
+	Unify      On
+	Volume     p
+End
+
+DefGroove BlueGrassSus      Add sustained accordion.
+
+Groove BlueGrassSus
+Drum-Clap Groove BlueGrassClap
+DefGroove BlueGrassSusClap   Accordion and clapping.
+
+////////////////////////////////////////////////
+/// Intro
+
+Groove BlueGrass
+
+AllTracks SeqRnd Off
+
+Chord  	      Sequence    *    *   *  L1     // NylonGuitar
+Chord-Banjo   Sequence    *    *   C1234   { 1 8 90; 1.5 8 90; 2  4 90}
+Bass          Sequence    B13   /    /      B1
+Walk          Sequence    -
+Drum-HH       Sequence     *    *    *      D13
+Drum-Snare    Sequence     *    *    *      D13
+
+DefGroove BlueGrassIntro   4 bar introduction.
+
 
 //////////////////////////////////////////
 // Simple ending for the bluegrassers

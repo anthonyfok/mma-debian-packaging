@@ -144,9 +144,9 @@ Begin Bass
 End
 
 Begin Walk
-	Voice FretlessBass
+	Voice $_Bass_Voice
+	Octave $_Bass_Octave
 	Volume ff
-	Octave 3
 	Sequence   z z z  W1234
 	Articulate 80
 End
@@ -173,12 +173,12 @@ End
 DefGroove LFusion     Basic Latin Fusion.
 
 Arpeggio Sequence -
-Begin Bass-Sus
+
+Begin Chord-Sus
 	Voice Strings
 	Octave 4
-	Harmony OpenAbove
-	Sequence  Sus1 Sus3 Sus5 Sus1
-	SeqRnd
+	Voicing Mode=Optimal
+	Sequence  { 1 1 90 0 90 0 * 4 }
 	Articulate 100
 	Unify On
 	Volume f
@@ -204,7 +204,7 @@ End
 DefGroove LFusion1  Same rhythm but with an accordion for that zydeco feeling.
 
 
-Bass-Sus Groove LfusionSus
+Chord-Sus Groove LfusionSus
 
 DefGroove LFusion1Sus  The zydeco with strings.
 

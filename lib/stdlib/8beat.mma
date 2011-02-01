@@ -19,8 +19,7 @@ Include stdpats
 // Define patterns
 
 Begin Drum Define
-	D1234+   D1234 ; 3.5 0 90; 4.5 0 90 
-	
+	D1234+   D1234 ; D34 Shift .5
 End
 
 Begin Chord Define
@@ -110,12 +109,12 @@ End
 // Randomized chords on 1, 2, 2.5, 3, 3.5, 4
 
 Begin Chord
+	Voice Honky-TonkPiano
 	Sequence   P1   P2   P3   P4
-	SeqRnd
+	SeqRnd On
 	Voicing  Mode=Optimal  Rmove=10
 	Volume mf
 	Articulate 90
-	Voice Honky-TonkPiano
 	Octave 5
 End
 
@@ -144,12 +143,13 @@ DefGroove 8Beat    Good for oldish rock stuff.
 
 Groove 8Beat
 
-Begin Bass-Sus
-	Sequence  Sus5 / Sus3 Sus1
+Begin Chord-Sus
+	Voice SlowStrings
+	Sequence  {1 1 90 0 90 0 * 4}
+	Voicing Mode=Optimal
 	Volume mp
 	Unify On
-	Voice SlowStrings
-	Octave 4
+	Octave 5
 	Articulate 100
 End
 	
@@ -172,10 +172,88 @@ End
 
 DefGroove 8Beat1     Adds interest to bass line with alternate walking bars.
 
-Bass-Sus Groove 8BeatSus
+Chord-Sus Groove 8BeatSus
 DefGroove 8Beat1Sus  Adds sustained string to 8Beat1.
 	
-	
+/////////////////////////////
+/// Plus versions add in piano
+
+Groove 8Beat
+
+Begin Arpeggio
+	Voice Piano1
+	Sequence  {A4; 1.5 8 90; 3.5 8 90} \
+              {A2; 1.5 4 90; 3.5 4 90} \
+              {A4 Shift .5} \
+              {A2; A4 Shift .5}
+    Harmony OpenBelow+OpenAbove
+	Articulate 130
+	Rvolume 0,20
+	Rskip 40
+    Range 2
+    SeqRnd ON
+    Direction Random
+	Volume mf
+	Octave 5
+End
+
+DefGroove 8BeatPlus   Adds a bit of random piano.
+
+Groove 8BeatSus
+Arpeggio Groove 8BeatPlus
+DefGroove 8BeatSusPlus  Strings and random piano.
+
+Groove 8Beat1
+Arpeggio Groove 8BeatPlus
+DefGroove 8Beat1Plus  Interesting bass line and piano.
+
+Groove 8Beat1Sus
+Arpeggio Groove 8BeatPlus
+DefGroove 8Beat1SusPlus  Interesting bass, piano and strings.
+
+///////////////////////
+/// Intro
+
+Groove 8Beat
+
+Alltracks SeqRnd Off
+
+Drum-OHH     Sequence   *    *    *    D1234
+Drum-CHH     Sequence   *    *    *    D13
+Drum-Snare   Sequence   D24  /    /    /
+Drum-Kick    Sequence   *    *    *    D1
+
+Bass         Sequence	Bmain  /  /    B1
+
+Chord        Sequence   P1    P2  P3   C123
+
+Chord-Guitar Sequence	G1    G1  G1   L1
+
+
+DefGroove 8BeatIntro   Straight-ahead four bar introduction.
+
+///////////////////////////////////////////
+/// Fill
+
+Groove 8Beat
+
+SeqSize 1
+
+Drum-OHH     Sequence   D8
+Drum-CHH     Sequence   D1234
+Drum-Snare   Sequence   D8
+Drum-Kick    Sequence   D13
+
+Bass         Sequence	B13
+
+Chord        Sequence   C1234
+
+Chord-Guitar Sequence	G1
+
+DefGroove 8BeatFill  A single bar fill, mostly drums.
+
+
+
 ///////////////////////////////////////
 // 8BeatEnd	
 

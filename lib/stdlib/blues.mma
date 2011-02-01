@@ -43,7 +43,7 @@ End
 Begin Drum-Clap
 	Sequence D24 
 	Tone HandClap
-	SeqRnd
+	SeqRnd On
 	Rvolume 10
 	RSkip 50
 	Rtime 4
@@ -58,17 +58,17 @@ Begin Drum-HH
 End
 
 Begin Walk
-	Sequence W1234 / / z
 	Voice AcousticBass
+	Sequence W1234 / / z
 	Octave 3
 	Volume mp
 	Articulate 80
 End
 
 Begin Bass
+	Voice $_Walk_Voice
+	Octave $_Walk_Octave
 	Sequence z / / B11
-	Voice FretlessBass
-	Octave 3
 	Volume mp
 	Articulate 80
 End
@@ -95,15 +95,17 @@ DefGroove BluesTriple   Change the piano chords to triplets. Nice for \
 
 Groove Blues
 
-Begin Bass-Sus
+
+Begin Chord-sus
+	Sequence	{ 1 1 90 0 50 0 * 4 } { 1 1 50 0 90 0 * 4 }
+	SeqRnd On
+	Voicing Mode=Optimal
+	Rvolume 10
 	Voice Harmonica
-	Sequence Sus1 Sus3 Sus5 Sus1
-	SeqRnd
-	Volume ppp
-	Octave 6
-	Harmony Open
 	Articulate 100
-	Unify On	
+	Unify On
+	Volume pp
+	Octave 5
 End
 
 DefGroove BluesSus      Add a sustained harmonica. Annoying.
@@ -112,6 +114,41 @@ Chord Groove BluesTriple
 
 DefGroove BluesTripleSus   Sustained 'arp and chord triplets.
 
+
+//////////////////////////////////////
+// Alternate with piano
+
+Groove Blues
+
+Begin Arpeggio
+	Voice $_Chord_Voice
+	Volume mf
+	Articulate 80
+	RSkip 40
+	Sequence Swing8
+	Rtime 10
+	RVolume 15
+End
+
+DefGroove Blues1    Add honky-piano.
+
+Chord-Sus  Groove  BluesSus
+
+DefGroove Blues1Sus  The honky-piano meets the mouth-arp.
+
+//////////////////////////////////////
+/// Intro
+
+Groove Blues
+
+Drum        Sequence D1234 / / D1
+Drum-Clap   Sequence D1
+Drum-HH     Sequence D1234 / / D1
+// Leave WALK as W1234 / / z
+Bass        Sequence z z z {1 2 1 90}
+Chord       Sequence C13 / /  L1
+
+DefGroove BluesIntro    Simple, 4 bar, introduction.	
 	
 /// Ending
 
