@@ -1,4 +1,5 @@
-mma usr/bin
+mma.py usr/bin/mma
+mma-* usr/bin
 lib usr/share/mma
 includes usr/share/mma
-modules/*.py usr/share/mma/modules
+MMA/*.py usr/share/mma/MMA
