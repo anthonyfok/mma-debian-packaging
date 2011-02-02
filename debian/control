@@ -1,7 +1,7 @@
 Source: mma
 Section: sound
 Priority: optional
-Maintainer: Debian QA Group <packages@qa.debian.org>
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Build-Depends: debhelper (>=7.0.50~)
 Build-Depends-Indep: python-dev, python-support (>= 0.4)
 Standards-Version: 3.7.3
