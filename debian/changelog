@@ -1,3 +1,9 @@
+mma (1.7-1) UNRELEASED; urgency=low
+
+  * New Upstream Release.
+
+ -- Miguel Colon <debian.micove@gmail.com>  Wed, 02 Feb 2011 02:30:21 -0500
+
 mma (0.12-2) unstable; urgency=low
 
   * QA upload.
