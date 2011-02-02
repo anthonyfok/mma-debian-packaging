@@ -5,7 +5,7 @@ Maintainer: Debian QA Group <packages@qa.debian.org>
 Build-Depends: debhelper (>=7.0.50~)
 Build-Depends-Indep: python-dev, python-support (>= 0.4)
 Standards-Version: 3.7.3
-Homepage: http://mypage.uniserve.com/~bvdp/mma/
+Homepage: http://www.mellowood.ca/mma/
 
 Package: mma
 Architecture: all
