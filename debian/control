@@ -9,7 +9,8 @@ Homepage: http://mypage.uniserve.com/~bvdp/mma/
 
 Package: mma
 Architecture: all
-Depends: ${python:Depends}
+Depends: ${python:Depends},
+ ${misc:Depends}
 Description: Musical Midi Accompaniment generator
  MMA creates midi tracks for a soloist to perform over from a user
  supplied file containing chords and MMA directives.
