@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Build-Depends: debhelper (>=7.0.50~)
-Build-Depends-Indep: python-dev, python-support (>= 0.4)
+Build-Depends-Indep: python-support
 Standards-Version: 3.7.3
 Homepage: http://www.mellowood.ca/mma/
 Vcs-Git: git://git.debian.org/pkg-multimedia/mma.git
