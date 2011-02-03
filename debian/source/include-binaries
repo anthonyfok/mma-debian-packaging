@@ -1,1 +1,4 @@
-debian/pdf/*
+debian/pdf/chords.pdf
+debian/pdf/mma-lib.pdf
+debian/pdf/mma-tutorial.pdf
+debian/pdf/mma.pdf
