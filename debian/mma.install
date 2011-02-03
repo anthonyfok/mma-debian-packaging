@@ -1,4 +1,5 @@
 mma-* usr/bin
+debian/mma-mnx debian/mma-rm2std usr/bin
 lib usr/share/mma
 includes usr/share/mma
 MMA/*.py usr/share/mma/MMA
