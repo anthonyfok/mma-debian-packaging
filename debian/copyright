@@ -1,15 +1,28 @@
-This package was debianized by Raphael Goulais <rafou@debian.org> on
-Tue, 13 Jan 2004 13:20:25 +0100.
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Source: http://www.mellowood.ca/mma/
+Name: mma
 
-It was downloaded from http://mypage.uniserve.com/~bvdp/mma/mma.html
+Copyright: 2000, Bob van der Poel <bvdp@universe.com>
+License: GPL-2+
 
-Upstream Author: Bob van der Poel <bvdp@universe.com>
+Files: debian/*
+Copyright: 2011, Joel Roth <joelz@pobox.com>
+License: GPL-2+
 
-This software is copyright (c) 2000 by Bob van der Poel
+Files: debian/mma.1
+Copyright: 2000, Bob van der Poel <bvdp@universe.com>
+License: GPL-2+
 
-You are free to distribute this software under the terms of
-the GNU General Public License.
+License: GPL-2
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License 
+ published by the Free Software Foundation; either version
+ 2, or (at your option) any later version.
+ .
+ On Debian GNU/Linux systems, the complete text of version 2
+ of the GNU General Public License can be found in
+ `/usr/share/common-licenses/GPL-2'.
 
-On Debian systems, the complete text of the GNU General Public
-License can be found in the file `/usr/share/common-licenses/GPL'.
-					  
+
+
