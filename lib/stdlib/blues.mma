@@ -114,6 +114,20 @@ Chord Groove BluesTriple
 
 DefGroove BluesTripleSus   Sustained 'arp and chord triplets.
 
+/// Left side triplet
+
+Groove Blues
+
+Begin Chord
+	Sequence  {1 3 90; 1.33 3 80; 1.66 3 80; 2 8 90; 2.33 3 80; 2.66 3 80; 3 4 90; 4 4 90}
+	Octave 5
+End
+
+DefGroove BluesTripleL  Same as BluesTriple with triplets on beats 1 and 2.
+
+
+Chord-Sus Groove BluesSus
+DefGroove BluesTripleLSus  Same as BluesTripleSus with triplets on beats 1 and 2.
 
 //////////////////////////////////////
 // Alternate with piano

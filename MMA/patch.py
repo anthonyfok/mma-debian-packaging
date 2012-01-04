@@ -101,16 +101,15 @@ def patchset(ln):
         # Handle the name.
 
         if voc in voiceNames:
-            warning("Patch Set duplicating voice name %s with %s=%s" % \
-                      (voiceNames[voc], n, MMA.midiC.extVocStr(voc) ))
+            warning("Patch Set duplicating voice name %s=%s with %s=%s" % \
+                      (voiceNames[voc],voc, n, MMA.midiC.extVocStr(voc) ))
 
         if n in voiceInx:
-            warning("Patch Set duplicating voice value %s with %s=%s" % \
-                     (MMA.midiC.extVocStr(voiceInx[n]), MMA.midiC.extVocStr(voc), n) )
+            warning("Patch Set duplicating voice value %s=%s with %s=%s" % \
+                     (MMA.midiC.extVocStr(voiceInx[n]), n, MMA.midiC.extVocStr(voc), n) )
 
         voiceNames[voc]=n
         voiceInx[n]=voc
-
 
         
 # Rename

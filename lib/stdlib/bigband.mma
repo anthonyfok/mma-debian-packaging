@@ -308,6 +308,28 @@ End
 
 DefGroove BigBandIntro  4 bar introduction.
 
+////////////
+
+Groove BigBand
+
+Walk Sequence	W1234   /  W13   {1 8 90; 1.5 2 100}  
+
+Begin Chord
+	Sequence   *   *   *   C1
+End
+
+
+Begin Chord-Hits1
+	Sequence  {1 8. 95; 2.75 4. 90}  /  /  {1 2. 80}
+	Voice AltoSax
+	Voicing Mode=Optimal
+	Volume f
+    Articulate 80
+    Octave 5
+	Rskip 10
+End
+
+DefGroove BigBandIntro2  Alternate 4 bar introduction.
 
 /// 8 bars
 

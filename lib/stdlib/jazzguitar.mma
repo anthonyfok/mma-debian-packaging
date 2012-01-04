@@ -39,7 +39,7 @@ Begin Plectrum
 	Voice JazzGuitar
 	Volume m
     Octave 5
-    Sequence {1 5 90; 2 -5  5-6:0 1-4:80; 3 5 90; 4 -5  6:0 1-5:80}
+    Sequence {1 3 90; 2 -3  5-6:0 1-4:80; 3 3 90; 4 -3  6:0 1-5:80}
 End
 
 Begin Bass
@@ -170,6 +170,50 @@ DefGroove JazzGuitar2WalkSus    Sustained strings added to JazzGuitarWalk2.
 Groove JazzGuitar3Walk
 Chord-Sus Groove  JazzGuitarSus
 DefGroove JazzGuitar3WalkSus    Sustained strings added to JazzGuitarWalk3.
+
+
+///////////////////////////////////////
+//// Plus versions
+
+Groove JazzGuitar
+Begin Arpeggio-Plus
+	Voice $_Plectrum_Voice
+	Articulate 140
+    Harmony 3Below+8Below
+	Rskip 30
+	Octave 5
+	Volume mf
+	Direction Random
+	Range 1.2
+    SeqRnd On
+	Sequence A2 A4 A4 A8
+End
+
+DefGroove JazzGuitarPlus   Basic pattern with some random notes.
+
+Groove JazzGuitarWalk
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitarWalkPlus   Basic walking version with random notes.
+
+Groove JazzGuitar2
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitar2Plus   Syncopated with random notes.
+
+Groove JazzGuitar2Walk
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitar2WalkPlus   Syncopated walking with random notes.
+
+Groove JazzGuitarSus
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitarSusPlus   Basic with strings and random notes.
+
+Groove JazzGuitarWalkSus
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitarWalkSusPlus   Walking version with strings and random notes.
+
+Groove JazzGuitar2WalkSus
+Arpeggio-Plus Groove JazzGuitarPlus
+DefGroove JazzGuitar2WalkSusPlus   Syncopated walking version with strings and random notes.
 
 
 ///////////////////////////////////

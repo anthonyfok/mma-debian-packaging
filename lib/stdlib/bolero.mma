@@ -17,16 +17,13 @@ Include stdpats
 /////////////////////////////////////////
 /////// Instrument patterns
 
-Begin Plectrum Define
-  P13   1 3 1-6:90; 3 3 1-6:90
-  P134  P13; 4 3 1-6:90
-  TR3   1  0 1-6:80 ;  1.33 0 1-6:80;  1.66 0 1-6:80
+// These are triplet patterns for Bolero1
 
-  PL1   P13  ; TR3 Shift 1; TR3 Shift 3
-  PL2   P134 ; TR3 Shift 1 
-  PL3   P13; TR3
+Begin Chord Define
+  TR3   1 16. 90; 1.33 16 85; 1.66 16 80
+  C1T3  C13; TR3 Shift 1
+  C1T34 C134; TR3 Shift 1
 End
-
 
 
 Drum  Define Dtriple 1 0 90; 1.333 0 90; 1.666 0 90
@@ -85,13 +82,13 @@ Begin Plectrum
     Rvolume  20
     Rtime    10
     Volume   mp
-    Sequence { 1.0   +5      80   90    90   90   90   80; 
-               2.0   +5      80   80    80   80   80   80; 
-               2.5   -5       -    -    70   70   70   70; 
-               3.0   +5      80   80    80   80   80   80; 
-               3.5   -5       -    -    70   70   70   70; 
-               4.0   +5      80   80    80   80   80   80; 
-               4.5   -5       -    -    70   70   70   70;  }
+    Sequence { 1.0   0      80   90    90   90   90   80; 
+               2.0   0      80   80    80   80   80   80; 
+               2.5   0       -    -    70   70   70   70; 
+               3.0   0      80   80    80   80   80   80; 
+               3.5   0       -    -    70   70   70   70; 
+               4.0   0      80   80    80   80   80   80; 
+               4.5   0       -    -    70   70   70   70;  }
 End
 
 Begin Bass
@@ -195,7 +192,7 @@ Drum-Lbongo   Sequence  {D4; D4 Shift .5} / / D1
 Drum-Maraca   Sequence  {D1234; D1234 Shift .5; D1 Shift .5} / /  D1
 Drum-Claves   Sequence  {D2; D3 Shift .5} / / D1
 
-Plectrum      Sequence  {1 3 1-6:100; 3 3 1-6:90; 4 3 1-3:80} / {1 3 1-6:90 * 4 } {1 8 1-6:100}
+Plectrum      Sequence  {1 0 1-6:100; 3 0 1-6:90; 4 0 1-3:80} / {1 0 1-6:90 * 4 } {1 0 1-6:100}
 
 Bass          Sequence  {1 4. 1 90; 2.5 8 3 90; 4 4 1 90} / /  {1 1 1 90}
 Bass-Guitar   Sequence  {1 2. 1 90 } {4.5 8 1 90 } / {1 1 3 90}
@@ -214,7 +211,7 @@ Begin Scale
 	Voice Strings
 	Range 3
 	Articulate 99
-	Volume ff
+	Volume mf   m  mp  p
 	Octave 4
 	Direction Both
 End
@@ -263,14 +260,19 @@ Begin Drum-Claves
 	Rtime 2
 End
 
-Begin Plectrum
-	Voice     NylonGuitar
-	Volume    mp
-	Octave    5
-	Rvolume   20
-	Rtime     10
-    Sequence  PL1 PL2
+Begin Chord
+    Voice    NylonGuitar
+    Articulate 70
+    Volume   mp
+    Octave   5
+    Strum    6
+    RSkip    20
+    Voicing  Mode=Optimal
+    Rvolume  20
+    Rtime    10
+    Sequence C1T3  C1T34
 End
+
 
 Begin Bass
 	Voice  FingeredBass
@@ -286,16 +288,16 @@ End
 DefGroove Bolero1    Spanish-style Bolero rhythm.
 
 Begin Arpeggio
-	Voice $_Plectrum_Voice
+	Voice $_Chord_Voice
 	Sequence A2 A4
 	SeqRnd On
 	RSkip 10
 	Octave 5
 	Range 1
 	Harmony Open
-	Articulate 100
+	Articulate 120
 	Unify On
-	Volume ff
+	Volume mf
 End
 
 DefGroove Bolero1Fill    Add guitar arpeggios to Bolero1.
@@ -306,7 +308,7 @@ Begin Chord-Sus
 	Voice Strings
 	Sequence  { 1 1 90 0 80 0 * 2}  // Root and fifth notes only.
 	Voicing Mode=Optimal
-	Volume mp
+	Volume p
 	Octave 5
 	Articulate 100
 	Unify On
@@ -330,7 +332,7 @@ Drum-Lbongo  Sequence  { Dtriple shift 1; Dtriple Shift 3} \
                        { Dtriple Shift 1; D4 }  /  D1
 Drum-Claves  Sequence  { Dtriple shift 1; D14 } /  /  D1
 
-Plectrum     Sequence  PL1 PL2 PL1 {1 5 1-6:90}
+Chord        Sequence  C1T34  /   C1234 {1 1 110}
 
 Bass	Sequence  {1 4 1 90; 2.5 8 1 90; 3 8 5 90; 4 4 1 90} B11 B13 {1 1 1 90}
 
@@ -345,7 +347,7 @@ SeqSize 1
 
 Drum-Lbongo  Sequence     {Dtriple ; Dtriple shift 1 ; D3}
 Drum-Claves  Sequence     {Dtriple ; Dtriple shift 1 ; D3}
-Plectrum     Sequence     PL3
+Chord        Sequence     C12
 Bass         Sequence     B11
 
 DefGroove Bolero1End    Single bar ending for Bolero1.

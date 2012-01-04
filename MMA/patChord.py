@@ -27,10 +27,11 @@ Bob van der Poel <bob@mellowood.ca>
 import random
 
 import MMA.notelen
-
+import MMA.ornament
 import gbl
 from   MMA.common import *
 from   MMA.pat import PC
+
 import copy
 
 
@@ -87,12 +88,12 @@ class Chord(PC):
 
         for mode, val in ln:
             if mode == 'MODE':
-                valid= ("-", "OPTIMAL", "NONE", "ROOT", "COMPRESSED", "INVERT")
+                valid= ("-", "OPTIMAL", "NONE", "ROOT", "COMPRESSED", "INVERT", "KEY")
 
                 if not val in  valid:
                     error("Valid Voicing Modes are: %s" % " ".join(valid))
 
-                if val in ('-', 'NONE',"ROOT"):
+                if val in ('-', 'NONE', 'ROOT'):
                     val = None
 
 
@@ -118,7 +119,9 @@ class Chord(PC):
 
 
             elif mode == 'CENTER':
-                val = stoi(val, "Argument for %s VOICING CENTER must be a value" % self.name)
+
+                val = stoi(val, "Argument for %s VOICING CENTER must be a value."\
+                               % self.name)
 
                 if val < 1 or val > 12:
                     error("VOICING CENTER: arg out-of-range; must be 1 to 12, not '%s'." % val)
@@ -218,13 +221,12 @@ class Chord(PC):
 
 
     def chordVoicing(self, chord, vMove):
-        """ Voicing algorithm by Alain Brenzikofer. """
-
+        """ Mangle chord notes for voicing options. """
 
         sc = self.seq
         vmode=self.voicing.mode
-
-        if vmode == "OPTIMAL":
+        #print vMove, vMove, chord.noteList,
+        if vmode == "OPTIMAL":  ## Optimal voicing algorithm by Alain Brenzikofer.
 
             # Initialize with a voicing around centerNote
 
@@ -235,12 +237,11 @@ class Chord(PC):
             if not (self.voicing.bcount or self.voicing.random):
                 chord.center2(self.voicing.center, self.voicing.range/2)
 
-
             # Move voicing
 
             elif self.lastChord:
                 if (self.lastChord != chord.noteList ) and vMove:
-                    chord.center2(self.voicing.center,self.voicing.range/2)
+                    chord.center2(self.voicing.center, self.voicing.range/2)
                     vMove = 0
 
                     # Update voicingCenter
@@ -263,6 +264,8 @@ class Chord(PC):
                         elif c >4: c=4
                     self.voicing.center=c
 
+        elif vmode == "KEY":
+            chord.keycenter()
 
         elif vmode == "COMPRESSED":
             chord.compress()
@@ -276,7 +279,7 @@ class Chord(PC):
             chord.compress()
 
         self.lastChord = chord.noteList[:]
-
+        #print chord.noteList
         return vMove
 
 
@@ -344,6 +347,7 @@ class Chord(PC):
             """
 
             nl=tb.chord.noteList
+
             l=len(nl)
             for j in range(l-1):
                 r = nl[j]
@@ -353,7 +357,7 @@ class Chord(PC):
                         break
 
             loo = zip(nl, vols)    # this is a note/volume array of tuples
-
+                
 
             """ Duplicate the root. This can be set from a DupRoot command
                 or by chordVoicing(). Notes:
@@ -392,24 +396,18 @@ class Chord(PC):
             else:
                 self.sortDirection = 0
                 
-            # take the list of notes and sort them in low to high order.
-            # reverse the list if direction is set.
+            strumAdjust = self.getStrum(sc)
+            if strumAdjust:  
+                loo.sort()    # sort for strum only. If no strum it doesn't matter
+                if self.sortDirection:
+                    loo.reverse()
 
-            loo.sort()
-            if self.sortDirection:
-                loo.reverse()
-
-            strumOffset = 0
-
-            for note, v in loo:  # sorting low-to-high notes. Mainly for STRUM.
-                self.sendNote(
-                    p.offset + strumOffset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(v, p.offset) )
-
-                strumOffset += self.getStrum(sc)
-
+            if self.ornaments['type']:   # ornanetation applies to the top note only
+                MMA.ornament.doOrnament(self, [loo[-1]], 
+                     self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                loo.pop()
+            self.sendChord(loo, p.duration, p.offset)
+                            
             tb.chord.reset()    # important, other tracks chord object
 
         # Adjust the voicingMove counter at the end of the bar

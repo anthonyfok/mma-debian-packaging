@@ -16,7 +16,6 @@ Begin DocVar
               at the start of playing a track. Quite useful for performance.
 End
 
-
 SeqClear
 Time 3
 Timesig 3 4

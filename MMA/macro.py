@@ -39,6 +39,7 @@ import MMA.player
 import MMA.seqrnd
 import MMA.midinote
 import MMA.swing
+import MMA.ornament
 
 import gbl
 from   MMA.lyric import lyric
@@ -260,6 +261,9 @@ class Macros:
 
         elif func == 'OCTAVE':
             return ' '.join([str(a/12) for a in t.octave])
+
+        elif func == 'ORNAMENT':
+            return MMA.ornament.getOrnOpts(t)
 
         elif func == 'RANGE':
             return ' '.join([str(x) for x in t.chordRange])
@@ -657,10 +661,13 @@ class Macros:
         if not v in self.vars:
             error("Variable '%s' not defined" % v)
 
-        vl=stoi(self.vars[v], "Variable must be a value to increment") + inc
+        vl=stof(self.vars[v], "Variable must be a value to increment") + inc        
+
+        # lot of mma commands expect ints, so convert floats like 123.0 to 123
 
         if vl == int(vl):
             vl = int(vl)
+
         self.vars[v]=str(vl)
 
         if gbl.debug:
@@ -686,7 +693,9 @@ class Macros:
         if not v in self.vars:
             error("Variable '%s' not defined" % v)
 
-        vl=stoi(self.vars[v], "Variable must be a value to decrement") - dec
+        vl=stof(self.vars[v], "Variable must be a value to decrement") - dec
+
+        # lot of mma commands expect ints, so convert floats like 123.0 to 123
 
         if vl == int(vl):
             vl = int(vl)
@@ -766,7 +775,6 @@ class Macros:
                 error("Usage: IF %s VariableName" % action)
 
             v=ln[1].upper()
-            retpoint = 2
 
             if action == 'DEF':
                 compare = v in self.vars
@@ -782,16 +790,13 @@ class Macros:
             if len(ln) != 3:
                 error("Usage: VARS %s Value1 Value2" % action)
 
-
+            
             s1,v1 = expandV(ln[1])
             s2,v2 = expandV(ln[2])
 
             if type(v1) == type(1.0) and type(v2) == type(1.0):
                 s1=v1
                 s2=v2
-
-
-            retpoint = 3
 
             if     action == 'LT':
                 compare = (v1 <     v2)
@@ -835,20 +840,6 @@ class Macros:
         if compare:
             gbl.inpath.push( q, qnum )
 
-
-
-def domath(s):
-    """ A simple math factoring func. Just does add, sub, mult, divide. """
-    print '>>>',s        
-    s = ' '.join(s)
-
-    try:
-        s = eval(s)
-
-    except:
-        error("Error in '%s' expression." % s)
-    print s
-    return str(s)
 
 
 macros = Macros()

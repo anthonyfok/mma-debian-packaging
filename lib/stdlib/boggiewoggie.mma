@@ -85,6 +85,35 @@ Chord Sequence C13 Bchord-3
 
 DefGroove BoggieWoggie3  BG with 8/16s bass line and strong chords.
 
+////////////////////////////////////////////
+/// Sustained
+
+Groove BoggieWoggie
+
+Begin Chord-Sus
+	Voice Clarinet
+	Voicing Mode=Optimal
+	Sequence { 1 1 90 0 70 0 * 2 }
+	Volume mp
+	Octave 5
+	Articulate 100
+	Unify On
+End
+
+DefGroove BoggieWoggieSus   Basic pattern with sustained Clarinet.
+
+Groove BoggieWoggie1
+Chord-Sus Groove BoggieWoggieSus
+DefGroove BoggieWoggie1Sus   Alternate 1 with Clarinet
+
+Groove BoggieWoggie2
+Chord-Sus Groove BoggieWoggieSus
+DefGroove BoggieWoggie2Sus   Alternate 2 with Clarinet
+
+Groove BoggieWoggie3
+Chord-Sus Groove BoggieWoggieSus
+DefGroove BoggieWoggie3Sus   Alternate 3 with Clarinet
+
 /////////////////////
 // Ending
 

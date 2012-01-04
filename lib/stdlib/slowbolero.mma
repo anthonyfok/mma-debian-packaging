@@ -105,8 +105,9 @@ End
 
 DefGroove SlowBolero  Easy going Bolero for ballads.
 
-//// Sustained
 
+/////////////////////////////
+//// Sustained
 
 Groove SlowBolero
 
@@ -129,6 +130,59 @@ End
 
 DefGroove SlowBoleroSus   Add sustained voices.
 
+////////////////////////////////////
+///////  Plus
+
+Groove SlowBolero
+Begin Arpeggio
+	Voice NylonGuitar
+	Articulate 140
+	Octave 4
+	Volume m
+    Range 2
+    RSkip 30
+    Harmony OpenBelow
+    RVolume 20
+    RTime 10
+    Direction Random
+	Sequence A8 / A4 A8
+End
+
+DefGroove SlowBoleroPlus  Add in some nylon guitar apreggios
+
+Groove SlowBoleroPlus
+Chord-Sus Groove SlowBoleroSus
+DefGroove SlowBoleroSusPlus  Arpeggios and sustained voices.
+
+///////////////////////////
+/// Alternate 1 has a backing melody
+
+Groove SlowBolero
+
+Begin Bass-Accomp
+    Voice JazzGuitar //SteelGuitar
+    Volume mf
+    Harmony OpenBelow+OpenAbove
+    Rskip 20
+    Articulate 120
+    Octave 5
+    Rtime 10
+    RVolume 0,10
+    SeqRnd On
+    Sequence {1 8 1 90; 2 8 1 90; 3 4 3 80; 4 4 5 70} \
+             {1 8 1 90; 1.5 8 2 80; 2 8 1 80; 2.5 8 2 70;3 4 3 80; 4 4 2 75} \
+             {1 4 6 90; 2 8. 5 90; 3 4. 3 80; 4 4 1 70} \
+             {1 8 5 90; 1.5 8 3 80; 2 8 5 80; 2.5 8 3 70;3 4 2 80; 4 4 1 75}
+End
+
+DefGroove SlowBolero1   Basic slow Bolero with alternate backing melody.
+
+Groove SlowBolero1
+Chord-Sus Groove SlowBoleroSus
+DefGroove SlowBolero1Sus  Backing melody and sustained voices.
+
+
+//////////////////////////
 //////  Intro
 
 Groove SlowBolero

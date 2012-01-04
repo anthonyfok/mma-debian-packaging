@@ -1,4 +1,3 @@
-
 # patScale.py
 
 """
@@ -27,10 +26,13 @@ import random
 
 import MMA.harmony
 import MMA.notelen
+import MMA.ornament
 from   MMA.pat  import PC
 
 import gbl
 from   MMA.common import *
+
+import copy
 
 class Scale(PC):
     """ Pattern class for a Scale track. """
@@ -45,6 +47,21 @@ class Scale(PC):
     sOffset    = 0
     notes      = None
     dirfact    = 1
+
+    def __init__(self, ln):
+        
+        PC.__init__(self, ln)
+        
+    def saveGroove(self, gname):
+        """ Save special/local variables for groove. """
+
+        PC.saveGroove(self, gname)  # create storage. Do this 1st.
+
+    def restoreGroove(self, gname):
+        """ Restore special/local/variables for groove. """
+
+        PC.restoreGroove(self, gname)
+
 
     def getPgroup(self, ev):
         """ Get group for scale patterns.
@@ -74,8 +91,10 @@ class Scale(PC):
 
         for n in ln:
             n = n.upper()
-            if not n in ( 'CHROMATIC', 'AUTO'):
-                error("Unknown %s ScaleType. Only Chromatic and Auto are valid" % self.name)
+            if not n in ( 'CHROMATIC', 'SCALE', 'AUTO', 'CHORD'):
+                error("%s Scaletype: Only Chromatic, Scale, Auto and "
+                      "Chord are valid, not '%s'" % (self.name, n))
+
             tmp.append(n)
 
         self.scaleType = seqBump(tmp)
@@ -83,8 +102,7 @@ class Scale(PC):
         if gbl.debug:
             print "Set %s ScaleType to " % self.name,
             printList(ln)
-
-
+        
     def restart(self):
         self.ssvoice = -1
         self.lastNote = -1
@@ -96,6 +114,7 @@ class Scale(PC):
         self.notes = None
         self.dirfact = 1
 
+        
     def trackBar(self, pattern, ctable):
         """ Do a scale bar.
 
@@ -104,11 +123,9 @@ class Scale(PC):
 
         sc = self.seq
         direct = self.direction[sc]
-        unify = self.unify[sc]
-
+        
         # If the range or direction has changed, we just start
         # with a new scale.
-
 
         t = self.chordRange[sc]
         if t != self.lastRange:
@@ -126,7 +143,6 @@ class Scale(PC):
             if tb.scaleZ:
                 continue
 
-
             thisChord = tb.chord.tonic + tb.chord.chordType
             stype = self.scaleType[sc]
 
@@ -137,9 +153,12 @@ class Scale(PC):
                 if stype == 'CHROMATIC':
                     notelist = [ tb.chord.rootNote + x for x in range(0,12)]
                 
+                elif stype == 'CHORD':
+                    notelist = tb.chord.noteList[:]
+
                 else:
                     notelist = list(tb.chord.scaleList)
-
+                
                 """ Get the current scale and append enuf copies
                 together for RANGE setting. If Range happens
                 to be 0 or 1 we end up with a single copy.
@@ -169,6 +188,7 @@ class Scale(PC):
                         self.sOffset = len(self.notes)-1
                 else:
                     self.sOffset = 0
+                    self.dirfact = 1
 
                 if self.lastNote > -1:
                     if self.lastNote in self.notes:
@@ -210,25 +230,25 @@ class Scale(PC):
 
             self.lastNote = note
 
+            duration = p.duration
+            vol = p.vol
+            offset = p.offset
+
             if not self.harmonyOnly[sc]:
-                self.sendNote(
-                    p.offset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(p.vol, p.offset))
+                nlist = [(note, p.vol)]
+            else:
+                nlist = []
 
             if self.harmony[sc]:
                 ch = self.getChordInPos(p.offset, ctable).chord.noteList
                 h = MMA.harmony.harmonize(self.harmony[sc], note, ch)
+                harmlist =  zip(h, [p.vol * self.harmonyVolume[sc]] * len(h))
+            else:
+                harmlist = []
 
-                strumOffset = self.getStrum(sc)
+            if self.ornaments['type']:
+                MMA.ornament.doOrnament(self, nlist, self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                nlist = []
 
-                for n in h:
-                    self.sendNote(
-                        p.offset + strumOffset,
-                        self.getDur(p.duration),
-                        self.adjustNote(n),
-                        self.adjustVolume(self.harmonyVolume[sc] * p.vol, -1) )
-
-                    strumOffset += self.getStrum(sc)
+            self.sendChord(nlist+harmlist, p.duration, p.offset)
 

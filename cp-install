@@ -152,7 +152,7 @@ print "and you should contact Bob and we'll figure it out."
 
 okay("")
 
-os.system("%s -G" % bin)
+os.system("%s -G" % exe)
 
 print "Setting permissions on MMADIR database file for user update."
 os.system("chmod a+w " + dest+"/lib/stdlib/.mmaDB")

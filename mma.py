@@ -66,7 +66,7 @@ if platform == 'Windows':
 elif platform == 'Darwin':
     dirlist = ( sys.path[0], "/Users/Shared/mma", 
              "/usr/local/share/mma", "/usr/share/mma", '.' )
-    midiPlayer = ['']   # must be a list!
+    midiPlayer = ['open']   # must be a list!
 else:
     dirlist = ( sys.path[0], "/usr/local/share/mma", "/usr/share/mma", '.' )
     midiPlayer = ["aplaymidi"] # Must be a list!

@@ -316,6 +316,17 @@ Chord  Sequence  C1233'4' C1'2'34 / {1 2 90}
 
 DefGroove BossaNovaIntro   Dull introduction.
 
+Groove BossaNovaIntro
+Begin Bass
+  Articulate 140
+  Volume ff
+  Sequence  B13   B11  B13  B1
+End
+Chord Sequence  C1233'4'  /  / { C12; 3 2 80}
+
+DefGroove BossaNovaIntro1  Same intro with straighter chording.
+
+Groove BossaNovaIntro
 SeqSize 8
 
 

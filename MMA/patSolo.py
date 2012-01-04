@@ -29,6 +29,7 @@ import MMA.harmony
 import MMA.volume
 import MMA.alloc
 import MMA.swing
+import MMA.truncate
 
 import gbl
 
@@ -80,7 +81,7 @@ class Melody(PC):
     def definePattern(self, name, ln):
         error("Melody/solo patterns cannot be defined")
 
-                
+
     def setArp(self, ln):
         """ Set the arpeggiate options. """
 
@@ -127,61 +128,6 @@ class Melody(PC):
         
         self.drumTone = MMA.translate.dtable.get(ln[0])
        
-
-    def xswingIt(self, notes):
-        """ Adjust an entire bar of chords for swingmode.
-
-            Check each chord in the array of chords for a bar for 
-            successive 8ths on & off the beat. If found, the first is
-            converted to 'long' 8th, the 2nd to a 'short'
-            and the offset for the 2nd is adjusted to comp. for the 'long'.
-
-            If there is a spurious offset between an on/off beat that pair
-            will NOT be adjusted. Nor sure if that is right or not?
-
-            Only called from getLine(), separate for sanity.
-        """
-
-        len8  = MMA.notelen.getNoteLen('8')
-        len81 = MMA.notelen.getNoteLen('81')
-        len82 = MMA.notelen.getNoteLen('82')
-        all8 = set([len8])        
-        onBeats = [ x * gbl.BperQ for x in range(gbl.QperBar)]
-
-        nl = sorted(notes)   # list of offsets
-        for i in range(len(nl)-1):
-            
-            # Check for successive note event offsets on 8th note positions
-
-            if nl[i] in onBeats and nl[i+1] == nl[i]+len8:
-                beat0 = nl[i]
-                beat1 = nl[i+1]
-
-                # check that all notes are 8ths by comparing a set of all
-                # the durations in both offsets with set([len8])
-
-                if set([nev.duration for nev in notes[beat0]+notes[beat1] ]) == all8:
-
-                    # lengthen notes on-the-beat
-
-                    for nev in notes[beat0]:
-                        nev.duration = len81
-                        nev.velocity *= MMA.swing.accent1
-                        nev.defvelocity *= MMA.swing.accent1
-
-                    # shorten notes off-the-beat
-
-                    for nev in notes[beat1]:
-                        nev.duration = len82
-                        nev.velocity *= MMA.swing.accent2
-                        nev.defvelocity *= MMA.swing.accent2
-
-                    # move off-beat list back
-
-                    notes[beat0+len81] = notes[beat1]
-                    del notes[beat1]
-
-        return notes
 
     def getChord(self, c, velocity, isdrum):
         """ Extract a set of notes for a single beat. 
@@ -339,7 +285,14 @@ class Melody(PC):
         if not pat.endswith(';'):
             error("All Solo strings must end with a ';'")
  
-        barEnd   = gbl.BperQ*gbl.QperBar          # end of bar in ticks
+        # Get the end of the bar in ticks. If we're doing a truncate
+        # use the temporary bar length, otherwise figure it out.
+
+        if MMA.truncate.length:
+            barEnd = MMA.truncate.length
+        else:
+            barEnd = gbl.BperQ*gbl.QperBar
+
         duration = MMA.notelen.getNoteLen('4')    # default note length
         velocity = 90               # intial/default velocity for solo notes
         articulation = 1            # additional articulation for solo notes
@@ -376,7 +329,7 @@ class Melody(PC):
         # a leading ~.
 
         if pat[-1].endswith("~"):
-            self.endTilde = [1, gbl.tickOffset + (gbl.BperQ * gbl.QperBar) ]
+            self.endTilde = [1, gbl.tickOffset + barEnd ]
             pat[-1] = pat[-1][:-1].strip()
         else:
             self.endTilde = []
@@ -478,12 +431,9 @@ class Melody(PC):
                     i += 1
 
             if i:
-                l=MMA.notelen.getNoteLen(a[0:i].replace(' ', '') )
+                duration = MMA.notelen.getNoteLen(a[0:i].replace(' ', '') )
                 a = a[i:].strip()
-            else:
-                l=duration
 
-            duration = l    # save last duration for next loop
 
             # next item might be an accent string. 
 
@@ -538,7 +488,7 @@ class Melody(PC):
             notes[offset].extend(evts)
 
             lastOffset = offset
-            offset += l
+            offset += duration
 
 
         if offset <= barEnd:
@@ -621,9 +571,10 @@ class Melody(PC):
 
                 if not self.drumType:        # no octave/transpose for drums
                     n = self.adjustNote(n)
+
                 self.sendNote(offset + strumOffset, 
                        self.getDur(int(nev.duration * nev.articulation)),
-                       n, self.adjustVolume(nev.velocity, offset) )
+                       n, int(nev.velocity))
                 strumOffset += self.getStrum(sc)
 
 

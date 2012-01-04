@@ -327,10 +327,10 @@ def insertPB(trk, ln):
     offset = getoffset(trk, ln[0])
     v = stoi(ln[1])
 
-    if v<-8191 or v>8192:
-        error("MidiNote: PB value must be -8191..+8192, not '%s'." % v)
+    if v<-8192 or v>8191:
+        error("MidiNote: PB value must be -8192..+8191, not '%s'." % v)
 
-    v+=8191  # convert to 0..16383, max 14 bit value
+    v+=8192  # convert to 0..16383, max 14 bit value
 
     channel = trk.channel
     track = gbl.mtrks[channel]
@@ -338,7 +338,7 @@ def insertPB(trk, ln):
     track.addToTrack(gbl.tickOffset + offset, chr(0xe0 | channel-1) + chr(v%128) + chr(v/128))
    
     if gbl.debug:
-        print "MidiNote PB %s: inserted bend %s at offset %s." % (trk.name, v-8191, offset)
+        print "MidiNote PB %s: inserted bend %s at offset %s." % (trk.name, v-8192, offset)
 
 
 def insertPBrange(trk, ln):
@@ -363,11 +363,11 @@ def insertPBrange(trk, ln):
     v1 = stoi(v1)
     v2 = stoi(v2)
 
-    if v1<-8191 or v1>8192 or v2<-8191 or v2>8192:
-        error("MidiNote: PBR values must be -8191..+8192, not '%s'." % ln[2])
+    if v1<-8192 or v1>8191 or v2<-8192 or v2>8191:
+        error("MidiNote: PBR values must be -8192..+8191, not '%s'." % ln[2])
 
-    v1+=8191  # convert to 0..16383, max 14 bit value
-    v2+=8191
+    v1+=8192  # convert to 0..16383, max 14 bit value
+    v2+=8192
     vinc = (v2-v1)/float(count)
     
     channel = trk.channel
@@ -384,7 +384,7 @@ def insertPBrange(trk, ln):
 
     if gbl.debug:
         print "MidiNote PBR %s: inserted bends %s to %s at offsets %s to %s." % \
-            (trk.name, v1-8191, v2-8191, s1, s2)
+            (trk.name, v1-8192, v2-8192, s1, s2)
 
 def insertControl(trk, ln):
     """ Insert a controller event. """

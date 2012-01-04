@@ -198,7 +198,6 @@ Arpeggio Sequence -
 Begin Plectrum-Banjo
     Tuning c g d+ a+  // tuning for a tenor banjo
 	Sequence   {1 8 90; 2 -8 80; 3 8 90; 4 -8 80}  {1 8 90; 2 -8 80; 2.5 4 90; 3 8 90; 4 -8 80} 
-	Strum 10
 	Voice Banjo
 	Volume p
 	Octave 4
@@ -216,7 +215,6 @@ Chord    Sequence	C13	/	/	L1
 Begin Plectrum-Banjo
     Tuning c g d+ a+  // tuning for a tenor banjo
 	Sequence   {1 8 90; 3 8 90; }  {1 8 90;   3 8 90; 4 -8 80} 
-	Strum 10
 	Voice Banjo
 	Volume p
 	Octave 4

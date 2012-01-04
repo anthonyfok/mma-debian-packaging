@@ -123,6 +123,34 @@ DefGroove R&B-BalladSus     Change rhythmic organ to sustained chords.
 
 
 /////////////////////////////////////////////
+//// Plus , 
+
+Groove R&B-Ballad
+
+Begin Arpeggio
+    Voice NylonGuitar
+	Sequence  A4 / / A8
+	Range 1.2
+	SeqRnd On
+    Direction Random
+	Rtime 5
+	RVolume 15
+	Rskip 25
+	Harmony 3Below+8Below
+	Accent 1 10
+	Volume mf
+	Octave 6
+    Articulate 120
+End
+
+DefGroove R&B-BalladPlus  Basic with added guitar riffs.
+
+Groove R&B-BalladSus
+ Arpeggio Groove R&B-BalladPlus
+DefGroove R&B-BalladSusPlus   Sustained with guitar riffs.
+
+
+/////////////////////////////////////////////
 /// Intro
 
 Groove R&B-Ballad

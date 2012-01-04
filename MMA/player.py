@@ -55,7 +55,7 @@ def setMidiPlayer(ln):
     
     n = []
     for l in ln:   # parse out optional args
-        if '=' in l:
+        if '=' in l and l[0].isalpha():
             a,b = l.upper().split('=', 1)
             if a == 'DELAY':
                 b = stof(b, "SetMidiPlayer: Delay must be value, not '%s'." % b)

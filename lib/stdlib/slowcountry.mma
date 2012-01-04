@@ -149,6 +149,48 @@ Groove SlowCountry
 Arpeggio Groove SlowCountryFill
 DefGroove SlowCountryWalkFill   Walking bass fill.
 
+
+///////////////////////////////////////
+/////////  Plus versions add in a fiddle
+
+Groove SlowCountry
+Begin Arpeggio-Fiddle
+    Voice Violin 
+    Volume p
+    HarmonyOnly 2Above
+    Articulate 100
+    Rskip 20
+    Range 2
+    Direction Random
+    Octave 5
+    SeqRnd On
+    Define AA 1 2 90; 3 2 70;
+    Sequence   AA {AA Shift .33} {AA Shift .66} {AA Shift .33; AA Shift .66}
+End
+
+DefGroove SlowCountryPlus   Basic slow country with awful fiddling.
+
+Groove SlowCountrySus
+Arpeggio-Fiddle Groove SlowCountryPlus
+DefGroove SlowCountrySusPlus  Slow country with strings and fiddling.
+
+Groove SlowCountryWalk
+Arpeggio-Fiddle Groove SlowCountryPlus
+DefGroove SlowCountryWalkPlus  Slow country walking bass fiddling.
+
+Groove SlowCountryWalkSus
+Arpeggio-Fiddle Groove SlowCountryPlus
+DefGroove SlowCountryWalkSusPlus  Slow country with walking bass, strings and fiddling.
+
+Groove SlowCountryFill
+Arpeggio-Fiddle Groove SlowCountryPlus
+DefGroove SlowCountryFillPlus  Slow country with guitar arpeggios and fiddling.
+
+
+Groove SlowCountryWalkFill
+Arpeggio-Fiddle Groove SlowCountryPlus
+DefGroove SlowCountryWalkFillPlus  Slow country with walking bass, guitar arpeggios and fiddling.
+
 ////////////////////////////////
 /// Intros
 

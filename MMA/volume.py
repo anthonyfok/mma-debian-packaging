@@ -261,3 +261,18 @@ def fvolume(dir, startvol, ln):
 
 
 
+def calcMidiVolume(s):
+    """ Convert a mnemonic volume to value for MIDI channel. """
+
+    s = s.upper()
+    if s in vols:
+        v = int(80 * vols[s])
+        if v<0: v=0
+        if v>127: v=127
+        
+    else:
+        v=stoi(s, "Expecting integer arg, not %s" % s)
+
+    return v
+
+        

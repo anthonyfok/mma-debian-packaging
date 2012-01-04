@@ -26,6 +26,7 @@ Bob van der Poel <bob@mellowood.ca>
 
 import MMA.notelen
 import MMA.harmony
+import MMA.ornament
 
 import gbl
 from   MMA.common import *
@@ -65,7 +66,7 @@ class Bass(PC):
         if n == "#":
             a.accidental = 1
             ptr = 2
-        elif n == 'b' or n == 'b' or n == '&':
+        elif n == 'b' or n == '&':
             a.accidental = -1
             ptr = 2
         else:
@@ -99,7 +100,6 @@ class Bass(PC):
         """
 
         sc = self.seq
-        unify = self.unify[sc]
 
         for p in pattern:
             ct = self.getChordInPos(p.offset, ctable)
@@ -110,27 +110,19 @@ class Bass(PC):
             note = ct.chord.scaleList[p.noteoffset] + p.addoctave + p.accidental
 
             if not self.harmonyOnly[sc]:
-                self.sendNote(
-                    p.offset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(p.vol, p.offset))
+                notelist = [(note,  p.vol)]
+            else:
+                notelist = []
 
             if self.harmony[sc]:
-                h = MMA.harmony.harmonize(self.harmony[sc], note, ct.chord.noteList)
+                h =  MMA.harmony.harmonize(self.harmony[sc], note, ct.chord.noteList)
+                harmlist = zip(h, [p.vol * self.harmonyVolume[sc]] * len(h))
+            else:
+                harmlist = []
 
-                strumOffset = self.getStrum(sc)
-                
-                for n in h:
-                    self.sendNote(
-                        p.offset + strumOffset,
-                        self.getDur(p.duration),
-                        self.adjustNote(n),
-                        self.adjustVolume(p.vol * self.harmonyVolume[sc], -1))
+            if self.ornaments['type']:
+                MMA.ornament.doOrnament(self, notelist, 
+                         self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                notelist = []
 
-                    strumOffset += self.getStrum(sc)
-
-
-
-
-
+            self.sendChord( notelist + harmlist, p.duration, p.offset)

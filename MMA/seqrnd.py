@@ -76,11 +76,10 @@ def getrndseq(v):
     tmp = []
     for x, i in enumerate(v):
         tmp.extend([x] * i)
-    tmp=tmp[:gbl.seqSize]
 
     if not len(tmp):
         error("SeqRndWeight has generated an empty list")
-            
+
     return random.choice(tmp)
           
 

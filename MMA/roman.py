@@ -33,7 +33,7 @@ from MMA.keysig import keySig
 # Table of scales ... a list of 7 notes for each possible Major/Minor scale
 
 majTable = { 'C': ('C', 'D', 'E', 'F', 'G', 'A', 'B'),
-             'C#': ('C#', 'D#', 'F', 'F#', 'G#', 'A#', 'C'),
+             'C#': ('C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'C'),
              'D': ('D', 'E', 'F#', 'G', 'A', 'B', 'C#'),
              'Db': ('Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C'),
              'D#': ('D#', 'F', 'G', 'G#', 'A#', 'C', 'D'),

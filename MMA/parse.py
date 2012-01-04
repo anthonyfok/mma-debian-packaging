@@ -55,10 +55,12 @@ import MMA.patch
 import MMA.paths
 import MMA.player
 import MMA.swing
+import MMA.truncate
+import MMA.ornament
 
 import gbl
 
-from   MMA.common import *
+
 from   MMA.lyric import lyric
 from   MMA.macro import macros
 from   MMA.alloc import trackAlloc
@@ -69,16 +71,12 @@ lastChord = None   # tracks last chord for "/ /" data lines.
 beginData = []      # Current data set by a BEGIN statement
 beginPoints = []    # since BEGINs can be nested, we need ptrs for backing out of BEGINs
 
-gmagic = 9988   # magic name for groove saved with USE
-
-
-
 """ This table is passed to the track classes. It has
     an instance for each chord in the current bar.
 """
 
 class CTable:
-    name      = None    # Chord name (not used?)
+    name      = None    # Chord name (used by plectrum track)
     chord     = None    # A pointer to the chordNotes structures
     chStart   = None    # where in the bar the chord starts (in ticks, 0..)
     chEnd     = None    # where it ends (in ticks)
@@ -224,9 +222,11 @@ def parse(inpath):
         if len(l)>1 and l[-2]=='*':
             rptcount = stoi(l[-1], "Expecting integer after '*'")
             l=l[:-2]
+
         else:
             rptcount = 1
 
+ 
 
         """ Extract solo(s) from line ... this is anything in {}s.
             The solo data is pushed into RIFFs and discarded from
@@ -265,9 +265,9 @@ def parse(inpath):
             chord in the line. Each entry has the start/end (in beats), chordname, etc.
         """
 
-        ctable = parseChordLine(l)
+        ctable = parseChordLine(l)   # parse the chord line
 
-        # Create MIDI data for the bar
+         # Create MIDI data for the bar
 
         for rpt in range(rptcount):   # for each bar in the repeat count ( Cm * 3)
 
@@ -291,9 +291,9 @@ def parse(inpath):
             """ Process each track. It is important that the track classes
                 are written so that the ctable passed to them IS NOT MODIFIED.
                 This applies especially to chords. If the track class changes
-                the chord, then restore it before returning!!!
+                the chord, then the function called MUST restore it before returning!!!
             """
-
+            
             for a in gbl.tnames.values():
                 if rsq >= 0:
                     seqSave = gbl.seqCount
@@ -311,12 +311,18 @@ def parse(inpath):
                 when -b or -B is set to limit output.
             """
 
+            if MMA.truncate.length:
+                nextOffset = MMA.truncate.length
+                MMA.truncate.countDown()
+            else:
+                nextOffset = gbl.QperBar * gbl.BperQ
+
             gbl.barPtrs[gbl.barNum+1] = [barLabel, gbl.tickOffset,
-                      gbl.tickOffset + (gbl.QperBar * gbl.BperQ)-1]
+                      gbl.tickOffset + nextOffset-1]
 
-            gbl.totTime += float(gbl.QperBar) / gbl.tempo
+            gbl.totTime += float(nextOffset/gbl.BperQ) / gbl.tempo
 
-            gbl.tickOffset += (gbl.QperBar * gbl.BperQ)
+            gbl.tickOffset += nextOffset
 
             gbl.barNum += 1
             gbl.seqCount = (gbl.seqCount+1) % gbl.seqSize
@@ -337,6 +343,7 @@ def parse(inpath):
                     print lyrics,
                 print
 
+
 def parseChordLine(l):
     """ Parse a line of chord symbols and determine start/end points. """
 
@@ -344,15 +351,23 @@ def parseChordLine(l):
 
     ctable = []               # an entry for each chord in the bar
     quarter = gbl.BperQ       # ticks in a quarter note (== 1 beat)
-    endTime = (quarter * gbl.QperBar)  # number of ticks in bar
+    if MMA.truncate.length:
+        endTime = MMA.truncate.length
+    else:
+        endTime = (quarter * gbl.QperBar)  # number of ticks in bar
 
     p = 0                    # our beat counter --- points to beat 1,2, etc in ticks
 
     for x in l:
-        if "@" in x:
+        if "@" in x:  # we have something like "Cm@3.2"
             ch, beat = x.split("@", 1)
-            beat = int((stof(beat, "Expecting an value after the @ in '%s'" % x)-1) * quarter)
-            p = int(beat/quarter) * quarter
+            beat = stof(beat, "Expecting an value after the @ in '%s'" % x)
+            if beat < 1:
+                error("Beat after @ must be 1 or greater, not '%s'." % beat)
+            if beat >= gbl.QperBar+1:
+                error("Beat after @ must be less than %s, not '%s'." % (gbl.QperBar+1, beat))
+            p = int( int(beat) * quarter)  # floor of @x, current full beat in ticks
+            beat = int( (beat-1) * quarter)  # tick offset for this chord
         else:
             ch = x
             beat = p
@@ -394,9 +409,9 @@ def parseChordLine(l):
             if not c:   # no chord specified
                 c = 'z'        # dummy chord name to keep chordnotes() happy
                 if r == '!':    # mute all
-                    r = 'DCAWBSR'
+                    r = 'DCAWBSRP'
                 elif not r:     # mute all tracks except Drum
-                    r = 'CBAWSR'
+                    r = 'CBAWSRP'
                 else:
                     error("To mute individual tracks you must "
                           "use a chord/z combination not '%s'" % ch)
@@ -437,11 +452,12 @@ def parseChordLine(l):
 
         ctable.append(ctab)
 
-    # Done all chords in line, fix up some pointers.
-
+    # Test to see that all chords are in range.
     if ctable[-1].chStart >= endTime:
         error("Maximum offset for chord '%s' must be less than %s, not '%s'." % \
                 ( ctable[-1].name, endTime/quarter+1, ctable[-1].chStart/quarter+1 ))
+
+    # Done all chords in line, fix up some pointers.
 
     for i, v in enumerate(ctable[:-1]):  # set end range for each chord
         ctable[i].chEnd = ctable[i+1].chStart
@@ -510,7 +526,6 @@ def ifend(ln):
 
 def ifelse(ln):
     error("ELSE without IF")
-
 
 
 #######################################
@@ -673,7 +688,7 @@ def setTime(ln):
     if len(ln) != 1:
         error("Use: Time N")
 
-    n = stoi(ln[0], "Argument for time must be integer")
+    n = stoi(ln[0], "Time: Argument must be integer.")
 
     if n < 1 or n > 12:
         error("Time (beats/bar) must be 1..12")
@@ -710,11 +725,14 @@ def tempo(ln):
     else:
         v  = stof(ln[0], "Tempo expecting rate, not '%s'" % ln[0])
 
+    if v <= 1:
+        error("Tempo: Value must be greater than 1.")
 
     # is this immediate or over time?
 
     if len(ln) == 1:
         gbl.tempo = int(v)
+
         gbl.mtrks[0].addTempo(gbl.tickOffset, gbl.tempo)
         if gbl.debug:
             print "Set Tempo to %s" % gbl.tempo
@@ -873,9 +891,9 @@ def include(ln):
     if len(ln) != 1:
         error("Use: Include FILE" )
 
-    fn = MMA.file.locFile(MMA.file.fixfname(ln[0]), gbl.incPath)
+    fn = MMA.file.locFile(ln[0], gbl.incPath)
     if not fn:
-        error("Could not find include file '%s'" % ln)
+        error("Could not find include file '%s'" % ln[0])
 
     else:
         parseFile(fn)
@@ -892,21 +910,20 @@ def usefile(ln):
     if len(ln) != 1:
         error("Use: Use FILE")
 
-    f = MMA.file.fixfname(ln[0])
-    fn = MMA.file.locFile(f, gbl.libPath)
+    fn = MMA.file.locFile(ln[0], gbl.libPath)
 
     if not fn:
-        error("Unable to locate library file '%s'" % f)
+        error("Unable to locate library file '%s'" % ln[0])
 
     """ USE saves current state, just like defining a groove.
         Here we use a magic number which can't be created with
         a defgroove ('cause it's an integer). Save, read, restore.
     """
 
-    slot = gmagic
-    MMA.grooves.grooveDefineDo(slot)
+    MMA.grooves.stackGroove.push()
     parseFile(fn)
-    MMA.grooves.grooveDo(slot)
+    MMA.grooves.stackGroove.pop()
+
 
 #######################################
 # Sequence
@@ -1396,53 +1413,18 @@ def trackVolume(name, ln):
 def trackChannelVol(name, ln):
     """ Set the channel volume for a track."""
 
-    if len(ln) != 1:
-        error("Use: %s ChannelVolume" % name)
+    gbl.tnames[name].setChannelVolume(ln)
 
-    v=stoi(ln[0], "Expecting integer arg, not %s" % ln[0])
-
-    if v<0 or v>127:
-        error("ChannelVolume must be 0..127")
-
-    gbl.tnames[name].setChannelVolume(v)
 
 def trackChannelCresc(name, ln):
     """ MIDI cresc. """
 
-    doTrackCresc(name, ln, 1)
+    gbl.tnames[name].setMidiCresc(ln, 1)
 
 def trackChannelDecresc(name, ln):
     """ MIDI cresc. """
 
-    doTrackCresc(name, ln, -1)
-
-def doTrackCresc(name, ln, dir):
-    """ Call func for midi(de)cresc """
-
-    if dir == -1:
-        func="MIDIDeCresc"
-    else:
-        func = "MIDICresc"
-
-    if len(ln) != 3:
-        error("Use: %s %s <start> <end> <count>" % (name, func))
-
-    v1=stoi(ln[0], "Expecting integer arg, not %s" % ln[0])
-    v2=stoi(ln[1], "Expecting integer arg, not %s" % ln[1])
-    count=stof(ln[2])
-
-    if count<=0:
-        error("%s: count must be >0" % func)
-
-    if v1<0 or v1>127 or v2<0 or v2>127:
-        error("%s: Volumes must be 0..127." % func)
-
-    if dir == -1 and v1<v2:
-        warning("%s: dest volume > start" % func)
-    elif dir == 1 and v1>v2:
-        warning("%s: dest volume < start" % func)
-
-    gbl.tnames[name].setMidiCresc(v1, v2, count)
+    gbl.tnames[name].setMidiCresc(ln, -1)
 
 def trackAccent(name, ln):
     """ Set emphasis beats for track."""
@@ -1639,7 +1621,8 @@ def trackHarmony(name, ln):
     if not ln:
         error("Use: %s Harmony N [...]" % name)
 
-    gbl.tnames[name].setHarmony(ln)
+    MMA.harmony.setHarmony(gbl.tnames[name], ln)
+#    gbl.tnames[name].setHarmony(ln)
 
 
 def trackHarmonyOnly(name, ln):
@@ -1647,8 +1630,9 @@ def trackHarmonyOnly(name, ln):
 
     if not ln:
         error("Use: %s HarmonyOnly N [...]" % name)
-
-    gbl.tnames[name].setHarmonyOnly(ln)
+    
+    MMA.harmony.setHarmonyOnly(gbl.tnames[name], ln)
+#      gbl.tnames[name].setHarmonyOnly(ln)
 
 def trackHarmonyVolume(name, ln):
     """ Set harmony volume for track."""
@@ -1656,7 +1640,8 @@ def trackHarmonyVolume(name, ln):
     if not ln:
         error("Use: %s HarmonyVolume N [...]" % name)
 
-    gbl.tnames[name].setHarmonyVolume(ln)
+    MMA.harmony.setHarmonyVolume(gbl.tnames[name], ln)
+#      gbl.tnames[name].setHarmonyVolume(ln)
 
 
 #######################################
@@ -1746,6 +1731,11 @@ def trackOn(name, ln):
     gbl.tnames[name].setOn()
 
 
+def trackOrnament(name, ln):
+    """ Set the ornamentation. Currently only for SCALE. """
+
+    MMA.ornament.setOrnament(gbl.tnames[name], ln)
+
 
 def trackTone(name, ln):
     """ Set the tone (note). Only valid in drum tracks."""
@@ -1779,6 +1769,15 @@ def trackArpeggiate(name, ln):
     else:
         warning("Arpeggiate: not permitted in %s tracks. Arg '%s' ignored." % \
                     ( g.vtype, ' '.join(ln) ) )
+
+def trackDelay(name, ln):
+    """ Set up the solo/melody delay (echo). """
+
+
+    if not ln:
+        error("Use: %s Delay N" % name)
+  
+    g=gbl.tnames[name].setDelay(ln)
 
 
 
@@ -1919,6 +1918,7 @@ simpleFuncs={
     'SETLIBPATH':       MMA.paths.setLibPath,
     'SETMIDIPLAYER':    MMA.player.setMidiPlayer,
     'SETOUTPATH':       MMA.paths.setOutPath,
+    'SETSYNCTONE':      MMA.midi.setSyncTone,
     'SHOWVARS':         macros.showvars,
     'STACKVALUE':       macros.stackValue,
     'SWELL':            MMA.volume.setSwell,
@@ -1928,6 +1928,7 @@ simpleFuncs={
     'TIME':             setTime,
     'TIMESIG':          MMA.midifuncs.setTimeSig,
     'TONETR':           MMA.translate.dtable.set,
+    'TRUNCATE':         MMA.truncate.setTruncate,
     'UNSET':            macros.unsetvar,
     'USE':              usefile,
     'VARCLEAR':         macros.clear,
@@ -1954,6 +1955,7 @@ trackFuncs={
     'CRESC':           trackCresc,
     'CUT':             trackCut,
     'DECRESC':         trackDeCresc,
+    'DELAY':           trackDelay,
     'DIRECTION':       trackDirection,
     'DRUMTYPE':        trackDrumType,
     'DUPROOT':         trackDupRoot,
@@ -1977,6 +1979,7 @@ trackFuncs={
     'OCTAVE':          trackOctave,
     'OFF':             trackOff,
     'ON':              trackOn,
+    "ORNAMENT":        trackOrnament,
     'TUNING':          trackPlectrumTuning,
     'CAPO':            trackPlectrumCapo,
     'RANGE':           trackRange,

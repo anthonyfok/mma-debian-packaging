@@ -91,10 +91,6 @@ def trackAlloc(name, err):
 
     gbl.tnames[name] = newtk = f(name)
 
-    # Set the sequence size of new track
-
-    newtk.setSeqSize()
-
     # Update current grooves to reflect new track.
 
     for slot in MMA.grooves.glist.keys():

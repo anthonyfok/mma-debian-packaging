@@ -13,7 +13,7 @@ Author Bob van der Poel
 NewSet ArpeggioVoice Piano1
 
 Begin DocVar
-	  ArpeggioVoice  Voice for the alternating apreggios in the Plus versions \
+	  ArpeggioVoice  Voice for the alternating arpeggios in the Plus versions \
         (Default=Piano1). Also used in Introduction and Ending.
 End
 

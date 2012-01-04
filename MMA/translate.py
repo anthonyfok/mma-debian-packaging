@@ -138,7 +138,7 @@ class Dtable:
         if gbl.debug:
             print "TONETR Translations:",
             for v, a in opts:
-                print "%s=%s" % (MMA.midiC.valueToDrum(v), MMA.midiC.valueToDrum(a)),
+                print "%s(%s)=%s" % (v, MMA.midiC.drumToValue(v), MMA.midiC.drumToValue(a)),
             print
 
 

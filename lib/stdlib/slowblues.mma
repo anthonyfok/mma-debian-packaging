@@ -22,6 +22,9 @@ Begin Walk Define
 	W1+34   1 4 80; 2.5 8 70; 3 4 80; 4 4 80 
 End
 
+Begin Chord Define
+   T3 1 8 90; 1.33 8 85; 1.66 8 80
+End
 
 /// SlowBlues
 
@@ -196,6 +199,24 @@ DefGroove SlowBluesWalk8	Same as SlowBlues but with a strong eight \
 Chord-Sus Groove SlowBLuesWalk4Sus
 
 DefGroove SlowBluesWalk8Sus  Choir added to Walk8.
+
+/////////////////////////////////
+/// Triplet variations
+
+Groove SlowBlues
+
+
+Chord Sequence {T3; T3 Shift 1; 2 8 90; 2.33 8 90; 2.66 8 90; 3 4 90; 4 4 80}
+
+DefGroove SlowBlues12Triple   Triplets on beats 1,2.
+
+Chord Sequence {1 4 90; 2 4 80; T3 Shift 2; T3 Shift 3}
+
+DefGroove SlowBlues34Triple   Triplets on beats 3,4.
+
+Chord Sequence {T3; T3 Shift 1; T3 Shift 2; T3 Shift 3}
+
+DefGroove SlowBlues4Triple   Triplets on beats 1,2,3 and 4.
 
 ////////////////////////
 /// Intro

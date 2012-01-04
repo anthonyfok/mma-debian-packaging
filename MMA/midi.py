@@ -27,12 +27,47 @@ import MMA.midiC
 
 import gbl
 from   MMA.common import *
+from   MMA.miditables import NONETONE
 
 splitChannels = []
+
+syncTone = [80,90]  # tone/velocity for -0 option. Changable from setSyncTone
 
 # some constants we use to catorgize event types
 MIDI_NOTE = 1
 MIDI_PRG  = 2
+
+def setSyncTone(ln):
+    """ Parser routine, sets tone/velocity for the -0 sync tone. """
+
+    global syncTone
+    emsg = "SetSyncTone: Expecting option pairs: Tone=xx Velocity=xx | Volume=xx."
+    
+    notopts, ln = opt2pair(ln)
+
+    if notopts or not ln:
+        error(emsg)
+    
+    for cmd, opt in ln:
+        cmd=cmd.upper()
+
+        if cmd=="TONE":
+            t = stoi(opt)
+            if t<0 or t>127:
+                error("SetSyncTone: Tone must be 0..127, not %s." % t)
+            syncTone[0]=t
+
+        elif cmd == "VELOCITY" or cmd == "VOLUME":
+            t = stoi(opt)
+            if t<1 or t>127:
+                error("SetSyncTone: Velocity must be 1..127, not %s." % v)
+            syncTone[1]=t
+
+        else:
+            error(emsg)
+
+    if gbl.debug:
+        print "SetSyncTone: Tone=%s, Velocity=%s" % tuple(syncTone)
 
 def setSplitChannels(ln):
     """ Parser routine, sets up list of track to split. Overwrites existing. """
@@ -289,6 +324,14 @@ class Mtrk:
             oldprg  - existing MIDI program
         """
 
+        # We truck around a special pseudo voice 'NONE' or 127.127.127 which
+        # is a signal that we don't want mma to set the voicing. Might be
+        # useful when know the track that mma is using and we have preset
+        # an external synth.
+
+        if program == NONETONE:
+            return
+
         v1, lsb1, msb1 = MMA.midiC.voice2tup(oldprg)
         v2, lsb2, msb2 = MMA.midiC.voice2tup(program)
 
@@ -343,8 +386,16 @@ class Mtrk:
     def addChannelVol(self, offset, v):
         """ Set the midi channel volume."""
 
-        self.addToTrack(offset,
-            chr(0xb0 | self.channel) + chr(0x07) + chr(v) )
+        tr = self.miditrk
+        cvol = chr(0xb0 | self.channel) + chr(0x07)  # 2 byte channel vol
+
+        # Before adding a new channel volume event we check to see if there
+        # are any future channel volume envents and delete them.
+        
+        for off in tr:  
+            if off >= offset:
+                tr[off] = [e for e in tr[off] if e[0:2] != cvol] 
+        self.addToTrack(offset, cvol + chr(v) )
 
 
     def addTempo(self, offset, beats):
@@ -389,8 +440,9 @@ class Mtrk:
         """
 
         if gbl.synctick and self.channel >= 0:
-            self.addToTrack(0, chr(0x90 | self.channel) + chr(80) + chr(90) )
-            self.addToTrack(1, chr(0x90 | self.channel) + chr(80) + chr(0) )
+            t,v = syncTone
+            self.addToTrack(0, chr(0x90 | self.channel) + chr(t) + chr(v) )
+            self.addToTrack(1, chr(0x90 | self.channel) + chr(t) + chr(0) )
 
 
         if gbl.debug:
@@ -609,6 +661,9 @@ class Mtrk:
         elif evType == MIDI_PRG:
             self.lastPrg=offset
 
+        # Important. It's possible that a negative delay could generate
+        # a negative offset.
+
         if offset < 0:
             offset = 0
 
@@ -680,8 +735,7 @@ def stripRange():
             b = validRange[i][1]
         else:
             tmp.append( [a,b] )
-            if i < len(validRange):
-                a,b = validRange[i]
+            a,b = validRange[i]
     tmp.append( [a,b] )
     validRange = tmp  # list of event times to keep
 
@@ -720,15 +774,18 @@ def stripRange():
             for ev in sorted(tr.keys()):   # sort is important!
                 if ev >= start and ev <=end:
                     for e in tr[ev]:
+                        e0 = ord(e[0]) & 0xf0
                         # skip note on events
-                        if ord(e[0]) & 0xf0 == 0x90 and ord(e[2]):
+                        if e0 == 0x90 and ord(e[2]):
                             continue
                         # skip lyric and text events
                         if ord(e[0]) == 0xff:
                             if ord(e[1]) == 0x05 or ord(e[1]) == 0x01:
                                 continue
                         # skip if event is note off and it already is present
-                        if ord(e[0]) & 0xf0 == 0x90 and ord(e[2]) == 0:
+                        # note: mma never generates a 0x80 (note-off) event, but
+                        # the test is included here since midi-inc may have them.
+                        if (e0 == 0x90 and ord(e[2]) == 0) or (e0 == 0x80):
                             for x in newEvents:
                                 if x == e:
                                     e=None
@@ -747,11 +804,11 @@ def stripRange():
 
     """ 2nd pass. Adjust offsets of stuff to keep. """
 
-    offset = 1
+    offset = 0
     for vals in range(len(validRange)):   # each valid range
         start = validRange[vals][0]
         end   = validRange[vals][1]+1
-        offset += (start - disList[vals][0])-1
+        offset += (start - disList[vals][0])
         for a in gbl.mtrks:               # each track
             tr = gbl.mtrks[a].miditrk
             for ev in sorted(tr.keys()):  # each event list

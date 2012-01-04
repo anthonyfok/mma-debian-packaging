@@ -286,8 +286,8 @@ fileExist = os.path.exists(outfile)
 
 for n in gbl.tnames.values():
     if n.channel:
-        n.doMidiClear()
         n.clearPending()
+        n.doMidiClear()
         n.doChannelReset()
         if n.riff:
             warning("%s has pending Riff(s)" % n.name)

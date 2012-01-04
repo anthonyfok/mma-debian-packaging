@@ -1,24 +1,5 @@
+
 Add FF 02 copyright message option
-
-GrooveOverlay: Permit a different groove for part of a bar (single
-   beat breaks, etc).
-
-    Syntax:  GrooveOverlay   2.5,3,yourgroove  4,4.5,mygroove
-
-   Rough code outline (in parse) would be:
-
- ... if chordoverlay active:
-      1. Change the start/end points already figured so that (using
-         the above example) 2.5 to 3 and 4 to 4.5 are silent (z!)
-      2. Remember what was in the table before we made the changes :)
-      3. process the bar normally for all the tracks
-      4. for each arg saved in overlay:
-             - create a new chordtable with all silence expect for the overlay part
-             - switch groove
-             - process
-      5. Return to original groove
- ... update bar pointers
-
 
 Enhance the html groove docs to <play> a sample for a clicked groove.
 
@@ -42,3 +23,10 @@ Add a midi channel volume tracker and setter. This would permit
 Library docs --- add the time signature to the header.
 
 Add Nashville chord notation in addition to roman.
+
+There is a bug in the Optimal Voicing code which makes the Centering
+   option useless.
+
+To my ear it appears that that when using the -b command line option
+   the last bar is truncated. I need to examine the result and the
+   code. Might be a one-off problem.

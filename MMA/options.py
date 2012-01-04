@@ -1,4 +1,4 @@
-# opts.py
+# options.py
 
 """
 This module is an integeral part of the program
@@ -232,7 +232,7 @@ def usage(msg=''):
     
     txt=[
         "MMA - Musical Midi Accompaniment",
-        "  Copyright 2003-9, Bob van der Poel. Version %s" % gbl.version ,
+        "  Copyright 2003-11, Bob van der Poel. Version %s" % gbl.version ,
         "  Distributed under the terms of the GNU Public License.",
         "  Usage: mma [opts ...] INFILE [opts ...]",
         "",
@@ -282,7 +282,7 @@ def usage(msg=''):
 
 
 def setBarRange(v):
-    """ Set a range of bars to compile. This is the -R option."""
+    """ Set a range of bars to compile. This is the -B/b option."""
 
     if gbl.barRange:
         error("Only one -b or -B permitted.")
@@ -297,7 +297,7 @@ def setBarRange(v):
                 s = int(s)
                 e = int(e)
             except:
-                usage("-R ranges must be integers, not '%s'." % l)
+                usage("-B/b ranges must be integers, not '%s'." % l)
 
             for a in range(s,e+1):
                 gbl.barRange.append(str(a))
@@ -306,11 +306,11 @@ def setBarRange(v):
             try:
                 s=int(l[0])
             except:
-                usage("-R range must be an integer, not '%s'." % l[0])
+                usage("-B/b range must be an integer, not '%s'." % l[0])
             gbl.barRange.append(str(s))
 
         else:
-            usage("-R option expecting N1-N2,N3... not '%s'." % v)
+            usage("-B/b option expecting N1-N2,N3... not '%s'." % v)
 
 
 

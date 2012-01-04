@@ -66,6 +66,26 @@ currentGroove     =  ''     # name of current groove (used by macros)
 groovesList = None
 groovesCount = 0
 
+class STACKGROOVE():
+    """ A little stacker for temporary grooves. """
+
+    def __init__(self):
+        self.stack = []   # set of integers used as groove names
+
+    def push(self):
+        s = self.stack
+        s.append(len(s))
+        grooveDefineDo(s[-1])
+
+    def pop(self):
+        s = self.stack
+        if not s:
+            error("Groove stacking error. Call Bob.")
+        grooveDo(s.pop())
+
+stackGroove = STACKGROOVE()   # single/only instance
+
+
 def grooveDefine(ln):
     """ Define a groove.
 
@@ -77,13 +97,13 @@ def grooveDefine(ln):
 
     slot=ln[0].upper()
 
-    # Slot names can't contain a '/' (reserved) or be an integer (used in groove select).
+    # Slot names can't contain a '/' or ':'
 
     if '/' in slot:
-        error("The '/' is not permitted in a groove name")
+        error("The '/' is not permitted in a groove name.")
 
-    if slot.isdigit():
-        error("Invalid slot name '%s'. Cannot be only digits" % slot)
+    if ':' in slot:
+        error("The ':' is not permitted in a groove name.")
 
     if slot in aliaslist:
         error("Can't define groove name %s, already defined as an alias for %s." \
@@ -122,13 +142,13 @@ def grooveAlias(ln):
     global aliaslist
 
     if len(ln) != 2:
-        error("GrooveAlias needs exactly 2 args: GrooveName AliasName.")
+        error("DefAlias needs exactly 2 args: GrooveName AliasName.")
 
     a = ln[0].upper()
     g = ln[1].upper()
 
     if not g in glist:
-        error("GrooveAlias: Groove %s has not been defined." % ln[0])
+        error("DefAlias: Groove %s has not been defined." % ln[0])
 
     aliaslist[a]=g
     
@@ -153,7 +173,9 @@ def groove(ln):
         wh = None
 
     for slot in ln:
+        slotOrig = slot   # we need this for search
         slot = slot.upper()
+
         if slot == "/":
             if len(tmpList):
                 slot=tmpList[-1]
@@ -171,7 +193,7 @@ def groove(ln):
                 print "Groove '%s' not defined. Trying auto-load from libraries" \
                       % slot
 
-            l=MMA.auto.findGroove(slot)    # name of the lib file with groove
+            l, slot = MMA.auto.findGroove(slotOrig)    # name of the lib file with groove
 
             if l:
                 if gbl.debug:
@@ -256,6 +278,7 @@ def grooveDo(slot):
 
     gbl.seqCount = 0
 
+
 def reportFutureVols():
     """ Print warning for pending track cresendos.
 
@@ -294,16 +317,17 @@ def grooveClear(ln):
     groovesList = {}
     aliaslist   = {}
     groovesCount = 0
+    tmplist = {}
+
+    # we first save all the temp grooves (for include, etc) into a glist replacement
+
+    for a in glist:
+        if type(a) == type(1):     # see if the groove name is an integer, not string
+            tmplist[a] = glist[a]  # yes, stacked groove, save
     
-    try:
-        a= glist[gmagic]
-    except:
-        a=None
+    # now just point glist to the copy. Normally created grooves are gone.
 
-    glist={}
-
-    if a:
-        glist[gmagic]=a
+    glist=tmplist
 
     lastGroove = ''
     currentGroove = ''
@@ -364,8 +388,6 @@ def trackGroove(name, ln):
     if g.sequence == [None] * len(g.sequence):
         warning("'%s' Track Groove has no sequence. Track name error?" % name)
 
-    g.setSeqSize()
-
     if gbl.debug:
         print "%s Groove settings restored from '%s'." % (name, slot)
 
@@ -393,8 +415,7 @@ def allgrooves(ln):
     if not ln:
         error("AllGrooves: requires arguments.")
     
-    origSlot = MMA.parse.gmagic    # save the current groove
-    grooveDefineDo(origSlot)
+    stackGroove.push()  # save the current groove into a temp slot
 
     action = ln[0].upper()   # either a command or a trackname
 
@@ -405,11 +426,12 @@ def allgrooves(ln):
 
     sfuncs = MMA.parse.simpleFuncs
     tfuncs = MMA.parse.trackFuncs
+    seqwarning = 0
 
     counter = 0
 
     for g in glist:   # do command for each groove in memory
-        grooveDo(g)     # active existing groove
+        grooveDo(g)   # activate the groove
 
         if action in sfuncs:        # test for non-track command and exe.
             sfuncs[action](ln[1:])
@@ -420,18 +442,24 @@ def allgrooves(ln):
                 error("AllGrooves: No command for assumed trackname %s." % action)
 
             name = action  # remember 'action' is ln[0]. Using 'name' just makes it clearer
+
             if not name in gbl.tnames:  # skip command if track doesn't exist
                 continue
 
             if trAction in tfuncs:
+                if trAction == 'SEQUENCE' and not seqwarning:
+                    warning("AllGrooves: Setting SEQUENCE on all grooves is probably a bad idea.")
+                    seqwarning = 1
+
                 tfuncs[trAction](name, ln[2:])
                 counter += 1
+
             else:
                 error ("AllGrooves: Not a command: '%s'" % ' '.join(ln))
 
         grooveDefineDo(g)       # store the change!!!
 
-    grooveDo(origSlot)          # restore original state
+    stackGroove.pop()       # restore original state 
     
     if not counter:
         warning("No tracks affected with '%s'" % ' '.join(ln))
@@ -439,4 +467,3 @@ def allgrooves(ln):
     else:
         if gbl.debug:
             print "AllGrooves: %s tracks modified." % counter
-

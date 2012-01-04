@@ -45,6 +45,7 @@ class Plectrum(PC):
         # We have vibrating strings (a string in python refers to text not a guitar string)
         self._vibrating = []
         self._tuning = []
+        self.strumCenter = 0  # default to use 'start'
         self._capoFretNo = 0  # The number that the capo is on (0 for open strings)
         self.setPlectrumTuning(['e-', 'a-', 'd', 'g', 'b', 'e+'])
 
@@ -53,11 +54,15 @@ class Plectrum(PC):
 
         PC.saveGroove(self, gname)  # create storage. Do this 1st.
         self.grooves[gname]['CAPO'] = self._capoFretNo
+        self.grooves[gname]['TUNING'] = self._tuning[:]
+        self.grooves[gname]['PSTRUM'] = self.strumCenter
 
     def restoreGroove(self, gname):
         """ Restore special/local/variables for groove. """
 
         self._capoFretNo = self.grooves[gname]['CAPO']
+        self._tuning = self.grooves[gname]['TUNING'][:]
+        self.strumCenter =  self.grooves[gname]['PSTRUM']
         PC.restoreGroove(self, gname)
 
 
@@ -76,6 +81,28 @@ class Plectrum(PC):
         if self.channel != 0:
             self.grooveFinish(0)
         PC.doMidiClear(self)
+
+
+    def setStrum(self, l):
+        """ Called frm parser CENTER option. Sets strum to bar center, start or end.
+
+            NOTE: This overrides the class setStrum() function.
+        """
+
+        if len(l) != 1:
+            error("Strum: %s permits exactly one strum setting" % self.name)
+
+        l = l[0].lower()
+
+        if l == 'start':
+            self.strumCenter = 0
+        elif l == 'center':
+            self.strumCenter = 1
+        elif l == 'end':
+            self.strumCenter = 2
+        else:
+            error("Strum: %s options are 'Start', 'Center' or 'End'. '%s' is illegal" % 
+                  (self.name, l.title()))
 
 
     def setPlectrumTuning (self, stringPitchNames):
@@ -183,7 +210,6 @@ class Plectrum(PC):
                   "not '%s'" % (self.name, ' '.join(ev) ) )
 
         a = struct()
-
         a.vol = 0        # as is this
         a.offset   = self.setBarOffset(ev[0])
         a.strum = stoi(ev[1], "%s: Expecting int value for strum" % self.name)
@@ -368,9 +394,18 @@ class Plectrum(PC):
             notes = self.fretboardNotes(chordList, chordBarreFretNo)
 
             for stringNo, vol in enumerate(p.pluckVol):
-
-                # the centre of the strum is on the beat
-                strumOffset = p.offset + p.strum*(pluckStringIndex - pluckStringCount/2.0)
+                if p.strum:
+                    if self.strumCenter == 0:
+                        # start strum at end of beat
+                        strumOffset = p.offset+p.strum*pluckStringIndex                        
+                    elif self.strumCenter == 1:
+                        # the centre of the strum is on the beat
+                        strumOffset = p.offset + p.strum*(pluckStringIndex - pluckStringCount/2.0)
+                    else:
+                        # start strum at end of beat
+                        strumOffset = p.offset + p.strum*(pluckStringCount - pluckStringIndex - 1)
+                else:
+                    strumOffset = 0
 
                 if vol == -1:
                     # silence this stringNo if the note on this string has changed
@@ -402,7 +437,7 @@ class Plectrum(PC):
                         self._vibrating[stringNo].note = None
 
                     plectrumNoteOnList.append(note)  # for debugging only
-
+                    
             if gbl.debug:
                 print "%s: channel=%s offset=%s chordList=%s NoteOn=%s." % \
                        (self.name, self.channel, p.offset + gbl.tickOffset, \

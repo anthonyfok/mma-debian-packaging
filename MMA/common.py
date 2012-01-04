@@ -1,4 +1,3 @@
-
 # common.py
 
 """
@@ -201,8 +200,8 @@ def lnExpand(ln, msg):
 
     for i,n in enumerate(ln):
         if n == '/':
-            if not last:
-                error ("%s cannot use a '/' as the first item in list." % cmd)
+            if last == None:
+                error ("%s cannot use a '/' as the first item in list." % msg)
             else:
                 ln[i] = last
         else:

@@ -328,6 +328,10 @@ chordlist = {
              (C, D, Eb, F, G, Ab, Bb),
              "Minor suspended 4th, minor triad plus 4th."),
 
+    'm7sus4':  ((C,    Eb,  F,  G, Bb ),
+             (C, D, Eb, F, G, Ab, Bb),
+             "Minor suspended 4th, minor triad plus 4th and dominant 7th."),
+
     'sus(addb9)': ((C,    F,    G, Db+12 ),
              (C, D, F, F, G, A, B),
              "Suspended 4th, major triad with the 3rd raised half tone plus flat 9th."),
@@ -378,7 +382,11 @@ chordlist = {
              (C, D, E, F, G, A, Bb),
              "7th (including 5th) plus 13th (the 9th and 11th are not voiced)."),
 
-    '13b5':  ((C,    E,    Gb,    Bb, A+12),
+    '7b13':  ((C,    E,    G,    Bb, Ab+12),
+             (C, D, E, F, G, A, Bb),
+             "7th (including 5th) plus flat 13th (the 9th and 11th are not voiced)."),
+
+    '13b5':  ((C,    E,    Gb,    Bb, Ab+12),
              (C, D, E, F, Gb, A, Bb),
              "7th with flat 5th,  plus 13th (the 9th and 11th are not voiced)."),
 
@@ -435,6 +443,7 @@ chordlist = {
 
 aliases = (
     ('aug9',     '9#5',      ''),
+    ('9+',       '9#5',      ''),
     ('+9',       '9#5',      ''),
     ('+9M7',     'aug9M7',   ''),
     ('+M7',      'M7#5',     ''),
@@ -451,9 +460,11 @@ aliases = (
     ('m+5',      'm#5',      ''),
     ('M6',       '6',        ''),
     ('m7-5',     'm7b5',     ''),
-    ('m7(omit5)','m7omit5',   ''),
+    ('m7(omit5)','m7omit5',  ''),
     ('+',        'aug',      ''),
     ('+7',       'aug7',     ''),
+    ('+7#9',     'aug7#9',   ''),
+    ('+7b9',     'aug7b9',   ''),
     ('7(omit3)', '7omit3',   ''),
     ('#5',       'aug',      ''),
     ('7#5b9',    'aug7b9',   ''),

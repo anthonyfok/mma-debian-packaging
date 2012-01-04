@@ -4,7 +4,8 @@
 Begin Doc
  Some things just don't fit! This is a soft-of-jazz and sort-of-folk set with
  a guitar and piano. I'm trying to emulate the background used by Madeleine Peyroux
- doing "Everybody's Talkin'".
+ doing "Everybody's Talkin'". The "Piano" set has the guitar replaced with a piano
+ for a different effect.
 End
 
 Author Bob van der Poel
@@ -56,6 +57,7 @@ Groove FolkyJazzGuitar
 Begin Arpeggio
     Voice Clavinet
     Articulate 120
+    Volume mp
     Octave 6
     Sequence  A4
     Harmony OpenBelow
@@ -114,6 +116,83 @@ Bass      Sequence  *  B1
 DefGroove FolkyJazzGuitarEnd    A 2 bar ending.
 
 
+////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+/// This is mostly a duplicate with a piano sub. Slightly differnt
+/// sequences, etc. Can be used side-by-side.
 
+Groove FolkyJazzGuitar
+
+Begin Bass-High
+  Voice Piano1
+  Octave 6
+  Articulate 130
+  HarmonyVolume 70
+  Harmony OpenBelow+8Below
+  Sequence  {1 2. 3 90; 3 2 5 90; 4 2 3 90 } \
+            {1 2. 1 90; 3 4. 3 90; 4 2 5 90} \
+            {1 2  5 90; 3 4  3 90; 4 2 5 90 } \
+            {1 2. 1 90; 3 4. 2 80; 4 2. 3 90}    
+
+End
+
+DefGroove FolkyJazzPiano Piano with guitar bass and drum.
+
+Groove FolkyJazzPiano
+
+ Begin Arpeggio
+    Groove FolkyJazzGuitarPlus
+    Voice JazzGuitar
+    Harmony OpenBelow+8Below
+    Sequence  {A4; A2 Shift .5} {A8; A2 Shift .5} {A4; A4 Shift .5} /
+ End
+
+DefGroove FolkyJazzPianoPlus Add in some guitar notes.
+
+////// Sustained
+
+Groove FolkyJazzPiano
+
+ Begin Chord-Sus
+    Groove FolkyJazzGuitarSus
+	Voice     SynthVox
+	Sequence  {1 2 90 60 50 40; 3 2 80 70 50 30}  
+End
+
+Bass-High Volume  mp
+
+DefGroove FolkyJazzPianoSus
+
+
+Groove FolkyJazzPianoPlus
+ Chord-Sus Groove FolkyJazzPianoSus
+ Arpeggio Volume pp
+DefGroove FolkyJazzPianoSusPlus  Added guitar and sustained voices.
+
+////////////////////////////
+///////////// Intro
+
+Groove FolkyJazzPiano
+
+Drum-Tom  Sequence  D1234  *  D134   D1
+Bass-High Sequence  *      *  *     {1 2. 1 90}
+Bass      Sequence  *      *  *     B1 
+
+DefGroove FolkyJazzPianoIntro   A basic 4 bar introduction.
+
+
+//////////////////////////////////////////////
+//// Ending
+
+Groove FolkyJazzPiano
+
+SeqSize 2
+
+Drum-Tom  Sequence D1234 D1
+Bass-High Sequence {1 2. 1 90; 3 2. 1 80}  {1 2. 1 75}
+Bass      Sequence  *  B1 
+
+
+DefGroove FolkyJazzPianoEnd    A 2 bar ending.
 
 

@@ -151,28 +151,27 @@ class Arpeggio(PC):
                 note = ourChord[self.arpOffset]
 
             self.arpOffset += self.arpDirection
-
+            
+            
             if not self.harmonyOnly[sc]:
-                self.sendNote(
-                    p.offset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(p.vol, p.offset) )
+                notelist = [(note, p.vol)]
+            else:
+                notelist = []
 
             if self.harmony[sc]:
-                h = MMA.harmony.harmonize(self.harmony[sc], note, ourChord)
-                
-                strumOffset = self.getStrum(sc)
-            
-                for n in h:
-                    self.sendNote(
-                        p.offset + strumOffset,
-                        self.getDur(p.duration),
-                        self.adjustNote(n),
-                        self.adjustVolume(p.vol * self.harmonyVolume[sc], -1) )
-                    
-                    strumOffset += self.getStrum(sc)
+                h =  MMA.harmony.harmonize(self.harmony[sc], note, ourChord)
+                vol = p.vol * self.harmonyVolume[sc]
+                harmlist = zip(h, [vol] * len(h))
+            else:
+                harmlist = []
 
+            if self.ornaments['type']:
+                MMA.ornament.doOrnament(self, notelist, 
+                         self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                notelist = []
+
+            self.sendChord( notelist+harmlist, p.duration, p.offset)
+                
             tb.chord.reset()    # important, other tracks chord object
 
 

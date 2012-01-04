@@ -1,21 +1,17 @@
 
-A stable release, version 1.7, of MMA--Musical MIDI Accompaniment
+A stable release, version 11.01, of MMA--Musical MIDI Accompaniment
 is available for downloading. In addition to a number of bug fixes
 and optimizations, MMA now features:
 
- - Chords can now be entered in Roman Numeral notation.
+ - Polychords
 
- - Extensive reworking/enhancement of the Solo track commands.
+ - Improved chord voicing
 
- - MidiInc extended to permit the creation of Solo Riffs.
+ - NEW: note ornamentation for most tracks
 
- - Enhanced the automatic groove finding so that multiple
-   directories can be scanned.
+ - NEW: Delay setting
 
- - -V option for an audible preview of a groove in the libraries.
-
- - A new utility, mma-gb.py. This is a simple GUI for viewing and
-   previewing the groove library.
+ - Many minor improvements and bug fixes.
 
  
 MMA is a accompaniment generator -- it creates midi tracks

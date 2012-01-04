@@ -28,6 +28,7 @@ import copy
 from MMA.common import *
 from MMA.chordtable import chordlist
 import MMA.roman
+import MMA.keysig  # needed for voicing mode keycenter()
 
 ####################################################
 # Convert a roman numeral chord to standard notation
@@ -62,7 +63,7 @@ def defChord(ln):
     notes=ln[1][0].split(',')
     if len(notes) < 2 or len(notes)>8:
         error("There must be 2..8 notes in a chord, not '%s'" % len(note))
-    notes.sort()
+
     for i,v in enumerate(notes):
         v=stoi(v, "Note offsets in chord must be integers, not '%s'" % v)
         if v<0 or v>24:
@@ -72,7 +73,7 @@ def defChord(ln):
     scale=ln[1][1].split(',')
     if len(scale) != 7:
         error("There must be 7 offsets in chord scale, not '%s'" % len(scale))
-    scale.sort()
+
     for i,v in enumerate(scale):
         v=stoi(v, "Scale offsets in chord must be integers, not '%s'" % v)
         if v<0 or v>24:
@@ -177,42 +178,42 @@ class ChordNotes:
     rootNote   - the root note of the chord ("Am" would be a 9).
 
     bnoteList  - the original chord notes, bypassing any
-    invert(), etc. mangling.
+                     invert(), etc. mangling.
 
     scaleList  - a 7 note list representing a scale similar to
-    the chord.
+                     the chord.
 
     reset() - resets noteList to the original chord notes.
-    This is useful to restore the original after
-    chord note mangling by invert(), etc. without having to
-    create a new chord object.
+              This is useful to restore the original after
+              chord note mangling by invert(), etc. without having to
+              create a new chord object.
 
 
     invert(n) - Inverts a chord by 'n'. This is done inplace and
-    returns None. 'n' can have any integer value, but -1 and 1
-    are most common. The order of the notes is not changed. Eg:
-
-    ch=Chord('Am')
-    ch.noteList == [9, 12, 16]
-    ch.invert(1)
-    ch.noteList     = [21, 12, 16]
+                returns None. 'n' can have any integer value, but -1 and 1
+                are most common. The order of the notes is not changed. Eg:
+ 
+                ch=Chord('Am')
+                ch.noteList == [9, 12, 16]
+                ch.invert(1)
+                ch.noteList     = [21, 12, 16]
 
     compress() - Compresses the range of a chord to a single octave. This is
-    done inplace and return None. Eg:
+                 done inplace and return None. Eg:
 
-    ch=Chord("A13")
-    ch.noteList == [1, 5, 8, 11, 21]
-    ch.compress()
-    ch.noteList == [1, 5, 8, 11, 10 ]
+                 ch=Chord("A13")
+                 ch.noteList == [1, 5, 8, 11, 21]
+                 ch.compress()
+                 ch.noteList == [1, 5, 8, 11, 10 ]
 
 
     limit(n) -    Limits the range of the chord 'n' notes. Done inplace
-    and returns None. Eg:
+                  and returns None. Eg:
 
-    ch=Chord("CM711")
-    ch.noteList == [0, 4, 7, 11, 15, 18]
-    ch.limit(4)
-    ch.noteList ==    [0, 4, 7, 11]
+                  ch=Chord("CM711")
+                  ch.noteList == [0, 4, 7, 11, 15, 18]
+                  ch.limit(4)
+                  ch.noteList ==    [0, 4, 7, 11]
 
 
     """
@@ -249,12 +250,19 @@ class ChordNotes:
         wmessage = ''   # slash warning msg, builder needed for gbl.rmShow
         octave = 0
         inversion = 0
+        polychord = None
 
         if name == 'z':
             self.tonic = self.chordType = None
             self.noteListLen = 0
             self.notesList = self.bnoteList = []
             return
+
+        if '|' in name:
+            if name.count('|') > 1:
+                error("Polychord marker '|' can only be used once.")
+            
+            name, polychord = name.split('|')
 
         if '/' in name and '>' in name:
             error("You cannot use both an inversion and a slash in the same chord")
@@ -394,6 +402,20 @@ class ChordNotes:
                 if not gbl.rmShow:
                     warning(wmessage)
 
+        if polychord:
+            ctable = ChordNotes(polychord)
+            self.noteList.extend(ctable.noteList)
+            self.noteList = list(set(self.noteList))
+            self.noteList.sort()
+            if len(self.noteList) > 8:
+                i = len(self.noteList)
+                self.noteList=self.noteList[:8]
+                warning("Polychord %s|%s has been truncated from %d to 8 notes." % \
+                            (name, polychord, i))
+            self.noteListLen = len(self.noteList)
+            self.bnoteList = tuple(self.noteList)
+
+
         if gbl.rmShow:
             if slash:
                 a = '/'+slash
@@ -468,6 +490,30 @@ class ChordNotes:
 
         return None
 
+    def keycenter(self):
+        """ Rotate the chord notes until the tonic is close to
+            the keysig value. Note that keysig is set C=0, D=2, etc
+            which matches the note values in the noteList.
+        """
+
+        key=MMA.keysig.keySig.keyNoteValue
+        notes = self.noteList  # just a shorter variable name
+        nbelow=0
+        nabove=0
+
+        for n in notes:
+            if n<key: nbelow+=1
+            elif n>key: nabove+=1
+
+        if nbelow>nabove:
+            for a in range(nbelow-nabove-1): # this is 0,1 ... start of list
+                notes[a] += 12
+
+        elif nbelow<nabove:
+            for a in range(1,nabove-nbelow):   # this should give 1,2 
+                notes[-a] -= 12                # and the - means end of list
+
+        return None
 
     def center1(self, lastChord):
         """ Descriptive comment needed here!!!! """
@@ -519,6 +565,7 @@ class ChordNotes:
 
 
         return None
+
 
 
 ######## End of Chord class #####

@@ -24,7 +24,7 @@ Bob van der Poel <bob@mellowood.ca>
 
 import os
 
-version = "1.7"        # Version -- Nov/2010
+version = "12.01"        # Version -- Jan 1, 2012
 
 """ A few globals are actually set in the calling stub, mma.py.This is
     done to make future ports and platform specific settings a bit easier.
@@ -97,6 +97,7 @@ ext = ".mma"        # extension for song/lib files.
 
 
 BperQ       =  192    # midi ticks per quarter note
+Bper128     =  BperQ/16  # a 1/128 note. Used for small timings
 QperBar     =  4      # Beats/bar, set with TIME
 tickOffset  =  0      # offset of current bar in ticks
 tempo       =  120    # current tempo

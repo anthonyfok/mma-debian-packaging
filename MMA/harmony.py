@@ -23,10 +23,80 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-
-
 from MMA.common import *
 
+
+def setHarmony(self, ln):
+    """ Set the harmony. """
+
+    ln = lnExpand(ln, '%s Harmony' % self.name)
+    tmp = []
+
+    for n in ln:
+        n = n.upper()
+        if n in ( '-', '-0', 'NONE'):
+            n = None
+
+        tmp.append(n)
+
+    self.harmony = seqBump(tmp)
+
+    if self.vtype in ( 'CHORD', 'DRUM' ):
+        warning("Harmony setting for %s track ignored" % self.vtype)
+
+    if gbl.debug:
+        print "Set %s Harmony to:" % self.name,
+        printList(self.harmony)
+
+
+def setHarmonyOnly(self, ln):
+    """ Set the harmony only. """
+
+    ln = lnExpand(ln, '%s HarmonyOnly' % self.name)
+    tmp = []
+
+    for n in ln:
+        n = n.upper()
+        if n in ('-', '0'):
+            n = None
+
+        tmp.append(n)
+
+    self.harmony = seqBump(tmp)
+    self.harmonyOnly = seqBump(tmp)
+
+    if self.vtype in ( 'CHORD', 'DRUM'):
+        warning("HarmonyOnly setting for %s track ignored" % self.vtype)
+
+    if gbl.debug:
+        print "Set %s HarmonyOnly to:" % self.name,
+        printList(self.harmonyOnly)
+
+
+def setHarmonyVolume(self, ln):
+    """ Set harmony volume adjustment. """
+
+    ln = lnExpand(ln, '%s HarmonyOnly' % self.name)
+    tmp = []
+
+    for n in ln:
+        v=stoi(n)
+
+        if v<0:
+            error("HarmonyVolume adjustment must be positive integer")
+        tmp.append(v/100.)
+
+    self.harmonyVolume = seqBump(tmp)
+
+    if self.vtype in ( 'CHORD', 'DRUM' ):
+        warning("HarmonyVolume adjustment for %s track ignored" % self.vtype)
+
+    if gbl.debug:
+        print "Set %s HarmonyVolume to:" % self.name,
+        printList(self.harmonyVolume)
+
+
+##########################################################
 
 def harmonize(hmode, note, chord):
     """ Get harmony note(s) for given chord. """

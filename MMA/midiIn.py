@@ -244,7 +244,7 @@ def readMidi(filename):
                 note=m1i()
                 vel=m1i()
 
-                if octAdjust and channel != 10:
+                if octAdjust and channel != 9:  # drums are 9 when 0..15 (not 10!)
                     note += octAdjust
                     while note < 0:  note += 12
                     while note >127: note -= 12
@@ -256,7 +256,7 @@ def readMidi(filename):
                 note=m1i()
                 vel=m1i()
 
-                if octAdjust and channel != 10:
+                if octAdjust and channel != 9:
                     note += octAdjust
                     while note < 0:  note += 12
                     while note >127: note -= 12
@@ -382,8 +382,14 @@ def midiinc(ln):
     doText = 0
     channels = []
     transpose = None
-    stripSilence = 1
+    stripSilence = -1
     report = 0
+    istart = 0
+    iend = 0xffffff
+    octAdjust = 0
+    volAdjust = 100
+    firstNote = 0
+    ignorePC = 1
 
     notopt, ln = opt2pair(ln)
 
@@ -455,7 +461,7 @@ def midiinc(ln):
                      "MIdiInc StripSilence= expecting 'value', 'On' or 'Off', "
                       "not %s" % opt)
 
-        elif cmd == "INCLUDEPC":
+        elif cmd == "IGNOREPC":
             opt=op.upper()
             if opt in ("TRUE", "ON", "1"):   # default
                 ignorePC=1
@@ -580,9 +586,9 @@ def midiinc(ln):
     # Midi file parsed, add selected events to mma data
 
     beatad = gbl.BperQ / float(beatDivision)
-    if not stripSilence:
+    if stripSilence < 0:
         firstNote = 0
-    elif stripSilence > 0:
+    else:
         firstNote = stripSilence
 
     if doText:
@@ -709,7 +715,6 @@ def createRiff(riff, tname, pt, riffTranspose, beatad):
 
     tickBar = gbl.BperQ * gbl.QperBar
     bars = {}
-
     for offset, duration, pitch, velocity in events:
         b = (offset/tickBar)
         if not b in bars:
@@ -717,12 +722,19 @@ def createRiff(riff, tname, pt, riffTranspose, beatad):
         bars[b]+=  "<Offset=%s> %st %s/%s;" % \
                   ( int(offset % tickBar), duration, pitch, velocity)
 
-    w = gbl.noWarn
-    gbl.noWarn=1
-    for a in bars:
+    # Ensure that all bars in the riff pushback data have something. 
+    # Otherwise the MIDI gets out of sync with the chords. This happens
+    # when there are rest bars in the imported data. We just step though
+    # and create mma rest bars for the missing ones.
+
+    for b in range(0,sorted(bars.keys())[-1], 1):
+        if not b in bars:
+            bars[b]="4r;"
+
+    for a in sorted(bars):   # note - sorted!
         if pt:
             print "%s Riff %s" % (tname, bars[a])
         else:
             gbl.tnames[tname].setRiff(bars[a])
-    w = gbl.noWarn
+
 

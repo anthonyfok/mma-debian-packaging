@@ -16,6 +16,8 @@ Begin DocVar
               at the start of playing a track. Quite useful for performance.
 End
 
+
+
 SeqClear
 Time 4
 Timesig 4 4
@@ -95,7 +97,5 @@ End
 DefGroove Metronome2-4   A very useful introduction. On bar one we have \
                          hits on beats 1 and 3; on bar two hits on beats \
                          1, 2, 3 and 4.
-
-
 
 

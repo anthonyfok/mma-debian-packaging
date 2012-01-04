@@ -36,7 +36,7 @@ End
 // uncomment the following line to see the riff data generated.
 //Midiinc File=rec1.mid Solo=1,Riff,print Volume=90
 
-Midiinc File=rec1.mid Solo=1,Riff Volume=90
+Midiinc File=rec1.mid Solo=1,Riff Volume=90 
 
 // Copy the solo data into Solo-1 and Solo-2 ... this could have
 // been done above, in the MidiInc line, but we're showing how

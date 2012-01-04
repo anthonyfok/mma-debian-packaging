@@ -73,7 +73,6 @@ class Walk(PC):
 
         sc=self.seq
         dir = self.direction[sc]
-        unify = self.unify[sc]
 
         for p in pattern:
 
@@ -82,12 +81,10 @@ class Walk(PC):
             if tb.walkZ:
                 continue
 
-            root = tb.chord.rootNote        # root note of chord
-
             """ Create a note list from the current scale. We do
             this for each beat, but it's pretty fast. The note
-            list is simply notes 0..6 of the scale PLUS notes
-            1..5 reversed. So, a Cmajor chord would result in
+            list is simply notes 0..5 of the scale PLUS notes
+            1..4 reversed. So, a Cmajor chord would result in
             the note list (0,2,4,5,7,9,7,5,4,2).
 
             Note that we deliberately skip the 7th. Too often
@@ -142,26 +139,24 @@ class Walk(PC):
             else:    # BOTH
                 self.walkChoice += random.choice( (-1,0,0,2,2,1,1,1,1,1,1,1))
 
-           
             if not self.harmonyOnly[sc]:
-                self.sendNote(
-                    p.offset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(p.vol, p.offset) )
+                notelist = [(note, p.vol)]
+            else:
+                notelist = []
 
             if self.harmony[sc]:
                 ch = self.getChordInPos(p.offset, ctable).chord.noteList
                 h = MMA.harmony.harmonize(self.harmony[sc], note, ch)
-              
-                strumOffset = self.getStrum(sc)
+                vol = p.vol * self.harmonyVolume[sc]
+                harmlist = zip(h, [vol] * len(h))
+            else:
+                harmlist = []
 
-                for n in h:
-                    self.sendNote(
-                        p.offset + strumOffset,
-                        self.getDur(p.duration),
-                        self.adjustNote(n),
-                        self.adjustVolume(p.vol * self.harmonyVolume[sc], -1) )
+            if self.ornaments['type']:
+                MMA.ornament.doOrnament(self, notelist,
+                        self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                notelist = []
 
-                    strumOffset += self.getStrum(sc)
+            self.sendChord( notelist+harmlist, p.duration, p.offset)
 
+               

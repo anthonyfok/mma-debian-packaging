@@ -255,9 +255,7 @@ def findGroove(targ):
     global grooveDB
 
 
-    """ If no existing DB we load them from each dir in libpath. 
-
-    """
+    # If no existing DB we load them from each dir in libpath. 
 
     if not grooveDB:
         grooveDB=[]
@@ -278,14 +276,88 @@ def findGroove(targ):
 
         RETURN: Lib-Filename if found
                 None if not found
+
+        BAD CODE DESIGN: There are 4 different exit points below. 
+
     """
+
+    # Split the filename from the groove name. 
+    # The complete spec for a groove name is dir/subdir/file:groove
+    # We just need to split at the ":", if no ":" then dir/file == None
+    # in which case we grab the first match found. If not, we force looking
+    # in the specified file.
+
+    if ':' in targ:
+        dirfile, targ = targ.split(':', 1)
+        targ=targ.upper()
+
+        # user is by-passing the default libs ... just pass the file/groovename back
+        if dirfile.startswith('.') or os.path.isabs(dirfile):
+            return dirfile, targ
+
+        # Does the library file exist? Check all the registered sub-dirs
+        # in gbl.libPath for the requested library file.
+        ext = None   # we need to know if file has a .mma extension
+
+        # 1st test for a file in the root lib or a specified subdir
+
+        fpath = MMA.file.locFile(dirfile, gbl.libPath)
+        if fpath:
+            found = 1                # and mark that it's found
+
+        # not it root, check subdirs
+
+        else:               
+            found = None
+            for dir, g in grooveDB:
+                fn = os.path.join(dir, dirfile)
+                fpath = MMA.file.locFile(fn, gbl.libPath)
+                if fpath:
+                    found = 1
+                    dirfile = fn
+                    break
+
+        if not found:
+            error("Can't locate library file: %s, Groove: %s." % (dirfile, targ))
+        
+        if fpath.endswith(gbl.ext) and not dirfile.endswith(gbl.ext):
+            dirfile += gbl.ext
+        
+        # check to see if any duplicates or if it is in the database
+        dups=[]
+        for dir, g in grooveDB:
+            for filename, namelist in g.items():
+                if targ in namelist:
+                    dups.append("%s/%s" % (dir,filename))
+
+        # error if groove name found in wrong lib file
+        if dups and dirfile not in dups:
+            error("Groove %s found in '%s', but not in requested file '%s'." \
+                      % (targ, ', '.join(dups), dirfile))
+
+        # If dup groove names are found we just do a warning
+
+        elif len(dups)>1:
+            dirfile = dups[0]
+            warning ("Groove %s has duplicates in '%s'. Using '%s'." % 
+                     (targ,', '.join(dups), dirfile))
+
+
+        return dirfile, targ
+
+    # Code for a normal groove load from a file. Just a matter of
+    # finding the file in the database.
+
+    targ=targ.upper()
 
     for dir, g in grooveDB:
         for filename, namelist in g.items():
             if targ in namelist:
-                return os.path.join(dir,filename)
+                return os.path.join(dir, filename), targ.upper()
 
-    return None
+    # ultimate fall though
+
+    return None, targ.upper()
 
 
 
