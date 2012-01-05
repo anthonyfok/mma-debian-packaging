@@ -6,7 +6,6 @@
 override_dh_install:
 	dh_install
 	cp mma.py          /usr/bin/mma
-	cp mma-gb.py       /usr/bin/mma-gb
 	cp mma-mnx.py      /usr/bin/mma-mnx
 	cp mma-rm2std.py   /usr/bin/mma-rm2std
 	cp mma-splitrec.py /usr/bin/mma-splitrec
