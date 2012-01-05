@@ -1,7 +1,3 @@
-text/ANNOUNCE
-text/README
-text/CONTRIB
-text/FAQ
-text/TODO
+text
 docs/html
 debian/pdf
