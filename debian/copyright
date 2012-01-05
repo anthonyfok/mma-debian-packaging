@@ -7,11 +7,12 @@ Copyright: 2000, Bob van der Poel <bvdp@universe.com>
 License: GPL-2+
 
 Files: debian/*
-Copyright: 2011, Joel Roth <joelz@pobox.com>
+Copyright: 2011-2012, Joel Roth <joelz@pobox.com>
 License: GPL-2+
 
-Files: debian/mma.1
-Copyright: 2000, Bob van der Poel <bvdp@universe.com>
+Files: debian/*.1
+Copyright: 2000-2012, Bob van der Poel <bvdp@universe.com>
+Copyright: 2012, Joel Roth <joelz@pobox.com>
 License: GPL-2+
 
 License: GPL-2
@@ -23,6 +24,3 @@ License: GPL-2
  On Debian GNU/Linux systems, the complete text of version 2
  of the GNU General Public License can be found in
  `/usr/share/common-licenses/GPL-2'.
-
-
-
