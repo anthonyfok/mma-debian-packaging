@@ -123,75 +123,50 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "pg2mma.py 1"
-.TH pg2mma.py 1 "2012-01-04" " " " "
+.IX Title "mup2mma 1"
+.TH mup2mma 1 "2012-01-04" " " " "
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
-pg2mma.py
+mup2mma
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\&\fBpg2mma.py\fR <infile> <outfile>
-.PP
-No options. Both infile and outfile must be specified. No files will
-be overwritten.
+\&\fBmup2mma\fR [options] <mupfile>
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-This program is used to convert a PGMusic .pat file containing
-extended patch definitions to a \s-1MMA\s0 format. The .pat files will
-contain lines like:
-.Sp
-.Vb 11
-\&        [                                                      
-\&        [Yamaha PSR 9000 \- E.Piano                                 
-\&        [     (P1)                                                             
-\&        4.0.114=Galaxy EP
-\&        4.0.117=Stage EP
-\&        4.0.115=Polaris EP
-\&        5.0.118=Jazz Chorus
-\&        5.0.113=Hyper Tines
-\&        4.0.119=Cool! EP
-\&        4.0.120=Phase EP
-\&        5.0.116=New Tines
-.Ve
-.PP
-This program will convert the above to:
+mup2mma extracts chords from a \s-1MUP\s0 music notation file and                     
+creates a \s-1MMA\s0 file. For this to work the \s-1MUP\s0 file must use                     
+the macro \*(L"C\*(R" for chord. In my \s-1MUP\s0 files I have the following:
 .Sp
 .RS 6
-Begin Patch Set
-.Sp
-.Vb 10
-\&  // Yamaha PSR 9000 \- E.Piano                                 
-\&  //   (P1)                                                             
-\&  4.0.114=GalaxyEp
-\&  4.0.117=StageEp
-\&  4.0.115=PolarisEp
-\&  5.0.118=JazzChorus
-\&  5.0.113=HyperTines
-\&  4.0.119=Cool!Ep
-\&  4.0.120=PhaseEp
-\&  5.0.116=NewTines
-.Ve
-.Sp
-End
+define C bold (11) chord above all: @
 .RE
 .PP
-The names in the orginal file are converted to CamelCase; both ';' and []
-comments are converted to \s-1MMA\s0 // style.
+This script just checks all input lines and assumes that anything              
+starting with \*(L"C\*(R" is a chord line.
 .PP
-The conversion recognizes the \*(L"\s-1ONEBASED\s0\*(R" keyword. When found, subsequent
-patch values will be decremented by 1.
-.PP
-The produced files should be useable directly by mma. However, there are a
-few cautions:
-.IP "\(bu" 6
-the .pat files we've looked at do contain errors.
-.IP "\(bu" 6
-many of the .pat files redefine existing \s-1GM\s0 voice names. You
-will need to change these names or put up with warning
-messages from \s-1MMA\s0.
+Additional \*(L"features\*(R":
+.Sp
+.RS 6
+Lines in the form \*(L"// \s-1TEMPO:\s0 xx\*(R" generate a Tempo entry
+.Sp
+\&\*(L"time =\*(R" lines are parsed for common time signatures
+.Sp
+repeats are inserted as comment lines
+.RE
+.SH "OPTIONS"
+.IX Header "OPTIONS"
+.IP "\-m" 6
+.IX Item "-m"
+add melody lines
+.IP "\-l" 6
+.IX Item "-l"
+add lyrics
+.IP "\-o" 6
+.IX Item "-o"
+overwrite
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 \&\fImma\fR\|(1)
@@ -204,4 +179,4 @@ The latest version of this program is always distributed with
 Bob van der Poel <bob@mellowood.ca>
 .SH "LICENSE"
 .IX Header "LICENSE"
-pg2mma.py is Copyright 2002\-2008 Bob van der Poel. Free use of this software is granted under the terms of the \s-1GNU\s0 General Public License.
+mup2mma is Copyright 2002\-2008 Bob van der Poel. Free use of this software is granted under the terms of the \s-1GNU\s0 General Public License.

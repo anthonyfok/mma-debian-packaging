@@ -5,7 +5,14 @@
 
 override_dh_install:
 	dh_install
-	cp mma.py /usr/bin/mma
+	cp mma.py          /usr/bin/mma
+	cp mma-gb.py       /usr/bin/mma-gb
+	cp mma-mnx.py      /usr/bin/mma-mnx
+	cp mma-rm2std.py   /usr/bin/mma-rm2std
+	cp mma-splitrec.py /usr/bin/mma-splitrec
+	cp mup2mma.py      /usr/bin/mup2mma
+	cp pg2mma.py       /usr/bin/pg2mma
+	cp synthsplit.py   /usr/bin/synthsplit
 
 override_dh_installchangelogs:
 	dh_installchangelogs text/CHANGES-1.7

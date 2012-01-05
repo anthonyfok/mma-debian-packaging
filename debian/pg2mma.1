@@ -123,90 +123,75 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "mma-splitrec.py 1"
-.TH mma-splitrec.py 1 "2012-01-04" " " " "
+.IX Title "pg2mma 1"
+.TH pg2mma 1 "2012-01-04" " " " "
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
-mma\-splitrec.py \- Create wav tracks from MMA input file
+pg2mma
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\&\fBmma\-splitrec.py\fR <somefile.mma>
+\&\fBpg2mma\fR <infile> <outfile>
+.PP
+No options. Both infile and outfile must be specified. No files will
+be overwritten.
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-This program is used to create a set of wav tracks from a \s-1MMA\s0
-input file. You need \s-1MMA\s0, the input file, a midiplayer, audio
-recorder and an external synth or timidity.
-.PP
-The command:
+This program is used to convert a PGMusic .pat file containing
+extended patch definitions to a \s-1MMA\s0 format. The .pat files will
+contain lines like:
 .Sp
-.RS 12
-mma\-splitrec.py somefile.mma
+.Vb 11
+\&        [                                                      
+\&        [Yamaha PSR 9000 \- E.Piano                                 
+\&        [     (P1)                                                             
+\&        4.0.114=Galaxy EP
+\&        4.0.117=Stage EP
+\&        4.0.115=Polaris EP
+\&        5.0.118=Jazz Chorus
+\&        5.0.113=Hyper Tines
+\&        4.0.119=Cool! EP
+\&        4.0.120=Phase EP
+\&        5.0.116=New Tines
+.Ve
+.PP
+This program will convert the above to:
+.Sp
+.RS 6
+Begin Patch Set
+.Sp
+.Vb 10
+\&  // Yamaha PSR 9000 \- E.Piano                                 
+\&  //   (P1)                                                             
+\&  4.0.114=GalaxyEp
+\&  4.0.117=StageEp
+\&  4.0.115=PolarisEp
+\&  5.0.118=JazzChorus
+\&  5.0.113=HyperTines
+\&  4.0.119=Cool!Ep
+\&  4.0.120=PhaseEp
+\&  5.0.116=NewTines
+.Ve
+.Sp
+End
 .RE
 .PP
-will determine the tracks in the \s-1MMA\s0 file, create temporary MIDIs
-for each track, play each file though an external synth and record
-the results into a series of wav files.
+The names in the orginal file are converted to CamelCase; both ';' and []
+comments are converted to \s-1MMA\s0 // style.
 .PP
-Also created is a mix file with all the tracks. This is called \*(L"bg.wav\*(R".
+The conversion recognizes the \*(L"\s-1ONEBASED\s0\*(R" keyword. When found, subsequent
+patch values will be decremented by 1.
 .PP
-When using an external synth the conversion takes a long time ...
-about the number of tracks times the duration of the song. Be patient.
-.PP
-If you have timidity installed you can let it create the wav files. It works
-pretty well, depending on your installed soundfonts.
-.PP
-Using timidity i've had good success with the following:
-.Sp
-.RS 12
-1. use mma\-splitrec.py with a decent soundfont to create tracks,
-.Sp
-2. use timidity to create a mix track of the mma file,
-.Sp
-3. copy the mix to my Zoom H4 recorder into a project file,
-.Sp
-4. play/create lots of sax tracks while listening to the mix (4 track mode on the H4),
-.Sp
-5. copy the sax tracks the split tracks from (1) into audacity,
-.Sp
-6. edit the tracks,
-.Sp
-7. publish the song and become rich and famous!
-.RE
-.SH "OPTIONS"
-.IX Header "OPTIONS"
-.IP "\fB\-m\fR" 12
-.IX Item "-m"
-Set the midi file player (aplaymidi) options. This is usually
-the port. You should quote the arg:  \-m \*(L"\-p 20\*(R"
-.IP "\fB\-r\fR" 12
-.IX Item "-r"
-Recorder options (arecord). You can change the number of channels,
-quality, port, etc. Again, quote the arg: \-r \*(L"\-D hw:0,0 \-c2\*(R"
-.IP "\fB\-o\fR" 12
-.IX Item "-o"
-Timidity options. Quote args: \-o \*(L"\-Ow\*(R"
-.Sp
-See the manual pages for aplaymidi, arecord and timidiy for option details.
-.IP "\fB\-i\fR" 12
-.IX Item "-i"
-By default an external synth is assumed. Use this option to force use
-of timidity.
-.IP "\fB\-b\fR" 12
-.IX Item "-b"
-By default the track \*(L"bg.wav\*(R" is created with all tracks playing. This
-option will skip creating that track.
-.IP "\fB\-t\fR" 12
-.IX Item "-t"
-Create only track \s-1XX\s0. The track name is passed to mma and its \-T option.
-To create a set of tracks you need multiple \-t settings: \-t Solo \-t Chord-piano
-.Sp
-The track names are \s-1NOT\s0 case sensitive.
-.IP "\fB\-x\fR" 12
-.IX Item "-x"
-Exclude tracks. Again, a separate \-x is required for each track to skip.
+The produced files should be useable directly by mma. However, there are a
+few cautions:
+.IP "\(bu" 6
+the .pat files we've looked at do contain errors.
+.IP "\(bu" 6
+many of the .pat files redefine existing \s-1GM\s0 voice names. You
+will need to change these names or put up with warning
+messages from \s-1MMA\s0.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 \&\fImma\fR\|(1)
@@ -219,4 +204,4 @@ The latest version of this program is always distributed with
 Bob van der Poel <bob@mellowood.ca>
 .SH "LICENSE"
 .IX Header "LICENSE"
-mma\-splitrec.py is Copyright 2002\-2008 Bob van der Poel. Free use of this software is granted under the terms of the \s-1GNU\s0 General Public License.
+pg2mma is Copyright 2002\-2008 Bob van der Poel. Free use of this software is granted under the terms of the \s-1GNU\s0 General Public License.

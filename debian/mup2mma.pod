@@ -1,6 +1,6 @@
 =head1 NAME
 
-mup2mma.py
+mup2mma
 
 =head1 SYNOPSIS
 
@@ -66,4 +66,4 @@ Bob van der Poel <bob@mellowood.ca>
 
 =head1 LICENSE
 
-mup2mma.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
+mup2mma is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.

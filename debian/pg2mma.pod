@@ -1,10 +1,10 @@
 =head1 NAME
 
-pg2mma.py
+pg2mma
 
 =head1 SYNOPSIS
 
-B<pg2mma.py> <infile> <outfile>
+B<pg2mma> <infile> <outfile>
 
 No options. Both infile and outfile must be specified. No files will
 be overwritten.
@@ -86,4 +86,4 @@ Bob van der Poel <bob@mellowood.ca>
 
 =head1 LICENSE
 
-pg2mma.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
+pg2mma is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
