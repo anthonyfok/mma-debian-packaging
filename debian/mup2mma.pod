@@ -1,0 +1,69 @@
+=head1 NAME
+
+mup2mma.py
+
+=head1 SYNOPSIS
+
+B<mup2mma> [options] <mupfile>
+
+=head1 DESCRIPTION
+
+mup2mma extracts chords from a MUP music notation file and                     
+creates a MMA file. For this to work the MUP file must use                     
+the macro "C" for chord. In my MUP files I have the following:                 
+
+=over 6
+
+define C bold (11) chord above all: @                                      
+
+=back
+                                                                                   
+This script just checks all input lines and assumes that anything              
+starting with "C" is a chord line.                                             
+                                                                                   
+Additional "features":                                                         
+                                                                                   
+=over 6
+
+Lines in the form "// TEMPO: xx" generate a Tempo entry                    
+
+"time =" lines are parsed for common time signatures                       
+
+repeats are inserted as comment lines                                      
+
+=back
+                                                                                   
+=head1 OPTIONS
+
+=over 6 
+
+=item -m
+
+add melody lines
+
+=item -l
+
+add lyrics                                                 
+
+=item -o
+
+overwrite                                                   
+                                    
+=back
+
+=head1 SEE ALSO
+
+mma(1)
+
+=head1 RESOURCES
+
+The latest version of this program is always distributed with
+B<MMA> and is available at http://www.mellowood.ca/mma
+
+=head1 AUTHOR
+
+Bob van der Poel <bob@mellowood.ca>
+
+=head1 LICENSE
+
+mup2mma.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.

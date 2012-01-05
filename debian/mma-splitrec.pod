@@ -1,0 +1,113 @@
+=head1 NAME
+
+B<mma-splitrec.py> - Create wav tracks from MMA input file
+
+=head1 SYNOPSIS
+
+B<mma-splitrec.py> <somefile.mma>
+
+=head1 DESCRIPTION
+
+This program is used to create a set of wav tracks from a MMA
+input file. You need MMA, the input file, a midiplayer, audio
+recorder and an external synth or timidity.
+
+The command:
+
+=over 12
+
+mma-splitrec.py somefile.mma
+
+=back
+
+will determine the tracks in the MMA file, create temporary MIDIs
+for each track, play each file though an external synth and record
+the results into a series of wav files.
+
+Also created is a mix file with all the tracks. This is called "bg.wav".
+
+When using an external synth the conversion takes a long time ...
+about the number of tracks times the duration of the song. Be patient.
+
+If you have timidity installed you can let it create the wav files. It works
+pretty well, depending on your installed soundfonts.
+
+Using timidity i've had good success with the following:
+
+=over 12
+
+1. use mma-splitrec.py with a decent soundfont to create tracks,
+
+2. use timidity to create a mix track of the mma file,
+
+3. copy the mix to my Zoom H4 recorder into a project file,
+
+4. play/create lots of sax tracks while listening to the mix (4 track mode on the H4),
+
+5. copy the sax tracks the split tracks from (1) into audacity,
+
+6. edit the tracks,
+
+7. publish the song and become rich and famous!
+
+=back
+
+=head1 OPTIONS
+
+=over 12
+
+=item B<-m> 
+
+Set the midi file player (aplaymidi) options. This is usually
+the port. You should quote the arg:  -m "-p 20"
+
+=item B<-r>
+
+Recorder options (arecord). You can change the number of channels,
+quality, port, etc. Again, quote the arg: -r "-D hw:0,0 -c2"
+
+=item B<-o>
+
+Timidity options. Quote args: -o "-Ow"
+
+See the manual pages for aplaymidi, arecord and timidiy for option details.
+
+=item B<-i>
+
+By default an external synth is assumed. Use this option to force use
+of timidity.
+
+=item B<-b>
+
+By default the track "bg.wav" is created with all tracks playing. This
+option will skip creating that track.
+
+=item B<-t>
+
+Create only track XX. The track name is passed to mma and its -T option.
+To create a set of tracks you need multiple -t settings: -t Solo -t Chord-piano
+
+The track names are NOT case sensitive.
+
+=item B<-x>
+
+Exclude tracks. Again, a separate -x is required for each track to skip.
+
+=back
+
+=head1 SEE ALSO
+
+mma(1)
+
+=head1 RESOURCES
+
+The latest version of this program is always distributed with
+B<MMA> and is available at http://www.mellowood.ca/mma
+
+=head1 AUTHOR
+
+Bob van der Poel <bob@mellowood.ca>
+
+=head1 LICENSE
+
+mma-splitrec.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.

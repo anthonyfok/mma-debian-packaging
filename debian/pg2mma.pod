@@ -1,0 +1,89 @@
+=head1 NAME
+
+pg2mma.py
+
+=head1 SYNOPSIS
+
+B<pg2mma.py> <infile> <outfile>
+
+No options. Both infile and outfile must be specified. No files will
+be overwritten.
+
+=head1 DESCRIPTION
+
+This program is used to convert a PGMusic .pat file containing
+extended patch definitions to a MMA format. The .pat files will
+contain lines like:
+
+=over 6
+
+        [                                                      
+        [Yamaha PSR 9000 - E.Piano                                 
+        [     (P1)                                                             
+        4.0.114=Galaxy EP
+        4.0.117=Stage EP
+        4.0.115=Polaris EP
+        5.0.118=Jazz Chorus
+        5.0.113=Hyper Tines
+        4.0.119=Cool! EP
+        4.0.120=Phase EP
+        5.0.116=New Tines
+
+=back
+
+This program will convert the above to:
+
+=over 6
+
+Begin Patch Set
+
+  // Yamaha PSR 9000 - E.Piano                                 
+  //   (P1)                                                             
+  4.0.114=GalaxyEp
+  4.0.117=StageEp
+  4.0.115=PolarisEp
+  5.0.118=JazzChorus
+  5.0.113=HyperTines
+  4.0.119=Cool!Ep
+  4.0.120=PhaseEp
+  5.0.116=NewTines
+
+End
+
+=back
+
+The names in the orginal file are converted to CamelCase; both ';' and []
+comments are converted to MMA // style.
+
+The conversion recognizes the "ONEBASED" keyword. When found, subsequent
+patch values will be decremented by 1.
+
+The produced files should be useable directly by mma. However, there are a
+few cautions:
+
+=over 6
+
+=item * the .pat files we've looked at do contain errors. 
+
+=item * many of the .pat files redefine existing GM voice names. You
+will need to change these names or put up with warning
+messages from MMA.
+
+=back
+
+=head1 SEE ALSO
+
+mma(1)
+
+=head1 RESOURCES
+
+The latest version of this program is always distributed with
+B<MMA> and is available at http://www.mellowood.ca/mma
+
+=head1 AUTHOR
+
+Bob van der Poel <bob@mellowood.ca>
+
+=head1 LICENSE
+
+pg2mma.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
