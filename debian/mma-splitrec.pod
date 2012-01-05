@@ -1,10 +1,10 @@
 =head1 NAME
 
-B<mma-splitrec.py> - Create wav tracks from MMA input file
+B<mma-splitrec> - Create wav tracks from MMA input file
 
 =head1 SYNOPSIS
 
-B<mma-splitrec.py> <somefile.mma>
+B<mma-splitrec> <somefile.mma>
 
 =head1 DESCRIPTION
 
@@ -16,7 +16,7 @@ The command:
 
 =over 12
 
-mma-splitrec.py somefile.mma
+mma-splitrec somefile.mma
 
 =back
 
@@ -36,7 +36,7 @@ Using timidity i've had good success with the following:
 
 =over 12
 
-1. use mma-splitrec.py with a decent soundfont to create tracks,
+1. use mma-splitrec with a decent soundfont to create tracks,
 
 2. use timidity to create a mix track of the mma file,
 
@@ -110,4 +110,4 @@ Bob van der Poel <bob@mellowood.ca>
 
 =head1 LICENSE
 
-mma-splitrec.py is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
+mma-splitrec is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
