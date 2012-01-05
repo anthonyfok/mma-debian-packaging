@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+override_dh_install:
+	dh_install
+	cp mma.py debian/mma/usr/bin/mma
+
+override_dh_installchangelogs:
+	dh_installchangelogs text/CHANGES-1.6
+
+%:
+	dh $@
