@@ -1,4 +1,4 @@
-mma-* usr/bin
-lib usr/share/mma
-includes usr/share/mma
-MMA/*.py usr/share/mma/MMA
+mma-*    ./debian/usr/bin
+lib      ./debian/usr/share/mma
+includes ./debian/usr/share/mma
+MMA/*.py ./debian/usr/share/mma/MMA
