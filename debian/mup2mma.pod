@@ -1,6 +1,6 @@
-=head1 NAME
+=head1 NAME 
 
-mup2mma
+mup2mma - create MMA file using chords from MUP music notation file
 
 =head1 SYNOPSIS
 

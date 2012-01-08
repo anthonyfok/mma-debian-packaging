@@ -1,6 +1,6 @@
-=head1 NAME
+=head1 NAME 
 
-pg2mma
+pg2mma - convert PGMusic .pat file to MMA format
 
 =head1 SYNOPSIS
 
