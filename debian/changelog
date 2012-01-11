@@ -1,6 +1,6 @@
 mma (12.01-1) unstable; urgency=low
 
-  * New Upstream Release
+  * New Upstream Release (Closes: #655441).
 
  -- Joel Roth <joelz@pobox.com>  Sun, 08 Jan 2012 09:16:02 -1000
 
