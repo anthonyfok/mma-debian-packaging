@@ -2,18 +2,27 @@ Source: mma
 Section: sound
 Priority: optional
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
-Uploaders: Joel Roth <joelz@pobox.com>
-Build-Depends: debhelper (>= 9)
-Build-Depends-Indep: python-support
-Standards-Version: 3.9.1
+Uploaders: Anthony Fok <foka@debian.org>
+Build-Depends: debhelper (>= 9), dh-exec, dh-python, python
+Standards-Version: 3.9.6
+X-Python-Version: >= 2.6
 Homepage: http://www.mellowood.ca/mma/
-Vcs-Git: git://git.debian.org/pkg-multimedia/mma.git
-Vcs-Browser: http://git.debian.org/?p=pkg-multimedia/mma.git
+Vcs-Git: git://anonscm.debian.org/pkg-multimedia/mma.git
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-multimedia/mma.git
 
 Package: mma
 Architecture: all
-Depends: ${python:Depends},
- ${misc:Depends}
-Description: Musical Midi Accompaniment generator
- MMA creates midi tracks for a soloist to perform over from a user
- supplied file containing chords and MMA directives.
+Depends: ${python:Depends}, ${misc:Depends}, python-tk
+Recommends: timidity
+Enhances: solfege
+Description: Musical MIDI Accompaniment Generator
+ “MMA—Musical MIDI Accompaniment” is an accompaniment generator.
+ It creates MIDI tracks for a soloist to perform over from
+ a user-supplied file containing chords and MMA directives.
+ .
+ MMA is very versatile and generates excellent tracks. It comes
+ with an extensive user-extendable library with a variety of patterns
+ for various popular rhythms, detailed user manuals, and several demo songs.
+ .
+ MMA is a command-line driven program. It creates MIDI files which are then
+ played by a sequencer or MIDI file play program.
