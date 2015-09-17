@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Uploaders: Joel Roth <joelz@pobox.com>
-Build-Depends: debhelper (>=7.0.50~)
+Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: python-support
 Standards-Version: 3.9.1
 Homepage: http://www.mellowood.ca/mma/
