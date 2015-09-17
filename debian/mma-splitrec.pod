@@ -9,7 +9,7 @@ B<mma-splitrec> <somefile.mma>
 =head1 DESCRIPTION
 
 This program is used to create a set of wav tracks from a MMA
-input file. You need MMA, the input file, a midiplayer, audio
+input file. You need MMA, the input file, a MIDI player, audio
 recorder and an external synth or timidity.
 
 The command:
@@ -26,39 +26,53 @@ the results into a series of wav files.
 
 Also created is a mix file with all the tracks. This is called "bg.wav".
 
-When using an external synth the conversion takes a long time ...
+When using an external synth, the conversion takes a long time ...
 about the number of tracks times the duration of the song. Be patient.
 
-If you have timidity installed you can let it create the wav files. It works
-pretty well, depending on your installed soundfonts.
+If you have timidity installed, you can let it create the wav files.
+It works pretty well, depending on your installed soundfonts.
 
-Using timidity i've had good success with the following:
+Using timidity, I've had good success with the following:
 
-=over 12
+=over 4
 
-1. use mma-splitrec with a decent soundfont to create tracks,
+=item 1.
 
-2. use timidity to create a mix track of the mma file,
+use mma-splitrec with a decent soundfont to create tracks,
 
-3. copy the mix to my Zoom H4 recorder into a project file,
+=item 2.
 
-4. play/create lots of sax tracks while listening to the mix (4 track mode on the H4),
+use timidity to create a mix track of the mma file,
 
-5. copy the sax tracks the split tracks from (1) into audacity,
+=item 3.
 
-6. edit the tracks,
+copy the mix to my Zoom H4 recorder into a project file,
 
-7. publish the song and become rich and famous!
+=item 4.
+
+play/create lots of sax tracks while listening to the mix (4 track mode on the H4),
+
+=item 5.
+
+copy the sax tracks the split tracks from (1) into audacity,
+
+=item 6.
+
+edit the tracks,
+
+=item 7.
+
+publish the song and become rich and famous!
 
 =back
 
 =head1 OPTIONS
 
-=over 12
+=over 8
 
 =item B<-m> 
 
-Set the midi file player (aplaymidi) options. This is usually
+Set the MIDI file player (aplaymidi) options. This is usually
 the port. You should quote the arg:  -m "-p 20"
 
 =item B<-r>
@@ -74,7 +88,7 @@ See the manual pages for aplaymidi, arecord and timidiy for option details.
 
 =item B<-i>
 
-By default an external synth is assumed. Use this option to force use
+By default, an external synth is assumed. Use this option to force use
 of timidity.
 
 =item B<-b>
@@ -110,4 +124,4 @@ Bob van der Poel <bob@mellowood.ca>
 
 =head1 LICENSE
 
-mma-splitrec is Copyright 2002-2008 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.
+mma-splitrec is Copyright 2002-2011 Bob van der Poel. Free use of this software is granted under the terms of the GNU General Public License.

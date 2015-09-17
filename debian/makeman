@@ -1,16 +1,16 @@
 #!/usr/bin/env perl
+
 use Modern::Perl;
+
 my %files = qw(
 	mma-splitrec.pod mma-splitrec
 	mup2mma.pod      mup2mma
 	pg2mma.pod       pg2mma
 );
-while ( my ($pod,$exec) = each %files ){
-	
+
+while (my ($pod,$exec) = each %files) {
 	my $file = "$exec.1";
 	my $cmd = qq(pod2man -c " " -r " " --section=1 $pod $exec.1 --name=$exec);
 	say $cmd;
 	system $cmd;
-
 }
-

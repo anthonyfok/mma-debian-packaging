@@ -14,7 +14,7 @@ the macro "C" for chord. In my MUP files I have the following:
 
 =over 6
 
-define C bold (11) chord above all: @                                      
+define C bold (11) chord above all: @
 
 =back
                                                                                    
