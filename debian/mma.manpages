@@ -1,7 +1,7 @@
-docs/man/mma-libdoc.8
-docs/man/mma-renum.1
 docs/man/mma.1
-debian/mma-gb.1
+docs/man/mma-gb.1
+docs/man/mma-renum.1
+docs/man/mma-libdoc.8
 debian/mma-mnx.1
 debian/mma-rm2std.1
 debian/mma-splitrec.1
