@@ -108,7 +108,7 @@ DefGroove CountrySwingSus   Adds a sustained fiddle to the hoedown.
 Groove CountrySwing
 
 Begin Arpeggio
-	Sequence     Fiddle1   Fiddle2   /    /
+	Sequence     Fiddle1   Fiddle2  
 	RSkip        20
 	Articulate  97 
 	SeqRnd On

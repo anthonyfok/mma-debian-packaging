@@ -189,7 +189,23 @@ Groove CountryBlues1Walk
 Arpeggio Groove CountryBluesFill
 DefGroove CountryBlues1WalkFill     Piano triplets, walking bass and fiddle.
 
+//////////////////////////////////////
+/// Intro
 
+Groove CountryBlues
+
+Drum-Snare  Sequence  -//*  *  *     D13
+Drum-HH     Sequence  -//*  *  *     {D12; D12 Shift .5}
+Begin Drum-Clap
+    Sequence  *  *  D1234 D1
+    Rskip 0
+End
+Chord 	    Sequence  *  *  * L1
+Chord-1     Sequence  *  *  * z
+Bass        Sequence    B134    B13    B134  B1
+Walk        Sequence -
+
+DefGroove CountryBluesIntro  A 4 bar introduction.
 
 //////////////////////////////////////
 /// Endings

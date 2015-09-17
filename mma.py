@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python 
 
 """
 The program "MMA - Musical Midi Accompaniment" and the associated
@@ -27,21 +27,13 @@ import os
 import platform
 
 # Ensure a proper version is available.
-
-pyMaj = 2
-pyMin = 5
-
-if sys.version_info[0] != pyMaj or sys.version_info[1] < pyMin:
-    if sys.version_info[0] == 3:
-        print ("\n  MMA doesn't work with Python 3.x at this time.")
-        print ("  Changing the interpreter to '/usr/bin/python2' will probably work.")
-        print ("  This means you'll need to edit the first line in the mma.py script.\n")
-    else:
-        print ("\nYou need a more current version of Python to run MMA.")
-        print ("We're looking for something equal or greater than version %s.%s" \
-                 % (pyMaj, pyMin))
+# This test forces 2.6+ or 3.x
+if sys.version_info[0] == 2 and sys.version_info[1] < 6:
+    print ("\nYou need a more current version of Python to run MMA.")
+    print ("We're looking for something equal or greater than version 2.6")
     print ("Current Python version is %s\n" % sys.version)
     sys.exit(0)
+
 
 """ MMA uses a number of application specific modules. These should
     be installed in a mma modules directory or in your python
@@ -62,14 +54,11 @@ platform = platform.system()
 
 if platform == 'Windows':
     dirlist = ( sys.path[0], "c:/mma", "c:/program files/mma", ".")
-    midiPlayer = ['']   # must be a list!
 elif platform == 'Darwin':
     dirlist = ( sys.path[0], "/Users/Shared/mma", 
              "/usr/local/share/mma", "/usr/share/mma", '.' )
-    midiPlayer = ['open']   # must be a list!
 else:
     dirlist = ( sys.path[0], "/usr/local/share/mma", "/usr/share/mma", '.' )
-    midiPlayer = ["aplaymidi"] # Must be a list!
 
 for d in dirlist:
     moddir = os.path.join(d, 'MMA')
@@ -79,16 +68,8 @@ for d in dirlist:
         MMAdir = d
         break
 
-if platform != 'Windows':
-    try:
-        import psyco
-        psyco.full()
-    except ImportError:
-        pass
-
-
 # Call the mainline code. Hopefully, byte-compiled.
-
-
+# NOTE: the variables MMAdir and platform are read (imported)
+#       by gbl.py.
 import MMA.main
 

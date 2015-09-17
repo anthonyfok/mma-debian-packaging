@@ -1,4 +1,3 @@
-
 # harmony.py
 
 """
@@ -34,19 +33,23 @@ def setHarmony(self, ln):
 
     for n in ln:
         n = n.upper()
-        if n in ( '-', '-0', 'NONE'):
+        if n in ('-', '0', 'NONE'):
             n = None
 
         tmp.append(n)
 
     self.harmony = seqBump(tmp)
 
-    if self.vtype in ( 'CHORD', 'DRUM' ):
+    if self.vtype in ('CHORD', 'DRUM'):
         warning("Harmony setting for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        print "Set %s Harmony to:" % self.name,
-        printList(self.harmony)
+        msg = ["Set %s Harmony to:" % self.name]
+        for a in self.harmony:
+            if not a:
+                a = 'None'
+            msg.append(a)
+        print(' '.join(msg))
 
 
 def setHarmonyOnly(self, ln):
@@ -57,7 +60,7 @@ def setHarmonyOnly(self, ln):
 
     for n in ln:
         n = n.upper()
-        if n in ('-', '0'):
+        if n in ('-', '0', 'NONE'):
             n = None
 
         tmp.append(n)
@@ -65,12 +68,16 @@ def setHarmonyOnly(self, ln):
     self.harmony = seqBump(tmp)
     self.harmonyOnly = seqBump(tmp)
 
-    if self.vtype in ( 'CHORD', 'DRUM'):
+    if self.vtype in ('CHORD', 'DRUM'):
         warning("HarmonyOnly setting for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        print "Set %s HarmonyOnly to:" % self.name,
-        printList(self.harmonyOnly)
+        msg = ["Set %s HarmonyOnly to:" % self.name]
+        for a in self.harmonyOnly:
+            if not a:
+                a='None'
+            msg.append(a)
+        print(' '.join(msg))
 
 
 def setHarmonyVolume(self, ln):
@@ -80,20 +87,22 @@ def setHarmonyVolume(self, ln):
     tmp = []
 
     for n in ln:
-        v=stoi(n)
+        v = stoi(n)
 
-        if v<0:
+        if v < 0:
             error("HarmonyVolume adjustment must be positive integer")
         tmp.append(v/100.)
 
     self.harmonyVolume = seqBump(tmp)
 
-    if self.vtype in ( 'CHORD', 'DRUM' ):
+    if self.vtype in ('PLECTRUM', 'DRUM'):
         warning("HarmonyVolume adjustment for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        print "Set %s HarmonyVolume to:" % self.name,
-        printList(self.harmonyVolume)
+        msg = ["Set %s HarmonyVolume to:" % self.name]
+        for a in self.harmonyVolume:
+            msg.append(str(a*100))
+        print(' '.join(msg))
 
 
 ##########################################################
@@ -106,70 +115,70 @@ def harmonize(hmode, note, chord):
     for tp in hmode.split('+'):
 
         if tp in ('2', '2BELOW'):
-            hnotes.append( gethnote(note, chord) )
+            hnotes.append(gethnote(note, chord))
 
         elif tp == '28Below':
-            hnotes.append( gethnote(note, chord)-12)
+            hnotes.append(gethnote(note, chord)-12)
 
         elif tp == '2ABOVE':
-            hnotes.append( gethnote(note, chord)+12 )
+            hnotes.append(gethnote(note, chord)+12)
 
         elif tp == '28ABOVE':
-            hnotes.append( gethnote(note, chord)+24 )
+            hnotes.append(gethnote(note, chord)+24)
 
-        elif tp in ( '3', '3BELOW'):
+        elif tp in ('3', '3BELOW'):
             a = gethnote(note, chord)
             b = gethnote(a, chord)
-            hnotes.extend( [a, b] )
-        
+            hnotes.extend([a, b])
+
         elif tp == '38BELOW':
             a = gethnote(note, chord)
             b = gethnote(a, chord)
-            hnotes.extend( [a-12, b-12] )
-   
+            hnotes.extend([a-12, b-12])
+
         elif tp == '3ABOVE':
             a = gethnote(note, chord)
             b = gethnote(a, chord)
-            hnotes.extend( [a+12, b+12] )
+            hnotes.extend([a+12, b+12])
 
         elif tp == '38ABOVE':
             a = gethnote(note, chord)
             b = gethnote(a, chord)
-            hnotes.extend( [a+24, b+24] )
+            hnotes.extend([a+24, b+24])
 
         elif tp in ('OPEN', "OPENBELOW"):
-            a=gethnote(note, chord)
-            hnotes.append( gethnote(a, chord))
-            
+            a = gethnote(note, chord)
+            hnotes.append(gethnote(a, chord))
+
         elif tp == 'OPEN8BELOW':
             a = gethnote(note, chord)
-            hnotes.append( gethnote(a-12, chord))
+            hnotes.append(gethnote(a-12, chord))
 
         elif tp == 'OPENABOVE':
-            a=gethnote(note, chord)
-            hnotes.append( gethnote(a, chord) + 12 )
+            a = gethnote(note, chord)
+            hnotes.append(gethnote(a, chord) + 12)
  
         elif tp == 'OPEN8ABOVE':
-            a=gethnote(note, chord)
-            hnotes.append( gethnote(a, chord) + 24 )
+            a = gethnote(note, chord)
+            hnotes.append(gethnote(a, chord) + 24)
 
         elif tp in ('8', '8BELOW'):
-            hnotes.append( note - 12 )
+            hnotes.append(note - 12)
 
         elif tp == '8ABOVE':
-            hnotes.append( note + 12 )
+            hnotes.append(note + 12)
 
         elif tp in ('16', '16BELOW'):
-            hnotes.append( note - (2 * 12) )
+            hnotes.append(note - (2 * 12))
 
         elif tp == '16ABOVE':
-            hnotes.append( note + (2 * 12) )
+            hnotes.append(note + (2 * 12))
 
         elif tp in ('24', '24BELOW'):
-            hnotes.append( note - (3 * 12) )
+            hnotes.append(note - (3 * 12))
 
         elif tp == '24ABOVE':
-            hnotes.append( note + (3 * 12) )
+            hnotes.append(note + (3 * 12))
         else:
             error("Unknown harmony type '%s'" % tp)
 
@@ -178,6 +187,7 @@ def harmonize(hmode, note, chord):
     """
 
     return list(set(hnotes))
+
 
 def gethnote(note, chord):
     """ Determine harmony notes for a note based on the chord.
@@ -194,9 +204,8 @@ def gethnote(note, chord):
         note.
     """
 
-    wm="No harmony note found since no chord, using note " + \
-        "0 which will sound bad"
-
+    wm = "No harmony note found since no chord, using note " \
+         "0 which will sound bad"
 
     if not chord:        # should never happen!
         warning(wm)
@@ -208,12 +217,12 @@ def gethnote(note, chord):
     # ensure that the note is in the chord
 
     while ch[-1] < note:
-        for i,n in enumerate(ch):
-            ch[i]+=12
+        for i, n in enumerate(ch):
+            ch[i] += 12
 
     while ch[0] >= note:
-        for i,v in enumerate(ch):
-            ch[i]-=12
+        for i, v in enumerate(ch):
+            ch[i] -= 12
 
     # get one lower than the note
 
@@ -222,9 +231,8 @@ def gethnote(note, chord):
             warning(wm)
             return 0
 
-        h=ch.pop()
-        if h<note: break
+        h = ch.pop()
+        if h < note:
+            break
 
     return h
-
-

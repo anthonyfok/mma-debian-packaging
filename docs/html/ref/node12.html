@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html592"
+<A NAME="tex2html625"
   HREF="node13.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html590"
+<A NAME="tex2html623"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html584"
+<A NAME="tex2html617"
   HREF="node11.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html593"
+<B> Next:</B> <A NAME="tex2html626"
   HREF="node13.html">Randomizing</A>
-<B> Up:</B> <A NAME="tex2html591"
+<B> Up:</B> <A NAME="tex2html624"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html585"
+<B> Previous:</B> <A NAME="tex2html618"
   HREF="node11.html">Emulating plucked instruments: Plectrum</A>
 <BR>
 <BR></DIV>
@@ -68,17 +68,16 @@ You might want to use an A<SMALL>RIA</SMALL> to embellish a section of a song
 complete melody over the song chords.
 
 <P>
-In a traditional song the melody depends on two parts: patterns
-(IE. note lengths, volume, articulation) and pitch (usually determined
-by the chords in a song). If you have been using 
+In a traditional song the melody depends on two parts: patterns (IE.
+note lengths, volume, articulation) and pitch (usually determined by
+the chords in a song). If you have been using 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  at all you will
 know that that chords are the building block of what 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  does
-already. So, to generate a melody we just need some kind of
-pattern. And, since 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  already uses patterns in most things it
-does, it is a short step to use a specialized pattern to generate a
-melody.
+already. So, to generate a melody we just need some kind of pattern.
+And, since 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  already uses patterns in most things it does, it is a
+short step to use a specialized pattern to generate a melody.
 
 <P>
 It might serve to look at the sample song files enclosed in this
@@ -87,7 +86,7 @@ too bad?
 
 <P>
 Just like other track, you can create as many A<SMALL>RIA</SMALL>s as you
-want.  So, you can have the tracks A<SMALL>RIA-1</SMALL>, A<SMALL>RIA</SMALL>, and
+want. So, you can have the tracks A<SMALL>RIA-1</SMALL>, A<SMALL>RIA</SMALL>, and
 A<SMALL>RIA-SILLY</SMALL> all at the same time. And, the majority of other
 commands (like O<SMALL>CTAVE</SMALL>, A<SMALL>RTICULATE</SMALL>, H<SMALL>ARMONY</SMALL>, etc.)
 apply to A<SMALL>RIA</SMALL>s.
@@ -106,12 +105,22 @@ The following commands are important to note:
 </DD>
 <DT><STRONG>ScaleType</STRONG></DT>
 <DD>Much like a scale track. By default, the setting for
-  this is CHORD. But, you can use AUTO, SCALE, CHORD or
+  this is CHORD. But, you can use AUTO, SCALE, CHORD, KEY or
   CHROMATIC. AUTO and SCALE are identical and force 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to select
   notes from the scale associated with the current chord; CHROMATIC
   generates an 11 tone scale starting at the root note of the chord;
-  CHORD forces the selection to the notes in the current chord.
+  CHORD forces the selection to the notes in the current chord; KEY
+  sets the scale to one based on the current key signature (see
+  <A HREF="node26.html#keysignature">here</A>).
+
+<P>
+In addition, each of the above listed S<SMALL>CALE</SMALL>T<SMALL>YPE</SMALL>s can have a
+  single ``-'' appended to it. If this case, the list of notes used
+  for the melody will be depleted until all the notes are used or
+  there is a key change, chord change, etc. This mode will, mostly, avoid
+  repeated notes. You might even think of it as a poor man's 12 tone
+  composition tool (it really, really isn't).
 
 <P>
 </DD>
@@ -120,10 +129,10 @@ The following commands are important to note:
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  processes the song it moves a note-selection
   pointer up or down. By default D<SMALL>IRECTION</SMALL> is set to the single
   value "1" which tells 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to add 1 after each note is
-  generated. However, you can set the value to an integer -4 to 4 or
-  the special value "r*". The &#8220;r&#8221; setting creates a random
-  direction. You can have 1 to 4 &#8220;r&#8221;s:
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to add 1 after each note is generated.
+  However, you can set the value to an integer -4 to 4 or the special
+  value "r*". The ``r'' setting creates a random direction. You can
+  have 1 to 4 ``r''s:
 
 <P>
 <BLOCKQUOTE>
@@ -168,17 +177,13 @@ First, here is a simplified sample track definition:
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
     <B>Begin Aria
-<BR>
-Voice JazzGuitar
-<BR>
-Volume f 
-<BR>
-Sequence 1.5 8 90; 2 8 90; 2.5 8 90; 
-<BR>
-3 8 90; 3.5 8 90; 4 8 90; 4.5 8 90 
-<BR>
-ScaleType Scale   Range 1
-    Direction 0 0 1 2 -4 0 1 r  
+<BR>&nbsp;&nbsp; Voice JazzGuitar
+<BR>&nbsp;&nbsp;  Volume f 
+<BR>&nbsp;&nbsp;  Sequence {1.5 8 90; 2 8 90; 2.5 8 90; \
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 8 90; 3.5 8 90; 4 8 90; 4.5 8 90} 
+<BR>&nbsp;&nbsp; ScaleType Scale 
+<BR>&nbsp;&nbsp; Range 1 
+<BR>&nbsp;&nbsp; Direction 0 0 1 2 -4 0 1 r  
 <BR>
 End   </B> 
    
@@ -245,9 +250,9 @@ event in the set S<SMALL>EQUENCE</SMALL>:
 If you were to change the S<SMALL>CALE</SMALL>T<SMALL>YPE</SMALL> or R<SMALL>ANGE</SMALL> you would
 get a completely different series. Really, tables like this one are
 very difficult to determine and quite useless. Just try different
-D<SMALL>IRECTION</SMALL> and R<SMALL>ANGE</SMALL> settings, S<SMALL>CALETYPE</SMALL>s,
-etc. Most combinations will sound fine, but Chromatic scales might not
-be to your liking.
+D<SMALL>IRECTION</SMALL> and R<SMALL>ANGE</SMALL> settings, S<SMALL>CALETYPE</SMALL>s, etc.
+Most combinations will sound fine, but Chromatic scales might not be
+to your liking.
 
 <P>
 Please note the following:
@@ -271,8 +276,8 @@ Please note the following:
 </LI>
 <LI>Process a few bars of music.
 </LI>
-<LI>Load a new groove, but this time with a S<SMALL>EQSIZE</SMALL> of
-    2. Now, the A<SMALL>RIA</SMALL> will be truncated. This behavior is
+<LI>Load a new groove, but this time with a S<SMALL>EQSIZE</SMALL> of 2.
+    Now, the A<SMALL>RIA</SMALL> will be truncated. This behavior is
     duplicated in other tracks as well, but it might be unexpected
     here.
   
@@ -281,19 +286,20 @@ Please note the following:
 
 <P>
 </LI>
-<LI>D<SMALL>IRECTION</SMALL> can not be changed on a bar per bar basis. It
-  applies to the entire sequence. After each note in the A<SMALL>RIA</SMALL>
-  is generated a pointer advances to the next direction in the list.
+<LI>D<SMALL>IRECTION</SMALL> <SPAN  CLASS="textit">can not</SPAN> be changed on a bar by bar
+  basis. It applies to the entire sequence. After each note in the
+  A<SMALL>RIA</SMALL> is generated a pointer advances to the next direction in
+  the list.
 
 <P>
 </LI>
 </UL>
 
 <P>
-You can make dramatic changes to your songs with a few simple
-tricks. Try modifying the D<SMALL>IRECTION</SMALL> settings just slightly; use
-several patterns and S<SMALL>EQ</SMALL>R<SMALL>ND</SMALL> to generate less predictable
-patterns; use H<SMALL>ARMONY</SMALL>O<SMALL>NLY</SMALL> with a different voice and pattern.
+You can make dramatic changes to your songs with a few simple tricks.
+Try modifying the D<SMALL>IRECTION</SMALL> settings just slightly; use several
+patterns and S<SMALL>EQ</SMALL>R<SMALL>ND</SMALL> to generate less predictable patterns; use
+H<SMALL>ARMONY</SMALL>O<SMALL>NLY</SMALL> with a different voice and pattern.
 
 <P>
 Oh, and have fun!
@@ -304,26 +310,26 @@ Oh, and have fun!
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html592"
+<A NAME="tex2html625"
   HREF="node13.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html590"
+<A NAME="tex2html623"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html584"
+<A NAME="tex2html617"
   HREF="node11.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html593"
+<B> Next:</B> <A NAME="tex2html626"
   HREF="node13.html">Randomizing</A>
-<B> Up:</B> <A NAME="tex2html591"
+<B> Up:</B> <A NAME="tex2html624"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html585"
+<B> Previous:</B> <A NAME="tex2html618"
   HREF="node11.html">Emulating plucked instruments: Plectrum</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

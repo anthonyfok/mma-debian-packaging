@@ -54,7 +54,7 @@ Begin Chord-Voice
     Sequence {1 2 80 70 0; 3 2 70 60 0}
 End
 
-DefGroove StringBalladVoice
+DefGroove StringBalladVoice   Add a sustained voice to the strings.
 
 //////////////////////////////
 /// Stummed guitar

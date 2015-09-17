@@ -29,11 +29,12 @@ Begin Solo-2
   Volume m
   Articulate 200
   Arpeggiate Rate=32 Decay=-4 Direction=Down
-  Harmony OpenBelow+OpenAbove
+  Harmony 8Above+OpenAbove
 End
 
 // Include the recorded MIDI. Note the RIFF option ...
-// We do this 2 times just to change the volumes (for demo)
+// The first line imports (as riff) the file 'rec1.mid' into Solo and Solo-1
+// The second line imports (also as riff) the file 'rec2.mid' into Solo-2
 
 Midiinc File=rec1.mid Solo=1,Riff Solo-1=1,Riff Volume=90
 MidiInc File=rec2.mid Solo-2=1,Riff Volume=100
@@ -45,3 +46,4 @@ MidiInc File=rec2.mid Solo-2=1,Riff Volume=100
 	C
 	G7 * 2
 	C
+   z!

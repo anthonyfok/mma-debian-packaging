@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html578"
+<A NAME="tex2html610"
   HREF="node12.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html576"
+<A NAME="tex2html608"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html570"
+<A NAME="tex2html602"
   HREF="node10.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html579"
+<B> Next:</B> <A NAME="tex2html611"
   HREF="node12.html">Automatic Melodies: Aria Tracks</A>
-<B> Up:</B> <A NAME="tex2html577"
+<B> Up:</B> <A NAME="tex2html609"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html571"
+<B> Previous:</B> <A NAME="tex2html603"
   HREF="node10.html">Solo and Melody Tracks</A>
 <BR>
 <BR></DIV>
@@ -51,14 +51,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html580"
+<LI><A NAME="tex2html612"
   HREF="node11.html#SECTION001110000000000000000">Tuning</A>
-<LI><A NAME="tex2html581"
+<LI><A NAME="tex2html613"
   HREF="node11.html#SECTION001120000000000000000">Capo</A>
-<LI><A NAME="tex2html582"
+<LI><A NAME="tex2html614"
   HREF="node11.html#SECTION001130000000000000000">Strum</A>
-<LI><A NAME="tex2html583"
-  HREF="node11.html#SECTION001140000000000000000">Patterns</A>
+<LI><A NAME="tex2html615"
+  HREF="node11.html#SECTION001140000000000000000">Articulate</A>
+<LI><A NAME="tex2html616"
+  HREF="node11.html#SECTION001150000000000000000">Patterns</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
@@ -70,8 +72,8 @@ Emulating plucked instruments: Plectrum Tracks
 </H1>
 
 <P>
-P<SMALL>LECTRUM</SMALL><A NAME="tex2html47"
-  HREF="#foot5469"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>tracks are designed to let 
+P<SMALL>LECTRUM</SMALL><A NAME="tex2html51"
+  HREF="#foot6106"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>tracks are designed to let 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  create tracks that sound, remarkably,
 like real, strummed instruments (guitars, mandolins, banjos, etc).
 
@@ -84,12 +86,12 @@ sound until they are changed (a new note) or muted.
 <P>
 When creating a P<SMALL>LECTRUM</SMALL> pattern or sequence you simply set an
 offset, strum duration and volumes for each string of the
-&#8220;instrument&#8221;.
+``instrument''.
 
 <P>
 To aid in debugging, a special D<SMALL>EBUG</SMALL> option P<SMALL>LECTRUM</SMALL> is
 provided. When enabled this will display chord shapes for generated
-chords. See <A HREF="node25.html#debugging">here</A> for
+chords. See <A HREF="node26.html#debugging">here</A> for
 information to enable/disable this option.
 
 <P>
@@ -114,8 +116,8 @@ instrument. For example, to duplicate the default:
       </Table>
 
 <P>
-In this case we have set six strings. The first string is a low &#8220;e&#8221;,
-the second a low &#8220;a&#8221;, etc.
+In this case we have set six strings. The first string is a low ``e'',
+the second a low ``a'', etc.
 
 <P>
 Similarly, you could define a tenor banjo with:
@@ -148,17 +150,18 @@ Capo</A>
 </H1> 
 
 <P>
-A &#8220;capo&#8221; is small bar which is placed on the neck of a guitar, banjo
+A ``capo'' is small bar which is placed on the neck of a guitar, banjo
 or other stringed instrument to raise its pitch. They are quite useful
 when a song is in a pitch too low for a singer ... a capo placed
 on the guitar raises the pitch of each played chord. Much easier for a
 player than having to change (raise) each chord in the song. In 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  the use of a P<SMALL>LECTRUM</SMALL> C<SMALL>APO</SMALL> setting is a bit different:
-it doesn't change the chord pitches. A &#8220;C Major&#8221; chord remains a &#8220;C
-Major&#8221; chord. However, the actual note assignments to the different
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 
+the use of a P<SMALL>LECTRUM</SMALL> C<SMALL>APO</SMALL> setting is a bit different:
+it doesn't change the chord pitches. A ``C Major'' chord remains a ``C
+Major'' chord. However, the actual note assignments to the different
 strings on the instrument can (and most likely) changes. Depending on
-the tuning of the &#8220;instrument&#8221; a &#8220;C&#8221; chord with a C<SMALL>APO 2</SMALL>
-will be created as a &#8220;B&#8221; <SPAN  CLASS="textit">chord shape</SPAN> played above the second fret. In most cases
+the tuning of the ``instrument'' a ``C'' chord with a C<SMALL>APO 2</SMALL>
+will be created as a ``B'' <SPAN  CLASS="textit">chord shape</SPAN> played above the second fret. In most cases
 a chord with a positive C<SMALL>APO</SMALL> value will have a higher tonality.
 
 <P>
@@ -188,12 +191,12 @@ G<SMALL>ROOVE</SMALL>s.
 
 <P>
 It is also possible to change the pitch or tonality for individual
-chords with the &#8220;barre&#8221; chord name extension (detailed
-<A HREF="node31.html#barre-chords">here</A>).
+chords with the ``barre'' chord name extension (detailed
+<A HREF="node32.html#barre-chords">here</A>).
 
 <P>
 Yet another way to change the pitch is to use the O<SMALL>CTAVE</SMALL>
-settings <A HREF="node25.html#octave">here</A>.
+settings <A HREF="node26.html#octave">here</A>.
 
 <P>
 <SPAN  CLASS="textit">Remember: unlike a real instrument, neither <SMALL>CAPO</SMALL> or barre chords
@@ -215,7 +218,7 @@ offsets (delays) from the first string. In most cases this will
 sound just fine (remember, we don't have a real guitar here! It's a
 virtual model which is not meant to be the same). There are cases when
 you might want to modify the order. Use the S<SMALL>TRUM</SMALL> option to
-change the default to &#8220;Start&#8221;, &#8220;Center&#8221; or &#8220;End&#8221;. Example:
+change the default to ``Start'', ``Center'' or ``End''. Example:
 
 <P>
 
@@ -235,14 +238,72 @@ The P<SMALL>LECTRUM </SMALL>S<SMALL>TRUM</SMALL> command permits <SPAN  CLASS="t
 
 <P>
 
-<H1><A NAME="SECTION001140000000000000000">
+<H1><A NAME="SECTION001140000000000000000"></A>
+<A NAME="sec-plectrum-articulate"></A>
+<BR>
+Articulate
+</H1>
+
+<P>
+When the a pattern changes, strings need to be muted. By default, this
+is done at the same point as the new strings are sounded. However, you
+can adjust this with the A<SMALL>RTICULATE</SMALL> command. The command takes
+single values representing the number of MIDI ticks to move the off
+action back.
+
+<P>
+For example:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Plectrum-Jazzy  Articulate 40   </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+would subtract 40 MIDI ticks from the normally determined offset. You
+can use any value from 0 to 500 in this command.
+
+<P>
+Generally speaking, the use of this option will give a more staccato
+feeling to your track.
+
+<P>
+A value of 0 will restore the setting to its default (off). The use of large
+values is not recommended; however, the OFF point will never be before
+the ON so you'll just end up with very short sounding chords. Remember
+that 192 MIDI ticks is equivalent to a quarter note.
+
+<P>
+Just like in A<SMALL>RTICULATE</SMALL> for other tracks (see
+<A HREF="node26.html#articulate">here</A> for full
+details) you can increment or decrement the current settings:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Plectrum Articulate -5 +5  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+You can have different settings for each bar in your sequence.
+
+<P>
+
+<H1><A NAME="SECTION001150000000000000000">
 Patterns</A>
 </H1>
 
 <P>
 Setting a pattern for a P<SMALL>LECTRUM</SMALL> track is similar to that of
 other tracks: you simply set the offset and volumes for the different
-strings. In addition you must specify a &#8220;strum&#8221; value (used as a delay between
+strings. In addition you must specify a ``strum'' value (used as a delay between
 strings). The formal definition for a P<SMALL>LECTRUM</SMALL> pattern is:
 
 <P>
@@ -268,8 +329,8 @@ where:
 <DT><STRONG>Strum</STRONG></DT>
 <DD>The strumming delay between hitting each string. Use a
   positive number for a downward strum and negative number for an
-  upward strum and use zero for all the notes to be played together. &#8220;3&#8221;
-  is a fast downward strum and &#8220;-10&#8221; is a slow upward strum.
+  upward strum and use zero for all the notes to be played together. ``3''
+  is a fast downward strum and ``-10'' is a slow upward strum.
 
 <P>
 </DD>
@@ -280,18 +341,18 @@ where:
 <P>
 </DD>
 <DT><STRONG>Velocity</STRONG></DT>
-<DD>The MIDI velocity (loudness) for each string. &#8220;127&#8221;
+<DD>The MIDI velocity (loudness) for each string. ``127''
   is the maximum volume, A value of zero is used to mute the string or
   strings. Guitarists often mute the strings with the side of their
-  hand when strumming.<A NAME="tex2html48"
-  HREF="#foot5471"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+  hand when strumming.<A NAME="tex2html52"
+  HREF="#foot6108"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 </DD>
 </DL>
 
 <P>
-For a basic strumming guitar you might use:<A NAME="tex2html49"
-  HREF="#foot5472"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A>
+For a basic strumming guitar you might use:<A NAME="tex2html53"
+  HREF="#foot6109"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A>
 <P>
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
@@ -299,12 +360,12 @@ For a basic strumming guitar you might use:<A NAME="tex2html49"
     <B>Begin Plectrum-Strumming 
 <BR>&nbsp;&nbsp;Voice       NylonGuitar 
 <BR>&nbsp;&nbsp;Volume      m 
-<BR>&nbsp;&nbsp;Sequence  1.0   +5     120 120 120 120 120 100; &#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.0   +5      90  80  80  80  80  80;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.5   -5       -   -  50  50  50  50;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0   +5      90  80  80  80  80  80;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.5   -5       -   -  50  50  50  50;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;4.0   +5      90  80  80  80  80  80;&#92;
+<BR>&nbsp;&nbsp;Sequence  1.0   +5     120 120 120 120 120 100; \
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.0   +5      90  80  80  80  80  80;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.5   -5       -   -  50  50  50  50;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0   +5      90  80  80  80  80  80;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.5   -5       -   -  50  50  50  50;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;4.0   +5      90  80  80  80  80  80;\
 <BR>&nbsp;&nbsp;&nbsp;&nbsp;4.5   -5       -   -  50  50  50  50;     
 <BR>
 End   </B> 
@@ -318,9 +379,9 @@ This gives eight strums per bar. Note the strum values at beats 2.5,
 the opposite (high to low) direction.
 
 <P>
-Also, notice the use of &#8220;-&#8221; values for certain strings. A &#8220;-&#8221; lets
+Also, notice the use of ``-'' values for certain strings. A ``-'' lets
 that string continue to vibrate until the next pattern. If you want to
-disable (mute) a string use a &#8220;0&#8221; for the volume.
+disable (mute) a string use a ``0'' for the volume.
 
 <P>
 Another example shows how to set up a finger picking pattern:
@@ -332,13 +393,13 @@ Another example shows how to set up a finger picking pattern:
     <B>Begin Plectrum-FingerPicking 
 <BR>&nbsp;&nbsp;Voice       NylonGuitar 
 <BR>&nbsp;&nbsp;Volume      m 
-<BR>&nbsp;&nbsp;Sequence          1.0    0       - 100   -   -  90  -;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;1.5    0       -   -   -  90   -   -;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.0    0       -   -   90  -  90   -;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.5    0       -   -   -  90   -   -;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0    0       -   -   -   -   -  90;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.5    0       -   -   -   -  90   -;&#92;
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;4.0    0       -   -   -   90  -   -;&#92;
+<BR>&nbsp;&nbsp;Sequence          1.0    0       - 100   -   -  90  -;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1.5    0       -   -   -  90   -   -;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.0    0       -   -   90  -  90   -;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2.5    0       -   -   -  90   -   -;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0    0       -   -   -   -   -  90;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.5    0       -   -   -   -  90   -;\
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;4.0    0       -   -   -   90  -   -;\
 <BR>&nbsp;&nbsp;&nbsp;&nbsp;4.5    0       -   -   90  -   -   -;   
 <BR>
 End   </B> 
@@ -349,18 +410,18 @@ End   </B>
 <P>
 To make creation of volume tables a bit easier, you can shorten the
 notation by setting a range and volume. This is done by using
-&#8220;n-m:v&#8221; where n is the start string number and m is the end string
+``n-m:v'' where n is the start string number and m is the end string
 number and v is the volume. <B>Please note that the strings are numbered
-in &#8220;reverse&#8221; order, just like a guitar.</B> The last string (the bottom
-and usually the highest pitch) is string &#8220;1&#8221;, the first string
-(assuming 6 strings) is &#8220;6&#8221;. So,
+in ``reverse'' order, just like a guitar.</B> The last string (the bottom
+and usually the highest pitch) is string ``1'', the first string
+(assuming 6 strings) is ``6''. So,
 
 <P>
 
 <UL>
-<LI>&#8220;1.0 0 2:50&#8221; is the same as &#8220;1.0 0 - - - - 50 -&#8221;
+<LI>``1.0 0 2:50'' is the same as ``1.0 0 - - - - 50 -''
 </LI>
-<LI>&#8220;1.0 -5 2-4:80&#8221; is the same as &#8220;1.0 -5 - - 80 80 80 -&#8221;
+<LI>``1.0 -5 2-4:80'' is the same as ``1.0 -5 - - 80 80 80 -''
 
 <P>
 </LI>
@@ -373,10 +434,7 @@ It is not possible to mix range and individual string settings. So,
 <P>
 
 <UL>
-<LI>&#8220;1.0 0 2:50 90&#8221; <IMG
- WIDTH="28" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"
- SRC="img2.png"
- ALT="\includegraphics[height=3ex]{stop.eps}">
+<LI>``1.0 0 2:50 90'' 
 </LI>
 </UL>
 
@@ -387,7 +445,7 @@ tracks. So, assuming a 6 string guitar:
 <P>
 
 <UL>
-<LI>&#8220;1.0 0 90 &#8221; is the same as &#8220;1.0 0 90 90 90 90 90 90&#8221;
+<LI>``1.0 0 90 '' is the same as ``1.0 0 90 90 90 90 90 90''
 </LI>
 </UL>
 
@@ -398,10 +456,7 @@ if you are not using a range. Again, <SPAN  CLASS="textit">you cannot do</SPAN>:
 <P>
 
 <UL>
-<LI>&#8220;1. 0 80 90&#8221; <IMG
- WIDTH="28" HEIGHT="28" ALIGN="BOTTOM" BORDER="0"
- SRC="img2.png"
- ALT="\includegraphics[height=3ex]{stop.eps}">
+<LI>``1. 0 80 90'' 
 </LI>
 </UL>
 
@@ -411,15 +466,15 @@ P<SMALL>LECTRUM</SMALL> track: A<SMALL>RTICULATE</SMALL>, V<SMALL>OICING</SMALL>
 M<SMALL>ALLET</SMALL> and D<SMALL>IRECTION</SMALL>.
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot5469">...P<SMALL>LECTRUM</SMALL></A><A
- HREF="node11.html#tex2html47"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+<DT><A NAME="foot6106">...P<SMALL>LECTRUM</SMALL></A><A
+ HREF="node11.html#tex2html51"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The concept and code base for the Plectrum
   track was developed by Louis James Barman
   <SPAN  CLASS="textbf">&lt;louisjbarman at googlemail dot com&gt;</SPAN>. Send compliments to him!
 
 </DD>
-<DT><A NAME="foot5471">... strumming.</A><A
- HREF="node11.html#tex2html48"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
+<DT><A NAME="foot6108">... strumming.</A><A
+ HREF="node11.html#tex2html52"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>The P<SMALL>LECTRUM</SMALL> track differs from
     other 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  tracks as the duration of each note is not given but
@@ -428,36 +483,36 @@ M<SMALL>ALLET</SMALL> and D<SMALL>IRECTION</SMALL>.
     until another note is played on the same string.
 
 </DD>
-<DT><A NAME="foot5472">... use:</A><A
- HREF="node11.html#tex2html49"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
+<DT><A NAME="foot6109">... use:</A><A
+ HREF="node11.html#tex2html53"><SUP><SPAN CLASS="arabic">11</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
 <DD>These examples
   use B<SMALL>EGIN</SMALL>/E<SMALL>ND</SMALL> shorthand notation. This is explained in
-  the &#8220;Begin/End Block&#8221; chapter <A HREF="node26.html#sec-blocks">here</A>.
+  the ``Begin/End Block'' chapter <A HREF="node27.html#sec-blocks">here</A>.
 
 </DD>
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html578"
+<A NAME="tex2html610"
   HREF="node12.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html576"
+<A NAME="tex2html608"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html570"
+<A NAME="tex2html602"
   HREF="node10.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html579"
+<B> Next:</B> <A NAME="tex2html611"
   HREF="node12.html">Automatic Melodies: Aria Tracks</A>
-<B> Up:</B> <A NAME="tex2html577"
+<B> Up:</B> <A NAME="tex2html609"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html571"
+<B> Previous:</B> <A NAME="tex2html603"
   HREF="node10.html">Solo and Melody Tracks</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

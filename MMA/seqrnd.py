@@ -1,4 +1,3 @@
-
 # seqrnd.py
 
 """
@@ -27,7 +26,6 @@ import random
 
 from MMA.common import *
 
-
 """ SeqRnd variable is a list. The first entry is a flag:(0, 1 or x):
       0 - not set
       1 - set
@@ -38,11 +36,10 @@ seqRnd = [0]       # set if SEQRND has been set
 seqRndWeight = [1]
 
 
-
 def setseq():
     """ Set up the seqrnd values, called from parse loop.
 
-        
+
         returns:
            0...  a random sequence number,
            -1    signals that rndseq is not enabled.
@@ -59,7 +56,7 @@ def setseq():
         the same value of 1. A list of the valid sequence points is
         generated (ie, if seqsize==4 tmp will be [0,1,2,3]). In addition
         the weights of each entry in tmp[] is adjusted by the weights in
-        the seqrndweight[] list. 
+        the seqrndweight[] list.
     """
 
     if seqRnd[0]:
@@ -70,7 +67,8 @@ def setseq():
     else:
         r = -1
 
-    return ( r, seqRnd[1:] )
+    return (r, seqRnd[1:])
+
 
 def getrndseq(v):
     tmp = []
@@ -81,7 +79,7 @@ def getrndseq(v):
         error("SeqRndWeight has generated an empty list")
 
     return random.choice(tmp)
-          
+
 
 ## Main parser routines
 
@@ -89,12 +87,12 @@ def setSeqRnd(ln):
     """ Set random order for all tracks. """
 
     global seqRnd
-
-    emsg =  "use [ON, OFF or TrackList ]"
+    
+    emsg = "use [ON, OFF or TrackList ]"
     if not ln:
         error("SeqRnd:" + emsg)
 
-    a=ln[0].upper()
+    a = ln[0].upper()
 
     if a in ("ON", "1") and len(ln) == 1:
         seqRnd = [1]
@@ -103,7 +101,7 @@ def setSeqRnd(ln):
         seqRnd = [0]
 
     else:
-        seqRnd=[2]
+        seqRnd = [2]
         for a in ln:
             a = a.upper()
             if not a in gbl.tnames:
@@ -113,36 +111,37 @@ def setSeqRnd(ln):
             seqRnd.append(a)
 
     if gbl.debug:
-        print "SeqRnd:",
+        msg = ["SeqRnd:"]
         if seqRnd[0] == 2:
             for a in seqRnd[1:]:
-                print a,
-            print
+                msg.append(a)
         elif seqRnd[0] == 1:
-            print "On"
+            msg.append("On")
         else:
-            print "Off"
+            msg.append("Off")
+        print(' '.join(msg))
+
 
 def getweights(ln, msg):
 
     ln = lnExpand(ln, msg)
-    
+
     if not ln:
         error("Use: %s <weight factors>" % msg)
 
     tmp = []
     for n in ln:
         n = stoi(n)
-        if n < 0: error("%s: Values must be 0 or greater" % msg)
+        if n < 0:
+            error("%s: Values must be 0 or greater" % msg)
         tmp.append(n)
 
     tmp = seqBump(tmp)
 
     if gbl.debug:
-        print "%s: " % msg,
-        printList(tmp)
+        print("%s: %s" % (msg, ' '.join([str(x) for x in tmp])))
 
-    return  tmp
+    return tmp
 
 
 def setSeqRndWeight(ln):
@@ -151,4 +150,3 @@ def setSeqRndWeight(ln):
     global seqRndWeight
 
     seqRndWeight = getweights(ln, "SeqRndWeight")
-

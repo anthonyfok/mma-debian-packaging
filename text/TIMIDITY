@@ -51,7 +51,7 @@ To get timidity to use an sf2 file you have to do 2 things:
       i. In /usr/share/timidity create the file timidity.cfg. It
          has a single line:
 
-               soundfont "Airfont 380.sf2" order=0
+               soundfont "Airfont 340.sf2" order=0
 
          the quotes are there since the file name has a space in it.
 

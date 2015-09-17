@@ -23,11 +23,12 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-from   MMA.common import *
+from MMA.common import *
 
 length = None
-count  = None
-side   = None
+count = None
+side = None
+
 
 def setTruncate(ln):
     """ Set the truncate variable for the next bar. """
@@ -37,7 +38,7 @@ def setTruncate(ln):
     if length:
         warning("Truncate: option set with value pending, previous setting discarded.")
 
-    side  = 0    # assume 'right' or start of bar
+    side = 0    # assume 'right' or start of bar
     count = 1    # assume 1 bar only
 
     ln, opts = opt2pair(ln)   # separate out the option strings
@@ -58,17 +59,17 @@ def setTruncate(ln):
     # now parse options
 
     for cmd, opt in opts:
-        cmd=cmd.upper()
+        cmd = cmd.upper()
 
         if cmd == 'COUNT':
             b = stoi(opt, "Truncate: Bar COUNT must be integer.")
-            if b <1:
+            if b < 1:
                 error("Truncate: Bar COUNT must be 1 or greater.")
             count = b
 
         elif cmd == "SIDE":
             opt = opt.upper()
-            max = gbl.QperBar * gbl.BperQ
+            max = gbl.barLen
 
             if opt == "LEFT":   # side to use, default==left
                 side = 0
@@ -78,19 +79,18 @@ def setTruncate(ln):
 
             else:
                 opt = stof(opt, "Truncate: Expecting value, not '%s'." % opt)
-                side = int( (opt-1) * gbl.BperQ)
-                if side+length > max:
-                    error("Truncate: Side value of '%2.1f' too large." % opt)
-     
+                side = int((opt - 1) * gbl.BperQ)
+                if side + length > max:
+                    error("Truncate: Side value of '%g' too large." % opt)
+
         else:
             error("Truncate: '%s' is an unknown option." % cmd)
 
-
     if gbl.debug:
-        print "Truncate: Next %s bar(s) are %2.1f beats, " \
-              "using pattern from beats %2.1f to %2.1f." \
-            % (count, beats, float(side)/gbl.BperQ, (float(side)+length)/gbl.BperQ)
-    
+        print("Truncate: Next %s bar(s) are %g beats, "
+              "using pattern from beats %g to %g."
+            % (count, beats, float(side) / gbl.BperQ, (float(side) + length) / gbl.BperQ))
+
 
 def countDown():
     """ Decrement the bar count. Called from parse.  """
@@ -99,7 +99,6 @@ def countDown():
 
     count -= 1
     if count <= 0:
-        count  = None
+        count = None
         length = None
-        side   = None
-
+        side = None

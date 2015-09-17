@@ -25,24 +25,22 @@ Bob van der Poel <bob@mellowood.ca>
 import re
 from math import *
 
-from common import error
+from MMA.common import error
 
-safeCmds = [ 'ceil', 'fabs', 'floor', 'exp', 'log', 'log10', 'pow',
-             'sqrt', 'acos', 'asin', 'atan', 'atan2', 'cos', 'hypot',
-             'sin',  'tan',  'degrees', 'radians', 'cosh', 'sinh',
-	     'int', 'in', '.join',   'str', '.split', 'for' ]
+safeCmds = ['ceil', 'fabs', 'floor', 'exp', 'log', 'log10', 'pow',
+            'sqrt', 'acos', 'asin', 'atan', 'atan2', 'cos', 'hypot',
+            'sin', 'tan', 'degrees', 'radians', 'cosh', 'sinh',
+            'int', 'in', '.join', 'str', '.split', 'for']
 
-def safe_eval( expr ):
-        
-	toks = re.split( r'([a-zA-Z_\.]+|.)', expr )
-	
-	for t in toks:
-            if len(t)>1 and t not in safeCmds:
+
+def safe_eval(expr):
+
+        toks = re.split(r'([a-zA-Z_\.]+|.)', expr)
+
+        for t in toks:
+            if len(t) > 1 and t not in safeCmds:
                 error("Illegal/Unknown operator '%s' in $()." % t)
         try:
             return eval(expr)
         except:
             error("Illegal operation in '%s'." % expr)
-
-
-

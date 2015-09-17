@@ -5,7 +5,7 @@
 // These just print some calculations. 
 
 print (44 * 3.2) is $(44 * 3.2)
-
+print Use INT() to round it out: $( int(44 * 3.2))
 print The current tempo of $_Tempo times .3 is $( $_Tempo * .3)
 print
 print Here is a loop to set Articulate shorter in a series

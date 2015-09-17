@@ -133,11 +133,11 @@ End
 
 Chord-Steel Sequence -
 
-DefGroove WesternSwingPlus
+DefGroove WesternSwingPlus   Adds in Steel Guitar "melody".
 
 Chord-Sus Groove WesternSwingSus
 
-DefGroove WesternSwingSusPlus
+DefGroove WesternSwingSusPlus   Steel guitar and accordion
 
 ////////////////////////////////
 // Introduction

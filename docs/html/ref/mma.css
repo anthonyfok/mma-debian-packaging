@@ -28,17 +28,17 @@ TD.eqno			{ }	/* equation-number cells */
 
 
 /* document-specific styles come next */
-DIV.navigation		{   }
-DIV.flushleft		{   }
+DIV.logo-LaTeX		{   }
+DIV.logo-LaTeX2HTML		{   }
+PRE.preform		{   }
+DIV.LaTeX2HTML		{   }
+DIV.quote		{   }
 DIV.center		{   }
 DIV.verse		{   }
-DIV.logo-LaTeX2HTML		{   }
+DIV.flushleft		{   }
+DIV.navigation		{   }
 DIV.LaTeX		{   }
 SPAN.bf		{   }
-DIV.quote		{   }
-PRE.preform		{   }
-DIV.logo-LaTeX		{   }
-DIV.LaTeX2HTML		{   }
-SPAN.textit		{ font-style: italic  }
-SPAN.arabic		{   }
 SPAN.textbf		{ font-weight: bold  }
+SPAN.arabic		{   }
+SPAN.textit		{ font-style: italic  }

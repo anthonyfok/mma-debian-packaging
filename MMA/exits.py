@@ -1,4 +1,3 @@
-
 # exits.py
 
 """
@@ -24,12 +23,12 @@ Bob van der Poel <bob@mellowood.ca>
 This module contains cleanup code to be called on exit of MMA.
 
 """
-      
+
 import atexit
 import os
-import gbl
 
 files = []
+
 
 def cleanup():
     """ This cleanup routine will delete registered files. Currently this
@@ -44,7 +43,5 @@ def cleanup():
         except:
             pass
 
-            
 
 atexit.register(cleanup)
-

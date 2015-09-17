@@ -1,4 +1,3 @@
-
 # keysig.py
 
 """
@@ -27,8 +26,9 @@ other module.
 
 """
 
-import gbl
+from . import gbl
 from   MMA.common import *
+
 majKy = { "C" :  0, "G" :  1, "D" :  2,
           "A" :  3, "E" :  4, "B" :  5,
           "F#":  6, "C#":  7, "F" : -1,
@@ -49,6 +49,7 @@ notevalues={
         'A' : 9, 'A#': 10,'Bb': 10,'B' : 11,
         'Cb':11 }
 
+
 class KeySig:
 
     def __init__(self):
@@ -56,17 +57,16 @@ class KeySig:
         self.kName = ['C', 0]
         self.setAccList()
         self.keyNoteValue = notevalues['C']
-   
 
-    def set(self,ln):
-        """ Set the keysignature. Used by solo tracks. Formats are:
+    def set(self, ln):
+        """ Set the keysignature. Used by solo & aria tracks. Formats are:
               1. A,D,E, Eb,  etc followed by optional minor/major
                    flat can be b or &, sharp is #
               2. Number of sharps/flats plus option minor/major
                    id 3b or 2#
         """
 
-        mi = 0   #assume Major
+        mi = 0   # assume Major
 
         if len(ln) < 1 or len(ln) > 2:
             error("KeySig: Needs 1 or 2 arguments.")
@@ -88,24 +88,25 @@ class KeySig:
 
         kname = ln[0][0]
         kname = kname.upper()
-        if len(ln[0])>1:
+        if len(ln[0]) > 1:
             kname += ln[0][1:]
 
         if kname[0] in "ABCDEFG":
             if len(kname) == 2 and kname[1] == '&':
                 kname = kname[0] + 'b'
-
             if mi and kname in minKy:
                 self.kSig = minKy[kname]
+                midikey = minKy[kname]
             elif not mi and kname in majKy:
                 self.kSig = majKy[kname]
+                midikey = majKy[kname]
             else:
-                if mi: mi = 'minor'
-                else: mi = 'major'
-                error("KeySigs: keysignature '%s %s' is unknown/impossible." % (kname, mi))
+                if mi:
+                    t = 'minor'
+                else:
+                    t = 'major'
+                error("KeySigs: keysignature '%s %s' is unknown/impossible." % (kname, t))
             self.kName[0] = kname  # save name ('C', "Eb", etc)
-
-            midikey=majKy[kname]
 
         elif kname[0] in "01234567":
             c = int(kname[0])
@@ -128,13 +129,13 @@ class KeySig:
             else:
                 z = majKy
             for a in z:
-                if z[a]==self.kSig:
-                    self.kName[0]=a
+                if z[a] == self.kSig:
+                    self.kName[0] = a
                     break
 
         else:
             error("KeySig: unknown keysignature '%s'." % ln[0])
-        
+
         # Set the midi meta track with the keysig. This doen't do anything
         # in the playback, but other programs may use it.
 
@@ -144,11 +145,16 @@ class KeySig:
         gbl.mtrks[0].addKeySig(gbl.tickOffset, midikey, mi)
 
         self.setAccList()
-        
+
         self.keyNoteValue = notevalues[self.kName[0]]
-   
+
+        # Check for aria tracks. If found, reset the note list to null.
+        for t in gbl.tnames:
+            if gbl.tnames[t].vtype == 'ARIA':
+                gbl.tnames[t].restart()
+
         if gbl.debug:
-            print "KeySig:", self.getKeysig() 
+            print("KeySig:", self.getKeysig())
 
     def getKeysig(self):
         """ Create a key sig string. """
@@ -165,18 +171,19 @@ class KeySig:
             then modify.
          """
 
-        acc = {'a':0, 'b':0, 'c':0, 'd':0, 'e':0, 'f':0, 'g':0  }
-        ks=self.kSig
+        acc = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0, 'f': 0, 'g': 0}
+
+        # Current key negative values are flat, positive sharp
+        ks = self.kSig
 
         if ks < 0:
-            for a in range( abs(ks) ):
-                acc[ ['b','e','a','d','g','c','f'][a] ] = -1
+            for a in range(abs(ks)):
+                acc[['b', 'e', 'a', 'd', 'g', 'c', 'f'][a]] = -1
 
         else:
             for a in range(ks):
-                acc[ ['f','c','g','d','a','e','b'][a] ] = 1
+                acc[['f', 'c', 'g', 'd', 'a', 'e', 'b'][a]] = 1
 
-        self.accList=acc
+        self.accList = acc
 
-
-keySig=KeySig()    # single instance
+keySig = KeySig()    # single instance

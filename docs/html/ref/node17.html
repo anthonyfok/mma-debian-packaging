@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html661"
+<A NAME="tex2html695"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html659"
+<A NAME="tex2html693"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html687"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html662"
+<B> Next:</B> <A NAME="tex2html696"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html660"
+<B> Up:</B> <A NAME="tex2html694"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html654"
+<B> Previous:</B> <A NAME="tex2html688"
   HREF="node16.html">Ornament</A>
 <BR>
 <BR></DIV>
@@ -51,19 +51,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html663"
+<LI><A NAME="tex2html697"
   HREF="node17.html#SECTION001710000000000000000">Tempo</A>
-<LI><A NAME="tex2html664"
+<LI><A NAME="tex2html698"
   HREF="node17.html#SECTION001720000000000000000">Time</A>
-<LI><A NAME="tex2html665"
+<LI><A NAME="tex2html699"
   HREF="node17.html#SECTION001730000000000000000">Truncate</A>
-<LI><A NAME="tex2html666"
+<LI><A NAME="tex2html700"
   HREF="node17.html#SECTION001740000000000000000">TimeSig</A>
-<LI><A NAME="tex2html667"
+<LI><A NAME="tex2html701"
   HREF="node17.html#SECTION001750000000000000000">BeatAdjust</A>
-<LI><A NAME="tex2html668"
+<LI><A NAME="tex2html702"
   HREF="node17.html#SECTION001760000000000000000">Fermata</A>
-<LI><A NAME="tex2html669"
+<LI><A NAME="tex2html703"
   HREF="node17.html#SECTION001770000000000000000">Cut</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -87,7 +87,7 @@ Tempo</A>
 </H1>
 
 <P>
-The tempo of a piece is set in Beats per Minute with the &#8220;Tempo&#8221;
+The tempo of a piece is set in Quarter Beats per Minute with the ``Tempo''
 directive.
 
 <P>
@@ -101,8 +101,8 @@ directive.
 
 <P>
 sets the tempo to 120 beats/minute. You can also use the tempo command
-to increase or decrease the current rate by including a leading &#8220;+&#8221;,
-&#8220;-&#8221; or &#8220;*&#8221; in the rate. For example (assuming the current rate is
+to increase or decrease the current rate by including a leading ``+'',
+``-'' or ``*'' in the rate. For example (assuming the current rate is
 120):
 
 <P>
@@ -138,7 +138,7 @@ be at 110, the 3rd at 105 and the last at 100. Note: the value of
 $_T<SMALL>EMPO</SMALL> will reflect the final value, not the intermediates.
 
 <P>
-You can also vary an existing rate using a &#8220;+&#8221;, &#8220;-&#8221; or &#8220;*&#8221; in
+You can also vary an existing rate using a ``+'', ``-'' or ``*'' in
 the rate.
 
 <P>
@@ -162,7 +162,7 @@ settings of 101, 102, 103 ... 120. This will occur over 22 beats
 (5.5 bars * 4 beats) of music.
 
 <P>
-Using the multiplier is handy if you are switching to &#8220;double time&#8221;:
+Using the multiplier is handy if you are switching to ``double time'':
 
 <P>
 
@@ -186,7 +186,7 @@ and to return:
       </Table>
 
 <P>
-Note that the &#8220;+&#8221;, &#8220;-&#8221; or &#8220;*&#8221; sign must <SPAN  CLASS="textit">not</SPAN> be separated
+Note that the ``+'', ``-'' or ``*'' sign must <SPAN  CLASS="textit">not</SPAN> be separated
 from the tempo value by any spaces. The value for T<SMALL>EMPO</SMALL> can be
 any value, but will be converted to integer for the final setting.
 
@@ -200,7 +200,7 @@ Time
 <P>
 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  doesn't really understand time signatures. It just cares about
-the number of beats in a bar. So, if you have a piece in
+the number of quarter note beats in a bar. So, if you have a piece in
 <SPAN  CLASS="textbf">4/4</SPAN> time you would use:
 
 <P>
@@ -225,13 +225,21 @@ For  <SPAN  CLASS="textbf">3/4</SPAN> use:
       </Table>
 
 <P>
-For <SPAN  CLASS="textbf">6/8</SPAN> you'd probably want either &#8220;2&#8221; or &#8220;6&#8221;.
+For <SPAN  CLASS="textbf">6/8</SPAN> it's easiest to use ``6''. You could use ``2'' or
+``3'', but you do need to remember that this setting also sets the
+chord offset defaults. So, if you set T<SMALL>IME 2</SMALL> you would set
+chords (without using the extended ``@'' notation,
+<A HREF="node8.html#chord-position">here</A>) on beats
+1 and 2. If you use the recommended ``6'' you will also need to double
+ your T<SMALL>EMPO</SMALL> setting since <SPAN  CLASS="textbf">6/8</SPAN> is about eighth notes
+ and 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  really likes quarters.
 
 <P>
 Changing the time also cancels all existing sequences. So, after a
 time directive you'll need to set up your sequences or load a new
-groove.<A NAME="tex2html59"
-  HREF="#foot7447"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>
+groove.<A NAME="tex2html67"
+  HREF="#foot8420"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>
 <P>
 
 <H1><A NAME="SECTION001730000000000000000"></A> <A NAME="truncate"></A>
@@ -328,7 +336,7 @@ the pattern:
       </Table>
 
 <P>
-You can even use the &#8220;middle&#8221; part of the pattern by using a value
+You can even use the ``middle'' part of the pattern by using a value
 for the S<SMALL>IDE</SMALL> option:
 
 <P>
@@ -403,7 +411,7 @@ Groove PopBallad
 <P>
 You can specify both the number of beats and the S<SMALL>IDE</SMALL> as
 fractional values. This can be handy when your song is in a compound
-time. For example, the song &#8220; Theme From Mahogany&#8221; is in <SPAN  CLASS="textbf">4/4</SPAN>
+time. For example, the song `` Theme From Mahogany'' is in <SPAN  CLASS="textbf">4/4</SPAN>
 time, but one bar is in <SPAN  CLASS="textbf">5/8</SPAN> time. We have 4 beats in each
 bar, and don't really have an 8 beat time to use (we could, but it makes our input a bit more
 complicated), we simply convert the second time to
@@ -452,7 +460,7 @@ A few caveats:
 
 <UL>
 <LI>Both the S<SMALL>IDE</SMALL> and C<SMALL>OUNT</SMALL> options are value
-  pairs joined with a single &#8220;=&#8221;. No spaces are permitted.
+  pairs joined with a single ``=''.
 
 <P>
 </LI>
@@ -501,13 +509,28 @@ let you insert a Time Signature in your MIDI output:
       </Table>
 
 <P>
+or 
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>TimeSig NN/DD  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
 The NN parameter is the time signature numerator (the number of beats
-per bar). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to &#8220;3&#8221;.
+per bar). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to ``3''.
 
 <P>
 The DD parameter is the time signature denominator (the length of the
 note getting a single beat). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to
-&#8220;4&#8221;.
+``4''.
+
+<P>
+Note that the signal slash character is optional.
 
 <P>
 The NN value must be an integer in the range of 1 to 126. The DD value
@@ -525,7 +548,7 @@ time signature in any groove library files you create (the supplied
 files all do).
 
 <P>
-The common time signatures &#8220;common&#8221; and &#8220;cut&#8221; are supported. They
+The common time signatures ``common'' and ``cut'' are supported. They
 are translated by 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to <SPAN  CLASS="textbf">4/4</SPAN> and <SPAN  CLASS="textbf">2/2</SPAN>.
 
@@ -551,7 +574,7 @@ to manually adjust the beat position:
 
 <P>
 </LI>
-<LI>Delete some beats to handle a &#8220;short&#8221; bar.
+<LI>Delete some beats to handle a ``short'' bar.
 
 <P>
 </LI>
@@ -604,7 +627,7 @@ BeatAdjust 1
 
 <P>
 In <A HREF="#eg-mixed">this example</A> the problem of
-the &#8220;short bar&#8221; is handled. In this example, the sheet music has the
+the ``short bar'' is handled. In this example, the sheet music has the
 majority of the song in <SPAN  CLASS="textbf">4/4</SPAN> time, but bar 4 is in
 <SPAN  CLASS="textbf">2/4</SPAN>. This could be handled by setting the T<SMALL>IME</SMALL>
 setting to 2 and creating some different patterns. Forcing silence on
@@ -657,7 +680,7 @@ will insert half of a beat between the current bars.
 Finally in <A HREF="#eg-overlap">this example</A>, the problem of
 overlapping bars is handled. We want to change the G<SMALL>ROOVE</SMALL>
 in the middle of a bar. So, we create the third bar two times. The first one
-has a &#8220;z!&#8221; (silence) for beats 3 and 4; the second has &#8220;z!&#8221; for beats 1 and 2. This
+has a ``z!'' (silence) for beats 3 and 4; the second has ``z!'' for beats 1 and 2. This
 permits the two halves to overlap without conflict. The B<SMALL>EAT</SMALL>A<SMALL>DJUST</SMALL>
 forces the two bars to overlap completely.
 
@@ -711,16 +734,16 @@ Fermata
 </H1>
 
 <P>
-A &#8220;fermata&#8221; or &#8220;pause&#8221; in written music tells the musician to hold
+A ``fermata'' or ``pause'' in written music tells the musician to hold
 a note for a longer period than the notation would otherwise indicate.
 In standard music notation it is represented by a
-&#8220;<!-- MATH
+``<!-- MATH
  $\rotatebox{270}{\textbf{(\raisebox{.5ex}{.}}}$
  -->
 <IMG
- WIDTH="17" HEIGHT="5" ALIGN="BOTTOM" BORDER="0"
+ WIDTH="15" HEIGHT="4" ALIGN="BOTTOM" BORDER="0"
  SRC="img4.png"
- ALT="\rotatebox{270}{\textbf{(\raisebox{.5ex}{.}}}">&#8221;
+ ALT="\rotatebox{270}{\textbf{(\raisebox{.5ex}{.}}}">''
 above a note.
 
 <P>
@@ -731,7 +754,7 @@ To indicate all this
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>Fermata 1 1 200  </B> 
+    <B>Fermata -2 1 200  </B> 
    
 	    </td></tr>
       </Table>
@@ -743,11 +766,11 @@ Note that there are three parts to the command:
 
 <OL>
 <LI>The beat offset from the current point in the score to apply the
-  &#8220;pause&#8221;. The offset can be positive or negative and is calculated
+  ``pause''. The offset can be positive or negative and is calculated
   from the current bar. Positive numbers will apply to the next bar;
   negative to the previous. For offsets into the next bar you use
-  offsets starting at &#8220;0&#8221;; for offsets into the previous bar an
-  offset of &#8220;-1&#8221; represents the last beat in that bar.
+  offsets starting at ``0''; for offsets into the previous bar an
+  offset of ``-1'' represents the last beat in that bar.
 
 <P>
 For example, if you were in <SPAN  CLASS="textbf">4/4</SPAN> time and wanted the
@@ -756,10 +779,17 @@ For example, if you were in <SPAN  CLASS="textbf">4/4</SPAN> time and wanted the
   F<SMALL>ERMATA</SMALL> command after the bar and using an offset of -1.
 
 <P>
+Note: for best results the F<SMALL>ERMATA</SMALL> should be placed
+  <SPAN  CLASS="textit">after</SPAN> the bar (a negative offset). See the implementation
+  discussion, below, for details. A warning is printed when placed
+  before the bar.
+
+<P>
 </LI>
 <LI>The duration of the pause in beats. For example, if you have a
   quarter note to pause your duration would be 1, a half note (or 2
-  quarter notes) would be 2.
+  quarter notes) would be 2. <SPAN  CLASS="textit">Warning: the duration is in beats;
+    it is not a note duration.</SPAN>
 
 <P>
 </LI>
@@ -791,35 +821,27 @@ place a F<SMALL>ERMATA</SMALL> before or after the effected bar.
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
     <B>
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  Equivalent
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  Equivalents
 <BR>     
+<BR>    // Placement before bar (not recommended) 
 <BR>
 Fermata 3 1 200 
 <BR>
 C 
 <BR>
-Gm7   </B> 
-   
-	    </td></tr>
-      </Table>
-
-<BR>
-<P>
-
-      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
-        <tr><td>
-    <B>Alternate 
-<BR>     
+Gm7 
+<BR>   
+<BR>    // After bar, the right way! 
 <BR>
 C 
 <BR>
 Fermata -1 1 200 
 <BR>
-Gm7   </B> 
+Gm7    </B> 
    
 	    </td></tr>
       </Table>
- 
+
 	
 	       </td> </tr>
         </Table>
@@ -832,7 +854,7 @@ the first four bars of a popular torch song. The problem with the
 piece is that the first beat of bar four needs to be paused, and the
 accompaniment style has to switch in the middle of the bar. The
 example shows how to split the fourth bar with the first beat on one
-line and the balance on a second. The &#8220;z!&#8221;s are used to &#8220;fill in&#8221;
+line and the balance on a second. The ``z!''s are used to ``fill in''
 the 4 beats skipped by the B<SMALL>EAT</SMALL>A<SMALL>DJUST</SMALL>.
 
 <P>
@@ -893,22 +915,28 @@ The following conditions will generate warning messages:
 
 <P>
 </LI>
-<LI>An adjustment value less than 100.
+<LI>An adjustment value less than 100,
 
 <P>
 </LI>
+<LI>A positive offset (placement before the effected region).
+</LI>
 </UL>
+
+<P>
+<SPAN  CLASS="textbf"><BIG CLASS="LARGE">Implementation</BIG></SPAN>
 
 <P>
 This command works by adjusting the global tempo in the MIDI meta
 track at the point of the fermata. In most cases you can put more than
 one F<SMALL>ERMATA</SMALL> command in the same bar, but they should be in beat
 order (no checks are done). If the F<SMALL>ERMATA</SMALL> command has a
-negative position argument, special code is invoked to remove any
-note-on events in the duration specified, after the start of the
-beat.<A NAME="tex2html60"
-  HREF="#foot7610"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A> This means that extra rhythm notes will
-not be sounded--probably what you expect a held note to sound like.
+negative position argument, special code is invoked to move all note
+on, program and controller change events to the start of the effected
+area and note off events to the end. In addition, existing tempo
+changes are rationalized to make it ``just work''. This means that
+extra rhythm notes will not be sounded inside the fermata--probably
+what you expect a held note to sound like.
 
 <P>
 
@@ -918,15 +946,15 @@ Cut
 </H1>
 
 <P>
-This command was born of the need to simulate a &#8220;cut&#8221; or, more
-correctly, a &#8220;caesura&#8221;. This is indicated in music by two parallel
+This command was born of the need to simulate a ``cut'' or, more
+correctly, a ``caesura''. This is indicated in music by two parallel
 lines put at the top of a staff indicating the end of a musical
-thought. The symbol is also referred to as &#8220;railroad tracks&#8221;.
+thought. The symbol is also referred to as ``railroad tracks''.
 
 <P>
 The idea is to stop the music on all tracks, pause briefly, and
-resume.<A NAME="tex2html61"
-  HREF="#foot7643"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A>
+resume.<A NAME="tex2html68"
+  HREF="#foot8632"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  provides the C<SMALL>UT</SMALL> command to help deal with this
@@ -957,7 +985,7 @@ in an arbitrary bar. What
 
 <P>
 </LI>
-<LI>insert the required MIDI &#8220;note on&#8221; and &#8220;note off&#8221; commands
+<LI>insert the required MIDI ``note on'' and ``note off'' commands
   at the appropriate point in the track.
 
 <P>
@@ -967,10 +995,10 @@ in an arbitrary bar. What
 <P>
 You may think that a given note starts on beat 2 and ends (using
 <SMALL>ARTICULATE 100</SMALL>) right on beat 3--but you would most likely be
-wrong. So, if you want the note or chord to be &#8220;cut&#8221;, what point do
+wrong. So, if you want the note or chord to be ``cut'', what point do
 you use to instruct 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  correctly? Unfortunately, the simple answer
-is &#8220;it depends&#8221;. Again, the answers will consist of some examples.
+is ``it depends''. Again, the answers will consist of some examples.
 
 <P>
 In this first case you wish to stop the track in the middle of the last
@@ -990,9 +1018,9 @@ bar. The simplest answer is:
       </Table>
 
 <P>
-Unfortunately, this will &#8220;almost&#8221; work. But, any chords which are
+Unfortunately, this will ``almost'' work. But, any chords which are
 longer than one or two beats may continue to sound. This, often, gives
-a &#8220;dirty&#8221; sound to the end of the piece. The simple solution is to
+a ``dirty'' sound to the end of the piece. The simple solution is to
 add to the end of the piece:
 
 <P>
@@ -1006,7 +1034,7 @@ add to the end of the piece:
 
 <P>
 Depending on the rhythm you might have to fiddle a bit with the cut
-value. But, the example here puts a &#8220;all notes off&#8221; message in all
+value. But, the example here puts a ``all notes off'' message in all
 the active tracks at the start of beat 3. The exact same result can be
 achieved by placing:
 
@@ -1050,7 +1078,7 @@ BeatAdjust .2
       </Table>
 
 <P>
-In this case the &#8220;all notes off&#8221; is placed at the end of bar 4 and
+In this case the ``all notes off'' is placed at the end of bar 4 and
 two-tenths of a beat is inserted at the same location. Bar 5 continues
 the track.
 
@@ -1109,7 +1137,7 @@ applies a slow-down in tempo to the second beat for the following
 
 <P>
 </LI>
-<LI>The three <SMALL>CUT</SMALL> commands insert MIDI &#8220;all notes off&#8221; in
+<LI>The three <SMALL>CUT</SMALL> commands insert MIDI ``all notes off'' in
   all the active tracks just <SPAN  CLASS="textit">before</SPAN> beats 2, 3 and 4.
 
 <P>
@@ -1129,7 +1157,7 @@ Finally, the proper syntax for the command:
       </Table>
 
 <P>
-If the voice is omitted, MIDI &#8220;all notes off&#8221; will be inserted into
+If the voice is omitted, MIDI ``all notes off'' will be inserted into
 each active track.
 
 <P>
@@ -1137,29 +1165,19 @@ If the offset is omitted, the current bar position will be used. This
 the same as using an offset value of 0.
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot7447">...
+<DT><A NAME="foot8420">...
 groove.</A><A
- HREF="node17.html#tex2html59"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+ HREF="node17.html#tex2html67"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The time value is saved/restored with grooves so
   setting a time is redundant in this case.
 
 </DD>
-<DT><A NAME="foot7610">...
-beat.</A><A
- HREF="node17.html#tex2html60"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
-<DD>Technically speaking, 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  determines an interval
-  starting 5% of a beat after the start of the fermata to a point 5%
-  of a beat before the end. Any MIDI Note-On events in this range (in
-  all tracks) are deleted.
-
-</DD>
-<DT><A NAME="foot7643">...
+<DT><A NAME="foot8632">...
 resume.</A><A
- HREF="node17.html#tex2html61"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
+ HREF="node17.html#tex2html68"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>The answer to the music theory question of whether
-  the &#8220;pause&#8221; takes time <SPAN  CLASS="textit">from</SPAN> the current beat or is treated
-  as a &#8220;fermata&#8221; is not clear--but as far as 
+  the ``pause'' takes time <SPAN  CLASS="textit">from</SPAN> the current beat or is treated
+  as a ``fermata'' is not clear--but as far as 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is concerned the
   command has no effect on timing.
 
@@ -1167,26 +1185,26 @@ resume.</A><A
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html661"
+<A NAME="tex2html695"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html659"
+<A NAME="tex2html693"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html687"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html662"
+<B> Next:</B> <A NAME="tex2html696"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html660"
+<B> Up:</B> <A NAME="tex2html694"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html654"
+<B> Previous:</B> <A NAME="tex2html688"
   HREF="node16.html">Ornament</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

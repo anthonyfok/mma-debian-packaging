@@ -25,11 +25,15 @@ End
 // Note the use of a macro here. Just doing "Bass Ornament Chromatic=On" would
 // reset ALL the options.
 
-print Add in a single option requires the use of a setting macro.
+print Adding in a single option requires the use of a setting macro.
 print See the source for the correct method.
+// the use of [1] below assumes that we know that the chromatic option
+// is the second in the reported list. Probably best not to do this since
+// it's not guaranteed not to change!
 print Initial setting of the chromatic option: $_Bass_Ornament[1]
 Bass Ornament $_Bass_Ornament Chromatic=On
 print New setting of the chromatic option:     $_Bass_Ornament[1]
+print
 
 5  C
 6  Am

@@ -150,7 +150,7 @@ Begin Arpeggio
 	Octave 6
 	Range 2
 	Direction Random
-	Sequence A8
+	Sequence A4 //A8
 End
 
 DefGroove SambaPlus    Adds pizzicato strings

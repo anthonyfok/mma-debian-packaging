@@ -38,6 +38,7 @@ SeqSize 4
 Begin Plectrum
 	Voice JazzGuitar
 	Volume m
+    Articulate 5
     Octave 5
     Sequence {1 3 90; 2 -3  5-6:0 1-4:80; 3 3 90; 4 -3  6:0 1-5:80}
 End
@@ -272,7 +273,7 @@ DefGroove JazzGuitarIntro  A 4 bar, arpeggiating introduction.
 Groove JazzGuitar
 
 Plectrum  Sequence * * * {1 5 90; 2 -5 1-5:90}
-Bass      Sequence * * * {1 4 1+ 90;2 8 5 90; 2.5 4. 3 90; 3 4 1 90; 4 4 1 90  }
+Bass      Sequence * * * {1 4 1+ 90;2 8 5 90; 2.5 4. 3 90; 3 1 1 90 }
 
 
 DefGroove JazzGuitar1Intro   A 4 bar intro with a bass run on bar 4.

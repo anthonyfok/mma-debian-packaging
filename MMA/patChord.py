@@ -28,22 +28,22 @@ import random
 
 import MMA.notelen
 import MMA.ornament
-import gbl
-from   MMA.common import *
-from   MMA.pat import PC
+from . import gbl
+from MMA.common import *
+from MMA.pat import PC, Pgroup
 
 import copy
 
 
 class Voicing:
     def __init__(self):
-        self.mode     = None
-        self.range    = 12
-        self.center   = 4
-        self.random   = 0
-        self.percent  = 0
-        self.bcount   = 0
-        self.dir      = 0
+        self.mode = None
+        self.range = 12
+        self.center = 4
+        self.random = 0
+        self.percent = 0
+        self.bcount = 0
+        self.dir = 0
 
 
 class Chord(PC):
@@ -55,7 +55,7 @@ class Chord(PC):
     def __init__(self, ln):
         self.voicing = Voicing()
         PC.__init__(self, ln)
-        
+
     def saveGroove(self, gname):
         """ Save special/local variables for groove. """
 
@@ -68,15 +68,13 @@ class Chord(PC):
         self.voicing = self.grooves[gname]['VMODE']
         PC.restoreGroove(self, gname)
 
-
     def clearSequence(self):
         """ Set some initial values. Called from init and clear seq. """
 
         PC.clearSequence(self)
-        self.voicing   = Voicing()
+        self.voicing = Voicing()
         # .direction was set in PC.clear.. we're changing to our default
         self.direction = seqBump(['UP'])
-
 
     def setVoicing(self, ln):
         """ set the Voicing Mode options.  Only valid for CHORDS. """
@@ -88,26 +86,24 @@ class Chord(PC):
 
         for mode, val in ln:
             if mode == 'MODE':
-                valid= ("-", "OPTIMAL", "NONE", "ROOT", "COMPRESSED", "INVERT", "KEY")
+                valid = ("-", "OPTIMAL", "NONE", "ROOT", "COMPRESSED",
+                         "INVERT", "KEY", "KEY2", "ROOTKEY")
 
-                if not val in  valid:
+                if not val in valid:
                     error("Valid Voicing Modes are: %s" % " ".join(valid))
 
                 if val in ('-', 'NONE', 'ROOT'):
                     val = None
 
-
                 if val and (max(self.invert) + max(self.compress)):
                     warning("Setting both VoicingMode and Invert/Compress is not a good idea")
 
-                """ When we set voicing mode we always reset this. This forces
-                    the voicingmode code to restart its rotations.
-                """
+                # When we set voicing mode we always reset this. This forces
+                # the voicingmode code to restart its rotations.
 
                 self.lastChord = []
 
                 self.voicing.mode = val
-
 
             elif mode == 'RANGE':
                 val = stoi(val, "VOICING RANGE %s: Arg must be a value" % self.name)
@@ -117,11 +113,10 @@ class Chord(PC):
 
                 self.voicing.range = val
 
-
             elif mode == 'CENTER':
 
-                val = stoi(val, "Argument for %s VOICING CENTER must be a value."\
-                               % self.name)
+                val = stoi(val, "Argument for %s VOICING CENTER must be a value."
+                           % self.name)
 
                 if val < 1 or val > 12:
                     error("VOICING CENTER: arg out-of-range; must be 1 to 12, not '%s'." % val)
@@ -140,7 +135,7 @@ class Chord(PC):
             elif mode == 'MOVE':
                 val = stoi(val, "Argument for %s VOICING MOVE  must be a value" % self.name)
 
-                if val < 0 :
+                if val < 0:
                     error("VOICING MOVE: bar count must >= 0, not %s" % val)
                 if val > 20:
                     warning("VOICING MOVE: bar count '%s' is quite large" % val)
@@ -151,40 +146,50 @@ class Chord(PC):
             elif mode == 'DIR':
                 val = stoi(val, "Argument for %s VOICING DIR must be a value" % self.name)
 
-                if not val in (1,0,-1):
+                if not val in (1, 0, -1):
                     error("VOICING MOVE: Dir must be -1, 0 or 1, not '%s'." % val)
 
                 self.voicing.dir = val
 
-
         if gbl.debug:
-            v=self.voicing
-            print "Set %s Voicing MODE=%s" % (self.name, v.mode),
-            print "RANGE=%s CENTER=%s" % (v.range, v.center),
-            print "RMOVE=%s MOVE=%s DIR=%s" % (v.random, v.bcount, v.dir)
-
+            v = self.voicing
+            print("Set %s Voicing MODE=%s RANGE=%s CENTER=%s RMOVE=%s MOVE=%s DIR=%s " %
+                  (self.name, v.mode, v.range, v.center, v.random, v.bcount, v.dir))
 
     def setDupRoot(self, ln):
         """ set/unset root duplication. Only for CHORDs """
-
 
         ln = lnExpand(ln, '%s DupRoot' % self.name)
         tmp = []
 
         for n in ln:
-            n = stoi(n, "Argument for %s DupRoot must be a value"     % self.name)
+            ll = []
+            for v in n.split(','):
+                v = stoi(v, "%s DupRoot: Argument must be a value, not '%s'."
+                            % (self.name, v))
 
-            if n < -9 or n > 9:
-                error("DupRoot %s out-of-range; must be -9 to 9" % n)
+                if v < -9 or v > 9:
+                    error("%s DupRoot: '%s' out-of-range; must be -9 to 9." % (self.name, v))
 
-            tmp.append( n * 12 )
+                if v:
+                    ll.append(v * 12)
+
+            tmp.append(ll)
 
         self.dupRoot = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s DupRoot to " % self.name,
-            printList(ln)
+            print("%s DupRoot set to: %s" % (self.name, self.getDupRootSetting()))
 
+    def getDupRootSetting(self):
+        """ Need to convert nested list ints to string. """
+
+        ret = ""
+        for l in self.dupRoot:
+            if not l:
+                l = [0]
+            ret += ','.join([str(x // 12) for x in l]) + "  "
+        return ret.strip()
 
     def getPgroup(self, ev):
         """ Get group for chord pattern.
@@ -196,22 +201,22 @@ class Chord(PC):
             error("There must be at least 3 items in each group "
                   "of a chord pattern definition, not <%s>" % ' '.join(ev))
 
-        a = struct()
+        a = Pgroup()
 
         a.offset = self.setBarOffset(ev[0])
         a.duration = MMA.notelen.getNoteLen(ev[1])
 
         vv = ev[2:]
-        if len(vv)>8:
+        if len(vv) > 8:
             error("Only 8 volumes are permitted in Chord definition, not %s" % len(vv))
 
         a.vol = [0] * 8
-        for i,v in enumerate(vv):
-            v=stoi(v, "Expecting integer in volume list for Chord definition")
-            a.vol[i]=v
+        for i, v in enumerate(vv):
+            v = stoi(v, "Expecting integer in volume list for Chord definition")
+            a.vol[i] = v
 
-        for i in range(i+1,8): # force remaining volumes
-            a.vol[i]=v
+        for i in range(i + 1, 8):  # force remaining volumes
+            a.vol[i] = v
 
         return a
 
@@ -219,53 +224,55 @@ class Chord(PC):
         self.ssvoice = -1
         self.lastChord = None
 
-
     def chordVoicing(self, chord, vMove):
         """ Mangle chord notes for voicing options. """
 
         sc = self.seq
-        vmode=self.voicing.mode
-        #print vMove, vMove, chord.noteList,
-        if vmode == "OPTIMAL":  ## Optimal voicing algorithm by Alain Brenzikofer.
+        vmode = self.voicing.mode
+
+        if vmode == "OPTIMAL":  # Optimal voicing algorithm by Alain Brenzikofer.
 
             # Initialize with a voicing around centerNote
-
             chord.center1(self.lastChord)
 
             # Adjust range and center
-
             if not (self.voicing.bcount or self.voicing.random):
-                chord.center2(self.voicing.center, self.voicing.range/2)
+                chord.center2(self.voicing.center, self.voicing.range // 2)
 
             # Move voicing
-
             elif self.lastChord:
-                if (self.lastChord != chord.noteList ) and vMove:
-                    chord.center2(self.voicing.center, self.voicing.range/2)
+                if (self.lastChord != chord.noteList) and vMove:
+                    chord.center2(self.voicing.center, self.voicing.range // 2)
                     vMove = 0
 
                     # Update voicingCenter
-
-                    sum=0
+                    sum = 0
                     for n in chord.noteList:
                         sum += n
-                    c=sum/chord.noteListLen
+                    c = sum // chord.noteListLen
 
-                    """ If using random voicing move it it's possible to
-                    get way off the selected octave. This check ensures
-                    that the centerpoint stays in a tight range.
-                    Note that if using voicingMove manually (not random)
-                    it is quite possible to move the chord centers to very
-                    low or high keyboard positions!
-                    """
+                    # If using random voicing move it it's possible to
+                    # get way off the selected octave. This check ensures
+                    # that the centerpoint stays in a tight range.
+                    # Note that if using voicingMove manually (not random)
+                    # it is quite possible to move the chord centers to very
+                    # low or high keyboard positions!
 
                     if self.voicing.random:
-                        if     c < -4: c=0
-                        elif c >4: c=4
-                    self.voicing.center=c
+                        if c < -4:
+                            c = 0
+                        elif c > 4:
+                            c = 4
+                    self.voicing.center = c
 
         elif vmode == "KEY":
             chord.keycenter()
+
+        elif vmode == "KEY2":
+            chord.key2center()
+
+        elif vmode == "ROOTKEY":
+            chord.rootkey()
 
         elif vmode == "COMPRESSED":
             chord.compress()
@@ -279,9 +286,8 @@ class Chord(PC):
             chord.compress()
 
         self.lastChord = chord.noteList[:]
-        #print chord.noteList
-        return vMove
 
+        return vMove
 
     def trackBar(self, pattern, ctable):
         """ Do a chord bar. Called from self.bar() """
@@ -289,17 +295,16 @@ class Chord(PC):
         sc = self.seq
         unify = self.unify[sc]
 
-        """ Set voicing move ONCE at the top of each bar.
-            The voicing code resets vmove to 0 the first
-            time it's used. That way only one movement is
-            done in a bar.
-        """
+        # Set voicing move ONCE at the top of each bar.
+        # The voicing code resets vmove to 0 the first
+        # time it's used. That way only one movement is
+        # done in a bar.
 
         vmove = 0
 
         if self.voicing.random:
             if random.randrange(100) <= self.voicing.random:
-                vmove = random.choice((-1,1))
+                vmove = random.choice((-1, 1))
         elif self.voicing.bcount and self.voicing.dir:
             vmove = self.voicing.dir
 
@@ -310,7 +315,7 @@ class Chord(PC):
             if tb.chordZ:
                 continue
 
-            self.crDupRoot = self.dupRoot[sc]
+            dupRoot = self.dupRoot[sc]
 
             vmode = self.voicing.mode
             vols = p.vol[0:tb.chord.noteListLen]
@@ -320,10 +325,9 @@ class Chord(PC):
             if self.chordLimit:
                 tb.chord.limit(self.chordLimit)
 
-            """ Compress chord into single octave if 'compress' is set
-                We do it here, before octave, transpose and invert!
-                Ignored if we have a VOICINGMODE.
-            """
+            # Compress chord into single octave if 'compress' is set
+            # We do it here, before octave, transpose and invert!
+            # Ignored if we have a VOICINGMODE.
 
             if self.compress[sc] and not vmode:
                 tb.chord.compress()
@@ -331,54 +335,47 @@ class Chord(PC):
             # Do the voicing stuff.
 
             if vmode:
-                vmove=self.chordVoicing(tb.chord, vmove)
+                vmove = self.chordVoicing(tb.chord, vmove)
 
             # Invert.
 
             if self.invert[sc]:
                 tb.chord.invert(self.invert[sc])
 
-            """ Voicing adjustment for 'jazz' or altered chords. If a chord (most
-                likely something like a M7 or flat-9 ends up with any 2 adjacent
-                notes separated by a single tone an unconfortable dissonance results.
-                This little check compares all notes in the chord and will cut the
-                volume of one note to reduce the disonance. Usually this will be
-                the root note volume being decreased.
-            """
+            # Voicing adjustment for 'jazz' or altered chords. If a chord (most
+            # likely something like a M7 or flat-9 ends up with any 2 adjacent
+            # notes separated by a single tone an unconfortable dissonance results.
+            # This little check compares all notes in the chord and will cut the
+            # volume of one note to reduce the disonance. Usually this will be
+            # the root note volume being decreased.
 
-            nl=tb.chord.noteList
-
-            l=len(nl)
-            for j in range(l-1):
+            nl = tb.chord.noteList
+            l = len(nl)
+            for j in range(l - 1):
                 r = nl[j]
-                for i in range(j+1, l):
-                    if nl[i] in (r-1, r+1, r-13, r+13) and vols[i] >= vols[0]:
-                        vols[j] = vols[i]/2
+                for i in range(j + 1, l):
+                    if nl[i] in (r - 1, r + 1, r - 13, r + 13) and vols[i] >= vols[0]:
+                        vols[j] = vols[i] // 2
                         break
 
-            loo = zip(nl, vols)    # this is a note/volume array of tuples
-                
+            loo = list(zip(nl, vols))    # this is a note/volume array of tuples
 
-            """ Duplicate the root. This can be set from a DupRoot command
-                or by chordVoicing(). Notes:
-                 - The volume for the added root will be the average of the chord
-                   notes (ignoring OFF notes) divided by 2.
-                 - If the new note (after transpose and octave adjustments
-                   is out of MIDI range it will be ignored.
-            """
+            # DupRoot adds additional root tones in
+            # different octaves to fatten chord sounds.
 
-            if self.crDupRoot:
-                root = tb.chord.rootNote + self.crDupRoot
-                t = root + self.octave[sc] + gbl.transpose
-                if t >=0 and t < 128:
-                    v=0
-                    c=0
-                    for vv in vols:
-                        if vv:
-                            v += vv
-                            c += 2
-                    v /= c
-                    loo.append( (tb.chord.rootNote + self.crDupRoot, v))
+            if dupRoot:
+
+                # Volume for the dups is adjusted by taking the
+                # average of the non-zero volumes in the chord
+                # and adjusting with the harmonyVolume.
+
+                v = [x for x in vols if x > 0]
+                if v:   # just in case we have a no-volume chord
+                    v = int((sum(v) // len(v)) * self.harmonyVolume[sc])
+
+                    root = tb.chord.rootNote  # true root of chord
+                    for nn in dupRoot:
+                        loo.append(((nn + root), v))
 
             # For strum we need to know the direction. Note that the direction
             # is saved for the next loop (needed for alternating in BOTH).
@@ -392,28 +389,37 @@ class Chord(PC):
             elif sd == 'DOWN':
                 self.sortDirection = 1
             elif sd == 'RANDOM':
-                self.sortDirection = random.randint(0,1)
+                self.sortDirection = random.randint(0, 1)
             else:
                 self.sortDirection = 0
-                
-            strumAdjust = self.getStrum(sc)
-            if strumAdjust:  
+
+            if self.getStrum(sc):
                 loo.sort()    # sort for strum only. If no strum it doesn't matter
                 if self.sortDirection:
                     loo.reverse()
 
-            if self.ornaments['type']:   # ornanetation applies to the top note only
-                MMA.ornament.doOrnament(self, [loo[-1]], 
-                     self.getChordInPos(p.offset, ctable).chord.scaleList, p)
-                loo.pop()
-            self.sendChord(loo, p.duration, p.offset)
-                            
+            # ornametation applies to the top note only. However,
+            # we might need to step though the list of notes to find
+            # a sounding note (volumes set to 0).
+            offset = p.offset
+            if self.ornaments['type']:
+                while 1:
+                    lo = loo.pop()
+                    if lo[1]:
+                        offset = MMA.ornament.doOrnament(self, [lo],
+                                self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                        break
+                    elif not loo:
+                        break
+                    else:
+                        continue
+            
+            # Handle a non-ornamented chord or the remainer of an ornamented one
+            self.sendChord(loo, p.duration, offset)
+
             tb.chord.reset()    # important, other tracks chord object
 
         # Adjust the voicingMove counter at the end of the bar
 
         if self.voicing.bcount:
             self.voicing.bcount -= 1
-
-
-

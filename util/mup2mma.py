@@ -24,49 +24,50 @@
     
     0.5 - corrected melody/lyric notation.
 
+    1.0 - converted to python 2 or 3 (March/2014)
+
     bvdp, Dec/2004
     
 """
 
 import os
 import sys
-import commands
 import getopt
 
 # Useful functions
 
 def error(m=''):
-    print "Error: %s" % m
+    print("Error: %s" % m)
     sys.exit(1)
     
 def usage():
-    print "mup2mma - (c) Bob van der Poel"
-    print "Extract MMA data from MUP file."
-    print "Options:"
-    print "   -o   overwrite existing MMA file"
-    print "   -m   extract melody data"
-    print "   -l   extract lyric data"
-    print "   -v   print version"
+    print("""mup2mma - (c) Bob van der Poel
+Extract MMA data from MUP file.
+Options:
+ -o   overwrite existing MMA file
+ -m   extract melody data
+ -l   extract lyric data
+ -v   print version
+""")
     sys.exit(0)
 
 # Global variables
 
-Version = '0.5'
+Version = '1.0'
 
 overwrite = 0         # set if overwrite of old mma file okay
-doLyric = 0             # set if we want lyrics output
-doMelody = 0         #  set if we want melody output
+doLyric = 0           # set if we want lyrics output
+doMelody = 0          #  set if we want melody output
 
 
 # Parse command line, open files 
-
  
 try:
     opts, args = getopt.gnu_getopt(sys.argv[1:],  "omlv")
 except getopt.GetoptError:
     usage()
 
-for o,a in opts:
+for o, a in opts:
     if o == '-o':
         overwrite = 1
     elif o == '-l':
@@ -74,7 +75,7 @@ for o,a in opts:
     elif o == '-m':
         doMelody = 1
     elif o == '-v':
-        print Version
+        print(Version)
         sys.exit(0)
     else:
         usage()
@@ -86,12 +87,12 @@ infile = args[0]
 
 outfile = os.path.basename(infile)
 if outfile.endswith('.mup'):
-    outfile=outfile[:-4]
-title=outfile.replace("-", ' ').title()
+    outfile = outfile[:-4]
+title = outfile.replace("-", ' ').title()
 outfile += ".mma"
 
 try:
-    bars = file(infile)
+    bars = open(infile)
 except:
     error("Can't open input file '%s'." % infile)
 
@@ -99,7 +100,7 @@ if os.path.exists(outfile) and not overwrite:
     error("File '%s' already exists." % outfile)
 
 try:
-    out=file(outfile, "w")
+    out = open(outfile, "w")
 except:
     error("Can't open output file '%s'." % outfile)
 
@@ -112,11 +113,11 @@ bnum = 1
 donebar = 0
 melody = ''
 lyric = ''
-chordList=[]
+chordList = []
 
 for b in bars:
-    b=b.strip()
-    if b=='':               # skip empty lines
+    b = b.strip()
+    if b == '':               # skip empty lines
          continue
 
     if b.startswith("// TEMPO:"):
@@ -147,9 +148,12 @@ for b in bars:
         
         elif ts=='12/8':
             beats = 12
+            posStep = 4
+        elif ts=='5/4':
+            beats = 5
             posStep = 1
         else:
-            error("Uknown time sig, %s" % b)
+            error("Unknown time sig, %s" % b)
     
     # Parse line number from MUP
     
@@ -205,7 +209,8 @@ for b in bars:
             chord = chord.replace('^', 'M')
             chord = chord.replace('o', 'dim')
             chord = chord.replace('\\(dim)', 'dim')
-            
+            chord = chord.replace('6/9', '6(add9)')
+
             chordList.append(chord )
             pos += posStep
         
@@ -231,8 +236,11 @@ for b in bars:
         
         out.write('\n')
 
-        if int(bnum) % 4 == 0:   # put in blank line every 4 bars
-            out.write('\n')
+        try:
+            if int(bnum) % 4 == 0:   # put in blank line every 4 bars
+                out.write('\n')
+        except:
+            pass
 
         if key == 'repeatend':
             out.write( "\n// RepeatEnd\n\n")

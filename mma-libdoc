@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
-# Parse libraries and create html docs
+# Parse libraries and create html docs (works in py 2 & 3)
 
 import os, sys, time, platform, subprocess
 
 if len(sys.argv)>1:
-    print """mma-libdoc is a MMA maintenance program to parse library
+    print("""mma-libdoc is a MMA maintenance program to parse library
  files and create/maintain the html library documentation.
  This program should be run as 'root' and it takes no
  command options. For more details see the file
- "README.mma-libdoc" which is distributed with MMA."""
+ "README.mma-libdoc" which is distributed with MMA.""")
     sys.exit(0)
 
 installdir = ( "c:\\mma\\", "/usr/local/share/mma", "/usr/share/mma", ".")
@@ -25,8 +25,8 @@ for p in installdir:
         break
 
 if not libpath:
-    print "Can't find the MMA library!"
-    print "Please check your installation and/or change the search path in this program."
+    print("Can't find the MMA library!")
+    print("Please check your installation and/or change the search path in this program.")
     sys.exit(1)
 
 try:
@@ -45,7 +45,7 @@ else:
     sh_value = False
 
 
-print "Processing library files"
+print("Processing library files")
 
 def  dodir(dir):
     """ Process files in directory.  """
@@ -58,7 +58,7 @@ def  dodir(dir):
         try:
             os.mkdir(olib)
         except:
-            print "Can't create directory", olib
+            print("Can't create directory %s" % olib)
             sys.exit(1)
 
     links.append("<li> <A Href=#%s> <h2> %s </h2> </a> </li>" % (dir, dir.title()))
@@ -74,6 +74,9 @@ def  dodir(dir):
 
     for f in sorted(os.listdir(libpath + dir)):
         this = os.path.join(libpath, dir, f)
+
+        if f.startswith('#') or f.startswith('.'):   # ignore backup and hidden
+                continue
 
         if os.path.isdir(this):
             newdirs.append(os.path.join(dir, f))
@@ -92,37 +95,39 @@ def  dodir(dir):
             try:
                 libdate = os.path.getmtime(this)
             except:
-                print "NO, NO, NO --- let Bob know about this!"
+                print("NO, NO, NO --- let Bob know about this!")
                 pass   # shouldn't ever happen!
 
             if libdate < htmldate:
-                print "Skipping:", this
+                print("Skipping: %s" % this)
 
             else:
                 if htmldate == 0:
-                    print "Creating:", htmlfname
+                    print("Creating: %s" % htmlfname)
                 else:
-                    print "Updating:", htmlfname
+                    print("Updating: %s" % htmlfname)
                 try:
                     pid = subprocess.Popen( [MMA, "-Dxh", "-w", "-n", this],
                           shell=sh_value, stdout=subprocess.PIPE)
                     output = pid.communicate()[0]
+
                 except:
-                    print "Error forking %s. Is MMA variable correctly set?" % MMA
+                    print("Error forking %s. Is MMA variable correctly set?" % MMA)
                     sys.exit(1)
 
                 try:
                     o = open(htmlout, "w")
+                    output = output.decode(encoding="UTF-8")  # for py3
                     o.write(output)
                     o.close()
                 except:
-                    print "ERROR Creating %s" % htmlout
+                    print("ERROR Creating %s" % htmlout)
                     continue
                     
 
                 # Now make html files for each groove in the lib file.
 
-                for a in file(htmlout):
+                for a in open(htmlout):
                     if a.startswith("<!-- GROOVE"):
                         a=a.split()
                         gname = a[1].split('=', 1)[1]
@@ -135,15 +140,16 @@ def  dodir(dir):
                                shell=sh_value, stdout=subprocess.PIPE)
                             output = pid.communicate()[0]
                         except:
-                            print "Error forking %s. Is MMA variable correctly set?"
+                            print("Error forking %s. Is MMA variable correctly set?")
                             sys.exit(1)
 
                         try:
                             o = open(gout, "w")
-                            o.write(output)
+                            output = output.decode(encoding="UTF-8")  # for py3
+                            o.write(str(output))
                             o.close()
                         except:
-                            print "ERROR Creating %s" % gout
+                            print("ERROR Creating %s" % gout)
                         continue
 
 
@@ -177,7 +183,7 @@ if dirs.count("stdlib"):
 for dir in dirs:
     dodir(dir)
 
-out = file(os.path.join(docpath, 'index.html'), "w")
+out = open(os.path.join(docpath, 'index.html'), "w")
 
 out.write("""<HTML>
 

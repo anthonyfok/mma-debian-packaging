@@ -22,7 +22,7 @@ End
 // into the Solo track. When played they are treated just
 // like solo notes entered by hand. 
 
-Midiinc File=rec1.mid Solo=1,Riff Volume=70 Octave=2
+Midiinc File=rec1.mid Solo=1,Riff  Volume=70 Octave=2
 
 // And play it
 
@@ -31,3 +31,4 @@ Midiinc File=rec1.mid Solo=1,Riff Volume=70 Octave=2
 	C
 	G7 * 2
 	C
+    z!

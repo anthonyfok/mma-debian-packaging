@@ -1,4 +1,3 @@
-
 # patDrum.py
 
 """
@@ -26,9 +25,10 @@ Bob van der Poel <bob@mellowood.ca>
 import MMA.notelen
 import MMA.translate
 
-import gbl
-from   MMA.common import *
-from   MMA.pat import PC
+from . import gbl
+from MMA.common import *
+from MMA.pat import PC, Pgroup
+
 
 class Drum(PC):
     """ Pattern class for a drum track. """
@@ -38,7 +38,7 @@ class Drum(PC):
     def __init__(self, ln):
         """ init for drum track. """
 
-        self.toneList = [38]        
+        self.toneList = [38]
 
         PC.__init__(self, ln)   # This order is important!
 
@@ -51,7 +51,7 @@ class Drum(PC):
 
         PC.saveGroove(self, gname)  # do this 1st. Creates storage.
         self.grooves[gname]['TONES'] = self.toneList[:]
- 
+
     def restoreGroove(self, gname):
         """ Restore special/local/variables for groove. """
 
@@ -66,10 +66,9 @@ class Drum(PC):
 
     def clearSequence(self):
         """ Set some initial values. Called from init and clear seq. """
-        
+
         PC.clearSequence(self)
         self.toneList = seqBump([38])
-
 
     def setTone(self, ln):
         """ Set a tone list. Only valid for DRUMs.
@@ -82,12 +81,10 @@ class Drum(PC):
         for n in ln:
             tmp.append(MMA.translate.dtable.get(n))
 
-        self.toneList = seqBump( tmp )
-
+        self.toneList = seqBump(tmp)
 
     def restart(self):
         self.ssvoice = -1
-
 
     def getPgroup(self, ev):
         """ Get group for a drum pattern.
@@ -97,17 +94,15 @@ class Drum(PC):
 
         if len(ev) != 3:
             error("There must be at exactly 3 items in each "
-                  "group of a drum define, not <%s>" % ' '.join(ev) )
+                  "group of a drum define, not <%s>" % ' '.join(ev))
 
-        a = struct()
+        a = Pgroup()
 
-        a.offset   = self.setBarOffset(ev[0])
+        a.offset = self.setBarOffset(ev[0])
         a.duration = MMA.notelen.getNoteLen(ev[1])
-        a.vol      = stoi(ev[2], "Type error in Drum volume")
+        a.vol = stoi(ev[2], "Type error in Drum volume")
 
         return a
-
-
 
     def trackBar(self, pattern, ctable):
         """ Do a drum bar.
@@ -116,11 +111,11 @@ class Drum(PC):
 
         """
 
+        
         sc = self.seq
 
         for p in pattern:
             tb = self.getChordInPos(p.offset, ctable)
-
             if tb.drumZ:
                 continue
 
@@ -128,12 +123,4 @@ class Drum(PC):
                 p.offset,
                 self.getDur(p.duration),
                 self.toneList[sc],
-                self.adjustVolume(p.vol, p.offset) )
-
-
-
-
-
-
-
-
+                self.adjustVolume(p.vol, p.offset))

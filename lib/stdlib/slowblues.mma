@@ -112,7 +112,7 @@ End
 
 DefGroove SlowBluesFill  Full chord plus argeggio for fills.
 Arpeggio Sequence A8
-DefGroove SlowBluesFill1 Same as fill1 but with straight 8ths.
+DefGroove SlowBluesFill1 Same as Fill but with straight 8ths.
 
 Groove SlowBluesFill
 Arpeggio Sequence -

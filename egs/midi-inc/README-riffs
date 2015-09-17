@@ -20,7 +20,7 @@ create a short introduction to a song (The Summer Knows).
 
  -- we now have 3 files: summer.mid, summer.mma and solo.mid
 
-6. Modify the original MMA file so we can analize the solo file. Just add
+6. Modify the original MMA file so we can analyze the solo file. Just add
    the following line AFTER the metronome:
 
      MidiInc File=solo.mid Report=On
@@ -48,7 +48,7 @@ create a short introduction to a song (The Summer Knows).
 
      MidiInc File=sol.mid Solo=1,riff,print Volume=200  StripSilence=4361
 
-   and complile. You should get a bunch of RIFF command lines on the screen.
+   and compile. You should get a bunch of RIFF command lines on the screen.
    If it's working you can cut/paste off the screen or redirect into a
    scratch file.
 

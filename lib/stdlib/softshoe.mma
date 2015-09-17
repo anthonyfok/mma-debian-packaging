@@ -147,6 +147,19 @@ Chord        Sequence  * * * L1
 
 DefGroove SoftShoeIntro   A 4 bar introduction.
 
+Groove  SoftShoe
+SeqSize 8
+
+
+Drum-Side    Sequence  * * * * * * * D1
+Drum-OHH     Sequence  { D13 ; D24 Shift .75 } / / / / / / D13
+
+Bass         Sequence  B13 / / / / / / {1 4 5 90; 2 4 4 90; 3 4 3 90; 4 4 2 90}
+Walk         Sequence -
+
+Chord        Sequence  * * * * * * * L1
+	
+DefGroove SoftShoeIntro8   Same intro over 8 bars.
 
 ////////////////////////
 //// Ending

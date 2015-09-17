@@ -169,7 +169,7 @@ Chord-Sus Groove JiveSus
 DefGroove Jive1SusPlus      No push with strings and arpeggios.
  
 ////////////////////////
-/// Intro
+/// Intros
 
 Groove Jive
 
@@ -186,6 +186,33 @@ Drum-Clap  Sequence  D1234 / / D1
 
 DefGroove JiveIntro    4 bar intro.
 
+//////// 
+
+Groove Jive
+
+AllTracks SeqRnd Off
+AllTracks Rskip 0
+
+Drum-Kick  Sequence  D13 / / D1
+Drum-Snare Sequence  D24 / / D1
+Drum-HH    Sequence  D1234  / / D1
+Bass       Sequence  B13 / / {1 4 1 80; 2 4 3 90; 3 4 1 100}
+Begin Bass-Sax
+   Accent    {}
+   Volume    f
+   Sequence  B11 / / {1 2 1 90}
+End
+Begin Chord 
+  Sequence  {C1234; 1 1 80 * 4 Shift .66} / / L1
+  Volume    m
+End
+Begin Drum-Clap
+  Sequence  D1234 / / D12
+  Volume    f   /  /  ff
+End
+DefGroove JiveIntro2    Alternate, busier, 4 bar intro.
+
+///////////
 
 Groove Jive
 AllTracks SeqRnd Off

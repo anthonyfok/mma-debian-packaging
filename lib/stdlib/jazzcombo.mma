@@ -203,6 +203,7 @@ End
 DefGroove JazzCombo2   The basic beat with added drums.
 
 
+
 ////////////////////
 /// Sustained
 
@@ -234,6 +235,52 @@ Groove JazzCombo2
 Chord-Sus Groove JazzComboSus
 DefGroove  JazzCombo2Sus  Strings plus added drums.
 
+///////////////////////////////////
+/// Plus versions. These all mute the rhythm guitar and let it
+/// play a sort-of solo line.
+
+Groove JazzCombo
+
+Chord-Guitar Sequence -
+Begin Arpeggio-Guitar
+    Voice       $_Chord-Guitar_Voice
+    Articulate  110
+    Harmony     3Below
+    Octave      5
+    Rskip       30    40   40   70
+	Sequence    A2    A4   A4   A8
+    Volume      mp
+    Direction   Random
+	Range       1
+    SeqRnd      On
+End
+
+DefGroove JazzComboPlus   Guitar plays pseudo melody instead of rhythm.
+
+Groove JazzCombo1
+Chord-Guitar Sequence -
+Arpeggio-Guitar Copy  JazzComboPlus::Arpeggio-Guitar 
+DefGroove JazzCombo1Plus   Guitar melody with staighter piano.
+
+Groove JazzCombo2
+Chord-Guitar Sequence -
+Arpeggio-Guitar Copy  JazzComboPlus::Arpeggio-Guitar 
+DefGroove JazzCombo2Plus   More drums with guitar melody.
+
+Groove JazzComboSus
+Chord-Guitar Sequence -
+Arpeggio-Guitar Copy  JazzComboPlus::Arpeggio-Guitar 
+DefGroove JazzComboSusPlus   Strings with guitar.
+
+Groove JazzCombo1Sus
+Chord-Guitar Sequence -
+Arpeggio-Guitar Copy  JazzComboPlus::Arpeggio-Guitar 
+DefGroove JazzCombo1SusPlus   Strings, straight chords and guitar.
+
+Groove JazzCombo2Sus 
+Chord-Guitar Sequence -
+Arpeggio-Guitar Copy  JazzComboPlus::Arpeggio-Guitar 
+DefGroove JazzCombo2SusPlus    Strings, drums and guitar.
 
 ////////////////////////////////
 /// Introduction
@@ -255,6 +302,14 @@ Chord-Piano  Sequence     -
 
 
 DefGroove JazzComboIntro   A 4 bar introduction.
+
+Walk         Sequence     W1234   /    /    {1 2. 90}
+Chord-Guitar Sequence     *       /    /    L1
+Chord-Piano  Sequence     L1      /    /    /
+Drum-OHH     Sequence     *       *    *    D1
+Drum-Snare   Sequence     *       *    *    D1
+
+DefGroove JazzComboIntro2  Same intro with less stuff going on.
 
 /////////////////////////////////////////
 ///// Ending

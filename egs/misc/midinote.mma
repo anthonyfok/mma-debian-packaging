@@ -97,7 +97,7 @@ Begin Solo
  Harmony Open
  Midinote Offsets=Ticks
 End
- Solo MidiNote Pbr 20  0,192    0,8000
+ Solo MidiNote articulate=on Pbr 20  0,192    0,8000
  Solo Midinote Pbr 20  384,576  8000,0
  z  {1ae+c+;}
 Solo MidiNote Pb 0 0

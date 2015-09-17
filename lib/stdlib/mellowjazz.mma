@@ -20,11 +20,12 @@ Timesig 4 4
 Include stdpats
 Seqsize 4
 
-// These are used in the bass-accent grooves and others to set
+// These are used in the arpeggio-accent grooves and others to set
 // an offset for the "push" notes.
 If Ndef Push0
   Set Push0 0.666
 Endif
+Set PUSH1 $( 1 + $PUSH0 )
 Set Push2 $( 2 + $PUSH0 )
 Set Push3 $( 3 + $PUSH0 )
 Set Push4 $( 4 + $PUSH0 )
@@ -32,6 +33,20 @@ Set Push4 $( 4 + $PUSH0 )
 
 ////////////////////////////////////////////////
 /// Basic Groove
+
+
+/// Set the drum set to brushes. If you have a different patch set,
+/// change the "If Def" and Voice.
+
+If Def Wk3000
+    StackValue $_Debug
+    Debug Warnings=Off
+    Drum-Kick1  Voice BrushSet
+    Drum-Snare1 Voice BrushSet
+    Drum-Snare2 Voice BrushSet
+    Drum-Ride1  Voice BrushSet
+    Debug $_Stackvalue
+Endif
 
 
 Begin Drum-Kick1
@@ -46,7 +61,7 @@ Begin Drum-Snare1
     Tone SnareDrum1
     Rvolume 5 
     Rtime 5
-    Volume mp
+    Volume   p
     Sequence { D1234 ; D24 Shift $PUSH0 }
 End
 
@@ -63,9 +78,10 @@ Begin Drum-OHH
     Tone OpenHiHat
     Rvolume 5 
     Rtime 5
-    Volume mp
+    Volume m
     Sequence  {1 0 50} z z z
 End
+
 Begin Drum-Ride1
     Tone RideCymbal1
     Rvolume 5 
@@ -74,55 +90,36 @@ Begin Drum-Ride1
     Sequence  { D1 } z  z  z
 End 
 
-/// Set the drum set to brushes. If you have a different patch set,
-/// change the "if def" and Voice.
-
-if Def Wk3000
-    StackValue $_Debug
-    Debug Warnings=Off
-    Drum-Kick1 Voice BrushSet
-    Drum-Snare1 Voice BrushSet
-    Drum-Snare2 Voice BrushSet
-    Drum-Ride1 Voice BrushSet
-    Debug $_Stackvalue
-Endif
 
 Begin Walk-Main         /// Our main bass line on 1,3,4
      Voice AcousticBass
-     Volume mp
+     Volume m
      Articulate 90
      Octave 3
-     Sequence {1 4 90 ; 3 4 90; 4 4 90}
-End
-
-Begin Walk-Accent      /// accents before 3 & 4, skips sometimes.
-    Copy Walk-Main
-    Volume p
-    Rskip 20
-    Sequence { $PUSH2 8 90; $PUSH4 8 90}
+     Sequence {1 4 90 ; 3 4 90; 4 4 90; $PUSH2 8 90; $PUSH4 8 90}
+     Rskip 30 Beats= $PUSH2 , $PUSH4
 End
 
 Begin Chord-Guitar
     Voice JazzGuitar
-    Volume p
     Articulate 120  
     Volume pp
     Octave 5
     Strum 3
     Voicing Mode=Key
-    Sequence {C1234; C4 Shift $PUSH0 } { 1 2 90; 3 2 90; C4 Shift $PUSH0 }
+    Sequence {C1234; $PUSH4 8 80 } { 1 2 90; 3 2 90; $PUSH4 8 80 }
 End
 
 Begin Chord-Piano
     Voice Piano1
-    Volume p
+    Volume m
     Rskip 20
     Rtime 10
     Rvolume 0,20
     Articulate 110
     Octave 5
     Voicing Mode=Key
-    Sequence {C1; C4 Shift $PUSH0 }
+    Sequence {C1; $PUSH4 8 80 }
 End
 
 DefGroove MellowJazz    A slow, steady beat.
@@ -145,7 +142,7 @@ Begin Arpeggio-Piano
     Octave  5
     Range  .9
     Sequence  { A4; $PUSH4 8 80 }  \
-              { A8; $PUSH2 8 70; $PUSH4 8 60} \
+              { A4; $PUSH1 8 70; $PUSH2 8 70; $PUSH3 8 70; $PUSH4 8 60} \
               { A2; $PUSH2 8 70; $PUSH4 8 60 } \
               { A4; $PUSH2 8 80 }
 End
@@ -159,12 +156,12 @@ Groove MellowJazz
 
 Begin Chord-Strings
     Voice TremoloStrings
-    Volume pp
+    Volume mp
     Articulate 100
     Unify On
     Octave 5
     DupRoot -1  // Add in some cellos
-    Sequence {1 2 90 0 80; 3 2 90 0 80}
+    Sequence {1 2 90 0 80 0; 3 2 90 0 80 0}
 End
 
 DefGroove MellowJazzSus   Add strings to the mix.
@@ -190,11 +187,8 @@ Begin Walk-Main
     Direction Down
 End
 
-Walk-Accent Sequence -
-
 Chord-Guitar Sequence -
 Chord-Piano  Sequence { C1234; C1234 Shift $Push0 }
-
 
 DefGroove MellowJazzFill  A one bar fill.
 
@@ -209,11 +203,10 @@ Drum-Snare2  Sequence  D1     z      D1    z
 Drum-OHH     Sequence  *      z    {1 0 50} z
 Drum-Ride1   Sequence  D1     z     D1      z
 
-Walk-Main   Sequence   W1234  /      /   {1 2 90}
-Walk-Accent Sequence { $PUSH2 8 90; $PUSH4 8 90}   /    /  z
+Walk-Main   Sequence   { W1234; $PUSH2 8 75; $PUSH4 8 80} /    /   {1 2 90}
 
-Chord-Guitar Sequence -
-Chord-Piano  Sequence *       *     *   L1
+Chord-Guitar Sequence  -
+Chord-Piano  Sequence  *      *     *   L1
 
 DefGroove MellowJazzIntro   Simple 4 bar intro.
 
@@ -224,17 +217,14 @@ DefGroove MellowJazzIntro   Simple 4 bar intro.
 Groove MellowJazz
 Seqsize 2
 
-// Drum-Kick1
+Drum-Kick1   Sequence  D1     /
 Drum-Snare1  Sequence  *      D1
 Drum-Snare2  Sequence  D1     z 
 Drum-OHH     Sequence  *      z 
 Drum-Ride1   Sequence  D1     z 
 
-Walk-Main   Sequence   W1234  {1 2 90}
-Walk-Accent Sequence { $PUSH2 8 90; $PUSH4 8 90}  z
-
-Chord-Guitar Sequence {1 2 90 } z
+Walk-Main   Sequence   {W1234; $PUSH2 8 80; $PUSH4 8 80;}  {1 2 90}
+Chord-Guitar Sequence {1 2 90 }    z
 Chord-Piano  Sequence C1234        L1
-
 
 DefGroove MellowJazzEnd  Simple 2 bar ending.

@@ -3,6 +3,10 @@
 # Extract midi solos for including into mma scripts using MIDINote.
 # Bob van der Poel, Jan/09
 
+# You need to run this with python2. Probably will not get converted since
+# the usage of this program is mostly replaced my the midiInc command in MMA.
+# bvdp, Feb/2014.
+
 import os, sys, math, time, getopt
 
 # Some constants/globals

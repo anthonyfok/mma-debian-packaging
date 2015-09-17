@@ -158,6 +158,22 @@ Chord          	Sequence	C13  C1  C123  C1
 
 DefGroove LatinWaltzIntro   Simple 4 bar introduction.
 
+Groove LatinWaltz
+SeqSize 8
+
+Drum-CowBell	Sequence  *  *  *  *  *  *  *  D1
+Drum-LowConga   Sequence  *  *  *  *  *  *  z  z 
+Drum-HighConga  Sequence  *  *  *  *  *  *  *  z
+Drum-Maraca     Sequence D123 D1 /  D23 D1 D3 / D1
+//Drum-Claves     Sequence  D1 D3 D2 D1
+
+Chord          	Sequence	C13  C1  C123  C23  C1 C13 C123 C1
+
+// Bass        
+// Walk
+
+DefGroove LatinWaltzIntro8   Simple 8 bar introduction.
+
 /////////////////////////////////////////////////////////
 ////////  Ending
 
