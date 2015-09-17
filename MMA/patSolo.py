@@ -1,4 +1,3 @@
-
 # patSolo.py
 
 """
@@ -31,27 +30,30 @@ import MMA.alloc
 import MMA.swing
 import MMA.truncate
 
-import gbl
+from . import gbl
 
-from   MMA.common import *
-from   MMA.pat import PC
-from   MMA.keysig import keySig
+from MMA.common import *
+from MMA.pat import PC, Pgroup
+from MMA.keysig import keySig
 
 import re
 import random
 
-# Each note in a solo gets a NoteEvent. 
+
+# Each note in a solo gets a NoteEvent.
 class NoteEvent:
-    def __init__(self, pitch, velocity):
+    def __init__(self, pitch, velocity, isgrace):
         self.duration = None
         self.pitch = pitch
         self.articulation = None
         self.velocity = velocity
         self.defvelocity = velocity
+        self.isgrace = isgrace             # signal grace note, no harmony and change offset
 
-accValues = {'#': 1, "&":-1, 'n':0}
+accValues = {'#': 1, "&": -1, 'n': 0}
 
 ##############################
+
 
 class Melody(PC):
     """ The melody and solo tracks are identical, expect that
@@ -61,12 +63,16 @@ class Melody(PC):
 
     vtype = 'MELODY'
     drumType = None
-    
+
     endTilde = []
     drumTone = 38
     arpRate = 0
     arpDecay = 0
     arpDirection = 'UP'
+    stretch = 1
+    followChord = 0
+    followKey = 1
+    rootChord = 0   # start off with a C chord as default
 
     def setDrumType(self):
         """ Set this track to be a drum track. """
@@ -77,10 +83,89 @@ class Melody(PC):
         self.drumType = 1
         self.setChannel('10')
 
+    def setVoicing(self, ln):
+        """ Set the voicing option for a solo/melody track. Only permitted
+            option is FOLLOWCHORD.
+        """
 
-    def definePattern(self, name, ln):
-        error("Melody/solo patterns cannot be defined")
+        notopt, ln = opt2pair(ln, toupper=1)
 
+        if notopt:
+            error("Voicing %s: Each option must be a OPT=VALUE pair." % self.name)
+
+        for opt, val in ln:
+            if opt == 'FOLLOWCHORD':
+                if val in ('0', 'OFF'):
+                    val = None
+                elif val in ('1', 'ON'):
+                    val = 1
+                else:
+                    error("%s Voicing FollowChord: expecting On or Off." % self.name)
+                self.followChord = val
+
+            elif opt == 'FOLLOWKEY':
+                if val in ('0', 'OFF'):
+                    val = None
+                elif val in ('1', 'ON'):
+                    val = 1
+                else:
+                    error("%s Voicing FollowKey: expecting On or Off." % self.name)
+
+                self.followKey = val
+
+            elif opt == 'ROOT':
+                try:
+                    self.rootChord = MMA.chords.cdAdjust[val.upper()]
+                except KeyError:
+                    error("Voicing %s: Chord name %s not valid." % (self.name, val))
+
+            else:
+                error("Voicing %s: Only valid options are 'FollowChord', 'FollowKey' and 'Root'."
+                      % self.name)
+
+    def formatPattern(self, pat):
+        """ Format an existing pattern. Overrides class def! """
+
+        if not pat:
+            return ''
+        else:
+            return pat
+
+    def saveGroove(self, gname):
+        """ Save special/local variables for groove. """
+
+        PC.saveGroove(self, gname)  # create storage. Do this 1st.
+        self.grooves[gname]['FOLLOWCHORD'] = self.followChord
+        self.grooves[gname]['FOLLOWKEY'] = self.followKey
+        self.grooves[gname]['ROOT'] = self.rootChord
+
+    def restoreGroove(self, gname):
+        """ Restore special/local/variables for groove. """
+
+        self.followChord = self.grooves[gname]['FOLLOWCHORD']
+        self.followKey = self.grooves[gname]['FOLLOWKEY']
+        self.rootChord = self.grooves[gname]['ROOT']
+        PC.restoreGroove(self, gname)
+
+    def defPatRiff(self, ln):
+        """ Create a solo pattern. This is used for solo sequenes only.
+
+            All we do is to return the string set as a pattern. Pretty simple.
+
+        """
+
+        return ln
+
+    def setStretch(self, ln):
+        """ Set a stretch (or compress) value for each note set in a solo. """
+
+        s = stof(ln[0])
+
+        if s < 1 or s > 500:
+            error("%s Stretch: value must be a percentage in range 1 to 500, not '%s'"
+                  % (self.name, s))
+
+        self.stretch = s / 100.
 
     def setArp(self, ln):
         """ Set the arpeggiate options. """
@@ -88,31 +173,42 @@ class Melody(PC):
         notopt, ln = opt2pair(ln, 1)
 
         if notopt:
-            error("%s Arpeggiate: expecting cmd=opt pairs, not '%s'." \
-                      % (self.name, ' '.join(notopt) ))
-        
+            error("%s Arpeggiate: expecting cmd=opt pairs, not '%s'."
+                  % (self.name, ' '.join(notopt)))
+
         for cmd, opt in ln:
             if cmd == 'RATE':
                 if opt == '0' or opt == 'NONE':
                     self.arpRate = 0
                 else:
-                    self.arpRate = MMA.notelen.getNoteLen(opt)
+                    self.arpRate = self.getNoteLen(opt)
 
             elif cmd == 'DECAY':
-                v = stof(opt, "Mallet Decay must be a value, not '%s'" % opt)
+                v = stof(opt, "Arpeggiate Decay must be a value, not '%s'" % opt)
                 if v < -50 or v > 50:
-                    error("%s Arpeggiate: Decay rate must be -50..+50" % \
-                              self.name )
-                self.arpDecay = v/100
+                    error("%s Arpeggiate: Decay rate must be -50..+50" %
+                          self.name)
+                self.arpDecay = v / 100
 
             elif cmd == 'DIRECTION':
                 valid = ("UP", "DOWN", "BOTH", "RANDOM")
                 if opt not in valid:
-                    error("%s Arpeggiate Direction: Unknown setting '%s', use %s."\
-                       % (self.name, opt, ', '.join(valid)))
+                    error("%s Arpeggiate Direction: Unknown setting '%s', use %s."
+                          % (self.name, opt, ', '.join(valid)))
                 self.arpDirection = opt
 
- 
+        if gbl.debug:
+            print("%s Arpeggiate: Rate=%s Decay=%s Direction=%s" % 
+                  (self.name, self.arpRate, self.arpDecay, self.arpDirection))
+
+    def getNoteLen(self, n):
+        """ This is a special interface to MMA.notelen.getNoteLen() which
+            adjusts the length (in MIDI ticks) by the "stetch" value for
+            this class.
+        """
+
+        return MMA.notelen.getNoteLen(n) * self.stretch
+
     def restart(self):
         self.ssvoice = -1
 
@@ -124,13 +220,11 @@ class Melody(PC):
 
         if len(ln) > 1:
             error("Only 1 value permitted for Drum Tone in Solo tracks")
-        
-        
-        self.drumTone = MMA.translate.dtable.get(ln[0])
-       
 
-    def getChord(self, c, velocity, isdrum):
-        """ Extract a set of notes for a single beat. 
+        self.drumTone = MMA.translate.dtable.get(ln[0])
+
+    def getChord(self, c, velocity, isdrum, isgrace):
+        """ Extract a set of notes for a single beat.
 
             This is a function just to make getLine() a bit shorter
             and more readble.
@@ -161,9 +255,9 @@ class Melody(PC):
                 continue
             if '/' in cc:
                 if cc.count('/') > 1:
-                    error("%s: Only 1 '/velocity' permitted. You can separate " \
-                          "notes in the chord with ',' or ' ' and it'll work." % \
-                              self.name)
+                    error("%s: Only 1 '/velocity' permitted. You can separate "
+                          "notes in the chord with ',' or ' ' and it'll work." %
+                          self.name)
                 cc, newvel = cc.split('/')
                 if not newvel:
                     error("%s: expecting 'volume' after '/'" % self.name)
@@ -179,33 +273,34 @@ class Melody(PC):
                 thisvel = velocity
 
             if cc[0] == 'r':
+                if isgrace:
+                    warning("%s: Grace note is a rest (ignored)." % self.name)
+
                 if events or len(cc) > 1:
                     error("%s: Rests and notes cannot be combined." % self.name)
                 else:
-                    events.append( NoteEvent(None, 0))  # note event with no pitch
-
+                    events.append(NoteEvent(None, 0, isgrace))  # note event with no pitch
 
             elif cc[0] in "1234567890":
-                n = stoi(cc, "%s: Note values must be integer or literal." % \
-                             self.name)
-                if n<0 or n>127:
-                    error("%s: Midi notes must be 0..127, not '%s'" % \
-                              (self.name, n))
+                n = stoi(cc, "%s: Note values must be integer or literal." %
+                         self.name)
+                if n < 0 or n > 127:
+                    error("%s: Midi notes must be 0..127, not '%s'" %
+                          (self.name, n))
 
                 # if using value we fake-adjust octave,
                 # it (and transpose) is set later.
 
                 if not isdrum:
                     n -= self.octave[self.seq]
-                     
-                events.append(NoteEvent(n, thisvel))
 
+                events.append(NoteEvent(n, thisvel, isgrace))
 
             elif isdrum:       # drum must be a value, * or drum-name
                 if cc == '*':
-                    events.append( NoteEvent(self.drumTone, thisvel ))
+                    events.append(NoteEvent(self.drumTone, thisvel, isgrace))
                 else:
-                    events.append( NoteEvent(int(MMA.translate.dtable.get(cc)), thisvel) )
+                    events.append(NoteEvent(int(MMA.translate.dtable.get(cc)), thisvel, isgrace))
 
             else:   # must be a note(s) in std. notation
                 cc = list(cc)
@@ -216,8 +311,8 @@ class Melody(PC):
                         error("%s: Encountered illegal note name '%s'"
                               % (self.name, name))
 
-                    n = self.midiNotes[ name ]  # name is string, n is value
-                    
+                    n = self.midiNotes[name]  # name is string, n is value
+
                     # Parse out a "#', '&' or 'n' accidental.
 
                     if cc and cc[0] in accValues:
@@ -235,8 +330,7 @@ class Melody(PC):
                         else:
                             n -= 12
 
-                    events.append( NoteEvent(n, thisvel) )
-                    
+                    events.append(NoteEvent(n, thisvel, isgrace))
 
         return events
 
@@ -254,24 +348,26 @@ class Melody(PC):
                  notes[offset] - [nev [,...] ] See top of file for noteEvent()
                                   class which sets the fields.
         """
- 
-        sc=self.seq
 
-        savedSpecial = None
+        sc = self.seq
 
-        """ Get a COPY of the keysignature note table (a dict). 
-            As a bar is processed the table is updated. There is one flaw here---in
-            real music an accidental for a note in a give octave does not
-            effect the following same-named notes in different octaves.
+        """ Get a COPY of the keysignature note table (a dict).
+            As a bar is processed the table is updated. There is one difference
+            here---in real music an accidental for a note in a given octave does
+            not effect the following same-named notes in different octaves.
             In this routine IT DOES.
+
+            FollowKey=Off is usually (user) set when using a sequence pattern.
         """
 
-        self.acc=keySig.accList.copy()
+        if self.followKey:   # this is the default
+            self.acc = keySig.accList.copy()
+        else:    # disable the feature. Useful for sequence patterns!
+            self.acc = {'a': 0, 'c': 0, 'b': 0, 'e': 0, 'd': 0, 'g': 0, 'f': 0}
 
         # list of notename to midivalues
 
-        self.midiNotes = {'c':0, 'd':2, 'e':4, 'f':5, 'g':7, 'a':9, 'b':11, 'r':None }
-
+        self.midiNotes = {'c': 0, 'd': 2, 'e': 4, 'f': 5, 'g': 7, 'a': 9, 'b': 11, 'r': None}
 
         """ The initial string is in the format "1ab;4c;;4r;". The trailing
             ';' is important and needed. If we don't have this requirement
@@ -284,27 +380,27 @@ class Melody(PC):
 
         if not pat.endswith(';'):
             error("All Solo strings must end with a ';'")
- 
+
         # Get the end of the bar in ticks. If we're doing a truncate
         # use the temporary bar length, otherwise figure it out.
 
         if MMA.truncate.length:
             barEnd = MMA.truncate.length
         else:
-            barEnd = gbl.BperQ*gbl.QperBar
+            barEnd = gbl.barLen
 
-        duration = MMA.notelen.getNoteLen('4')    # default note length
+        duration = self.getNoteLen('4')    # default note length
         velocity = 90               # intial/default velocity for solo notes
         articulation = 1            # additional articulation for solo notes
 
-        notes={}   # NoteEvent list, keys == offset
-        
+        notes = {}   # NoteEvent list, keys == offset
+
         if self.drumType:
             isdrum = 1
             lastc = str(self.drumTone)
         else:
             isdrum = None
-            lastc = ''             # last parsed note        
+            lastc = ''             # last parsed note
 
         # convert pat to a list
         pat = [x.strip() for x in pat.split(';')[:-1]]
@@ -329,7 +425,7 @@ class Melody(PC):
         # a leading ~.
 
         if pat[-1].endswith("~"):
-            self.endTilde = [1, gbl.tickOffset + barEnd ]
+            self.endTilde = [1, gbl.tickOffset + barEnd]
             pat[-1] = pat[-1][:-1].strip()
         else:
             self.endTilde = []
@@ -341,12 +437,12 @@ class Melody(PC):
             """ If we find a "<>" we just ignore that. It's useful when
                 multiple continuation bars are needed with ~.
             """
-            
+
             accentVol = None
             accentDur = None
+            isgrace = False
 
             if a == '<>':
-                savedSpecial = None
                 continue
 
             """ Next, strip out all '<SPECIAL=xx>' settings.
@@ -356,10 +452,12 @@ class Melody(PC):
                       changed here for the duration of the current bar/riff.
                       The set velocity will still be modified by the global
                       and track volume adjustments.
-            
+
               DURATION: Duration or articulation setting is defaulted to 100.
                         Changing it here will do so for the duration of the
                         bar/riff. Note, the track ARTICULATION is still applied.
+
+              ISGRACE: grace note indication and offset. Offset is optional.
 
               OFFSET: change the current offset into the bar. Can be negative
                       which forces overlapping notes.
@@ -377,39 +475,44 @@ class Melody(PC):
 
                     vv = vv.upper().strip()
 
-                    if vv == '..':
-                        savedSpecial = [','.join(vls)]
-                        continue
+                    if vv == 'GRACE':
+                        vv = 'GRACE=2'
 
                     if not '=' in vv:
                         vv = "VOLUME=" + vv
-                        
-                    vc,vo = vv.split('=', 1)  # note: it's already uppercase!
+
+                    vc, vo = vv.split('=', 1)  # note: it's already uppercase!
 
                     if vc == 'VOLUME':
                         if vo in MMA.volume.vols:   # arg was a volume 'FF, 'mp', etc.
                             velocity *= MMA.volume.vols[vo]
                         else:
                             error("%s: No volume '%s'." % (self.name, vo))
-                    
+
+                    elif vc == 'GRACE':
+                        isgrace = stof(vo, "%s: Expecting a value, not %s." % (self.name, vo))
+                        if isgrace <= 0:
+                            error("%s: Offset modifier must be greater than 0."
+                                  % self.name)
+
                     elif vc == 'OFFSET':
-                        offset = stoi(vo, "%s: Offset expecting integer, not %s." \
-                                          % (self.name, vo))
+                        offset = stoi(vo, "%s: Offset expecting integer, not %s."
+                                      % (self.name, vo))
 
                         if offset < 0:
                             error("%s: Offset must be positive." % self.name)
 
                         if offset >= barEnd:
-                            error("%s: Offset has been set past the end of the bar." \
-                                      % self.name )
+                            error("%s: Offset has been set past the end of the bar."
+                                  % self.name)
 
                     elif vc == 'ARTICULATE':
                         articulation = stoi(vo, "%s: Articulation expecting integer,"
-                                     " not %s." % (self.name, vo))
-       
-                        if articulation < 1 or articulation >200:
-                                error("%s: Articulation must be 1..200, not %s." % \
-                                          (self.name, vo) )
+                                            " not %s." % (self.name, vo))
+
+                        if articulation < 1 or articulation > 200:
+                                error("%s: Articulation must be 1..200, not %s." %
+                                      (self.name, vo))
                         articulation /= 100.
 
                     else:
@@ -425,21 +528,20 @@ class Melody(PC):
 
             i = 0
             while i < len(a):
-                if not a[i] in '1234567890.+tT':
+                if not a[i] in '1234567890.+-tT':
                     break
                 else:
                     i += 1
 
             if i:
-                duration = MMA.notelen.getNoteLen(a[0:i].replace(' ', '') )
+                duration = self.getNoteLen(a[0:i].replace(' ', ''))
                 a = a[i:].strip()
 
-
-            # next item might be an accent string. 
+            # next item might be an accent string.
 
             i = 0
             while i < len(a):
-                if not a[i] in "!-^&":
+                if not a[i] in "!-_^&":
                     break
                 else:
                     i += 1
@@ -449,37 +551,43 @@ class Melody(PC):
                 accentVol = 1
                 accentDur = 1
 
-                accentDur -=  c.count('!') * .2
-                accentDur +=  c.count('-') * .2
+                accentDur -= c.count('!') * .2
+                accentDur += c.count('-') * .2
+                accentDur += c.count('_') * .2
+                accentVol += c.count('^') * .2
+                accentVol -= c.count('&') * .2
 
-                accentVol +=  c.count('^') * .2
-                accentVol -=  c.count('&') * .2
-
-                if accentDur<.1: accentDur = .1
-                if accentDur>2:  accentDur = 2
-                if accentVol<.1: accentVol = .1
-                if accentVol>2:  accentVol = 2
+                if accentDur < .1:
+                    accentDur = .1
+                if accentDur > 2:
+                    accentDur = 2
+                if accentVol < .1:
+                    accentVol = .1
+                if accentVol > 2:
+                    accentVol = 2
                 a = a[i:]
 
             # Now we get to look at pitches.
 
-            if not a or a=='' or a==' ':
-                a=lastc
-            evts = self.getChord(a, velocity, isdrum)  # get chord
+            if not a or a == '' or a == ' ':
+                a = lastc
+            evts = self.getChord(a, velocity, isdrum, isgrace)  # get chord
+
+            if not evts:
+                error("No pitches specifed for notes.")
 
             for e in evts:
                 e.velocity = self.adjustVolume(e.defvelocity, offset)
                 if accentVol:
-                    e.velocity *=  accentVol
+                    e.velocity *= accentVol
                 e.duration = duration
 
                 if accentDur:
                     e.articulation = articulation * accentDur
                 else:
-                    e.articulation = articulation                
+                    e.articulation = articulation
 
             lastc = a     # save last chord for next loop
-
 
             # add note event(s) to note{}
 
@@ -488,8 +596,9 @@ class Melody(PC):
             notes[offset].extend(evts)
 
             lastOffset = offset
-            offset += duration
 
+            if not e.isgrace:
+                offset += duration
 
         if offset <= barEnd:
             if self.endTilde:
@@ -497,30 +606,46 @@ class Melody(PC):
 
         else:
             if self.endTilde:
-                self.endTilde[0]=offset-barEnd
+                self.endTilde[0] = offset - barEnd
             else:
-                warning("%s, end of last note overlaps end of bar by %2.3f "
-                    "beat(s)." % (self.name, (offset-barEnd)/float(gbl.BperQ)))
+                warning("%s, end of last note overlaps end of bar by %g "
+                        "beat(s)." % (self.name, (offset - barEnd) / float(gbl.BperQ)))
 
         if MMA.swing.mode:
             notes = MMA.swing.swingSolo(notes)
 
         return notes
 
+    def followAdjust(self, notes, ctable):
+        """ Convert pitches to reflect current chord. """
 
-    def addHarmony(self, notes, ctable):
-        """ Add harmony to solo notes. """
-        
-        sc=self.seq
+        sc = self.seq
 
-        harmony = self.harmony[sc]
-        harmOnly = self.harmonyOnly[sc]
-        
-        
         for offset in notes:
             nn = notes[offset]
 
-            if len(nn) == 1 and nn[0].pitch != None:
+            if len(nn) == 1 and nn[0].pitch is not None:
+                tb = self.getChordInPos(offset, ctable)
+
+                if tb.chordZ:
+                    continue
+
+                nn[0].pitch += (tb.chord.rootNote + self.rootChord)
+
+        return notes
+
+    def addHarmony(self, notes, ctable):
+        """ Add harmony to solo notes. """
+
+        sc = self.seq
+
+        harmony = self.harmony[sc]
+        harmOnly = self.harmonyOnly[sc]
+
+        for offset in notes:
+            nn = notes[offset]
+
+            if (len(nn) == 1) and (nn[0].pitch is not None) and (nn[0].isgrace is not True):
                 tb = self.getChordInPos(offset, ctable)
 
                 if tb.chordZ:
@@ -537,54 +662,74 @@ class Melody(PC):
 
                 for n in h:
                     e = NoteEvent(n,
-                         self.adjustVolume(velocity * self.harmonyVolume[sc], offset))
+                                  self.adjustVolume(velocity * self.harmonyVolume[sc],
+                                                    offset), False)
                     e.duration = duration
                     e.articulation = articulation
                     nn.append(e)
-                    
 
     def trackBar(self, pat, ctable):
         """ Do the solo/melody line. Called from self.bar() """
-        
+
+        sc = self.seq
+
         notes = self.getLine(pat)
-        sc=self.seq
-        
+
+        # adjust all the notes for the given chord if we are in "FOLLOW CHORD" mode.
+
+        if self.followChord and not self.drumType:
+            notes = self.followAdjust(notes, ctable)
+
         if self.harmony[sc] and not self.drumType:
             self.addHarmony(notes, ctable)
 
         unify = self.unify[sc]
 
         rptr = self.mallet
-
         for offset in sorted(notes.keys()):
-            nn=notes[offset]
-            strumOffset = 0
-            
-            if self.arpRate:
+            nn = notes[offset]
+
+            # the "None" test is important. Arp doesn't like rests.
+            if self.arpRate and nn[0].pitch is not None:
                 self.trackArp(nn, offset)
                 continue
 
+            dur = None  # default duration for notes in chord
+
+            strumAdjust = self.getStrum(sc)
+            strumAdd = self.strumAdd[sc]
+            strumOffset = 0
+
             for nev in nn:
                 n = nev.pitch
-                if n == None:     # skip rests
+                if n is None:     # skip rests
                     continue
 
                 if not self.drumType:        # no octave/transpose for drums
                     n = self.adjustNote(n)
 
-                self.sendNote(offset + strumOffset, 
-                       self.getDur(int(nev.duration * nev.articulation)),
-                       n, int(nev.velocity))
-                strumOffset += self.getStrum(sc)
+                if nev.isgrace:
+                    off = int(offset - (nev.duration // nev.isgrace))
+                else:
+                    off = offset + strumOffset
 
+                # Set duration for this chord. Only do it once so they are
+                # all the same length. The call to getDur() adjust for RDURATION.
+                if dur is None:
+                    dur = self.getDur(int(nev.duration * nev.articulation))
+
+                self.sendNote(off, dur, n, int(nev.velocity))
+
+                strumAdjust += strumAdd
+                strumOffset += strumAdjust
 
     def trackArp(self, nn, offset):
         """ Special trackbar() for arpeggiator. """
 
         if self.drumType:
             error("%s Arpeggiate: Incompatible with DRUMTYPE. Try MALLET?" % self.name)
-        
-        notes = [ [self.adjustNote(x.pitch), x.velocity] for x in nn]
+
+        notes = [[self.adjustNote(x.pitch), x.velocity] for x in nn]
         notes.sort()
 
         random = self.direction == 'RANDOM'
@@ -593,12 +738,12 @@ class Melody(PC):
             notes.reverse()
 
         elif self.arpDirection == "BOTH":
-            z=notes[:]
+            z = notes[:]
             z.reverse()
             notes.extend(z[1:-1])
 
         duration = self.arpRate             # duration of each note
-        count = nn[0].duration / duration   # total number to play
+        count = nn[0].duration // duration   # total number to play
         if count < 1:
             count = 1
 
@@ -608,10 +753,10 @@ class Melody(PC):
                 random.randomize(nn)
             for i in nn:
                 n = notes[i]
- 
-                self.sendNote(offset, 
-                      self.getDur(duration), n[0],
-                      self.adjustVolume(n[1], offset) )
+
+                self.sendNote(offset,
+                              self.getDur(duration), n[0],
+                              self.adjustVolume(n[1], offset))
                 count -= 1
                 if not count:
                     break
@@ -620,20 +765,19 @@ class Melody(PC):
 
                 if self.arpDecay:
                     n[1] = int(n[1] + (n[1] * self.arpDecay))
-                    if n[1] < 1: n[1] = 1
-                    if n[1] > 127: n[1] = 127
-                    
- 
+                    if n[1] < 1:
+                        n[1] = 1
+                    if n[1] > 127:
+                        n[1] = 127
+
             if not count:
                 break
-               
 
- 
+
 class Solo(Melody):
     """ Pattern class for a solo track. """
 
     vtype = 'SOLO'
-
 
     # Grooves are not saved/restored for solo tracks.
 
@@ -643,6 +787,11 @@ class Solo(Melody):
     def saveGroove(self, gname):
         pass
 
+    def forceRestoreGroove(self, gname):
+        PC.restoreGroove(self, gname)
+
+    def forceSaveGroove(self, gname):
+        PC.saveGroove(self, gname)
 
 #######################
 
@@ -651,7 +800,7 @@ class Solo(Melody):
     change the tracks with the setAutoSolo command.
 """
 
-autoSoloTracks = [ 'SOLO', 'SOLO-1', 'SOLO-2', 'SOLO-3' ]
+autoSoloTracks = ['SOLO', 'SOLO-1', 'SOLO-2', 'SOLO-3']
 
 
 def setAutoSolo(ln):
@@ -666,24 +815,19 @@ def setAutoSolo(ln):
 
     autoSoloTracks = []
     for n in ln:
-        n=n.upper()
+        n = n.upper()
         MMA.alloc.trackAlloc(n, 1)
         if gbl.tnames[n].vtype not in ('MELODY', 'SOLO'):
-            error("All autotracks must be Melody or Solo tracks, not %s"\
-                      % gbl.tnames[n].vtype)
+            error("All autotracks must be Melody or Solo tracks, not %s"
+                  % gbl.tnames[n].vtype)
 
         autoSoloTracks.append(n)
 
     if gbl.debug:
-        print "AutoSolo track names:",
-        for a in autoSoloTracks:
-            print a,
-        print
-
+        print("AutoSolo track names: %s" % ' '.join([a for a in autoSoloTracks]))
 
 
 ###############
-
 
 def extractSolo(ln, rptcount):
     """ Parser calls this to extract solo strings. """
@@ -699,27 +843,27 @@ def extractSolo(ln, rptcount):
             error("Bars with both repeat count and solos are not permitted")
 
         ln, solo = pextract(ln, '{', '}')
-        
+
         if len(solo) > len(autoSoloTracks):
             error("Too many melody/solo riffs in chord line. %s used, "
-                  "only %s defined" % (len(solo), len(autoSoloTracks)) )
-
+                  "only %s defined" % (len(solo), len(autoSoloTracks)))
 
         firstSolo = solo[0][:]  # save for autoharmony tracks
-        
+
         """ We have the solo information. Now we loop though each "solo" and:
               1. Ensure or Create a MMA track for the solo
               2. Push the solo data into a Riff for the given track.
         """
 
         for s, trk in zip(solo, autoSoloTracks):
-            if not s: continue    # skip placeholder/empty tracks
+            if not s:
+                continue    # skip placeholder/empty tracks
             MMA.alloc.trackAlloc(trk, 1)
             t = gbl.tnames[trk]
             if t.riff:
                 error("%s: Attempt to add {} solo when the track "
                       "has pending RIFF data." % t.name)
-            t.setRiff( s.strip() )
+            t.setRiff(s.strip())
 
         """ After all the solo data is interpreted and sent to the
             correct track, we check any leftover tracks. If any of these
@@ -732,11 +876,10 @@ def extractSolo(ln, rptcount):
 
         for t in autoSoloTracks[1:]:
             if t in gbl.tnames and not gbl.tnames[t].riff \
-                   and max(gbl.tnames[t].harmonyOnly):
-                gbl.tnames[t].setRiff( firstSolo[:] )
+                    and set(gbl.tnames[t].harmonyOnly) != {None}:
+                gbl.tnames[t].setRiff(firstSolo[:])
 
                 if gbl.debug:
-                    print "%s duplicated to %s for HarmonyOnly." % (trk, t)
+                    print("%s duplicated to %s for HarmonyOnly." % (trk, t))
 
     return ln
-

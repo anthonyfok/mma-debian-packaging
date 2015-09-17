@@ -119,6 +119,8 @@ DefGroove SlowJazz   Slow, basic jazz backup track.
 
 //////// Sustained
 
+Groove SlowJazz
+
 Begin Chord-Sus
 	Voice TremoloStrings
 	Sequence  { 1 1 90 0 80 0 * 2}  // Root and fifth notes only.
@@ -145,6 +147,26 @@ Chord-Sus Groove SlowJazzSus
 
 DefGroove SlowJazzWalkSus      Sustained version with full walk.
 
+//// Plus
+
+Groove SlowJazz
+
+Begin Arpeggio-Plus
+    Voice JazzGuitar
+    Octave 5
+    Volume m
+    Articulate 110
+    Harmony OpenAbove
+    Rskip 40
+    Sequence  Swing8 A4 {Swing8; A4} A4
+    SeqRnd  On
+End
+Arpeggio Sequence -
+DefGroove SlowJazzPlus     A bit of a plucked melody backup.
+
+Groove SlowJazzSus
+Arpeggio-Plus Groove SlowJazzPlus
+DefGroove SlowJazzSusPlus   Plucked melody plus strings.
 
 ////////////////////////////////////////////////////////////////
 ////  Duplicate all the grooves leaving out the push chords. ('1' versions)
@@ -183,6 +205,15 @@ Groove    SlowJazzWalkSus
 Chord     Groove SlowJazz1
 Arpeggio  Groove SlowJazz1
 DefGroove SlowJazz1WalkSus  Slow, straight walking with strings.
+
+Groove SlowJazz1
+Arpeggio-Plus Groove SlowJazzPlus
+Arpeggio-Plus Sequence A4 A8
+DefGroove SlowJazz1Plus   Straight chords with plucked background melody.
+
+Groove SlowJazz1Sus
+Arpeggio-Plus Groove SlowJazzPlus
+DefGroove SlowJazz1SusPlus   Straight chords, strings and plucked background melody.
 
 
 ///////////////////////////////////

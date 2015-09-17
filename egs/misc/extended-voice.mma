@@ -1,6 +1,8 @@
 Print This demo shows how to get voicing from the different
 Print soundbanks in a Casio WK-3000. Similar programming should
-Print in other synths. Please list the file and read the comments!
+Print work in other synths. Please list the file and read the comments!
+Print 
+Print **** MMA now has extended voicing so you can ignore this ***
 Print
 
 // First off we create a simple pattern, just chords on 1,3

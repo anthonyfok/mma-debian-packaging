@@ -1,4 +1,3 @@
-
 # volume.py
 
 """
@@ -25,7 +24,6 @@ Bob van der Poel <bob@mellowood.ca>
 
 from MMA.common import *
 
-
 """ Volumes are specified in musical terms, but converted to
     midi velocities. This table has a list of percentage changes
     to apply to the current volume. Used in both track and global
@@ -36,10 +34,10 @@ from MMA.common import *
     are (most likely) sounded with a maximum velocity.
 """
 
-vols={ 'OFF': 0.00,  'PPPP': 0.05,  'PPP':  0.10,
-       'PP':  0.25,  'P':    0.40,  'MP':   0.70,
-       'M':   1.00,  'MF':   1.10,  'F':    1.30,
-       'FF':  1.60,  'FFF':  1.80,  'FFFF': 2.00  }
+vols = {'OFF': 0.00, 'PPPP': 0.05, 'PPP': 0.10,
+        'PP': 0.25, 'P': 0.40, 'MP': 0.70,
+        'M': 1.00, 'MF': 1.10, 'F': 1.30,
+        'FF': 1.60, 'FFF': 1.80, 'FFFF': 2.00}
 
 volume = vols['M']        # default global volume
 nextVolume = None         # main parser sets this to the next volume
@@ -48,7 +46,7 @@ nextVolume = None         # main parser sets this to the next volume
 lastVolume = volume
 futureVol = []
 vTRatio = .6
-vMRatio = 1-vTRatio
+vMRatio = 1 - vTRatio
 
 
 def adjvolume(ln):
@@ -62,46 +60,42 @@ def adjvolume(ln):
     notopt, ln = opt2pair(ln, 1)
 
     if notopt:
-        error("ADJUSTVOLUME: Expecting DYNAMIC=RATIO pairs" )
+        error("ADJUSTVOLUME: Expecting DYNAMIC=RATIO pairs")
 
     for v, r in ln:
         if v == 'RATIO':
-            r=stof(r)
+            r = stof(r)
 
-            if r<0 or r>100:
+            if r < 0 or r > 100:
                 error("ADJUSTVOLUME RATIO: value must be 0 to 100")
 
-            vTRatio = r/100
-            vMRatio = 1-vTRatio
+            vTRatio = r / 100
+            vMRatio = 1 - vTRatio
 
         elif v in vols:
             vols[v] = calcVolume(r, vols[v])
 
         else:
-            error("ADJUSTVOLUME DYNAMIC: '%s' for AdjustVolume is unknown" % v )
-
+            error("ADJUSTVOLUME DYNAMIC: '%s' for AdjustVolume is unknown" % v)
 
     if gbl.debug:
-        print "Volume Ratio: %s%% Track / %s%% Master" % ( vTRatio * 100, vMRatio * 100)
-        print "Volume table:",
-        for a in sorted(vols):
-            print "%s=%s" % (a, int(vols[a] * 100)),
-        print
-
+        print("Volume Ratio: %s%% Track / %s%% Master" % (vTRatio * 100, vMRatio * 100))
+        print("Volume table: %s" % 
+              ' '.join([ "%s=%s" % (a, int(vols[a] * 100)) for a in sorted(vols)]))
 
 
 def calcVolume(new, old):
     """ Calculate a new volume "new" possibly adjusting from "old". """
 
     if new[0] == '-' or new[0] == '+':
-        a = stoi(new, "Volume expecting value for %% adjustment, not %s" % new)
-        v = old + (old * a/100.)
+        a = stof(new, "Volume expecting value for %% adjustment, not %s" % new)
+        v = old + (old * a / 100.)
         if v < 0:
-            v=0
+            v = 0
             warning("Volume adjustment results in 0 volume.")
 
     elif new[0] in "0123456789":
-        v = stoi(new, "Volume expecting value, not '%s'" % new) / 100.
+        v = stof(new, "Volume expecting value, not '%s'" % new) / 100.
 
     else:
         new = new.upper()
@@ -109,19 +103,19 @@ def calcVolume(new, old):
         adj = None
 
         if '+' in new:
-            new,adj = new.split('+')
+            new, adj = new.split('+')
         elif '-' in new:
-            new,adj = new.split('-')
+            new, adj = new.split('-')
             adj = '-' + adj
 
         if not new in vols:
             error("Unknown volume '%s'" % new)
 
-        v=vols[new]
+        v = vols[new]
 
         if adj:
             a = stoi(adj, "Volume expecting adjustment value, not %s" % adj)
-            v += (v * (a/100.))
+            v += (v * (a / 100.))
 
     return v
 
@@ -131,30 +125,28 @@ def setVolume(ln):
 
     global volume, lastVolume, futureVol
 
-    lastVolume = volume
-
     if len(ln) != 1:
-        error ("Use: Volume DYNAMIC")
+        error("Use: Volume DYNAMIC")
 
     volume = calcVolume(ln[0], volume)
 
     futureVol = []
     if gbl.debug:
-        print "Volume: %s%%" % volume
-
+        print("Volume: %s%%" % volume)
 
 
 # The next 3 are called from the parser.
-
 
 def setCresc(ln):
     """ Master Crescendo. """
 
     setCrescendo(1, ln)
 
+
 def setDecresc(ln):
     """ Master Decrescendo (Diminuendo). """
     setCrescendo(-1, ln)
+
 
 def setSwell(ln):
     """ Set a swell (cresc<>decresc). """
@@ -165,7 +157,7 @@ def setSwell(ln):
 
     if len(ln) == 3:            # 3 args, 1st is intial setting
         setVolume([ln[0]])
-        ln=ln[1:]
+        ln = ln[1:]
 
     if len(ln) != 2:
         error("Swell expecting 2 or 3 args.")
@@ -175,25 +167,21 @@ def setSwell(ln):
         error("Swell bar count must be 2 or greater.")
 
     if count % 2:
-        c=(count+1)/2
-        offset=1
+        c = (count + 1) // 2
+        offset = 1
     else:
-        c=count/2
-        offset=0
+        c = count // 2
+        offset = 0
 
-    c=str(c)
+    c = str(c)
 
-    futureVol = fvolume(0, volume, [ ln[0], c ] )
-    futureVol.extend(fvolume(0, futureVol[-1], 
-              [str(int(volume*100)), c ])[offset:])
-    
-    
+    futureVol = fvolume(0, volume, [ln[0], c])
+    futureVol.extend(fvolume(0, futureVol[-1],
+                             [str(int(volume * 100)), c])[offset:])
+
     if gbl.debug:
-        print "Set Swell to:",
-        for a in futureVol:
-            print int(a*100),
-        print
-         
+        print("Set Swell to: %s" % ' '.join([str(int(a * 100)) for a in futureVol]))
+
 
 def setCrescendo(dir, ln):
     """ Combined (de)cresc() """
@@ -207,29 +195,25 @@ def setCrescendo(dir, ln):
 
     if len(ln) == 3:
         setVolume([ln[0]])
-        ln=ln[1:]
+        ln = ln[1:]
 
     futureVol = fvolume(dir, volume, ln)
-    
-    if gbl.debug:
-        print "Set (De)Cresc to:",
-        for a in futureVol:
-            print int(a*100),
-        print
 
-    
+    if gbl.debug:
+        print("Set (De)Cresc to: %s" % ' '.join([str(int(a * 100)) for a in futureVol]))
 
 # Used by both the 2 funcs above and from TRACK.setCresc()
+
 
 def fvolume(dir, startvol, ln):
     """ Create a list of future vols. Called by (De)Cresc. """
 
     # Get destination volume
-    
+
     destvol = calcVolume(ln[0], startvol)
 
-    bcount = stoi(ln[1], "Type error in bar count for (De)Cresc, '%s'" % ln[1] )
-    
+    bcount = stoi(ln[1], "Type error in bar count for (De)Cresc, '%s'" % ln[1])
+
     if bcount <= 0:
         error("Bar count for (De)Cresc must be postive")
 
@@ -237,28 +221,46 @@ def fvolume(dir, startvol, ln):
     # Using 'dir' of 0 will bypass this (used by SWELL).
 
     if dir > 0 and destvol < startvol:
-        warning("Cresc volume less than current setting" )
+        warning("Cresc volume less than current setting")
 
     elif dir < 0 and destvol > startvol:
-        warning("Decresc volume greater than current setting" )
+        warning("Decresc volume greater than current setting")
 
     elif destvol == startvol:
-        warning("(De)Cresc volume equal to current setting" )
+        warning("(De)Cresc volume equal to current setting")
 
-    if bcount> 1:
+    if bcount > 1:
         bcount -= 1
-    step = ( destvol-startvol ) / bcount        
-    volList=[startvol]
- 
-    for a in range(bcount-1):
+    step = (destvol - startvol) / bcount
+    volList = [startvol]
+
+    for a in range(bcount - 1):
         startvol += step
-        volList.append( startvol)
+        volList.append(startvol)
 
     volList.append(destvol)
-    
+
     return volList
 
 
+def calcMidiVolume14(s):
+    """ Convert a mnemonic volume to value for MIDI channel.
+        This function uses a 14 bit (0..0x3fff). See below for
+        the 7 bit version.
+    """
+
+    s = s.upper()
+    if s in vols:
+        v = int(0x1fff * vols[s])
+        if v < 0:
+            v = 0
+        if v > 0x3fff:
+            v = 0x3fff
+
+    else:
+        v = stoi(s, "Expecting integer arg or volume mnemonic, not %s" % s)
+
+    return v
 
 
 def calcMidiVolume(s):
@@ -267,12 +269,12 @@ def calcMidiVolume(s):
     s = s.upper()
     if s in vols:
         v = int(80 * vols[s])
-        if v<0: v=0
-        if v>127: v=127
-        
+        if v < 0:
+            v = 0
+        if v > 127:
+            v = 127
+
     else:
-        v=stoi(s, "Expecting integer arg, not %s" % s)
+        v = stoi(s, "Expecting integer arg or volume mnemonic, not %s" % s)
 
     return v
-
-        

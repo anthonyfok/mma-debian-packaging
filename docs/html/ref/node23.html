@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html786"
+<A NAME="tex2html822"
   HREF="node24.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html784"
+<A NAME="tex2html820"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html778"
+<A NAME="tex2html814"
   HREF="node22.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html787"
-  HREF="node24.html">Fine Tuning (Translations)</A>
-<B> Up:</B> <A NAME="tex2html785"
+<B> Next:</B> <A NAME="tex2html823"
+  HREF="node24.html">Triggers</A>
+<B> Up:</B> <A NAME="tex2html821"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html779"
+<B> Previous:</B> <A NAME="tex2html815"
   HREF="node22.html">Low Level MIDI Commands</A>
 <BR>
 <BR></DIV>
@@ -51,18 +51,18 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html788"
+<LI><A NAME="tex2html824"
   HREF="node23.html#SECTION002310000000000000000">Voice</A>
-<LI><A NAME="tex2html789"
+<LI><A NAME="tex2html825"
   HREF="node23.html#SECTION002320000000000000000">Patch</A>
 <UL>
-<LI><A NAME="tex2html790"
+<LI><A NAME="tex2html826"
   HREF="node23.html#SECTION002321000000000000000">Patch Set</A>
-<LI><A NAME="tex2html791"
+<LI><A NAME="tex2html827"
   HREF="node23.html#SECTION002322000000000000000">Patch Rename</A>
-<LI><A NAME="tex2html792"
+<LI><A NAME="tex2html828"
   HREF="node23.html#SECTION002323000000000000000">Patch List</A>
-<LI><A NAME="tex2html793"
+<LI><A NAME="tex2html829"
   HREF="node23.html#SECTION002324000000000000000">Ensuring It All Works</A>
 </UL></UL>
 <!--End of Table of Child-Links-->
@@ -77,14 +77,14 @@ Patch Management
 <P>
 Modern music keyboards and synthesizers are capable of producing a
 bewildering variety of sounds. Many consumer units priced well under
-$1000.00 contain several hundred or more unique voices. But, &#8220;out of
-the box&#8221; 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  supports the 128 &#8220;General MIDI&#8221;<A NAME="tex2html87"
-  HREF="#foot12483"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A> preset voices as well as &#8220;extended&#8221; voices (see
+$1000.00 contain several hundred or more unique voices. But, ``out of
+the box'' 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  supports the 128 ``General MIDI''<A NAME="tex2html97"
+  HREF="#foot14043"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A> preset voices as well as ``extended'' voices (see
 below). These voices are assigned the values 0 to 127. We refer to the
-various voices as &#8220;tones&#8221;, &#8220;instruments&#8221;, or
-&#8220;patches&#8221;.<A NAME="tex2html88"
-  HREF="#foot12484"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+various voices as ``tones'', ``instruments'', or
+``patches''.<A NAME="tex2html98"
+  HREF="#foot14044"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 
 <H1><A NAME="SECTION002310000000000000000"></A>  <A NAME="set-voice"></A>
@@ -106,20 +106,20 @@ The MIDI instrument or voice used for a track is set with:
 
 <P>
 Voices apply only to the specified track. The actual instrument can be
-specified via the MIDI instrument number, an &#8220;extended&#8221; value, or
+specified via the MIDI instrument number, an ``extended'' value, or
 with the symbolic name.  See the tables in the MIDI
-<A HREF="node31.html#sec-voicenames">voicing section</A> for lists of the standard, recognized
+<A HREF="node32.html#sec-voicenames">voicing section</A> for lists of the standard, recognized
 names.
 
 <P>
 You can create interesting effects by varying the voice used with drum
-tracks. By default &#8220;Voice 0&#8221; is used. However, you can change the
+tracks. By default ``Voice 0'' is used. However, you can change the
 drum voices. The supplied library files do not change the voices since
 this is highly dependent on the MIDI synth you are using.
 
 <P>
 You can specify a different V<SMALL>OICE</SMALL> for each bar in a sequence.
-Repeated values can be represented with a &#8220;/&#8221;:
+Repeated values can be represented with a ``/'':
 
 <P>
 
@@ -132,7 +132,7 @@ Repeated values can be represented with a &#8220;/&#8221;:
 
 <P>
 It is possible to set up translations for the selected voice: see
-<A HREF="node24.html#set-voicetr">V<SMALL>OICE</SMALL>TR</A>.
+<A HREF="node25.html#set-voicetr">V<SMALL>OICE</SMALL>TR</A>.
 
 <P>
 To complicate matters a little bit more, 
@@ -160,8 +160,10 @@ End
 
 <P>
 
-<H1><A NAME="SECTION002320000000000000000">
-Patch</A>
+<H1><A NAME="SECTION002320000000000000000"></A> 
+<A NAME="extended-patch"></A>
+<BR>
+Patch
 </H1>
 
 <P>
@@ -201,7 +203,7 @@ In order to use voices outside of the normal GM range
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  uses an
 extended addressing mode which includes values for the patch and
 controllers 0 and 32. Each value is separated from the others with a
-single &#8220;.&#8221;. Two examples would include 22.33.44 and 22.33. The first
+single ``.''. Two examples would include 22.33.44 and 22.33. The first
 value is the Patch Number, the second is a value for Controller 0. The
 third value, if present, is the setting for Controller 32.
 
@@ -219,7 +221,7 @@ this voice directly in a V<SMALL>OICE</SMALL> command:
       </Table>
 
 <P>
-Yes, but who wants all those &#8220;funny&#8221; numbers in their 
+Yes, but who wants all those ``funny'' numbers in their 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  files?
 Well, no one that I know. For this reason the P<SMALL>ATCH</SMALL> command has
 been developed. This command lets you modify existing patch names,
@@ -236,15 +238,18 @@ onto the same P<SMALL>ATCH</SMALL> line.
 
 <P>
 
-<H2><A NAME="SECTION002321000000000000000">
-Patch Set</A>
+<H2><A NAME="SECTION002321000000000000000"></A>
+<A NAME="patch-set"></A>
+<BR>
+Patch Set
 </H2>
 
 <P>
 The S<SMALL>ET</SMALL> option is used to assign one or more patch values to
 symbolic names. Going back to my Casio example, above, I could use the
 following line to register the voice with 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 
+
 <P>
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
@@ -255,14 +260,14 @@ following line to register the voice with
       </Table>
 
 <P>
-The assignment consists of two parts or keys joined by a &#8220;=&#8221;
+The assignment consists of two parts or keys joined by a ``=''
 sign. No spaces are permitted. The left part of the assignment is a
 value. It can be a single number in the range 0 to 127; or 2 or 3 numbers
-joined by &#8220;.&#8221;s. The right right part is a symbolic name. Any characters
+joined by ``.''s. The right right part is a symbolic name. Any characters
 are permitted (but no spaces!).
 
 <P>
-After the assignment you can use &#8220;RotaryGuitar&#8221; just like any other
+After the assignment you can use ``RotaryGuitar'' just like any other
 instrument name:
 
 <P>
@@ -329,20 +334,20 @@ command:
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>include casio-wk300<A NAME="tex2html89"
-  HREF="#foot12621"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></B> 
+    <B>include casio-wk300<A NAME="tex2html99"
+  HREF="#foot14192"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></B> 
    
 	    </td></tr>
       </Table>
 
 <P>
 A file like this can be created by hand or you can convert existing an
-existing file to a format  understands. A number of &#8220;patch&#8221;
-files exist for the popular &#8220;Band in a Box&#8221; program from
+existing file to a format  understands. A number of ``patch''
+files exist for the popular ``Band in a Box'' program from
 PGMusic. There files may be subject to copyright, so use them with
 respect. No patch files are included in this distribution, but many
 are freely available on the internet. For a start you might want to
-look at <TT><A NAME="tex2html90"
+look at <TT><A NAME="tex2html100"
   HREF="http://www.pgmusic.com/support_miscellaneous.htm">http://www.pgmusic.com/support_miscellaneous.htm</A></TT>. These
 files cannot be read my 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> , so we have included a
@@ -367,8 +372,9 @@ different manufacturers use different names to refer to the same
 voices. Most of the time this isn't a major concern, but you have the
 freedom in 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to change any patch name you want. For example, 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  calls the first voice in the GM set &#8220;Piano1&#8221;. Maybe you want to use
-the name &#8220;AcousticGrand&#8221;. Easy:
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 
+calls the first voice in the GM set ``Piano1''. Maybe you want to use
+the name ``AcousticGrand''. Easy:
 
 <P>
 
@@ -380,9 +386,9 @@ the name &#8220;AcousticGrand&#8221;. Easy:
       </Table>
 
 <P>
-Each R<SMALL>ENAME</SMALL> option has a left and right part joined by an &#8220;=&#8221;
+Each R<SMALL>ENAME</SMALL> option has a left and right part joined by an ``=''
 sign. The left part is the current name; the right is the new
-name. Please note that after this command the name &#8220;Piano1&#8221; will not
+name. Please note that after this command the name ``Piano1'' will not
 be available.
 
 <P>
@@ -455,7 +461,7 @@ If you are going to use any of the extended patches in your MIDI files
 you may need to do some additional work.
 
 <P>
-Your hardware may need to be in a &#8220;special&#8221; mode for any of the
+Your hardware may need to be in a ``special'' mode for any of the
 extended patches to take effect. What we suggest is that you use the
 MIDI command <A HREF="node22.html#sec-midi">(details here)</A> to do some initialization. For an example please
 look at the file <TT><SPAN  CLASS="textbf">includes/init.mma</SPAN></TT> which we include in our
@@ -477,7 +483,7 @@ To use a file like <TT><SPAN  CLASS="textbf">includes/init.mma</SPAN></TT> just 
 
 <P>
 in your mmarc file. See the Path section of this manual for details
-<A HREF="node28.html#sec-paths">(here)</A>.
+<A HREF="node29.html#sec-paths">(here)</A>.
 
 <P>
 To help keep things sane, 
@@ -485,7 +491,7 @@ To help keep things sane,
 an extended voice has been used in that track it resets the effected
 controllers to a zero state. In most cases this means that if you
 finish playing the file your keyboard will be returned to a
-&#8220;default&#8221; state.
+``default'' state.
 
 <P>
 However, you might wish to generate some explicit MIDI sequences at the
@@ -504,7 +510,7 @@ placing a line like:
 
 <P>
 at the end of your song file. Or, use the MMAE<SMALL>ND</SMALL> command
-detailed <A HREF="node28.html#sec-mmaend">here</A>.
+detailed <A HREF="node29.html#sec-mmaend">here</A>.
 
 <P>
 You can get about as complicated as you want with all this. One scheme
@@ -562,11 +568,11 @@ Now, when you compile the file define the macro on the command line:
 
 <P>
 This defines the macro so that your wrappers work. To compile for the
-GM voicing, just skip the &#8220;-SCASIO&#8221;.
+GM voicing, just skip the ``-SCASIO''.
 
 <P>
 An alternate method is to use the V<SMALL>OICE</SMALL>TR command
-<A HREF="node24.html#set-voicetr">(details here)</A>. Using a similar example we'd create a song
+<A HREF="node25.html#set-voicetr">(details here)</A>. Using a similar example we'd create a song
 file like:
 
 <P>
@@ -607,51 +613,53 @@ alternate voices we want to use. Now, when the G<SMALL>ROOVE</SMALL> is loaded
 the various voices will be changed.
 
 <P>
+
+<P>
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot12483">... MIDI&#8221;</A><A
- HREF="node23.html#tex2html87"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+<DT><A NAME="foot14043">... MIDI''</A><A
+ HREF="node23.html#tex2html97"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The General
   MIDI or GM standard was developed by the MIDI Manufactures
   Association.
 
 </DD>
-<DT><A NAME="foot12484">...
-&#8220;patches&#8221;.</A><A
- HREF="node23.html#tex2html88"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
-<DD>&#8220;Patch&#8221; a bit of a historical term dating back
+<DT><A NAME="foot14044">...
+``patches''.</A><A
+ HREF="node23.html#tex2html98"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
+<DD>``Patch'' a bit of a historical term dating back
   to the times when synthesizers cost a lot of money and used bits of
-  wire and cable to &#8220;patch&#8221; different oscillators, filters, etc.   together.
+  wire and cable to ``patch'' different oscillators, filters, etc.   together.
 
 </DD>
-<DT><A NAME="foot12621">... casio-wk300</A><A
- HREF="node23.html#tex2html89"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
-<DD>Refer to I<SMALL>NCLUDE</SMALL> <A HREF="node28.html#sec-include">(here)</A> for details on file placement.
+<DT><A NAME="foot14192">... casio-wk300</A><A
+ HREF="node23.html#tex2html99"><SUP><SPAN CLASS="arabic">23</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
+<DD>Refer to I<SMALL>NCLUDE</SMALL> <A HREF="node29.html#sec-include">(here)</A> for details on file placement.
 
 </DD>
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html786"
+<A NAME="tex2html822"
   HREF="node24.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html784"
+<A NAME="tex2html820"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html778"
+<A NAME="tex2html814"
   HREF="node22.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html787"
-  HREF="node24.html">Fine Tuning (Translations)</A>
-<B> Up:</B> <A NAME="tex2html785"
+<B> Next:</B> <A NAME="tex2html823"
+  HREF="node24.html">Triggers</A>
+<B> Up:</B> <A NAME="tex2html821"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html779"
+<B> Previous:</B> <A NAME="tex2html815"
   HREF="node22.html">Low Level MIDI Commands</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

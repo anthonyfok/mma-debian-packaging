@@ -27,9 +27,11 @@ the sequences for later recall.
 """
 
 import MMA.midiC
+import MMA.midiM
 
-import gbl
+from . import gbl
 from   MMA.common import *
+
 
 def mdefine(ln):
     """ Set a midi seq pattern. """
@@ -66,7 +68,6 @@ class Mdefine:
         except:
             error("The MDEFINE pattern %s has not been defined" % name)
 
-
     def set(self, name, ln):
         """ Parse a MDEFINE line.
 
@@ -78,35 +79,33 @@ class Mdefine:
 
         name = name.upper()
 
-        ln=ln.rstrip('; ')     # dump trailing ';' and whitespace
+        ln = ln.rstrip('; ')     # dump trailing ';' and whitespace
         ln = ln.split(';')
         evs = []
         for l in ln:
-            l=l.split()
+            l = l.split()
 
             if len(l) == 1:
-                evs.extend( self.get(l[0].upper() ))
+                evs.extend(self.get(l[0].upper()))
                 continue
 
             if len(l) != 3:
                 error("MDEFINE sequence must have 3 values: Beat, Ctrl, Datum")
 
-            off=stof(l[0], "Value for offset must be integer/float")
+            off = stof(l[0], "Value for offset must be integer/float")
 
-            c=MMA.midiC.ctrlToValue(l[1])
+            c = MMA.midiC.ctrlToValue(l[1])
             if c < 0:
-                c=stoi(l[1])
+                c = stoi(l[1])
                 if c < 0 or c > 0x7f:
                     error("Controller values must be 0x00 to 0x7f")
 
-            d=stoi(l[2])
+            d = stoi(l[2])
             if d < 0 or d > 0x7f:
                 error("MIDI Control Datum value must be 0x00 to 0x7f")
 
+            evs.append([off, MMA.midiM.packBytes(c, d)])
 
-            evs.append( [off, chr(c) + chr(d)])
-
-        self.defs[name]=evs
+        self.defs[name] = evs
 
 mdef = Mdefine()
-

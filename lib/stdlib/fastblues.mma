@@ -95,6 +95,7 @@ End
 
 Begin Chord-Sax
 	Copy Chord-Piano
+    Voicing Mode=None
 	Invert 1
 	Sequence  {Cshuffle Shift .05}
 	Octave 6

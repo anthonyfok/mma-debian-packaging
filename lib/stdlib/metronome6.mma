@@ -1,5 +1,5 @@
 
-// metronome3
+// metronome6
 
 Begin Doc
 
@@ -44,6 +44,3 @@ Begin Drum-Hi
 End
 
 DefGroove Metronome6      A two bar 6/8 ballad  introduction.
-
-
-

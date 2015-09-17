@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html722"
+<A NAME="tex2html756"
   HREF="node22.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html720"
+<A NAME="tex2html754"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html714"
+<A NAME="tex2html748"
   HREF="node20.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html723"
+<B> Next:</B> <A NAME="tex2html757"
   HREF="node22.html">Low Level MIDI Commands</A>
-<B> Up:</B> <A NAME="tex2html721"
+<B> Up:</B> <A NAME="tex2html755"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html715"
+<B> Previous:</B> <A NAME="tex2html749"
   HREF="node20.html">Repeats</A>
 <BR>
 <BR></DIV>
@@ -51,38 +51,38 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html724"
+<LI><A NAME="tex2html758"
   HREF="node21.html#SECTION002110000000000000000">Variables</A>
 <UL>
-<LI><A NAME="tex2html725"
+<LI><A NAME="tex2html759"
   HREF="node21.html#SECTION002111000000000000000">Set</A>
-<LI><A NAME="tex2html726"
+<LI><A NAME="tex2html760"
   HREF="node21.html#SECTION002112000000000000000">NewSet</A>
-<LI><A NAME="tex2html727"
+<LI><A NAME="tex2html761"
   HREF="node21.html#SECTION002113000000000000000">Mset</A>
-<LI><A NAME="tex2html728"
+<LI><A NAME="tex2html762"
   HREF="node21.html#SECTION002114000000000000000">RndSet</A>
-<LI><A NAME="tex2html729"
+<LI><A NAME="tex2html763"
   HREF="node21.html#SECTION002115000000000000000">UnSet VariableName</A>
-<LI><A NAME="tex2html730"
+<LI><A NAME="tex2html764"
   HREF="node21.html#SECTION002116000000000000000">ShowVars</A>
-<LI><A NAME="tex2html731"
+<LI><A NAME="tex2html765"
   HREF="node21.html#SECTION002117000000000000000">Inc and Dec</A>
-<LI><A NAME="tex2html732"
+<LI><A NAME="tex2html766"
   HREF="node21.html#SECTION002118000000000000000">VExpand On or Off</A>
-<LI><A NAME="tex2html733"
+<LI><A NAME="tex2html767"
   HREF="node21.html#SECTION002119000000000000000">StackValue</A>
 </UL>
 <BR>
-<LI><A NAME="tex2html734"
+<LI><A NAME="tex2html768"
   HREF="node21.html#SECTION002120000000000000000">Predefined Variables</A>
-<LI><A NAME="tex2html735"
+<LI><A NAME="tex2html769"
   HREF="node21.html#SECTION002130000000000000000">Indexing and Slicing</A>
-<LI><A NAME="tex2html736"
+<LI><A NAME="tex2html770"
   HREF="node21.html#SECTION002140000000000000000">Mathematical Expressions</A>
-<LI><A NAME="tex2html737"
+<LI><A NAME="tex2html771"
   HREF="node21.html#SECTION002150000000000000000">Conditionals</A>
-<LI><A NAME="tex2html738"
+<LI><A NAME="tex2html772"
   HREF="node21.html#SECTION002160000000000000000">Goto</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -153,15 +153,15 @@ Vexpand ON/Off   </B>
 <P>
 All variable names are case-insensitive. Any characters can be used in
 a variable name. The only exceptions are that a variable name cannot
-start with a &#8220;$&#8221; or a &#8220;_&#8221; (an underscore--this is reserved for
+start with a ``$'' or a ``_'' (an underscore--this is reserved for
 internal variables, see below) <SPAN  CLASS="textit">and</SPAN> names cannot contain a
-&#8220;[&#8221; or &#8220;]&#8221; character (brace characters are reserved for
+``['' or ``]'' character (brace characters are reserved for
 indexing, <A HREF="#slicing">details here</A>).
 
 <P>
 Variables are set and manipulated by using their names. Variables are
 expanded when their name is prefaced by a space followed by single
-&#8220;$&#8221; sign. For example:
+``$'' sign. For example:
 
 <P>
 
@@ -175,12 +175,13 @@ expanded when their name is prefaced by a space followed by single
       </Table>
 
 <P>
-The first line creates the variable &#8220;Silly&#8221;; the second creates a
-bar of music with the chords &#8220;Am / Bm /&#8221;.
+The first line creates the variable ``Silly''; the second creates a
+bar of music with the chords ``Am / Bm /''.
 
 <P>
-Note that the &#8220;$&#8221; must be the first item on a line or follow a
-space character. For example, the following will NOT work:
+<SPAN  CLASS="textit">Note that the ``$'' must be the first item on a line or follow a
+space character. The variable name must be terminated by a space or
+the end of a line.</SPAN> For example, the following will NOT work:
 
 <P>
 
@@ -188,7 +189,19 @@ space character. For example, the following will NOT work:
         <tr><td>
     <B>Set Silly 4a;b;c;d; 
 <BR>
-1 Am {$Silly}   </B> 
+1 Am {$Silly }   // needs space before the $  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+Nor will:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>1 Am { $Silly}  // needs space at the end of the name  </B> 
    
 	    </td></tr>
       </Table>
@@ -200,7 +213,7 @@ However:
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>1 Am { $Silly}   </B> 
+    <B>1 Am { $Silly }   </B> 
    
 	    </td></tr>
       </Table>
@@ -231,7 +244,7 @@ want to assign an empty string to the variable. A valid example is:
       </Table>
 
 <P>
-You can concatenate variables or constants by using a single &#8220;+&#8221;.
+You can concatenate variables or constants by using a single ``+''.
 For example:
 
 <P>
@@ -417,8 +430,8 @@ Alternately,
       </Table>
 
 <P>
-will set $G<SMALL>RV</SMALL> to one of &#8220;Groove1&#8221;, &#8220;Groove2&#8221; or
-&#8220;Groove3&#8221;.
+will set $G<SMALL>RV</SMALL> to one of ``Groove1'', ``Groove2'' or
+``Groove3''.
 
 <P>
 Then you can do the same as in the earlier example with:
@@ -444,7 +457,7 @@ UnSet VariableName</A>
 
 <P>
 Removes the variable. This can be useful if you have conditional tests
-which simply rely on a certain variable being &#8220;defined&#8221;.
+which simply rely on a certain variable being ``defined''.
 
 <P>
 
@@ -455,7 +468,7 @@ ShowVars</A>
 <P>
 Mainly used for debugging, this command displays the names of the
 defined variables and their contents.  The display will preface each
-variable name with a &#8220;$&#8221;. Note that internal 
+variable name with a ``$''. Note that internal 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  variables are
 not displayed with this command.
 
@@ -542,9 +555,9 @@ VExpand On   </B>
       </Table>
 
 <P>
-In this case the actual contents of the variable &#8220;Full&#8221; is &#8220;$LeftC
-$RightC&#8221;. If the O<SMALL>FF/</SMALL>O<SMALL>N</SMALL> option lines had not been used, the
-contents would be &#8220;Am Em G /&#8221;. You can easily verify this with the
+In this case the actual contents of the variable ``Full'' is ``$LeftC
+$RightC''. If the O<SMALL>FF/</SMALL>O<SMALL>N</SMALL> option lines had not been used, the
+contents would be ``Am Em G /''. You can easily verify this with the
 S<SMALL>HOW</SMALL>V<SMALL>ARS</SMALL> option.
 
 <P>
@@ -587,7 +600,7 @@ variables ... for example:
       </Table>
 
 <P>
-the same line will now be &#8220;1 Am / G /&#8221;.
+the same line will now be ``1 Am / G /''.
 
 <P>
 Most of 
@@ -704,8 +717,8 @@ Predefined Variables
 <P>
 For your convenience 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  tracks a number of internal settings and
-you can access these values with special macros.<A NAME="tex2html70"
-  HREF="#foot9572"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>  All of these &#8220;system&#8221; variables are
+you can access these values with special macros.<A NAME="tex2html77"
+  HREF="#foot10636"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>  All of these ``system'' variables are
 prefaced with a single underscore. For example, the current tempo is
 displayed with the variable $_TEMPO.
 
@@ -733,6 +746,11 @@ values for global settings:
 <DT><STRONG>&nbsp;&nbsp;$_Groove</STRONG></DT>
 <DD>Name of the currently selected groove. May be
   empty if no groove has been selected.
+
+<P>
+</DD>
+<DT><STRONG>&nbsp;&nbsp;$_Groovelist</STRONG></DT>
+<DD>List of all currently defined G<SMALL>ROOVE</SMALL> names.
 
 <P>
 </DD>
@@ -788,6 +806,14 @@ Debug $_LastDebug   </B>
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_Lyric</STRONG></DT>
 <DD>Current L<SMALL>YRIC</SMALL> settings.
+
+<P>
+</DD>
+<DT><STRONG>&nbsp;&nbsp;$_MMAPath</STRONG></DT>
+<DD>The root directory used by 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> . The modules,
+  library, etc. are in this directory. This is set at startup and
+  cannot be modified by the user.
 
 <P>
 </DD>
@@ -847,6 +873,12 @@ Debug $_LastDebug   </B>
 
 <P>
 </DD>
+<DT><STRONG>&nbsp;&nbsp;$_TickPos</STRONG></DT>
+<DD>Helpful in debugging, this variable is set to the
+  current tick position in the generated MIDI file.
+
+<P>
+</DD>
 <DT><STRONG>&nbsp;&nbsp;$_Time</STRONG></DT>
 <DD>The current T<SMALL>IME</SMALL> (beats per bar) setting.
 
@@ -854,6 +886,11 @@ Debug $_LastDebug   </B>
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_ToneTr</STRONG></DT>
 <DD>List of all T<SMALL>ONE</SMALL>TR settings.
+
+<P>
+</DD>
+<DT><STRONG>&nbsp;&nbsp;$_Tracklist</STRONG></DT>
+<DD>List of all currently defined T<SMALL>RACK</SMALL> names.
 
 <P>
 </DD>
@@ -889,7 +926,7 @@ Debug $_LastDebug   </B>
 <P>
 The second type of system variable is for settings in a certain track.
 Each of these variables is in the form $_TRACKNAME_VALUE. For
-example, the current voice setting for the &#8220;Bass-Sus&#8221; track can be
+example, the current voice setting for the ``Bass-Sus'' track can be
 accessed with the variable $_Bass-Sus_Voice.
 
 <P>
@@ -912,7 +949,7 @@ Print $_Bass_Octave
       </Table>
 
 <P>
-The following are the available &#8220;TrackName&#8221; macros:
+The following are the available ``TrackName'' macros:
 
 <P>
 <DL>
@@ -957,6 +994,9 @@ The following are the available &#8220;TrackName&#8221; macros:
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_NoteSpan</STRONG></DT>
 <DD>
 </DD>
+<DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_MOctave</STRONG></DT>
+<DD>
+</DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Octave</STRONG></DT>
 <DD>
 </DD>
@@ -964,6 +1004,9 @@ The following are the available &#8220;TrackName&#8221; macros:
 <DD>(all options)
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Range</STRONG></DT>
+<DD>
+</DD>
+<DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_RDuration</STRONG></DT>
 <DD>
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Rskip</STRONG></DT>
@@ -987,11 +1030,17 @@ The following are the available &#8220;TrackName&#8221; macros:
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Span</STRONG></DT>
 <DD>
 </DD>
+<DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Sticky</STRONG></DT>
+<DD>
+</DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Strum</STRONG></DT>
 <DD>(only permitted in Chord tracks)
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Tone</STRONG></DT>
 <DD>(only permitted in Drum tracks)
+</DD>
+<DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Trigger</STRONG></DT>
+<DD>
 </DD>
 <DT><STRONG>&nbsp;&nbsp;$_TRACKNAME_Unify</STRONG></DT>
 <DD>
@@ -1008,7 +1057,7 @@ The following are the available &#8220;TrackName&#8221; macros:
 </DL>
 
 <P>
-The &#8220;TrackName&#8221; macros are useful in copying values between
+The ``TrackName'' macros are useful in copying values between
 non-similar tracks and C<SMALL>H</SMALL>S<SMALL>HARE</SMALL> tracks. For example:
 
 <P>
@@ -1043,8 +1092,8 @@ Indexing and Slicing
 
 <P>
 All variables can have an option <SPAN  CLASS="textit">slice</SPAN> or <SPAN  CLASS="textit">index</SPAN> appended
-to them using &#8220;[]&#8221; notation. The exact syntax of the data in the
-&#8220;[]&#8221;s is dependent on the underlying Python interpreter. But, as a
+to them using ``[]'' notation. The exact syntax of the data in the
+``[]''s is dependent on the underlying Python interpreter. But, as a
 summary:
 
 <P>
@@ -1076,12 +1125,12 @@ mind:
 
 <UL>
 <LI>For simple variables which contain only one element
-  (ie. $_Tempo) any index other than &#8220;[0]&#8221;, &#8220;[-1]&#8221;, etc. will
+  (e.g., $_Tempo) any index other than ``[0]'', ``[-1]'', etc. will
   return an empty string.
 
 <P>
 </LI>
-<LI>Variables containing multiple values (ie. $_Bass_Volume) are
+<LI>Variables containing multiple values (e.g., $_Bass_Volume) are
   treated as list. Slicing and indexing is useful to extract a single
   value.
 
@@ -1094,8 +1143,8 @@ mind:
 <P>
 </LI>
 </UL>
-The &#8220;[]&#8221; must follow the variable <SPAN  CLASS="textit">without</SPAN> any space
-characters. The expression inside the &#8220;[]&#8221; must not contain any
+The ``[]'' must follow the variable <SPAN  CLASS="textit">without</SPAN> any space
+characters. The expression inside the ``[]'' must not contain any
 spaces.
 
 <P>
@@ -1185,15 +1234,15 @@ Print $v
 How it works: 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  first parses each line and expands any variables
 it finds. In the second example this means that the $_Tempo is
-converted to &#8220;100&#8221;. After all the variable expansion is done a check
+converted to ``100''. After all the variable expansion is done a check
 is made to find math delimiters. Anything inside these delimiters is
 evaluated by Python.
 
 <P>
 You can even use this feature to modify values stored in
-lists.<A NAME="tex2html71"
-  HREF="#foot9718"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A> A bit complex, but well worthwhile! In the following
-example we add &#8220;10&#8221; to the current A<SMALL>RTICULATE</SMALL> setting. It's
+lists.<A NAME="tex2html78"
+  HREF="#foot10815"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A> A bit complex, but well worthwhile! In the following
+example we add ``10'' to the current A<SMALL>RTICULATE</SMALL> setting. It's
 split into three lines to make it clearer:
 
 <P>
@@ -1207,11 +1256,11 @@ split into three lines to make it clearer:
 
 <P>
 Note the use of single quotes to convert the 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  &#8220;string&#8221; to
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  ``string'' to
 something Python can deal with. You could just as easily use double
-quotes, but do note that the spaces before the &#8220;$&#8221; and before the
-final &#8220; ' &#8221; are needed. The result of the above is that the variable
-&#8220;$a&#8221; now is set to something like: &#8220;['100', '100', '90', '80']&#8221;.
+quotes, but do note that the spaces before the ``$'' and before the
+final `` ' '' are needed. The result of the above is that the variable
+``$a'' now is set to something like: ``['100', '100', '90', '80']''.
 
 <P>
 
@@ -1223,9 +1272,9 @@ final &#8220; ' &#8221; are needed. The result of the above is that the variable
       </Table>
 
 <P>
-Next we use a list comprehension to add &#8220;10&#8221; to each value in the
-list. Our new list (contained in &#8220;$b&#8221;) will be: &#8220;['110', '110',
-'100', '90']&#8221;. Notice how the strings were converted from strings to
+Next we use a list comprehension to add ``10'' to each value in the
+list. Our new list (contained in ``$b'') will be: ``['110', '110',
+'100', '90']''. Notice how the strings were converted from strings to
 integers (for the addition) and then back to strings.
 
 <P>
@@ -1240,7 +1289,7 @@ integers (for the addition) and then back to strings.
 <P>
 The new list is now converted to a string which 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  can deal with
-and store it in &#8220;$c&#8221;. In this case: &#8220;110 110 100 90&#8221;.
+and store it in ``$c''. In this case: ``110 110 100 90''.
 
 <P>
 
@@ -1321,8 +1370,8 @@ the functions:
 </PRE>
 
 <P>
-the miscellaneous functions:<A NAME="tex2html72"
-  HREF="#foot9651"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A>
+the miscellaneous functions:<A NAME="tex2html79"
+  HREF="#foot10724"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A>
 <P>
 <PRE>
     for, in, str(), .join(), .split()
@@ -1373,8 +1422,8 @@ them in conditionals. In
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  a conditional consists of a line
 starting with an I<SMALL>F</SMALL> directive, a test, a series of lines to
 process (depending upon the result of the test), and a closing
-E<SMALL>ND</SMALL>I<SMALL>F</SMALL> or I<SMALL>F</SMALL>E<SMALL>ND</SMALL><A NAME="tex2html73"
-  HREF="#foot9719"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A>  directive. An optional E<SMALL>LSE</SMALL> statement may be included.
+E<SMALL>ND</SMALL>I<SMALL>F</SMALL> or I<SMALL>F</SMALL>E<SMALL>ND</SMALL><A NAME="tex2html80"
+  HREF="#foot10816"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A>  directive. An optional E<SMALL>LSE</SMALL> statement may be included.
 
 <P>
 The first set of tests are unary (they take no arguments):
@@ -1396,7 +1445,7 @@ The first set of tests are unary (they take no arguments):
 
 <P>
 In the above tests you must supply the name of a variable--don't make
-the mistake of including a &#8220;$&#8221; which will invoke expansion and
+the mistake of including a ``$'' which will invoke expansion and
 result in something you were not expecting.
 
 <P>
@@ -1416,48 +1465,46 @@ Endif  </B>
       </Table>
 
 <P>
-The other tests are binary (they take two arguments):
+The other tests are binary. Each test requires a conditional (symbolic
+or mnemonic as detailed in the following table) and two arguments.
 
 <P>
-<DL>
-<DT><STRONG>LT Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">Str1</SPAN> is less than
-  <SPAN  CLASS="textit">Str2</SPAN>. (Please see the discussion below on how the tests are
-  done.)
-
-<P>
-</DD>
-<DT><STRONG>LE Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">str1</SPAN> is less than or equal
-  to <SPAN  CLASS="textit">Str2</SPAN>.
-
-<P>
-</DD>
-<DT><STRONG>EQ Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">str1</SPAN> is equal to
-  <SPAN  CLASS="textit">Str2</SPAN>.
-
-<P>
-</DD>
-<DT><STRONG>NE Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">str1</SPAN> is not equal to
-  <SPAN  CLASS="textit">Str2</SPAN>.
-
-<P>
-</DD>
-<DT><STRONG>GT Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">str1</SPAN> is greater than
-  <SPAN  CLASS="textit">Str2</SPAN>.
-
-<P>
-</DD>
-<DT><STRONG>GE Str1 Str2</STRONG></DT>
-<DD>Returns true if <SPAN  CLASS="textit">str1</SPAN> is greater than or
-  equal to <SPAN  CLASS="textit">Str2</SPAN>.
-
-<P>
-</DD>
-</DL>
+<TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER">Mnemonic</TD>
+<TD ALIGN="CENTER">Symbolic</TD>
+<TD ALIGN="LEFT">Condition</TD>
+</TR>
+<TR><TD ALIGN="CENTER">&nbsp;</TD>
+<TD ALIGN="CENTER">&nbsp;</TD>
+<TD ALIGN="LEFT">&nbsp;</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">LT</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">&lt;</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is less than  <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">LE</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">&lt;=</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is less than or equal to
+  <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">EQ</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">==</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is equal to   <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">NE</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">!=</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is not equal to   <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">GT</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">&gt;</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is greater than <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><SPAN  CLASS="textbf">GE</SPAN></TH>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">&gt;=</SPAN></TD>
+<TD ALIGN="LEFT">True if <SPAN  CLASS="textit">Str1</SPAN> is greater than or
+  equal to <SPAN  CLASS="textit">Str2</SPAN></TD>
+</TR>
+</TABLE>
 
 <P>
 In the above tests you have several choices in specifying <SPAN  CLASS="textit">Str1</SPAN>
@@ -1475,7 +1522,7 @@ two strings or numeric values are expected. So, you really could do:
       </Table>
 
 <P>
-and get a &#8220;true&#8221; result. The reason that &#8220;abc&#8221; equals &#8220;ABC&#8221; is
+and get a ``true'' result. The reason that ``abc'' equals ``ABC'' is
 that all the comparisons in 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  are case-insensitive.
 
@@ -1486,15 +1533,15 @@ You can also compare a variable to a string:
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>If GT $foo abc  </B> 
+    <B>If &gt; $foo abc  </B> 
    
 	    </td></tr>
       </Table>
 
 <P>
-will evaluate to &#8220;true&#8221; if the <SPAN  CLASS="textit">contents</SPAN> of the variable
-&#8220;foo&#8221; evaluates to something &#8220;greater than&#8221; &#8220;abc&#8221;. But, there is
-a bit of a &#8220;gotcha&#8221; here. If you have set &#8220;foo&#8221; to a two word
+will evaluate to ``true'' if the <SPAN  CLASS="textit">contents</SPAN> of the variable
+``foo'' evaluates to something ``greater than'' ``abc''. But, there is
+a bit of a ``gotcha'' here. If you have set ``foo'' to a two word
 string, then 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  will choke on the command. In the following
 example:
@@ -1526,7 +1573,7 @@ the comparison is passed the line:
 and 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  seeing three arguments generates an error. If you want the
 comparison done on a variable which might be more than one word, use
-the &#8220;$$&#8221; syntax. This delays the expansion of the variable until
+the ``$$'' syntax. This delays the expansion of the variable until
 the I<SMALL>F</SMALL> directive is entered. So:
 
 <P>
@@ -1539,7 +1586,7 @@ the I<SMALL>F</SMALL> directive is entered. So:
       </Table>
 
 <P>
-would generate a comparison between &#8220;A B&#8221; and &#8220;ABC&#8221;.
+would generate a comparison between ``A B'' and ``ABC''.
 
 <P>
 Delayed expansion can be applied to either variable. It only works in
@@ -1547,16 +1594,13 @@ an I<SMALL>F</SMALL> directive.
 
 <P>
 Strings and numeric values can be confusing in comparisons. For
-example, if you have the strings &#8220;22&#8221; and &#8221;3&#8221; and compare them as
-strings, &#8220;3&#8221; is greater than &#8220;22&#8221;; however, if you compare them as
-values then 3 is less than 22.
-
-<P>
-The rule in 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is quite simple: If either string in a comparison is
-a numeric value, both strings are converted to values. Otherwise they
-are compared as strings.<A NAME="tex2html74"
-  HREF="#foot9692"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">5</SPAN></SUP></A>
+example, if you have the strings ``22'' and ''3'' and compare them as
+strings, ``3'' is greater than ``22''; however, if you compare them as
+values then 3 is less than 22. The rule in 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is quite simple: If
+both strings can be converted to a value, a numeric comparison is done;
+otherwise they are compared as strings.<A NAME="tex2html81"
+  HREF="#foot10787"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">5</SPAN></SUP></A>
 <P>
 This lets you do consistent comparisons in situations like:
 
@@ -1575,8 +1619,8 @@ IfEnd  </B>
       </Table>
 
 <P>
-Note that the above example could have used &#8220;$Count&#8221;, but you
-should probably always use the &#8220;$$&#8221; in tests.
+Note that the above example could have used ``$Count'', but you
+should probably always use the ``$$'' in tests.
 
 <P>
 Much like other programming languages, an optional E<SMALL>LSE</SMALL>
@@ -1764,38 +1808,38 @@ Goto 5
       </Table>
 
 <P>
-For an example of how to use some simple labels to simulate a &#8220;DS al
-Coda&#8221; examine the file &#8220;lullaby-of-Broadway&#8221; in the sample songs
+For an example of how to use some simple labels to simulate a ``DS al
+Coda'' examine the file ``lullaby-of-Broadway'' in the sample songs
 directory.
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot9572">... macros.</A><A
- HREF="node21.html#tex2html70"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+<DT><A NAME="foot10636">... macros.</A><A
+ HREF="node21.html#tex2html77"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The values
   are dynamically created and reflect the current settings, and may
   not be exactly the same as the value you originally set due to
   internal roundings, etc.
 
 </DD>
-<DT><A NAME="foot9718">...
+<DT><A NAME="foot10815">...
 lists.</A><A
- HREF="node21.html#tex2html71"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
+ HREF="node21.html#tex2html78"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>this was written before the introduction of slices,
   (<A HREF="#slicing">details here</A>). Slices make this
   much easier, but lets leave the hard stuff in just to show what can
   be done.
 
 </DD>
-<DT><A NAME="foot9651">... functions:</A><A
- HREF="node21.html#tex2html72"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
+<DT><A NAME="foot10724">... functions:</A><A
+ HREF="node21.html#tex2html79"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
 <DD>It is possible that the
-    following functions could be used to do &#8220;bad&#8221; things. If you see
+    following functions could be used to do ``bad'' things. If you see
     code using these commands from a suspect source you should be
     careful.
 
 </DD>
-<DT><A NAME="foot9719">...I<SMALL>F</SMALL>E<SMALL>ND</SMALL></A><A
- HREF="node21.html#tex2html73"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A></DT>
+<DT><A NAME="foot10816">...I<SMALL>F</SMALL>E<SMALL>ND</SMALL></A><A
+ HREF="node21.html#tex2html80"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A></DT>
 <DD>
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 's author probably suffers
   from mild dyslexia and can't remember if the command is IfEnd or
@@ -1803,37 +1847,36 @@ lists.</A><A
   you.
 
 </DD>
-<DT><A NAME="foot9692">... strings.</A><A
- HREF="node21.html#tex2html74"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">5</SPAN></SUP></A></DT>
-<DD>An attempt is made to convert each
-  string to a float. If conversion of both strings is successful, the
-  comparison is made between two floats, otherwise two strings are
-  used.
+<DT><A NAME="foot10787">... strings.</A><A
+ HREF="node21.html#tex2html81"><SUP><SPAN CLASS="arabic">21</SPAN>.<SPAN CLASS="arabic">5</SPAN></SUP></A></DT>
+<DD>For this comparison
+  float values are used. Rounding errors can cause equality
+  comparisons to fail.
 
 </DD>
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html722"
+<A NAME="tex2html756"
   HREF="node22.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html720"
+<A NAME="tex2html754"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html714"
+<A NAME="tex2html748"
   HREF="node20.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html723"
+<B> Next:</B> <A NAME="tex2html757"
   HREF="node22.html">Low Level MIDI Commands</A>
-<B> Up:</B> <A NAME="tex2html721"
+<B> Up:</B> <A NAME="tex2html755"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html715"
+<B> Previous:</B> <A NAME="tex2html749"
   HREF="node20.html">Repeats</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

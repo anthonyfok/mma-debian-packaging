@@ -1,4 +1,3 @@
-
 # pat.py
 
 """
@@ -38,12 +37,19 @@ import MMA.alloc
 import MMA.seqrnd
 import MMA.truncate
 import MMA.ornament
+import MMA.trigger
 
-import gbl
-from   MMA.common import *
-from   MMA.miditables import NONETONE
+from . import gbl
+from MMA.common import *
+from MMA.miditables import NONETONE
 
 pats = {}        # Storage for all pattern defines
+
+class Pgroup:
+    pass
+
+defaultDrum = 0
+defaultVoice = 0
 
 def getIncDec(v):
     """ See if 'v' starts with -/+. Strip and return. """
@@ -58,6 +64,7 @@ def getIncDec(v):
         incr = 0
 
     return incr, v
+
 
 def getIncDecValue(orig, inc, new):
     """ Set value based on original, increment and new values. """
@@ -76,8 +83,8 @@ def getRndPair(l, trk, min, max):
     if not l:
         error("%s: expecting a value or value pair." % trk)
 
-    if l.count(',')>1:
-        error("%s: Random pairs can only have one ','!" % trk)
+    if l.count(',') > 1:
+       error("%s: Random pairs can only have one ','." % trk)
 
     if l.count(',') == 1:
         n1, n2 = l.split(',')
@@ -91,18 +98,16 @@ def getRndPair(l, trk, min, max):
         try:
             n1 = int(n1)
         except:
-            error("%s: Expecting integer, not '%s'." % trk)
+            error("%s: Expecting integer, not '%s'." % (trk, n1))
         n2 = n1 * -1
 
     if n2 < n1:
         n1, n2 = n2, n1
 
     if n1 < min or n1 > max or n2 < min or n2 > max:
-        error("%s: Max range is %s to %s." % (trk, min, max) )
+        error("%s: Max range is %s to %s." % (trk, min, max))
 
     return (n1, n2)
-
-
 
 
 class PC:
@@ -111,7 +116,7 @@ class PC:
         Define classes for processing drum, chord, arp, and chord track.
         These are mostly the same, so we create a base class and derive
         the others from it.
-        
+
         We have a class for each track type. They are all derived
         from the base PC class. Some classes have their own __init__().
         They call back here after doing their own special stuff.
@@ -120,14 +125,14 @@ class PC:
 
     def __init__(self, nm):
 
-        self.inited     = 0
-        self.name       = nm
-        self.channel    = 0
-        self.grooves    = {}
-        self.saveVols   = {}
-        self.ssvoice    = -1  # Track the voice set for the track
+        self.inited = 0
+        self.name = nm
+        self.channel = 0
+        self.grooves = {}
+        self.saveVols = {}
+        self.ssvoice = -1  # Track the voice set for the track
         self.smidiVoice = ()  # Track MIDIVoice cmds to avoid dups
-        self.midiSent   = 0   # if set, MIDICLEAR invoked.
+        self.midiSent = 0   # if set, MIDICLEAR invoked.
 
         """ Midi commands like Pan, Glis, etc. are stacked until musical
             data is actually written to the track. Each item in
@@ -139,15 +144,19 @@ class PC:
         self.riff = []
 
         self.disable = 0
-
+        self.sticky = False
         self.clearSequence()
 
         self.nextVolume = None
-
+        self.cVolume = 127  # assume device is set to max.
         self.inited = 1
 
+        # Double test is needed! We disable a track only
+        # when there is a list of tracks which are NOT
+        # disabled. The variable name is slightly misleading.
         if gbl.muteTracks and nm not in gbl.muteTracks:
             self.disable = 1
+
 
     ##########################################
     ## These are called from process() to set options
@@ -161,13 +170,13 @@ class PC:
 
         for n in ln:
 
-            n = stoi(n, "Argument for %s Compress must be a value" \
-                    % self.name)
+            n = stoi(n, "Argument for %s Compress must be a value"
+                        % self.name)
 
             if n < 0 or n > 5:
                 error("Compress %s out-of-range; must be 0 to 5" % n)
 
-            if n and self.vtype=='CHORD' and self.voicing.mode:
+            if n and self.vtype == 'CHORD' and self.voicing.mode:
                 vwarn = 1
 
             tmp.append(n)
@@ -175,12 +184,11 @@ class PC:
         self.compress = seqBump(tmp)
 
         if self.vtype not in ("CHORD", "ARPEGGIO"):
-            warning ("Compress is ignored in %s tracks" % self.vtype)
+            warning("Compress is ignored in %s tracks" % self.vtype)
 
         if gbl.debug:
-            print "Set %s Compress to:" % self.name,
-            printList(self.compress)
-
+            print("Set %s Compress to: %s" %
+                  (self.name, ' '.join([str(a) for a in self.compress])))
 
     def setRange(self, ln):
         """ set range. """
@@ -192,8 +200,8 @@ class PC:
         for n in ln:
             n = stof(n)
             if n == 0:
-                n=1
-            if  n <= 0 or n >= 6:
+                n = 1
+            if n <= 0 or n >= 6:
                 error("Range %s out-of-range; must be between 0..6, not %s" % (self.name, n))
 
             tmp.append(n)
@@ -201,23 +209,23 @@ class PC:
         self.chordRange = seqBump(tmp)
 
         if self.vtype not in ("SCALE", "ARPEGGIO", "ARIA"):
-            warning ("Range ignored in '%s' tracks" % self.vtype)
+            warning("%s Range: ignored in '%s' tracks" % (self.name, self.vtype))
+
+        if self.vtype == 'ARIA':
+            self.restart()
 
         if gbl.debug:
-            print "Set %s Range to:" % self.name,
-            printList(self.chordRange)
-
+            print("Set %s Range to: %s" % 
+                  (self.name, ' '.join([str(a) for a in self.chordRange])))
 
     def setVoicing(self, ln):
         """ set the Voicing Mode options.
 
             This is an error trap stub. The real code is in patChord.py
-            (settings are only valid for that type).
+            and patSolo.py (settings are only valid for those types).
         """
 
         error("Voicing is not supported for %s tracks" % self.vtype)
-
-
 
     def setForceOut(self):
         """ Set the force output flag. This does 2 things: assigns
@@ -230,7 +238,6 @@ class PC:
 
         self.insertVoice(gbl.seqCount)
 
-
     def setDelay(self, ln):
         """ Set a delay for this track. """
 
@@ -239,47 +246,99 @@ class PC:
         tmp = []
         for n in ln:
             if n[0] == '-':
-                mul=-1
-                n=n[1:]
+                mul = -1
+                n = n[1:]
             elif n[0] == '+':
                 mul = 1
-                n=n[1:]
+                n = n[1:]
             else:
-                mul=1
+                mul = 1
             tmp.append(MMA.notelen.getNoteLen(n) * mul)
 
         self.delay = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s Delay set to:" % self.name,
-            printList(self.delay)
+            print("Set %s Delay set to: %s" % 
+                  (self.name, ' '.join([str(a) for a in self.delay])))
 
-        
     def setDupRoot(self, ln):
         """ set/unset root duplication.
 
             This is a stub. Only valid for CHORDs and that is where the code is."""
 
-
         warning("RootDup has no effect in %s tracks" % self.vtype)
 
+    def setChords(self, ln):
+        """ Set track specific chord(s). """
+
+        # An empty arg. or a single '-' turns off this stuff.
+        if not ln:
+            self.chord = seqBump([[]])
+            return
+
+        # Bracket the chord data. It can be passed as "C D E" or
+        # "{ C D E } {i ii iii}". Also permitted is an empty {} or
+        # a single "/" (repeat last) with or without {}.
+
+        # make the entire line into a long string.
+        ln = ' '.join(ln)
+
+        clist = []
+        while 1:   # loop on entire string
+            if not ln:
+                break
+
+            if ln[0] == '/':  # handle single repeat
+                if clist:
+                    clist.append(clist[-1])
+                    ln = ln[1:].strip()
+                    continue
+                else:
+                    error("%s CHORDS: cannot start with a '/'." % self.name)
+
+            if ln[0] != '{':
+                ln = '{ ' + ln + '}'
+                continue
+
+            ln, s = pextract(ln, '{', '}', onlyone=True)
+            if not s:
+                error("%s CHORDS: Multiple bar chords need {}s." % self.name)
+
+            s = s[0].split()
+            if len(s) == 1 and s[0] == '/':    # this would be a {/}
+                ln = '/' + ln
+                continue    # loop back and handle repeat above
+
+            if s and s[0] == '/':
+                error("%s CHORDS: Chord list cannot start with '/'." % self.name)
+
+            clist.append(s)
+
+        if len(clist) > gbl.seqSize:
+            warning("%s CHORDS: Too many bars(%s) for seq size(%s). Chord list truncated."
+                    % (self.name, len(clist), gbl.seqSize))
+
+        self.chord = seqBump(clist)
+
+        if gbl.debug:
+            print("%s: Chords for track set to: %s" % 
+                  (self.name, ' '.join( ["{%s}" % ' '.join(l) for l in self.chord])))
 
     def setChordLimit(self, ln):
         """ set/unset the chordLimit flag. """
 
-        n = stoi(ln, "Argument for %s ChordLimit must be a value"     % self.name)
+        n = stoi(ln, "%s Limit argument for must be a value" % self.name)
 
         if n < 0 or n > 8:
-            error("ChordLimit %s out-of-range; must be 0 to 8" % n)
+            error("%s Limit %s out-of-range; must be 0 to 8" % (self.name, n))
 
         self.chordLimit = n
 
         if self.vtype not in ("CHORD", "ARPEGGIO"):
-            warning ("Limit is ignored in %s tracks" % self.vtype)
+            warning("%s Limit is ignored in %s tracks" % (self.name, self.vtype))
 
         if gbl.debug:
-            print "Set %s ChordLimit to %s" % (self.name, n)
-
+            print("Set %s Limit to %s" % (self.name, n))
 
     def setChannel(self, ln=None):
         """ Set the midi-channel number for a track.
@@ -298,15 +357,15 @@ class PC:
 
         if not ln:
             try:
-                c=gbl.midiChPrefs[self.name]
+                c = gbl.midiChPrefs[self.name]
             except:
-                c=0
+                c = 0
 
             if not c or gbl.midiAvail[c]:
-                c=-1
+                c = -1
                 for a in range(16, 0, -1):
-                    if a!=10 and not gbl.midiAvail[a]:
-                        c=a
+                    if a != 10 and not gbl.midiAvail[a]:
+                        c = a
                         break
 
             if c < 0:
@@ -315,9 +374,9 @@ class PC:
 
         else:
             c = stoi(ln, "%s Channel assignment expecting Value, not %s" %
-                (self.name, ln))
+                    (self.name, ln))
 
-            if c<0 or c>16:
+            if c < 0 or c > 16:
                 error("%s Channel must be 0..16, not %s" % (self.name, ln))
 
         if c == 10:
@@ -336,16 +395,15 @@ class PC:
         if c == 0:
             if gbl.midiAvail[self.channel]:
                 gbl.midiAvail[self.channel] -= 1
-            s="%s channel disabled" % self.name
+            s = "%s channel disabled" % self.name
             if gbl.midiAvail[self.channel]:
-                s+=" Other tracks are still using channel %s" % self.channel
+                s += " Other tracks are still using channel %s" % self.channel
             else:
-                s+=" Channel %s available" % self.channel
+                s += " Channel %s available" % self.channel
             warning(s)
             self.channel = 0
             self.disable = 1
             return
-
 
         if c != 10:
             for a, tr in gbl.tnames.items():
@@ -353,38 +411,40 @@ class PC:
                     continue
 
                 if tr.channel == c:
-                    error("Channel %s is assigned to %s" % (c, tr.name ) )
+                    error("Channel %s is assigned to %s" % (c, tr.name))
 
         self.channel = c
         if not self.name in gbl.midiAssigns[c]:
             gbl.midiAssigns[c].append(self.name)
 
-        gbl.midiAvail[c]+=1
+        gbl.midiAvail[c] += 1
 
         if not c in gbl.mtrks:
-            gbl.mtrks[c]=MMA.midi.Mtrk(c)
+            gbl.mtrks[c] = MMA.midi.Mtrk(c)
             if gbl.debug:
-                print "MIDI channel %s buffer created" % c
+                print("MIDI channel %s buffer created" % c)
 
+        # If a track name has not be set via MidiTName (this will be
+        # queued since the track just got a midi assignment here) we
+        # put a default track name into the queue.
 
         if c != 10:
-            f=0
+            f = 0
             for a, i in enumerate(self.midiPending):
-                if i[0]=='TNAME':
-                    f=1
+                if i[0] == 'TNAME':
+                    f = 1
             if not f:
-                self.midiPending.append(('TNAME', 0, self.name.title() ))
+                self.midiPending.append(('TNAME', 0, self.name.title()))
 
         if gbl.debug:
-            print "MIDI Channel %s assigned to %s" % (self.channel, self.name)
-
+            print("MIDI Channel %s assigned to %s" % (self.channel, self.name))
 
     def setChShare(self, ln):
         """ Share midi-channel setting. """
 
         if self.channel:    # If channel already assigned, ignore
             warning("Channel for %s has previously been assigned "
-                "(can't ChShare)" % self.name)
+                    "(can't ChShare)" % self.name)
             return
 
         """ Get name of track to share with and make sure it exists.
@@ -403,7 +463,6 @@ class PC:
         if sc == self.name:
             error("%s can't share MIDI channel with itself" % sc)
 
-
         if not gbl.tnames[sc].channel:
             gbl.tnames[sc].setChannel()
 
@@ -411,180 +470,39 @@ class PC:
 
         if not schannel:
             error("CHShare attempted to assign MIDI channel for %s, but "
-                    "none avaiable" %    self.name)
+                  "none avaiable" % self.name)
 
-
-        """ Actually do the assignment. Also copy voice/octave from
+        """ Actually do the assignment. Also copy voice from
             base track to this one ... it's going to use that voice anyway?
         """
 
         self.channel = schannel
-
         self.voice = gbl.tnames[sc].voice[:]
-        self.octave = gbl.tnames[sc].octave[:]
 
         # Update the avail. lists
 
         gbl.midiAssigns[self.channel].append(self.name)
-        gbl.midiAvail[self.channel]+=1
+        gbl.midiAvail[self.channel] += 1
 
-
-    def setChannelVolume(self, ln):
-        """ LowLevel MIDI command. Set Channel Volume. """
+    def setSticky(self, ln):
+        """ Set track as sticky. Sticky tracks are ignored by groove commands. """
 
         if len(ln) != 1:
-            error("Use: %s ChannelVolume" % self.name)
+            error("%s Sticky needs single argument ('True/False')." % self.name)
+         
+        arg = ln[0].upper()
+        if arg in ("TRUE", "ON", "1"):
+            self.sticky = True
 
-        v = MMA.volume.calcMidiVolume(ln[0])
+        elif arg in ("FALSE", "OFF", "0"):
+            self.sticky = False 
 
-        # Delete any pending cvolume events (from midicresc)
-        self.midiPending = [e for e in self.midiPending if e[0] != "CVOLUME"]
-
-        self.midiPending.append(( "CVOLUME", gbl.tickOffset, v) )
+        else:
+            error("%s Sticky: '%s' is not a valid option." % (self.name, arg))
 
         if gbl.debug:
-            print "Set %s MIDIChannelVolume to %s" % (self.name, v)
-
-    def setMidiCresc(self, ln, dir):
-        """ Low level MIDI (de)cresc channel volume."""
-
-        if dir == -1:
-            func="MIDIDeCresc"
-        else:
-            func = "MIDICresc"
-
-        if len(ln) != 3:
-            error("Use: %s %s <start> <end> <count>" % (self.name, func))
-
-        v1 = MMA.volume.calcMidiVolume(ln[0])
-        v2 = MMA.volume.calcMidiVolume(ln[1])
-        count=stof(ln[2])
-
-        if count<=0:
-            error("%s: count must be >0" % func)
-
-        if dir == -1 and v1<v2:
-            warning("%s: dest volume > start" % func)
-        elif dir == 1 and v1>v2:
-            warning("%s: dest volume < start" % func)
-
-        # Delete any pending Channel Volume events from the pending queue
-        # Note: future channel vols already in the track are deleted by the 
-        # addChannelVol fucntion in midi.py.
-
-        self.midiPending = [e for e in self.midiPending if e[0] != "CVOLUME"]
-
-        t = abs(v2-v1)
-        step = (count * gbl.BperQ * gbl.QperBar) / t # step rate
-        p = gbl.tickOffset
-
-        if v2 < v1:
-            dir = -1
-        else:
-            dir = 1
-        for v in range(v1, v2+dir, dir):
-            self.midiPending.append(("CVOLUME", int(p), v))
-            p += step
-
-        if gbl.debug:
-            print "%s MIDIChannelVolume: Added %s changes" % (self.name, t)
-
+            print("%s Sticky %s" % (self.name, self.sticky))
         
-
-    def setTname(self, n):
-        """ Set the track name.
-
-            This is stacked and only gets output if track generates MIDI.
-            It is a handy way to override MMA's track naming.
-        """
-
-        self.midiPending.append(('TNAME', 0, n ))
-        if gbl.debug:
-            print "Set %s track name for MIDI to %s" % (self.name, n)
-
-    def setPan(self, ln):
-        """ Set MIDI Pan for this track. Parse sends 1 or 3 args. """
-
-        if len(ln)==3:
-            beats = stof(ln[2])
-            if beats < 1:
-                error("Beat value must be positive count, not '%s'." % beats)
-            initPan = stoi(ln[0], "Expecting integer value 0..127")
-            newPan  = stoi(ln[1], "Expecting integer value 0..127")
-        else:
-            beats = 0
-            initPan = 0
-            newPan = stoi(ln[0], "Expecting integer value 0..127")
-
-        ticks = beats * gbl.BperQ   # convert beats to midi ticks
-
-        if initPan<0 or initPan>127:
-            error("Initial MidiPAN value must be 0..127")
-
-        if newPan<0 or newPan>127:
-            error("Final MidiPAN value must be 0..127")
-
-        if newPan<initPan:
-            span = initPan-newPan
-            changer=-1
-        else:
-            span = newPan-initPan
-            changer=1
-
-        if span>0:
-            step = ticks/span
-        else:
-            beats=0
-
-        if beats:
-            v=initPan
-            off=gbl.tickOffset
-            for a in range(span+1):
-                self.midiPending.append( ("PAN", int(off), v))
-                off+=step
-                v+=changer
-
-        else:
-            self.midiPending.append( ("PAN", gbl.tickOffset, newPan))
-
-        if gbl.debug:
-            if beats:
-                print "Set %s MIDIPan from %s to %s over %s beats." % \
-                   (self.name, initPan, newPan, beats)
-            else:
-                print "Set %s MIDIPan to %s" % (self.name, newPan)
-
-
-
-    def setGlis(self, ln):
-        """ Set MIDI Glis for this track. """
-
-        v = stoi(ln, "Expecting integer for Portamento")
-
-        if v<0 or v>127:
-            error("Value for Portamento must be 0..127")
-
-        self.midiPending.append( ("GLIS", gbl.tickOffset, v))
-
-        if gbl.debug:
-            print "Set %s MIDIPortamento to %s" % (self.name, v)
-
-    def setMidiText(self, ln):
-        """ Set/queue midi text. """
-
-        self.midiPending.append( ("MIDITEXT", gbl.tickOffset, ln))
-
-        if gbl.debug:
-            print "Set %s MIDIText '%s'." % ln
-
-    def setMidiCue(self, ln):
-        """ Set/queue midi cue. """
-
-        self.midiPending.append( ("MIDICUE", gbl.tickOffset, ln))
-
-        if gbl.debug:
-            print "Set %s MIDICue '%s'." % ln
-
     def setStrum(self, ln):
         """ Set Strum time. """
 
@@ -593,17 +511,15 @@ class PC:
 
         for n in ln:
             if ',' in n:
-                a,b = n.split(',', 1)
-                a = stoi(a, "Argument for %s Strum must be an integer"  % self.name)
-                b = stoi(b, "Argument for %s Strum must be an integer"  % self.name)
+                a, b = n.split(',', 1)
+                a = stoi(a, "Argument for %s Strum must be an integer" % self.name)
+                b = stoi(b, "Argument for %s Strum must be an integer" % self.name)
             else:
-                a = stoi(n, "Argument for %s Strum must be an integer"  % self.name)
+                a = stoi(n, "Argument for %s Strum must be an integer" % self.name)
                 b = a
 
-            if a>b:
-                xx=a
-                a=b
-                b=xx
+            if a > b:
+                b, a = a, b
 
             if a < -300 or a > 300 or b < -300 or b > 300:
                 error("STRUM: %s out-of-range. All values must be -300..300" % n)
@@ -611,7 +527,7 @@ class PC:
             if a == 0 and b == 0:
                 tmp.append(None)
             else:
-                tmp.append((a,b))
+                tmp.append((a, b))
 
         self.strum = seqBump(tmp)
 
@@ -619,22 +535,40 @@ class PC:
             warning("Strum has no effect in %s tracks" % self.name)
 
         if gbl.debug:
-            print "Set %s Strum to %s" % (self.name, self.strum)
+            print("%s Strum set to %s" % (self.name, self.strum))
 
+    def setStrumAdd(self, ln):
+        """ Additional options for strum. """
+
+        ln = lnExpand(ln, '%s StrumAdd' % self.name)
+        tmp = []
+
+        for i in ln:
+            v = stoi(i, "Argument for %s StrumAdd must be an integer" % self.name)
+            tmp.append(v)
+
+        self.strumAdd = seqBump(tmp)
+
+        if gbl.debug:
+            print("%s StrumAdd set to %s." % (self.name, self.strumAdd))
 
     def getStrum(self, sc):
         """ Returns the strum factor. Note that if strum==(0,0) a 0 is returned."""
+        
 
         if not self.strum[sc]:
             return 0
-        else:
-            return  random.randint(self.strum[sc][0], self.strum[sc][1])
+        
+        a, b = self.strum[sc]  # split out tuple. Always 2 values (or empty)
+        if a == b:
+            return a
+        
+        return random.randint(a, b)
 
     def setTone(self, ln):
         """ Set Tone. Error trap, only drum tracks have tone. """
 
         error("Tone command not supported for %s track" % self.name)
-
 
     def setOn(self):
         """ Turn ON track. """
@@ -645,9 +579,9 @@ class PC:
         else:
             self.disable = 0
             self.ssvoice = -1
-            
+
         if gbl.debug:
-            print "%s Enabled" % self.name
+            print("%s Enabled" % self.name)
 
     def setOff(self):
         """ Turn OFF track. """
@@ -655,9 +589,7 @@ class PC:
         self.disable = 1
 
         if gbl.debug:
-            print "%s Disabled" % self.name
-
-
+            print("%s Disabled" % self.name)
 
     def setRVolume(self, ln):
         """ Set the volume randomizer for a track. """
@@ -665,29 +597,50 @@ class PC:
         msg = "%s Rvolume" % self.name
         ln = lnExpand(ln, msg)
         tmp = []
-
         for n in ln:
             n1, n2 = getRndPair(n, msg, -100, 100)
-            tmp.append( [ n1/100. , n2/100. ] )
+            tmp.append([n1 / 100., n2 / 100.])
 
         self.rVolume = seqBump(tmp)
 
         if gbl.debug:
-            print "%s:" % msg,
+            msg = ["%s Rvolume:" % self.name]
             for n1, n2 in self.rVolume:
                 n1 = int(n1 * 100)
                 n2 = int(n2 * 100)
                 if abs(n1) == n2:
-                    print "%s" % n2,
+                    msg.append("%s" % n2)
                 else:
-                    print "%s,%s" % (n1, n2),
-            print
-
+                    msg.append("%s,%s" % (n1, n2))
+            print(' '.join(msg))
 
     def setRSkip(self, ln):
         """ Set the note random skip factor for a track. """
 
         msg = "%s RSkip" % self.name
+        ln, options = opt2pair(ln)
+
+        if not ln:
+            error("%s: Needs weighting list and optional beats=[]." % msg)
+
+        self.rSkipBeats = []
+        for cmd, opt in options:
+            if cmd.upper() == 'BEATS':
+                beats = opt.split(',')
+                if not beats:
+                    error("%s Beats: Expecting list of affected beats." % msg)
+                self.rSkipBeats = []
+                for b in beats:
+                    b = stof(b)
+                    if b < 1:
+                        error("%s: Beats must be => 1, not '%s'" % (msg, b))
+                    if b >= gbl.QperBar + 1:
+                        error("%s: Beats must less than %s, not '%s'" % (msg, gbl.QperBar + 1, b))
+                    self.rSkipBeats.append(int((b - 1) * gbl.BperQ))
+
+            else:
+                error("%s: Unknown option %s." % (msg, cmd))
+
         ln = lnExpand(ln, msg)
         tmp = []
 
@@ -697,16 +650,39 @@ class PC:
             if n < 0 or n > 99:
                 error("%s: arg must be 0..99" % msg)
 
-            tmp.append(n/100.)
+            tmp.append(n / 100.)
 
         self.rSkip = seqBump(tmp)
 
         if gbl.debug:
-            print "%s set to:" % msg,
-            for n in self.rSkip:
-                print int(n * 100),
-            print
+            msg =["%s set to:" % msg]
+            if self.rSkipBeats:
+                msg.append("Beats=%s" % ','.join(['%g' % (i / float(gbl.BperQ) + 1)
+                                                  for i in self.rSkipBeats]))
+            msg.append(' '.join([str(int(n * 100)) for n in self.rSkip]))
+            print(' '.join(msg))
 
+    def setRDuration(self, ln):
+        """ Set the duration randomizer for a track. """
+
+        msg = "%s RDuration" % self.name
+        ln = lnExpand(ln, msg)
+        tmp = []
+
+        for n in ln:
+            n1, n2 = getRndPair(n, msg, -100, 100)
+            tmp.append([n1 / 100., n2 / 100.])
+
+        self.rDuration = seqBump(tmp)
+
+        if gbl.debug:
+            msg = ["%s:" % msg]
+            for n1, n2 in self.rDuration:
+                if abs(n1) == n2:
+                    msg.append("%s " % (n2 * 100))
+                else:
+                    msg.append("%s,%s " % (n1 * 100, n2 * 100))
+            print(' '.join(msg))
 
     def setRTime(self, ln):
         """ Set the timing randomizer for a track. """
@@ -722,51 +698,13 @@ class PC:
         self.rTime = seqBump(tmp)
 
         if gbl.debug:
-            print "%s:" % msg,
-            for n1, n2 in self.rVolume:
+            msg = ["%s:" % msg]
+            for n1, n2 in self.rTime:
                 if abs(n1) == n2:
-                    print "%s" % n2,
+                    msg.append("%s" % n2)
                 else:
-                    print "%s,%s" % (n1, n2),
-            print
-
-    def setRnd(self, arg):
-        """ Enable random pattern selection from sequence."""
-
-        if arg in ("ON", "1"):
-            self.seqRnd = 1
-
-        elif arg in ("OFF", "0"):
-            self.seqRnd = 0
-
-        else:
-            error("SeqRnd: '%s' is not a valid option" % arg)
-
-        if gbl.debug:
-            if self.seqRnd:
-                a="On"
-            else:
-                a="Off"
-            print "%s SeqRnd: %s" % (self.name, a)
-
-
-    def setRndWeight(self, ln):
-        """ Set weighting factors for seqrnd. """
-
-        ln = lnExpand(ln, "%s SeqRndWeight" % self.name)
-        tmp = []
-
-        for n in ln:
-            n = stoi(n)
-            if n < 0: error("SeqRndWeight: Values must be 0 or greater")
-            tmp.append(n)
-
-        self.seqRndWeight = seqBump(tmp)
-
-        if gbl.debug:
-            print "%s SeqRndWeight:" % self.name,
-            printList(self.seqRndWeight)
-
+                    msg.append("%s,%s" % (n1, n2))
+            print(' '.join(msg))
 
     def setDirection(self, ln):
         """ Set scale direction. """
@@ -777,7 +715,7 @@ class PC:
         for n in ln:
             n = n.upper()
             if not n in ('UP', 'DOWN', 'BOTH', 'RANDOM'):
-                error("Unknown %s Direction '%s'"  % (self.name, n) )
+                error("Unknown %s Direction '%s'" % (self.name, n))
             tmp.append(n)
 
         self.direction = seqBump(tmp)
@@ -786,10 +724,9 @@ class PC:
             self.lastChord = None
             self.lastNote = -1
 
-
         if gbl.debug:
-            print "Set %s Direction to:" % self.name,
-            printList(self.direction)
+            print("Set %s Direction to: %s" %
+                  (self.name, ' '.join(self.direction)))
 
 
     def setScaletype(self, ln):
@@ -798,8 +735,7 @@ class PC:
             This is a error stub. The real code is in the permitted track code.
         """
 
-        warning("ScaleType has no effect in %s tracks") % self.vtype
-
+        warning("ScaleType has no effect in %s tracks" % self.vtype)
 
     def setInvert(self, ln):
         """ Set inversion for track.
@@ -817,7 +753,7 @@ class PC:
         for n in ln:
             n = stoi(n, "Argument for %s Invert must be an integer" % self.name)
 
-            if n and self.vtype=='CHORD' and self.voicing.mode:
+            if n and self.vtype == 'CHORD' and self.voicing.mode:
                 vwarn = 1
 
             tmp.append(n)
@@ -825,15 +761,14 @@ class PC:
         self.invert = seqBump(tmp)
 
         if self.vtype not in ("CHORD", "ARPEGGIO"):
-            warning ("Invert is ignored in %s tracks" % self.vtype)
+            warning("Invert is ignored in %s tracks" % self.vtype)
 
         if vwarn:
             warning("Setting both Voicing Mode and Invert is not a good idea")
 
         if gbl.debug:
-            print "Set %s Invert to:" % self.name,
-            printList(self.invert)
-
+            print("Set %s Invert to: %s" % 
+                  (self.name, ' '.join([str(a) for a in self.invert])))
 
     def setOctave(self, ln):
         """ Set the octave for a track. Use 0-10, -x, +x. """
@@ -844,22 +779,38 @@ class PC:
         i = 0
         for n in ln:
             incr, n = getIncDec(n)
-            n = stoi(n, "Argument for %s Octave must be an integer"  % self.name)
-            n = getIncDecValue(self.octave[i]/12, incr, n)
+            n = stoi(n, "Argument for %s Octave must be an integer" % self.name)
+            n = getIncDecValue(self.octave[i] // 12, incr, n)
 
             if n < 0 or n > 10:
                 error("Octave %s out-of-range; must be 0..10" % n)
-            tmp.append( n * 12 )
-            i+=1
-
+            tmp.append(n * 12)
+            i += 1
 
         self.octave = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s Octave to:" % self.name,
-            for i in self.octave:
-                print i/12,
-            print
+            print("Set %s Octave to: %s" % 
+                  (self.name, ' '.join([str(i // 12) for i in self.octave])))
+
+
+    def setMOctave(self, ln):
+        """ Set the octave for a track based on MIDI octave values. Use -1..9. """
+
+        ln = lnExpand(ln, '%s MOctave' % self.name)
+        tmp = []
+
+        for n in ln:
+            n = stoi(n, "Argument for %s MOctave must be an integer" % self.name)
+            if n < -1 or n > 9:
+                error("MOctave %s out-of-range; must be -1..9" % n)
+            tmp.append((n + 1) * 12)
+
+        self.octave = seqBump(tmp)
+
+        if gbl.debug:
+            print("Set %s MOctave to: %s" % 
+                  (self.name, ' '.join([str((i // 12) - 1) for i in self.octave])))
 
 
     def setSpan(self, start, end):
@@ -876,42 +827,43 @@ class PC:
         self.spanEnd = end
 
         if gbl.debug:
-            print "Set %s Span to %s...%s" % (self.name, self.spanStart, self.spanEnd)
-
-
+            print("Set %s Span to %s...%s" % (self.name, self.spanStart, self.spanEnd))
 
     def setSeqSize(self):
         """ Expand existing pattern list.
 
-            Track functions my have their own and do a callback.
+            Track functions may have their own and do a callback.
         """
 
-        self.sequence      = seqBump(self.sequence)
+        self.sequence = seqBump(self.sequence)
         if self.midiVoice:
             self.midiVoice = seqBump(self.midiVoice)
         if self.midiSeq:
-            self.midiSeq   = seqBump(self.midiSeq)
-        self.invert        = seqBump(self.invert)
-        self.artic         = seqBump(self.artic)
-        self.volume        = seqBump(self.volume)
-        self.voice         = seqBump(self.voice)
-        self.rVolume       = seqBump(self.rVolume)
-        self.rSkip         = seqBump(self.rSkip)
-        self.rTime         = seqBump(self.rTime)
-        self.seqRndWeight  = seqBump(self.seqRndWeight)
-        self.strum         = seqBump(self.strum)
-        self.octave        = seqBump(self.octave)
-        self.harmony       = seqBump(self.harmony)
-        self.harmonyOnly   = seqBump(self.harmonyOnly)
+            self.midiSeq = seqBump(self.midiSeq)
+        self.invert = seqBump(self.invert)
+        self.artic = seqBump(self.artic)
+        self.chord = seqBump(self.chord)
+        self.volume = seqBump(self.volume)
+        self.voice = seqBump(self.voice)
+        self.rVolume = seqBump(self.rVolume)
+        self.rSkip = seqBump(self.rSkip)
+        self.rTime = seqBump(self.rTime)
+        self.rDuration = seqBump(self.rDuration)
+        self.seqRndWeight = seqBump(self.seqRndWeight)
+        self.strum = seqBump(self.strum)
+        self.strumAdd = seqBump(self.strumAdd)
+        self.octave = seqBump(self.octave)
+        self.harmony = seqBump(self.harmony)
+        self.harmonyOnly = seqBump(self.harmonyOnly)
         self.harmonyVolume = seqBump(self.harmonyVolume)
-        self.direction     = seqBump(self.direction)
-        self.delay         = seqBump(self.delay)
-        self.scaleType     = seqBump(self.scaleType)
-        self.compress      = seqBump(self.compress)
-        self.chordRange    = seqBump(self.chordRange)
-        self.dupRoot       = seqBump(self.dupRoot)
-        self.unify         = seqBump(self.unify)
-        self.accent        = seqBump(self.accent)
+        self.direction = seqBump(self.direction)
+        self.delay = seqBump(self.delay)
+        self.scaleType = seqBump(self.scaleType)
+        self.compress = seqBump(self.compress)
+        self.chordRange = seqBump(self.chordRange)
+        self.dupRoot = seqBump(self.dupRoot)
+        self.unify = seqBump(self.unify)
+        self.accent = seqBump(self.accent)
 
     def setVoice(self, ln):
         """ Set the voice for a track.
@@ -927,63 +879,34 @@ class PC:
         tmp = []
 
         for n in ln:
-            n = MMA.translate.vtable.get(n)
-            voc=MMA.midiC.instToValue(n)
-
-            if voc < 0 and n[0].isalpha():
-                error("Voice '%s' is not defined." % n)
-            if voc < 0:  # not a valid name, assume vv.msb(ctrl0).lsb(ctrl32) value
-                nn = n.split('.')
-                if len(nn) > 3 or len(nn) < 1:
-                    error("Expecting a voice value Prog.MSB.LSB, not '%s'" % n)
-                voc = 0
-                if len(nn) > 2:
-                    i = stoi(nn[2])
-                    if i<0 or i>127:
-                        error("LSB must be 0..127, not '%s'" % i)
-                    voc = i << 16
-
-                if len(nn) > 1:
-                    i = stoi(nn[1])
-                    if i<0 or i>127:
-                        error("MSB must be 0..127, not '%s'" % i)
-                    voc += i << 8
-
-                i = stoi(nn[0])
-                if i<0 or i>127:
-                    error("Program must be 0..127, not '%s'" % i)
-                voc += i
-
-            tmp.append( voc )
+            voc = MMA.midiC.decodeVoice(n)
+            tmp.append(voc)
 
         self.voice = seqBump(tmp)
 
-        if self.channel and len(gbl.midiAssigns[self.channel])>1:
-            a=[]
+        if self.channel and len(gbl.midiAssigns[self.channel]) > 1:
+            a = []
             for n in gbl.midiAssigns[self.channel]:
                 if n != self.name:
                     a.append(n)
 
             if len(a) > 1:      # a bit for grammar
-                t1="Tracks"
-                v1="are"
+                t1 = "Tracks"
+                v1 = "are"
             else:
-                t1="Track"
-                v1="is"
+                t1 = "Track"
+                v1 = "is"
 
-            warning("%s %s %s shared with %s. Changing voice may create conflict" \
-                % (t1, ', '.join(a), v1, self.name))
+            warning("%s %s %s shared with %s. Changing voice may create conflict"
+                    % (t1, ', '.join(a), v1, self.name))
 
         if gbl.debug:
-            print "Set %s Voice to:" % self.name,
-            for i in self.voice:
-                print MMA.midiC.valueToInst(i),
-            print
+            print("Set %s Voice to: %s" % 
+                  (self.name, ' '.join([MMA.midiC.valueToInst(i) for i in self.voice])))
 
 
     def setMidiClear(self, ln):
         """ Set MIDIclear sequences. """
-
 
         if ln[0] in 'zZ-':
             self.midiClear = None
@@ -991,16 +914,15 @@ class PC:
             self.midiClear = MMA.mdefine.mdef.get(ln[0])
 
         if gbl.debug:
-            print "%s MIDIClear: %s" % (self.name, self.midiSeqFmt(self.midiClear))
-
+            print("%s MIDIClear: %s" % (self.name, self.midiSeqFmt(self.midiClear)))
 
     def doMidiClear(self):
         """ Reset MIDI settings. """
 
         if self.midiSent:
-            if    not self.midiClear:
+            if not self.midiClear:
                 warning("%s: Midi data has been inserted with MIDIVoice/Seq "
-                    "but no MIDIClear data is present" % self.name)
+                        "but no MIDIClear data is present" % self.name)
 
             else:
                 for i in self.midiClear:
@@ -1009,15 +931,15 @@ class PC:
             self.midiSent = 0
 
     def doChannelReset(self):
-        """ Reset the midi voicing to 'sane'. Called when track ended. 
-            
+        """ Reset the midi voicing to 'sane'. Called when track ended.
+
             Note that standard MIDI voicing is left alone, only extended
             voicing is affected.
 
         """
 
         if self.ssvoice > 127 and self.ssvoice != NONETONE:
-            gbl.mtrks[self.channel].addProgChange( gbl.tickOffset, 0, self.ssvoice)
+            gbl.mtrks[self.channel].addProgChange(gbl.tickOffset, 0, self.ssvoice)
 
     def setMidiSeq(self, ln):
         """ Set a midi sequence for a track.
@@ -1043,13 +965,11 @@ class PC:
         if seq.count(None) == len(seq):
             self.midiSeq = []
         else:
-            self.midiSeq = seqBump( seq )
+            self.midiSeq = seqBump(seq)
 
         if gbl.debug:
-            print "%s MIDISeq:" % self.name,
-            for l in seq:
-                print '{ %s }' % self.midiSeqFmt(l),
-
+            print("%s MIDISeq: %s" % 
+                  (self.name, ' '.join(['{ %s }' % self.midiSeqFmt(l) for l in seq])))
 
 
     def setMidiVoice(self, ln):
@@ -1076,28 +996,23 @@ class PC:
         if seq.count(None) == len(seq):
             self.midiVoice = []
         else:
-            self.midiVoice = seqBump( seq )
-
-
+            self.midiVoice = seqBump(seq)
+ 
         if gbl.debug:
-            print "%s MIDIVoice:" % self.name,
-            for l in seq:
-                print '{ %s }' % self.midiSeqFmt(l),
-            print
+            print("%s MIDIVoice: %s" %
+                  (self.name, ' '.join(['{ %s }' % self.midiSeqFmt(l) for l in seq])))
 
 
     def midiSeqFmt(self, lst):
         """ Used by setMidiVoice/Clear/Seq for debugging format. """
 
-        if lst == None:
+        if lst is None:
             return ''
-        ret=''
+        ret = ''
         for i in lst:
             ret += "%s %s 0x%02x ; " % (i[0],
-                MMA.midiC.valueToCtrl(ord(i[1][0])),
-                ord(i[1][1]))
+                          MMA.midiC.valueToCtrl(i[1][0]), i[1][1])
         return ret.rstrip("; ")
-
 
     def setVolume(self, ln):
         """ Set the volume for a pattern.
@@ -1106,33 +1021,33 @@ class PC:
         """
 
         ln = lnExpand(ln, '%s Volume' % self.name)
+        ln = seqBump(ln)  # needed for -/+ setting to apply to all seqs
+
         tmp = [None] * len(ln)
         self.futureVols = []   # clear off dangling (de)cresc for voice.
 
-        for i,n in enumerate(ln):
+
+        for i, n in enumerate(ln):
             a = MMA.volume.calcVolume(n, self.volume[i])
 
             if self.vtype == 'DRUM':
-                a=MMA.translate.drumVolTable.get(self.toneList[i], a)
+                a = MMA.translate.drumVolTable.get(self.toneList[i], a)
             else:
-                a=MMA.translate.voiceVolTable.get(self.voice[i], a)
+                a = MMA.translate.voiceVolTable.get(self.voice[i], a)
             tmp[i] = a
 
         self.volume = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s Volume to:" % self.name,
-            for a in self.volume:
-                print int(a * 100),
-            print
-
+            print("Set %s Volume to: %s" %
+                  (self.name, ' '.join([str(int(a * 100))  for a in self.volume])))
 
     def setCresc(self, dir, ln):
         """ Set Crescendo for a track.     """
 
         if len(ln) == 3:
             self.setVolume([ln[0]])
-            ln=ln[1:]
+            ln = ln[1:]
 
         if len(ln) != 2:
             error("Cresc expecting 2 or 3 args.")
@@ -1145,10 +1060,8 @@ class PC:
         self.futureVols = MMA.volume.fvolume(dir, vol, ln)
 
         if gbl.debug:
-            print "Set %s Cresc to:" % self.name,
-            for a in self.futureVols:
-                print int(a*100),
-            print
+            print("Set %s Cresc to: %s" % 
+                  (self.name, ' '.join([str(int(a * 100)) for a in self.futureVols])))
 
 
     def setSwell(self, ln):
@@ -1156,40 +1069,37 @@ class PC:
 
         if len(ln) == 3:            # 3 args, 1st is intial setting
             self.setVolume([ln[0]])
-            ln=ln[1:]
+            ln = ln[1:]
 
         if len(ln) != 2:
             error("%s Swell expecting 2 or 3 args." % self.name)
 
         if self.volume.count(self.volume[0]) != len(self.volume):
-            warning("%s Swell being used with track with variable sequence volumes." \
-                        % self.name)
+            warning("%s Swell being used with track with variable sequence volumes."
+                    % self.name)
 
         count = stoi(ln[1])
         if count < 2:
             error("%s Swell bar count must be 2 or greater." % self.name)
 
         count += 1
-        c = int(count/2)
+        c = count // 2
         if count % 2:   # even number of bars (we bumped count)
             offset = 1
-            c+=1
+            c += 1
         else:           # odd number
             offset = 0
-        c=str(c)
+        c = str(c)
 
-        self.futureVols = MMA.volume.fvolume(0 ,self.volume[0],
-                  [ ln[0], c ] )
+        self.futureVols = MMA.volume.fvolume(0, self.volume[0],
+                                             [ln[0], c])
 
         self.futureVols.extend(MMA.volume.fvolume(0, self.futureVols[-1],
-                  [str(int(self.volume[0]*100)), c ] )[offset:] )
+                                                  [str(int(self.volume[0] * 100)), c])[offset:])
 
         if gbl.debug:
-            print "Set %s Swell to:" % self.name,
-            for a in self.futureVols:
-                print int(a*100),
-            print
-
+            print("Set %s Swell to: %s" % 
+                  (self.name, ' '.join([str( int(a * 100)) for a in self.futureVols])))
 
     def setMallet(self, ln):
         """ Mallet (repeat) settngs. """
@@ -1202,7 +1112,7 @@ class PC:
             try:
                 mode, val = l.upper().split('=')
             except:
-                error("Each Mallet option must contain a '=', not '%s'" % l)
+                error("%s Mallet: each option must contain a '=', not '%s'" % (self.name, l))
 
             if mode == 'RATE':
                 if val == '0' or val.upper() == 'NONE':
@@ -1214,20 +1124,21 @@ class PC:
                 val = stof(val, "Mallet Decay must be a value, not '%s'" % val)
 
                 if val < -50 or val > 50:
-                    error("Mallet Decay rate must be -50..+50")
+                    error("%s Mallet: Decay rate must be -50..+50" % self.name)
 
-                self.malletDecay = val/100
+                self.malletDecay = val / 100.
+
+            else:
+                error("%s Mallet: %s is not a option." % (self.name, mode))
 
         if gbl.debug:
-            print "%s Mallet Rate:%s Decay:%s" % \
-                (self.name, self.mallet, self.malletDecay)
-
+            print("%s Mallet Rate:%s Decay:%s" %
+                (self.name, self.mallet, self.malletDecay))
 
     def setAccent(self, ln):
         """ Set the accent values. This is a list of lists, a list for each seq. """
 
         tmp = []
-
 
         """ 2 ways to call this:
 
@@ -1241,23 +1152,25 @@ class PC:
             new ln[].
 
             Note that the "/" can or not have {}s.
+
+            An empty string resets to no accents.
         """
 
         ln = ' '.join(ln)
         if not ln.startswith('{'):
-            ln='{' + ln +"}"
+            ln = '{' + ln + "}"
 
-        l=[]
+        l = []
         while ln:
-            if ln[0] == "/":  #  / not delimited with {}
+            if ln[0] == "/":  # / not delimited with {}
                 ln = "{/}" + ln[1:]
 
             if ln[0][0] != '{':
-                error("%s Accent: Unmatched or missing '{} delimters" % self.name) 
+                error("%s Accent: Unmatched or missing '{} delimters" % self.name)
 
-            ln,b = pextract(ln, "{", "}", 1)
+            ln, b = pextract(ln, "{", "}", onlyone=True)
 
-            if len(b)==1 and b[0]=='/':   # convert ['/'] to '/' for lnExpand()
+            if len(b) == 1 and b[0] == '/':   # convert ['/'] to '/' for lnExpand()
                 l.append('/')
             else:
                 l.append(b[0].split())
@@ -1265,31 +1178,30 @@ class PC:
         ln = lnExpand(l, '%s Accent' % self.name)
 
         for l in ln:
-            tt=[]
-            if len(l)/2*2 != len(l):
+            tt = []
+            if len(l) // 2 * 2 != len(l):
                 error("Use: %s Accent Beat Percentage [...]" % self.name)
 
             for b, v in zip(l[::2], l[1::2]):
-                b=self.setBarOffset( b )
-                v=stoi(v, "Beat offset must be a value, not '%s'" % v)
+                b = self.setBarOffset(b)
+                v = stoi(v, "Beat offset must be a value, not '%s'" % v)
                 if v < -100 or v > 100:
                     error("Velocity adjustment (as percentage) must "
                           "be -100..100, not '%s'" % v)
 
-                tt.append( (b, v/100. ) )
+                tt.append((b, v / 100.))
             tmp.append(tt)
 
-        self.accent = seqBump( tmp )
+        self.accent = seqBump(tmp)
 
         if gbl.debug:
-            print "%s Accent:" % self.name,
+            accList = []
             for s in self.accent:
-                print "{",
-                for b,v in s:
-                    print '%s %s' % (1+(b/float(gbl.BperQ)), int(v*100)),
-                print "}",
-            print
-
+                accList.append('{')
+                for b, v, in s:
+                    accList.append("%s %s" % (1 + (b / float(gbl.BperQ)), int(v * 100)))
+                accList.append('}')
+            print("%s Accent: %s" % (self.name, ' '.join(accList)))
 
     def setArtic(self, ln):
         """ Set the note articuation value. """
@@ -1305,11 +1217,16 @@ class PC:
             a = stoi(n, "Expecting value in articulation setting")
             a = getIncDecValue(self.artic[i], incr, a)
 
-            if a < 1 or a > 500:
-                error("%s: Articulation setting must be 1..500, not %s" % (self.name,a))
+            if self.vtype is 'PLECTRUM':
+                if a < 0 or a > 500:
+                    error("%s: Articulation setting must be 0 .. 500 (midi ticks), not %s" %
+                          (self.name, a))
+            else:
+                if a < 1 or a > 500:
+                    error("%s: Articulation setting must be 1..500, not %s" % (self.name, a))
 
-            if a > 200:
-                warning("%s: Articulation '%s' is a large value." % (self.name, a))
+                if a > 200:
+                    warning("%s: Articulation '%s' is a large value." % (self.name, a))
 
             tmp.append(a)
             i += 1
@@ -1317,8 +1234,8 @@ class PC:
         self.artic = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s Articulate to:" % self.name,
-            printList(self.artic)
+            print("Set %s Articulate to: %s" % 
+                  (self.name, ' '.join([str(a) for a in self.artic])))
 
 
     def setUnify(self, ln):
@@ -1328,10 +1245,10 @@ class PC:
         tmp = []
 
         for n in ln:
-            n=n.upper()
-            if n  in ( 'ON',  '1'):
+            n = n.upper()
+            if n in ('ON', '1'):
                 tmp.append(1)
-            elif n in( 'OFF', '0'):
+            elif n in('OFF', '0'):
                 tmp.append(0)
             else:
                 error("Unify accepts ON | OFF | 0 | 1")
@@ -1339,49 +1256,8 @@ class PC:
         self.unify = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s Unify to:" % self.name,
-            printList(self.unify)
-
-
-    def copySettings(self, cp):
-        """ Copy the voicing from a 2nd voice to the current one. """
-
-        if not cp in gbl.tnames:
-            error("CopySettings does not know track '%s'" % cp)
-
-        cp=gbl.tnames[cp]
-
-        if cp.vtype != self.vtype:
-            error("Tracks must be of same type for copy ... "
-                "%s and %s aren't" % (self.name, cp.name))
-
-        self.volume      = cp.volume[:]
-        self.rVolume     = copy.deepcopy(cp.rVolume)
-        self.accent      = cp.accent[:]
-        self.rSkip       = cp.rSkip[:]
-        self.rTime       = copy.deepcopy(cp.rTime)
-        self.strum       = cp.strum[:]
-        self.octave      = cp.octave[:]
-        self.harmony     = cp.harmony[:]
-        self.harmonyOnly = cp.harmonyOnly[:]
-        self.harmonyVolume = cp.harmonyVolume[:]
-        self.direction   = cp.direction[:]
-        self.scaleType   = cp.scaleType[:]
-        self.voice       = cp.voice[:]
-        self.invert      = cp.invert[:]
-        self.artic       = cp.artic[:]
-        self.compress    = cp.compress[:]
-
-        self.riff        = cp.riff[:]
-
-        if self.vtype == 'DRUM':
-            self.toneList = cp.toneList[:]
-
-
-        if gbl.debug:
-            print "Settings from %s copied to %s" % (cp.name, self.name)
-
-
+            print("Set %s Unify to: %s" %
+              (self.name, ' '.join([str(a) for a in self.unify])))
 
     ##################################################
     ## Save/restore grooves
@@ -1399,41 +1275,41 @@ class PC:
         """
 
         self.grooves[gname] = {
-            'ACCENT':    self.accent[:],
-            'ARTIC':     self.artic[:],
-            'COMPRESS':  self.compress[:],
-            'DELAY':     self.delay[:],
-            'DIR':       self.direction[:],
-            'DUPROOT':   self.dupRoot[:],
-            'HARMONY':   (self.harmony[:], self.harmonyOnly[:], self.harmonyVolume[:]),
-            'INVERT':    self.invert[:],
-            'LIMIT':     self.chordLimit,
-            'RANGE':     self.chordRange[:],
-            'OCTAVE':    self.octave[:],
-            'RSKIP':     self.rSkip[:],
-            'RTIME':     copy.deepcopy(self.rTime),
-            'RVOLUME':   copy.deepcopy(self.rVolume),
-            'SCALE':     self.scaleType[:],
-            'SEQ':       self.sequence[:],
-            'SEQRND':    self.seqRnd,
-            'SEQRNDWT':  self.seqRndWeight[:],
-            'STRUM':     self.strum[:],
-            'VOICE':     self.voice[:],
-            'VOLUME':    self.volume[:],
-            'UNIFY':     self.unify[:],
-            'MIDISEQ':   self.midiSeq[:],
+            'ACCENT': self.accent[:],
+            'ARTIC': self.artic[:],
+            'CHORD': copy.deepcopy(self.chord),
+            'COMPRESS': self.compress[:],
+            'DELAY': self.delay[:],
+            'DIR': self.direction[:],
+            'DUPROOT': copy.deepcopy(self.dupRoot),
+            'HARMONY': (self.harmony[:], self.harmonyOnly[:], self.harmonyVolume[:]),
+            'INVERT': self.invert[:],
+            'LIMIT': self.chordLimit,
+            'RANGE': self.chordRange[:],
+            'OCTAVE': self.octave[:],
+            'RSKIP': self.rSkip[:],
+            'RSKIPBEATS': self.rSkipBeats[:],
+            'RTIME': copy.deepcopy(self.rTime),
+            'RDURATION': copy.deepcopy(self.rDuration),
+            'RVOLUME': copy.deepcopy(self.rVolume),
+            'SCALE': self.scaleType[:],
+            'SEQ': self.sequence[:],
+            'SEQRND': self.seqRnd,
+            'SEQRNDWT': self.seqRndWeight[:],
+            'STRUM': self.strum[:],
+            'STRUMADD': self.strumAdd[:],
+            'VOICE': self.voice[:],
+            'VOLUME': self.volume[:],
+            'UNIFY': self.unify[:],
+            'MIDISEQ': self.midiSeq[:],
             'MIDIVOICE': self.midiVoice[:],
             'MIDICLEAR': self.midiClear[:],
-            'SPAN':      (self.spanStart, self.spanEnd),
-            'MALLET':    (self.mallet, self.malletDecay),
-
-            'ORNAMENT':  copy.deepcopy(self.ornaments)
-
-        }
-
+            'SPAN': (self.spanStart, self.spanEnd),
+            'MALLET': (self.mallet, self.malletDecay),
+            'ORNAMENT': copy.deepcopy(self.ornaments)}
 
     def restoreGroove(self, gname):
-        """ Restore a defined groove. 
+        """ Restore a defined groove.
 
             Some tracks will override to restore their own variables. They
             then call back to this to finish the job.
@@ -1443,36 +1319,38 @@ class PC:
 
         g = self.grooves[gname]
 
-        self.sequence   =  g['SEQ']
-        self.volume     =  g['VOLUME']
-        self.accent     =  g['ACCENT']
-        self.rTime      =  g['RTIME']
-        self.rVolume    =  g['RVOLUME']
-        self.rSkip      =  g['RSKIP']
-        self.strum      =  g['STRUM']
-        self.octave     =  g['OCTAVE']
-        self.voice      =  g['VOICE']
+        self.sequence = g['SEQ']
+        self.volume = g['VOLUME']
+        self.accent = g['ACCENT']
+        self.rTime = g['RTIME']
+        self.rDuration = g['RDURATION']
+        self.rVolume = g['RVOLUME']
+        self.rSkip = g['RSKIP']
+        self.rSkipBeats = g['RSKIPBEATS']
+        self.strum = g['STRUM']
+        self.strumAdd = g['STRUMADD']
+        self.octave = g['OCTAVE']
+        self.voice = g['VOICE']
         self.harmony, self.harmonyOnly, self.harmonyVolume = g['HARMONY']
-        self.direction  =  g['DIR']
-        self.delay      =  g['DELAY']
-        self.scaleType  =  g['SCALE']
-        self.invert     =  g['INVERT']
-        self.artic      =  g['ARTIC']
-        self.seqRnd     =  g['SEQRND' ]
+        self.direction = g['DIR']
+        self.delay = g['DELAY']
+        self.scaleType = g['SCALE']
+        self.invert = g['INVERT']
+        self.chord = g['CHORD']
+        self.artic = g['ARTIC']
+        self.seqRnd = g['SEQRND']
         self.seqRndWeight = g['SEQRNDWT']
-        self.compress   =  g['COMPRESS']
-        self.chordRange =  g['RANGE']
-        self.dupRoot    =  g['DUPROOT']
-        self.chordLimit =  g['LIMIT']
-        self.unify      =  g['UNIFY']
-        self.midiClear  =  g['MIDICLEAR']
-        self.midiSeq    =  g['MIDISEQ']
-        self.midiVoice  =  g['MIDIVOICE']
-        self.spanStart, self.spanEnd  = g['SPAN']
+        self.compress = g['COMPRESS']
+        self.chordRange = g['RANGE']
+        self.dupRoot = g['DUPROOT']
+        self.chordLimit = g['LIMIT']
+        self.unify = g['UNIFY']
+        self.midiClear = g['MIDICLEAR']
+        self.midiSeq = g['MIDISEQ']
+        self.midiVoice = g['MIDIVOICE']
+        self.spanStart, self.spanEnd = g['SPAN']
         self.mallet, self.malletDecay = g['MALLET']
-
         self.ornaments = g['ORNAMENT']
-
 
         """ It's quite possible that the track was created after
             the groove was saved. This means that the data restored
@@ -1488,67 +1366,6 @@ class PC:
     ####################################
     ## Sequence functions
 
-    def setSequence(self, ln):
-        """ Set the sequence for a track.
-
-            The ln passed from the parser should be a list of existing
-            patterns, plus the special 'patterns' Z, z, -, and *. Remember
-            that the parser has already converted {} patterns to a special
-            pattern line _1.
-
-            First we expand ln to the proper length. lnExpand() also
-            duplicates '/' to the previous pattern.
-
-            Then we step though ln:
-
-              - convert 'z', 'Z' and '-' to empty patterns.
-
-              - duplicate the existing pattern for '*'
-
-              - copy the defined pattern for everything else.
-                There's a bit of Python reference trickery here.
-                Eg, if we have the line:
-
-                   Bass Sequence B1 B2
-
-                   the sequence is set with pointers to the existing
-                patterns defined for B1 and B2. Now, if we later change
-                the definitions for B1 or B2, the stored pointer DOEN'T
-                change. So, changing pattern definitions has NO EFFECT.
-
-        """
-
-
-        ln = lnExpand(ln, '%s Sequence' % self.name)
-        tmp = [None] * len(ln)
-
-        for i, n in enumerate(ln):
-            n=n.upper()
-
-            if n in     ('Z', '-'):
-                tmp[i] = None
-
-            elif n == '*':
-                tmp[i] = self.sequence[i]
-
-            else:
-                p= (self.vtype, n)
-                if not p in pats:
-                    error("Track %s does not have pattern '%s'" % p )
-                tmp[i] = pats[p]
-
-        self.sequence = seqBump(tmp)
-
-        if gbl.seqshow:
-            print "%s sequence set:" % self.name,
-            for a in ln:
-                if  a in "Zz-":
-                    print "-",
-                else:
-                    print a,
-            print
-
-
     def clearSequence(self):
         """ Clear sequence for track.
 
@@ -1557,67 +1374,76 @@ class PC:
         """
 
         if self.vtype != 'SOLO' or not self.inited:
-            self.artic        =  [90]
-            self.sequence     =  [None]
-            self.seqRnd       =  0
-            self.seqRndWeight =  [1]
-            self.scaleType    =  ['AUTO']
-            self.rVolume      =  [[0,0]]
-            self.rSkip        =  [0]
-            self.rTime        =  [[0,0]]
-            self.octave       =  [4 * 12]
-            self.voice        =  [0]
-            self.chordRange   =  [1]
-            self.harmony      =  [None]
-            self.harmonyOnly  =  [None]
+            if self.vtype == 'PLECTRUM':
+                self.artic = [0]
+            else:
+                self.artic = [90]
+            self.chord = [[]]
+            self.sequence = [None]
+            self.seqRnd = 0
+            self.seqRndWeight = [1]
+            self.scaleType = ['AUTO']
+            self.rVolume = [[0, 0]]
+            self.rSkip = [0]
+            self.rSkipBeats = []
+            self.rTime = [[0, 0]]
+            self.rDuration = [[0, 0]]
+            self.octave = [4 * 12]
+            if self.vtype == 'DRUM':
+                self.voice = [defaultDrum]
+            else:
+                self.voice = [defaultVoice]
+            self.chordRange = [1]
+            self.harmony = [None]
+            self.harmonyOnly = [None]
             self.harmonyVolume = [.8]
-            self.strum        =  [None]
-            self.volume       =  [MMA.volume.vols['M'] ]
-            self.compress     =  [0]
-            self.dupRoot      =  [0]
-            self.chordLimit   =  0
-            self.invert       =  [0]
-            self.lastChord    =  []
-            self.accent       =  [ [] ]
-            self.unify        =  [0]
-            self.midiClear    =  []
-            self.midiSeq      =  []
-            self.midiVoice    =  []
-            self.spanStart    =  0
-            self.spanEnd      =  127
-            self.mallet       =  0
-            self.malletDecay  =  0
-            self.futureVols   =  []
-            self.direction    =  ['BOTH']
-            self.delay        =  [0]
-            
+            self.strum = [None]
+            self.strumAdd = [0]
+            self.volume = [MMA.volume.vols['M']]
+            self.compress = [0]
+            self.dupRoot = [[]]
+            self.chordLimit = 0
+            self.invert = [0]
+            self.lastChord = []
+            self.accent = [[]]
+            self.unify = [0]
+            self.midiClear = []
+            self.midiSeq = []
+            self.midiVoice = []
+            self.spanStart = 0
+            self.spanEnd = 127
+            self.trigger = MMA.trigger.Trigger()
+            self.mallet = 0
+            self.malletDecay = 0
+            self.futureVols = []
+            self.direction = ['BOTH']
+            self.delay = [0]
+
             # ornamentation
-            self.ornaments = MMA.ornament.default() 
+            self.ornaments = MMA.ornament.default()
 
             # for midinote (see midinote.py)
-            self.transpose  = 0   # transpose off=0, on=1
-            self.useticks   = 1   # offsets   beats=0, ticks=1  defaults to ticks
-            self.tickdur    = 1   # duration  notes=0, ticks=1  defaults to ticks
+            self.transpose = 0   # transpose off=0, on=1
+            self.useticks = 1   # offsets   beats=0, ticks=1  defaults to ticks
+            self.tickdur = 1   # duration  notes=0, ticks=1  defaults to ticks
             self.articulate = 0   # honor articulate, defaults to Off
-            self.tadjust    = 0   # time adjustment factor
-            self.vadjust    = 1   # volume adjustment factor (percentage)
-            self.oadjust    = 0   # octave (12 pitches) adjustment
+            self.tadjust = 0   # time adjustment factor
+            self.vadjust = 1   # volume adjustment factor (percentage)
+            self.oadjust = 0   # octave (12 pitches) adjustment
 
         if self.riff:
             if len(self.riff) > 1:
                 warning("%s sequence clear deleting %s riffs" % (self.name, len(self.riff)))
             else:
-                warning("%s sequence clear deleting unused riff" % self.name )
+                warning("%s sequence clear deleting unused riff" % self.name)
 
         self.riff = []
 
         self.setSeqSize()
 
-
     ############################
     ### Pattern functions
     ############################
-
 
     def definePattern(self, name, ln):
         """ Define a Pattern.
@@ -1628,7 +1454,7 @@ class PC:
         """
 
         name = name.upper()
-        slot = (self.vtype,name)
+        slot = (self.vtype, name)
 
         # This is just for the debug code
 
@@ -1639,13 +1465,14 @@ class PC:
         else:
             redef = name + ' created'
 
-        ln = ln.rstrip('; ')    # Delete optional trailing    ';' & WS
+        if not self.vtype in ('SOLO', 'MELODY'):
+            ln = ln.rstrip('; ')    # Delete optional trailing    ';' & WS
+
         pats[slot] = self.defPatRiff(ln)
 
         if gbl.pshow:
-            print "%s pattern %s:" % (self.name.title(), redef )
-            self.printPattern(pats[slot])
-
+            print("%s pattern %s: %s" % (self.name.title(), redef,
+                  self.formatPattern(pats[slot])))
 
     def dupRiff(self, ln):
         """ Duplicate an existing set of riffs from one solo track to another."""
@@ -1654,27 +1481,26 @@ class PC:
             error("%s DupRiff: No data to copy." % self.name)
 
         for t in ln:
-            t=t.upper()
+            t = t.upper()
 
             if not t in gbl.tnames:
-                error("%s DupRiff: Destination track %s does not exist." \
-                          % (self.name, t))
+                error("%s DupRiff: Destination track %s does not exist."
+                      % (self.name, t))
 
             tr = gbl.tnames[t]
 
             if self.vtype != tr.vtype:
-                error("%s DupRiff: Can't copy to %s, incompatible types (%s != %s)." \
-                          % (self.name,t, self.vtype, tr.vtype))
+                error("%s DupRiff: Can't copy to %s, incompatible types (%s != %s)."
+                      % (self.name, t, self.vtype, tr.vtype))
 
             if tr.riff:
-                error("%s DupRiff: Destination track %s has pending data." \
-                          % (self.name, tr.name))
-                
-            tr.riff = copy.deepcopy(self.riff)
-            
-            if gbl.debug:
-                print "%s DupRiff copied to %s." % (self.name, tr.name)
+                error("%s DupRiff: Destination track %s has pending data."
+                      % (self.name, tr.name))
 
+            tr.riff = copy.deepcopy(self.riff)
+
+            if gbl.debug:
+                print("%s DupRiff copied to %s." % (self.name, tr.name))
 
     def setRiff(self, ln):
         """ Define and set a Riff. """
@@ -1685,32 +1511,32 @@ class PC:
             self.riff.append(ln)
         else:
             ln = ln.rstrip('; ')
-            if len(ln) == 1 and (ln[0] in ('Z','z','-')):
+            if len(ln) == 1 and (ln[0] in ('Z', 'z', '-')):
                 self.riff.append([])
             else:
                 self.riff.append(self.defPatRiff(ln))
 
         if gbl.pshow:
-            print "%s Riff:" % self.name,
+            msg = ["%s Riff:" % self.name]
             if solo:
-                print self.riff[-1]
+                msg.append(self.riff[-1])
             else:
-                self.printPattern(self.riff[-1])
+                msg.append(self.formatPattern(self.riff[-1]))
+            print(' '.join(msg))
 
 
     def defPatRiff(self, ln):
         """ Worker function to define pattern. Shared by definePattern()
         and setRiff().
         """
-
+        
         def mulPatRiff(oldpat, fact):
             """ Multiply a pattern. """
 
             fact = stoi(fact, "The multiplier arg must be an integer not '%s'" % fact)
 
-            if fact<1 or fact >100:
+            if fact < 1 or fact > 100:
                 error("The multiplier arg must be in the range 2 to 100")
-
 
             """ Make N copies of pattern, adjusted so that the new copy has
                 all note lengths and start times  adjusted.
@@ -1720,21 +1546,20 @@ class PC:
 
             new = []
             add = 0
-            step = (gbl.BperQ * gbl.QperBar)/fact
+            step = gbl.barLen // fact
 
             for n in range(fact):
                 orig = copy.deepcopy(oldpat)
                 for z in orig:
-                    z.offset = (z.offset / fact) + add
-                    z.duration /= fact
+                    z.offset = (z.offset // fact) + add
+                    z.duration //= fact
                     if z.duration < 1:
                         z.duration = 1
 
                     new.append(z)
                 add += step
 
-            return tuple( new )
-
+            return tuple(new)
 
         def shiftPatRiff(oldpat, fact):
 
@@ -1743,22 +1568,14 @@ class PC:
             # Adjust all the beat offsets
 
             new = copy.deepcopy(oldpat)
-            max = gbl.BperQ * (gbl.QperBar)
+            max = gbl.barLen
             for n in new:
                 n.offset += fact * gbl.BperQ
                 if n.offset < 0 or n.offset > max:
                     error("Pattern shift with factor %f has resulted in an "
-                          "illegal offset" % fact )
+                          "illegal offset" % fact)
 
-            return    tuple( new )
-
-        def patsort(c1, c2):
-            """ Sort a pattern tuple. """
-
-            if c1.offset < c2.offset: return -1
-            if c1.offset == c2.offset: return 0
-            else: return 1
-
+            return tuple(new)
 
         ### Start of main function...
 
@@ -1770,17 +1587,16 @@ class PC:
         for l in ln:
             p.append(l.split())
 
-        plist=[]
-
+        plist = []
 
         for ev in p:
-            more=[]
-            for i,e in enumerate(ev):
-                if e.upper() in ('SHIFT', '*'):
+            more = []
+            for i, e in enumerate(ev):
+                if e in ('SHIFT', '*'):
                     if i == 0:
                         error("Pattern definition can't start with SHIFT or *")
                     more = ev[i:]
-                    ev=ev[:i]
+                    ev = ev[:i]
                     break
 
             if len(ev) == 1:
@@ -1792,7 +1608,7 @@ class PC:
                     pt = pats[nm]
 
                 else:
-                    error("%s is not an existing %s pattern"  % (nm[1], nm[0].title()) )
+                    error("%s is not an existing %s pattern" % (nm[1], nm[0].title()))
 
             else:
                 pt = [self.getPgroup(ev)]
@@ -1811,8 +1627,7 @@ class PC:
 
             plist.extend(pt)
 
-
-        plist.sort(patsort)
+        plist.sort( key=lambda plist: plist.offset)
 
         if MMA.swing.mode:
             plist = MMA.swing.pattern(plist, self.vtype)
@@ -1820,52 +1635,46 @@ class PC:
         return plist
 
 
-    def printPattern(self, pat):
-        """ Print a pattern. Used by debugging code."""
-
-        print self.formatPattern(pat)
-
     def formatPattern(self, pat):
-        pp=[]
+        pp = []
         if not pat:
             return ' z '
 
         for p in pat:
-            s=[]
-            s.append("%.2f" % (1+(p.offset/float(gbl.BperQ))))
-            if self.vtype!='PLECTRUM':
-                s.append("%.2f " % p.duration)
-                              
+            s = []
+            s.append("%g" % (1 + (p.offset / float(gbl.BperQ))))
+            if self.vtype != 'PLECTRUM':
+                s.append("%st" % p.duration)
+
             if self.vtype == 'CHORD':
                 for a in p.vol:
-                    s.append( "%.0f" % a)
+                    s.append("%g" % a)
 
             elif self.vtype == 'PLECTRUM':
                 s.append("%s" % p.strum)
                 for a in p.vol:
-                    s.append( "%.0f" % a)
+                    s.append("%g" % a)
 
             elif self.vtype == 'BASS':
-                f=str(p.noteoffset+1)
+                f = str(p.noteoffset + 1)
 
                 if p.accidental == 1:
-                    f+="#"
+                    f += "#"
                 elif p.accidental == -1:
-                    f+="b"
+                    f += "b"
 
                 if p.addoctave > 0:
-                    f+="+" * (p.addoctave/12)
+                    f += "+" * (p.addoctave // 12)
                 elif p.addoctave < 0:
-                    f+="-" * (p.addoctave/-12)
+                    f += "-" * (p.addoctave // -12)
 
-                s.append( "%s %.0f" % (f, p.vol ) )
+                s.append("%s %g" % (f, p.vol))
 
             elif self.vtype in ('ARPEGGIO', 'SCALE', 'DRUM', 'WALK'):
-                s.append( "%.0f " % p.vol )
+                s.append("%g " % p.vol)
 
             pp.append(' '.join(s))
         return "; ".join(pp)
-
 
     def insertVoice(self, sc):
         """ Called from bar() and setForceOut(). Adds voice stuff to track."""
@@ -1889,10 +1698,10 @@ class PC:
 
         # Set the voice in the midi track if not previously done.
 
-        v=self.voice[sc]
+        v = self.voice[sc]
         if v != self.ssvoice:
 
-            gbl.mtrks[self.channel].addProgChange( gbl.tickOffset, v, self.ssvoice)
+            gbl.mtrks[self.channel].addProgChange(gbl.tickOffset, v, self.ssvoice)
             self.ssvoice = v
 
             # Mark ssvoice also in shared tracks
@@ -1904,8 +1713,8 @@ class PC:
                     pass
 
             if gbl.debug:
-                print "%s Voice '%s' inserted at %s" % \
-                    (self.name, MMA.midiC.valueToInst(v), gbl.tickOffset )
+                print("%s Voice '%s' inserted at %s" % 
+                    (self.name, MMA.midiC.valueToInst(v), gbl.tickOffset))
 
         """ Our 2nd stab at MIDIVOICE. This time any sequences
             with offsets >0 are sent. AND the smidiVoice and midiSent
@@ -1921,11 +1730,9 @@ class PC:
                 self.smidiVoice = v
                 self.midiSent = 1  # used by MIDICLEAR
 
-
     #########################
     ## Music processing
     #########################
-
 
     def bar(self, ctable):
         """ Process a bar of music for this track. """
@@ -1946,7 +1753,6 @@ class PC:
                 self.riff.pop(0)
             return
 
-
         """ Decide which seq to use. This is either the current
             seqCount, or if SeqRnd has been set for the track
             it is a random pattern in the sequence.
@@ -1961,12 +1767,15 @@ class PC:
 
         sc = self.seq
 
-        """ Get pattern for this sequence. Either a Riff or a Pattern. """
-
+        # Get pattern for this sequence. Either a Riff, Pattern or trigger
         if self.riff:
             pattern = self.riff.pop(0)
         else:
             pattern = self.sequence[sc]
+            if self.trigger.mode:
+                pattern = MMA.trigger.makeTriggerSequence(self, ctable, pattern)
+                if not pattern and self.trigger.override:
+                    pattern = self.sequence[sc]
             if not pattern:
                 return
 
@@ -1977,10 +1786,20 @@ class PC:
         if not self.channel:
             self.setChannel()
 
+        MMA.midifuncs.doChannelInit(self.channel, self.name)
+
+        # If there is track specific chord data, substitute it for the ctable
+        # data already passed.
+
+        if self.chord[sc]:
+            ctable = MMA.parse.parseChordLine(self.chord[sc])
+
         # We are ready to create musical data. 1st do pending midi commands.
+        # It probably doesn't matter if we do this now or later??? 
 
         self.clearPending()
 
+        # This absolutely needs to be done BEFORE any note ON stuff!
         self.insertVoice(sc)
 
         # Do MIDISeq for this voice
@@ -1989,12 +1808,12 @@ class PC:
             l = self.midiSeq[sc]
             if l:
                 for i in l:
-                    gbl.mtrks[self.channel].addCtl( getOffset(i[0]), i[1] )
+                    gbl.mtrks[self.channel].addCtl(getOffset(i[0]), i[1])
                 self.midiSent = 1
 
         """ Special for TRUNCATE. If bar(s) are being truncated patterns
             need to be resized to fit the new size. (Note: SOLO patterns
-            are not touched sinc they are not yet compiled.) We use the
+            are not touched since they are not yet compiled.) We use the
             'side' and 'length' settings to figure out where to start/end
             slicing the pattern.
             NOTE: use a deepcopy of the pattern!
@@ -2014,53 +1833,54 @@ class PC:
         if pattern:
             self.trackBar(pattern, ctable)
 
-
-
     def clearPending(self):
-
+        self.midiPending.sort()  # probably not needed, but it's cheap insurance
         while self.midiPending:
             c, off, v = self.midiPending.pop(0)
 
             if c == 'TNAME':
                 gbl.mtrks[self.channel].addTrkName(off, v)
                 if gbl.debug:
-                    print "%s Track name inserted at offset %s" % \
-                          (self.name, off)
+                    print("%s Track name inserted at offset %s" % 
+                          (self.name, off))
 
             elif c == 'GLIS':
                 gbl.mtrks[self.channel].addGlis(off, v)
                 if gbl.debug:
-                    print "%s Glis at offset %s set to %s" % \
-                          (self.name, off, ord(chr(v)))
+                    print("%s Glis at offset %s set to %s" % 
+                          (self.name, off, ord(chr(v))))
 
             elif c == 'PAN':
                 gbl.mtrks[self.channel].addPan(off, v)
                 if gbl.debug:
-                    print "%s Pan at offset %s set to %s" % \
-                          (self.name, off, v)
+                    print("%s Pan at offset %s set to %s" % 
+                          (self.name, off, v))
 
             elif c == 'CVOLUME':
                 gbl.mtrks[self.channel].addChannelVol(off, v)
                 if gbl.debug:
-                    print "%s ChannelVolume at offset %s set to %s" % \
-                          (self.name, off, v)
+                    print("%s ChannelVolume at offset %s set to %s" % 
+                          (self.name, off, v))
 
             elif c == 'MIDITEXT':
                 gbl.mtrks[self.channel].addText(off, v)
                 if gbl.debug:
-                    print "%s MidiText inserted at %s." % (self.name, off)
+                    print("%s MidiText inserted at %s." % (self.name, off))
 
             elif c == 'MIDICUE':
                 gbl.mtrks[self.channel].addCuePoint(off, v)
                 if gbl.debug:
-                    print "%s MidiCue inserted at %s." % (self.name, off)
+                    print("%s MidiCue inserted at %s." % (self.name, off))
+
+            elif c == 'WHEEL':
+                gbl.mtrks[self.channel].addWheel(off, v)
+                if gbl.debug:
+                    print("%s Wheel inserted at %s." % (self.name, off))
 
             else:
                 error("Unknown midi command pending. Call Bob")
 
-
-
-    def getChordInPos( self, offset, ctabs):
+    def getChordInPos(self, offset, ctabs):
         """ Compare an offset to a list of ctables and return
             the table entry active for the given beat.
 
@@ -2076,72 +1896,79 @@ class PC:
         for c in ctabs:
             if offset < c.chEnd:
                 break
-
         return c
-
-
-
-
 
     def adjustVolume(self, v, beat):
         """ Adjust a note volume based on the track and global volume
-            setting.
+            setting. This is an expensive operation applied to each
+            and every generated note.
         """
 
+        # If the volume (velocity) is OFF, just return OFF
         if not v:
             return 0
 
         sc = self.seq
 
-        if self.rSkip[sc] and random.random() < self.rSkip[sc]:
+        # Random skip and random skipbeats, return OFF
+        if self.rSkip[sc] and (not self.rSkipBeats or beat in self.rSkipBeats) \
+                and random.random() < self.rSkip[sc]:
             return 0
 
-        a1 = self.volume[sc]
-        if not a1:
+        # If the track is set to OFF, return OFF
+        trackAdjust = self.volume[sc]
+        if not trackAdjust:
             return 0
 
-        if self.nextVolume:   # inter-bar cresc adjust
-            bt=beat
-            if bt<1:  # might have negative offsets, cres code ignores
-                bt=0
-            a1 += (self.nextVolume - a1) * bt / (gbl.BperQ * gbl.QperBar)
+        # single bar cresc adjust, adjust track volume adjuster value
+        if self.nextVolume: 
+            bt = beat
+            if bt < 1:  # might have negative offsets, cres code ignores
+                bt = 0
+            trackAdjust += (self.nextVolume - trackAdjust) * \
+                bt / gbl.barLen
 
-        a1 *= MMA.volume.vTRatio
+        trackAdjust *= MMA.volume.vTRatio
 
-        a2 = MMA.volume.volume
+        fullAdjust = MMA.volume.volume
 
-        if not a2:
+        # Is everything off?
+        if not fullAdjust:
             return 0
 
-        if MMA.volume.nextVolume:   # inter-bar cresc adjust
-            bt=beat
-            if bt<1:  # might have negative offsets, cres code ignores
-                bt=0
-            a2 += (MMA.volume.nextVolume - a2) * bt / (gbl.BperQ * gbl.QperBar)
+        # global single bar cresc adjust
+        if MMA.volume.nextVolume:
+            bt = beat
+            if bt < 1:  # might have negative offsets, cres code ignores
+                bt = 0
+            fullAdjust += (MMA.volume.nextVolume - fullAdjust) * \
+                bt / gbl.barLen
 
-        a2 *= MMA.volume.vMRatio
+        fullAdjust *= MMA.volume.vMRatio
 
-        v *= ( a1 + a2 )
+        v *= (trackAdjust + fullAdjust)
 
-        for b,a in self.accent[sc]:
-            if b==beat:
+        for b, a in self.accent[sc]:
+            if b == beat:
                 v += (v * a)
 
-        # take .rVolume % of current volume, add/sub result to current
-
+        # Random volume adjustment
         if self.rVolume[sc]:
-            a1 = int(v * self.rVolume[sc][0])
-            a2 = int(v * self.rVolume[sc][1])
-            if a1 or a2:
-                v += random.randrange(a1, a2)
+            trackAdjust = int(v * self.rVolume[sc][0])
+            fullAdjust = int(v * self.rVolume[sc][1])
+            if trackAdjust or fullAdjust:
+                if fullAdjust < trackAdjust:
+                    trackAdjust, fullAdjust = fullAdjust, trackAdjust
+                v += random.randrange(trackAdjust, fullAdjust)
 
+        # normalize
         if v > 127:
             v = 127
-        elif  v < 1:
+        elif v < 1:
             v = 1
 
+        # all was done in fp, don't forget to round!
         return int(v)
-
 
     def adjustNote(self, n):
         """ Adjust a note for a given octave/transposition.
@@ -2158,73 +1985,77 @@ class PC:
         return n
 
 
-    def setBarOffset(self, v):
+    def setBarOffset(self, v, emsg=''):
         """ Convert a string into a valid bar offset in midi ticks. """
 
-        m=v.find('-')
-        p=v.find('+')
+        m = v.find('-')
+        p = v.find('+')
 
-        if m>-1 and p>-1:
-            if m>p:
+        # determine split point and sign
+        if m > -1 and p > -1:  # both - and +, get lowest
+            if m > p:
                 sp = p
                 sign = 1
             else:
                 sp = m
                 sign = -1
 
-        elif m >- 1:
+        elif m > -1:   # only -, easy
             sp = m
             sign = -1
 
-        elif p >- 1:
+        elif p > -1:  # only +, easy
             sp = p
             sign = 1
 
         else:
-            sp = None
+            sp = None  # easier, no split
 
-        if sp:
-            note = v[sp+1:]
+        if sp:   # get offset, and note length modifier
+            note = v[sp + 1:]
             v = v[:sp]
+            notepart = MMA.notelen.getNoteLen(note) * sign
         else:
-            note = None
+            notepart = 0
 
-        v=stof(v, "Value for %s bar offset must be integer/float" % self.name)
-        v = (v-1) * gbl.BperQ
-
-        if note:
-            v += MMA.notelen.getNoteLen(note) * sign
+        v = stof(v, "%sValue for %s bar offset must be integer/float, not '%s'" %
+                 (emsg, self.name, v))
+        v = ((v - 1) * gbl.BperQ) + notepart
 
         if v < 0:
-            if v<-gbl.BperQ:
-                error("Defining %s Pattern, bar offset must be 0 or greater" %
-                  self.name)
+            if v < -gbl.BperQ:
+                error("%sValue for %s bar offset must be 0 or greater, not '%s'" %
+                      (emsg, self.name, v/gbl.BperQ+1))
             else:
                 warning("Offset in '%s' is '%s ticks' before bar start!" % (self.name, -v))
 
-        if v >= gbl.QperBar * gbl.BperQ:
-            error("Defining %s Pattern, bar offset must be less than %s" %
-                  (self.name, gbl.QperBar + 1))
-
+        if v >= gbl.barLen:
+            error("%sValue for %s bar offset must be less than %s, not '%s'." %
+                  (emsg, self.name, gbl.QperBar + 1, v/gbl.BperQ+1))
 
         return int(v)
-
 
     def getDur(self, d):
         """ Return the adjusted duration for a note.
 
-            The adjustment makes notes longer or shorter. Valid
-            adjustments are 1 to 200.
+            Articulate and RDuration are used.
         """
 
-        d = (d * self.artic[self.seq]) / 100
-        if not d:
-            d = 1   # force a value if we end with 0.
+        sc = self.seq
 
-        return d
+        d = (d * self.artic[sc]) // 100
 
+        if self.rDuration[sc]:
+            a1 = int(d * self.rDuration[sc][0])
+            a2 = int(d * self.rDuration[sc][1])
+            if a1 or a2:
+                d += random.randrange(a1, a2)
+        if d <= 0:
+            d = 1   # force a value if we end with 0 or less.
 
-    def sendNote( self, offset, duration, note, velocity):
+        return int(d)
+
+    def sendNote(self, offset, duration, note, velocity):
         """ Send a note to the MIDI machine. This is called from all
             track classes and handles niceties like mallet-repeat and delay.
         """
@@ -2239,19 +2070,18 @@ class PC:
             ll = self.getDur(rptr)
             offs = 0
             vel = velocity
-
-            for q in range(duration/rptr):
+            for q in range(duration // rptr):
                 gbl.mtrks[self.channel].addPairToTrack(
                     offset + offs + self.delay[sc],
                     self.rTime[sc][0], self.rTime[sc][1],
                     ll,
                     note,
                     vel,
-                    None )
+                    None)
 
                 offs += rptr
                 if self.malletDecay:
-                    vel = int( vel + (vel * self.malletDecay) )
+                    vel = int(vel + (vel * self.malletDecay))
                     if vel < 1:
                         vel = 1
                     if vel > 127:
@@ -2264,37 +2094,43 @@ class PC:
                 duration,
                 note,
                 velocity,
-                self.unify[sc] )
-
+                self.unify[sc])
 
     def sendChord(self, chord, duration, offset):
         """ Send a chord to midi with strum delay. Called
-            from Bass, Walk, Arpeggio and Scale.
+            from Chord, Bass, Walk, Arpeggio and Scale.
 
             chord = list of [note, volume]s
             p = pattern for current beat
 
             This compensates out the strum value so that the additional (harmony)
             notes all end at the same time.
+
+            Adjusts the RDURATION setting.
         """
 
         sc = self.seq
         strumAdjust = self.getStrum(sc)
+        strumAdd = self.strumAdd[sc]
+
         if strumAdjust:
-            minDuration = duration/3
+            minDuration = duration // 3
             if minDuration < gbl.Bper128:   # this is 12 ticks
                 minDuraiton = gbl.Bper128
 
         strumOffset = 0  # 1st note in list is not offset-strummed
 
+        duration = self.getDur(duration)
+
         for n, vol in chord:
             self.sendNote(
-                offset + strumOffset,
-                self.getDur(duration),
+                int(offset + strumOffset),
+                duration,
                 self.adjustNote(n),
                 self.adjustVolume(vol, offset))
 
             if strumAdjust:
+                strumAdjust += strumAdd
                 strumOffset += strumAdjust
                 duration -= strumAdjust
                 if duration < minDuration:

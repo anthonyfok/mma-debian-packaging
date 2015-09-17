@@ -22,11 +22,9 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-import os
+version = "15.01"        # Version -- Jan 27/2015
 
-version = "12.01"        # Version -- Jan 1, 2012
-
-""" A few globals are actually set in the calling stub, mma.py.This is
+""" A few globals are actually set in the calling stub, mma.py. This is
     done to make future ports and platform specific settings a bit easier.
     The following variables are imported from mma.py and stored here:
 
@@ -34,7 +32,7 @@ version = "12.01"        # Version -- Jan 1, 2012
         MMAdir     - the home directory for mma stuff
 
     The above variables can be accessed from the rest of the mma modules in
-    the form "gbl.MMAdir", etc. 
+    the form "gbl.MMAdir", etc.
 """
 
 from __main__ import MMAdir, platform
@@ -60,16 +58,16 @@ tnames = {}
     now this is only used in -c reporting.
 """
 
-midiAssigns={}
-for c in range(0,17):
-    midiAssigns[c]=[]
+midiAssigns = {}
+for c in range(0, 17):
+    midiAssigns[c] = []
 
 """ midiAvail is a list with each entry representing a MIDI channel.
     As channels are allocated/deallocated the appropriated slot
     is inc/decremented.
 """
 
-midiAvail     = [ 0 ] * 17   # slots 0..16, slot 0 is not used.
+midiAvail = [0] * 17   # slots 0..16, slot 0 is not used.
 
 deletedTracks = []    # list of deleted tracks for -c report
 
@@ -80,7 +78,7 @@ deletedTracks = []    # list of deleted tracks for -c report
 midiChPrefs = {}
 
 
-""" Is the -T option is used only the tracks in this list
+""" If the -T option is used only the tracks in this list
     are generated. All other tracks are muted (OFF)
 """
 
@@ -90,7 +88,7 @@ muteTracks = []
 ############# String constants ####################
 
 
-ext = ".mma"        # extension for song/lib files.
+EXT = ".mma"        # extension for song/lib files.
 
 
 ##############  Tempo, and other midi positioning.  #############
@@ -99,6 +97,7 @@ ext = ".mma"        # extension for song/lib files.
 BperQ       =  192    # midi ticks per quarter note
 Bper128     =  BperQ/16  # a 1/128 note. Used for small timings
 QperBar     =  4      # Beats/bar, set with TIME
+barLen      =  BperQ * QperBar  # convenience (updated by TIME)
 tickOffset  =  0      # offset of current bar in ticks
 tempo       =  120    # current tempo
 seqSize     =  1      # variation sequence table size
@@ -117,44 +116,13 @@ barPtrs     = {}      # for each bar, pointers to event start/end
 synctick    =  0      # flag, set if we want a tick on all tracks at offset 0
 endsync     =  0      # flag, set if we want a eof sync
 
-
-#############   Path and search variables. #############
-# In mma.py we checked for known directories and inserted the
-# first found 'mma' directory into the sys.path list and set MMAdir.
-# Assume that this is where the rest of mma's configuration file
-# live. If mma runs but can't fine includes, etc. look in mma.py
-# and add the proper paths.
-
-
-libPath = os.path.join(MMAdir, 'lib')
-if not os.path.isdir(libPath):
-    print "Warning: Library directory not found."
-
-incPath = os.path.join(MMAdir, 'includes')
-if not os.path.isdir(incPath):
-    print "Warning: Include directory not found."
-
-# Set up autolib defaults. We start with MMALIB/stdlib and append
-# any other directories we find in MMALIB. Note, the order of
-# libs after stdlib is alphabetical.
-# User can change the libs with SetAutoLibPath dir1 dir2 etc.
-
-autoLib=['stdlib']
-dirs = sorted(os.listdir(libPath))
-for d in dirs:
-    if os.path.isdir(os.path.join(libPath, d)) and d not in autoLib:
-        autoLib.append(d)
-
-
 outPath    =   ''      # Directory for MIDI file
-mmaStart   =   []      # list of START files
-mmaEnd     =   []      # list of END files
-mmaRC      =   None    # user specified RC file, overrides defaults
 inpath     =   None    # input file
 
 midiFileType   = 1     # type 1 file, SMF command can change to 0
 runningStatus  = 1     # running status enabled
 
+inAllGrooves = False   # set if running an ALLGROOVES command
 
 #############  Options. #############
 
@@ -180,13 +148,13 @@ chshow         =     Lchshow        = 0
 
 plecShow       =     LplecShow  = 0  # not a command line setting
 rmShow         =     LrmShow    = 0  # not command
+gvShow         =     LgvShow    = 0
 
 outfile        =     None
 infile         =     None
 createDocs     =     0
 maxBars        =     500
 makeGrvDefs    =     0
-cmdSMF         =     None
 
 playFile       =     0       # set if we want to call a player
 

@@ -24,7 +24,7 @@ Seqsize 4
 Begin Drum-Snare
     Tone SnareDrum1
     Sequence 	D1	/	/	D123
-	Volume pp
+	Volume p
 	Rskip 2
 	Rvolume 20
 	Rtime 2
@@ -33,7 +33,7 @@ End
 Begin Drum-Kick
 	Tone KickDrum1
 	Sequence	  D1 
-	Volume mp
+	Volume m
 	Rvolume 10
 	Rtime 3
 End
@@ -41,7 +41,7 @@ End
 Begin Drum-Tri
 	Sequence	D1	z	z	z
 	Tone OpenTriangle
-	Volume pp
+	Volume p
 	Rvolume 10
 	Rtime 2
 End
@@ -50,7 +50,7 @@ Begin Chord
 	Voice Piano1
 	Sequence  {1 2. 90} /  / {1 4 90; 2.5 8 70; 3 8 80}
 	Voicing Mode=Optimal
-	Volume p
+	Volume m
     DupRoot -1
 	Articulate 110 / / 90
 	Octave 4
@@ -60,7 +60,7 @@ Begin Bass
     Voice AcousticBass
 	Sequence	B1   B1/5   B1   z
 	Octave  3
-	Volume p
+	Volume mp
 	Articulate 70
 End
 
@@ -68,7 +68,7 @@ Begin Walk
 	Voice $_Bass_Voice
 	Octave $_Bass_Octave
 	Sequence	z    z    z   W123
-	Volume p
+	Volume mp
 	Articulate 70
 End
 
@@ -77,11 +77,11 @@ DefGroove FastWaltz    A basic waltz pattern in 1.
 
 Begin Chord-Sus
 	Voice TremoloStrings
-	Sequence  { 1 2. 90 0 50 * 3 }
+	Sequence  { 1 2. 90 * 3 }
 	Voicing Mode=Optimal
 	Articulate 100
 	Unify On
-	Volume p
+	Volume mp
 	Octave 5
 End
 
@@ -105,7 +105,7 @@ Begin Arpeggio
 	Rskip      10  20
     Harmony OpenAbove
     Direction Random
-	Volume p
+	Volume mp
 	Articulate 99
 End
 

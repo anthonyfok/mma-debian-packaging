@@ -26,7 +26,7 @@ End
 Begin Drum Define
 	D1     1 0 90             // hit on 1
 	D2     D1 Shift 1         // hit on 2
-	D3     D1 Shift 1         // hit on 3
+	D3     D1 Shift 2         // hit on 3
 	D12    D1; D2             // hits on 1 and 2
 	D13    D1; D3             // hits on 1 and 3
 	D23    D12 Shift 1        // hits on 2 and 3
@@ -59,6 +59,7 @@ Begin Bass Define
 End
 
 Begin Walk Define
+    W1      1 4 90            // Walk 1 per bar
 	W123	1 2. 90 * 3       // Walk quarters on 1, 2 and 3       
 End
 

@@ -1,4 +1,3 @@
-
 # main.py
 
 """
@@ -28,15 +27,17 @@ import os
 import MMA.midi
 import MMA.midifuncs
 import MMA.parse
-import MMA.file 
+import MMA.file
 import MMA.options
 import MMA.auto
 import MMA.docs
 
-import gbl
-from   MMA.common import *
-from   MMA.lyric import lyric
+from . import gbl
+from MMA.common import *
+from MMA.lyric import lyric
 import MMA.paths
+
+cmdSMF = None
 
 ########################################
 ########################################
@@ -44,22 +45,18 @@ import MMA.paths
 # This is the program mainline. It is called/executed
 # exactly once from a call in the stub program mma.py.
 
-###########################
-
+MMA.paths.init()   # initialize the lib/include paths
 
 # Get our command line stuff
 
 MMA.options.opts()
 
-"""
-    LibPath and IncPath are set in MMA.globals. Debug setting isn't set
-    when the default is done.
-"""
+#  LibPath and IncPath are set before option parsing ... Debug setting
+#  wasn't set so check it now.
 
 if gbl.debug:
-    print "Initialization has set LibPath set to", gbl.libPath
-    print "Initialization has set IncPath set to", gbl.incPath
-
+    print("Initialization has set LibPath set to %s" % MMA.paths.libPath)
+    print("Initialization has set IncPath set to %s" % MMA.paths.incPath)
 
 #######################################
 # Set up initial meta track stuff. Track 0 == meta
@@ -67,46 +64,19 @@ if gbl.debug:
 m = gbl.mtrks[0] = MMA.midi.Mtrk(0)
 
 if gbl.infile:
-    fileName=MMA.file.locFile(gbl.infile, None)
+    if gbl.infile != 1:
+        fileName = MMA.file.locFile(gbl.infile, None)
+        if fileName:
+            m.addTrkName(0, "%s" % fileName.rstrip(".mma"))
+            m.addText(0, "Created by MMA. Input filename: %s" % fileName)
 
-    if fileName:   # needed for certain doc commands.
-        m.addTrkName(0, "%s" % fileName.rstrip(".mma") )
-        m.addText(0, "Created by MMA. Input filename: %s" % fileName)
 
 m.addTempo(0, gbl.tempo)              # most user files will override this
-MMA.midifuncs.setTimeSig(['4','4'])   # most stdlib (and/or user) files will override this
-
-#####################################
-# Read an RC file. All found files are processed.
-
-docOption = gbl.createDocs   # Disable doc printing for RC file
-gbl.createDocs = 0
-
-#rcread=0
-
-rcfiles = ('mmarc', 'c:\\mma\\mmarc', '~/.mmarc', '/usr/local/etc/mmarc', '/etc/mmarc'    )
-if gbl.mmaRC:
-    rcfiles = [ gbl.mmaRC ]
-
-for i in rcfiles:
-    f = MMA.file.locFile(i, None)
-    if f:
-        if gbl.showrun:
-            print "Reading RC file '%s'" % f
-        MMA.parse.parseFile(f)
-        #rcread+=1
-        break
-    else:
-        if gbl.mmaRC:
-            error("Specified init file '%s' not found" % gbl.mmaRC)
-
-else: #if not rcread:
-    if gbl.debug:
-        gbl.lineno = -1
-        warning("No RC file was found or processed")
+MMA.midifuncs.setTimeSig(['4', '4'])  # most stdlib (and/or user) files will override this
 
 
-gbl.createDocs = docOption   # Restore doc options
+# Read RC files
+MMA.paths.readRC()
 
 
 ################################################
@@ -125,15 +95,14 @@ if gbl.makeGrvDefs:
 if not gbl.infile:
     MMA.options.usage("No input filename specified.")
 
-
 ################################
 # Just extract docs (-Dxh, etc) to stdout.
 
-if docOption:
-    if docOption == 4:
+if gbl.createDocs:
+    if gbl.createDocs == 4:
         MMA.docs.htmlGraph(gbl.infile)
     else:
-        f=MMA.file.locFile(gbl.infile, None)
+        f = MMA.file.locFile(gbl.infile, None)
         if not f:
             error("File '%s' not found" % gbl.infile)
         MMA.parse.parseFile(f)
@@ -142,11 +111,11 @@ if docOption:
 
 
 #########################################################
-# These cmdline options override settings in RC files
+# This cmdline option overrides the setting in RC files
 
-if gbl.cmdSMF:
+if MMA.options.cmdSMF != None:
     gbl.lineno = -1
-    MMA.midifuncs.setMidiFileType(['SMF=%s' % gbl.cmdSMF])
+    MMA.midifuncs.setMidiFileType(['SMF=%s' % MMA.options.cmdSMF])
 
 ######################################
 # Create the output filename
@@ -158,80 +127,73 @@ MMA.paths.createOutfileName(".mid")
 # Read/process files....
 
 # First the mmastart files
-
-for f in gbl.mmaStart:
-    fn = MMA.file.locFile(f, gbl.incPath)
-    if not fn:
-        warning("MmaStart file '%s' not found/processed" % fn)
-    MMA.parse.parseFile(fn)
-    gbl.lineno = -1
+MMA.paths.dommaStart()
 
 # The song file specified on the command line
 
-f = MMA.file.locFile(gbl.infile, None)
+if gbl.infile == 1:  # use stdin, set filename to 1
+    f = 1
+else:
+    f = MMA.file.locFile(gbl.infile, None)
 
-if not f:
-    gbl.lineno = -1
-    error("Input file '%s' not found" % gbl.infile)
+    if not f:
+        gbl.lineno = -1
+        error("Input file '%s' not found" % gbl.infile)
 
 MMA.parse.parseFile(f)
 
 # Finally, the mmaend files
-
-for f in gbl.mmaEnd:
-    fn = MMA.file.locFile(f, None)
-    if not fn:
-        warning("MmaEnd file '%s' not found/processed" % f)
-    MMA.parse.parseFile(fn)
+MMA.paths.dommaEnd() 
 
 #################################################
 # Just display the channel assignments (-c) and exit...
 
 if gbl.chshow:
-    print "\nFile '%s' parsed, but no MIDI file produced!" % gbl.infile
-    print
-    print "Tracks allocated:"
-    k=gbl.tnames.keys()
+    msg = ["\nFile '%s' parsed, but no MIDI file produced!" % gbl.infile]
+    msg.append("\nTracks allocated:\n")
+    k = list(gbl.tnames.keys())
     k.sort()
-    max=0
+    max = 0
     for a in k + gbl.deletedTracks:
-        if len(a)>max:
+        if len(a) > max:
             max = len(a)
-    max+=1
-    wrap=0
+    max += 1
+    wrap = 0
     for a in k:
         wrap += max
-        if wrap>60:
+        if wrap > 60:
             wrap = max
-            print
-        print " %-*s" %( max, a),
-    print
-    print
+            msg.append('\n')
+        msg.append(" %-*s" % (max, a))
+    msg.append('\n')
+    print(' '.join(msg))
+    
     if gbl.deletedTracks:
-        print "Deleted Tracks:"
-        wrap=0
+        msg = ["Deleted Tracks:\n"]
+        wrap = 0
         for a in gbl.deletedTracks:
             wrap += max
-            if wrap>60:
-                wrap=max
-                print
-            print " %-*s" %( max,a),
-        print
-        print
-    print "Channel assignments:"
+            if wrap > 60:
+                wrap = max
+                msg.append('\n')
+            msg.append(" %-*s" % (max, a),)
+        msg.append('\n')
+        print(' '.join(msg))
+        
+    msg=["Channel assignments:\n"]
     for c, n in sorted(gbl.midiAssigns.items()):
         if n:
             wrap = 3
-            print " %2s" % c,
+            msg.append(" %2s" % c)
             for nn in n:
                 wrap += max
-                if wrap>63:
-                    print "\n   ",
-                    wrap=max+3
-                print "%-*s" % (max,nn),
+                if wrap > 63:
+                    msg.append('\n    ')
+                    wrap = max+3
+                msg.append(" %-*s" % (max, nn))
+            msg.append('\n')
+    print(' '.join(msg))
 
-            print
-    print
     sys.exit(0)
 
 
@@ -239,14 +201,15 @@ if gbl.chshow:
 # Dry run, no output
 
 if gbl.noOutput:
-    warning( "Input file parsed successfully. No midi file generated")
+    gbl.lineno = -1
+    warning("Input file parsed successfully. No midi file generated")
     sys.exit(0)
 
 
 ##############################
 # Create the output (MIDI) file
 
-gbl.lineno=-1    # disable line nums for error/warning
+gbl.lineno = -1    # disable line nums for error/warning
 
 
 """ We fix the outPath now. This lets you set outpath in the song file.
@@ -270,7 +233,8 @@ gbl.lineno=-1    # disable line nums for error/warning
 
 outfile = MMA.paths.outfile
 
-if (not outfile.startswith('/')) and gbl.outPath and not gbl.outfile and not gbl.playFile:
+if (not outfile.startswith('/')) and gbl.outPath \
+        and not gbl.outfile and not gbl.playFile:
     if gbl.outPath[0] in '.\\/':
         outfile = "%s/%s" % (gbl.outPath, outfile)
     else:
@@ -298,31 +262,32 @@ for n in gbl.tnames.values():
     track only has one entry we can safely skip the entire track.
 """
 
-trackCount=1    # account for meta track
+trackCount = 1    # account for meta track
 
 for n in sorted(gbl.mtrks.keys())[1:]:     # check all but 0 (meta)
     if len(gbl.mtrks[n].miditrk) > 1:
         trackCount += 1
 
-if trackCount == 1: # only meta track
+if trackCount == 1:  # only meta track
     if fileExist:
-        print
-    print "No data created. Did you remember to set a groove/sequence?"
+        print("\n")
+    print("No data created. Did you remember to set a groove/sequence?")
     if fileExist:
-        print "Existing file '%s' has not been modified." % outfile
+        print("Existing file '%s' has not been modified." % outfile)
     sys.exit(1)
 
 lyric.leftovers()
 
 if fileExist:
-    print "Overwriting existing",
+    msg = "Overwriting existing"
 else:
-    print "Creating new",
-print "midi file (%s bars, %.2f min): '%s'" %  (gbl.barNum, gbl.totTime, outfile)
+    msg = "Creating new"
+print("%s midi file (%s bars, %.2f min): '%s'" %
+    (msg, gbl.barNum, gbl.totTime, outfile))
 
 try:
-    out = file(outfile, 'wb')
-except:
+    out = open(outfile, 'wb')
+except IOError:
     error("Can't open file '%s' for writing" % outfile)
 
 MMA.midi.writeTracks(out)
@@ -333,7 +298,4 @@ if gbl.playFile:
     MMA.player.playMidi(outfile)
 
 if gbl.debug:
-    print "Completed processing file '%s'." % outfile
-
-
-
+    print("Completed processing file '%s'." % outfile)

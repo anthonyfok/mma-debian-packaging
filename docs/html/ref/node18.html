@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html678"
+<A NAME="tex2html712"
   HREF="node19.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html676"
+<A NAME="tex2html710"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html670"
+<A NAME="tex2html704"
   HREF="node17.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html679"
+<B> Next:</B> <A NAME="tex2html713"
   HREF="node19.html">Volume and Dynamics</A>
-<B> Up:</B> <A NAME="tex2html677"
+<B> Up:</B> <A NAME="tex2html711"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html671"
+<B> Previous:</B> <A NAME="tex2html705"
   HREF="node17.html">Tempo and Timing</A>
 <BR>
 <BR></DIV>
@@ -51,15 +51,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html680"
+<LI><A NAME="tex2html714"
   HREF="node18.html#SECTION001810000000000000000">Skew</A>
-<LI><A NAME="tex2html681"
+<LI><A NAME="tex2html715"
   HREF="node18.html#SECTION001820000000000000000">Accent</A>
-<LI><A NAME="tex2html682"
+<LI><A NAME="tex2html716"
   HREF="node18.html#SECTION001830000000000000000">Delay</A>
-<LI><A NAME="tex2html683"
+<LI><A NAME="tex2html717"
   HREF="node18.html#SECTION001840000000000000000">Notes</A>
-<LI><A NAME="tex2html684"
+<LI><A NAME="tex2html718"
   HREF="node18.html#SECTION001850000000000000000">Summary</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -76,7 +76,7 @@ to eighth notes. Normally, the first of a pair of eights is lengthened
 and the second is shortened. In the sheet music this can is sometimes
 notated as sequences of a dotted eighth followed by a sixteenth. But,
 if you were to foolish enough to play the song with this timing you'd
-get a funny look from a jazz musician who will tell you to &#8220;swing&#8221;
+get a funny look from a jazz musician who will tell you to ``swing''
 the notes.
 
 <P>
@@ -90,9 +90,9 @@ them to a triplet consisting of a quarter note and and eighth.
 </DIV>
 
 <P>
-In the above music the first shows &#8220;straight eights&#8221;, the second
-&#8220;dotted eight, sixteenths&#8221;, and the third a rough indication of how
-the first line would be played in &#8220;swing&#8221;. It all depends on the
+In the above music the first shows ``straight eights'', the second
+``dotted eight, sixteenths'', and the third a rough indication of how
+the first line would be played in ``swing''. It all depends on the
 style of music ... if we are playing a classical piece the first line
 would have eight notes of the same length, and the second line would
 have a sixteenth note one third the length of the dotted eights. In
@@ -110,7 +110,7 @@ In default mode
 
 <P>
 To enable automatic conversions, simply set S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> to
-&#8220;on&#8221;:
+``on'':
 
 <P>
 
@@ -122,8 +122,8 @@ To enable automatic conversions, simply set S<SMALL>WING</SMALL>M<SMALL>ODE</SMA
       </Table>
 
 <P>
-This directive accepts the value &#8220;On&#8221; and &#8220;Off&#8221; or &#8220;1&#8221; and
-&#8220;0&#8221;.
+This directive accepts the value ``On'' and ``Off'' or ``1'' and
+``0''.
 
 <P>
 With S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> enabled 
@@ -134,14 +134,14 @@ parts.
 <P>
 
 <UL>
-<LI>Any eighth note in a pattern &#8220;on the beat&#8221; (1, 2, etc.) is
-  converted to a &#8220;81&#8221; note.
+<LI>Any eighth note in a pattern ``on the beat'' (1, 2, etc.) is
+  converted to a ``81'' note.
 
 <P>
 </LI>
-<LI>Any eighth note in a pattern &#8220;off the beat&#8221; (1.5, 2.5, etc.)
-  is converted to &#8220;82&#8221; note, and the offset is adjusted to the prior
-  beat plus the value of an &#8220;81&#8221; note.
+<LI>Any eighth note in a pattern ``off the beat'' (1.5, 2.5, etc.)
+  is converted to ``82'' note, and the offset is adjusted to the prior
+  beat plus the value of an ``81'' note.
 
 <P>
 </LI>
@@ -168,6 +168,12 @@ dynamic define in the sequence the adjustment will take place if
 needed.
 
 <P>
+<SPAN  CLASS="textit">Important (again):</SPAN> S<SMALL>WINGMODE</SMALL> is saved and restored when
+switching G<SMALL>ROOVES</SMALL>. This means that the S<SMALL>WINGMODE</SMALL> setting
+you set in a song file is only valid until the next time you issue a
+G<SMALL>ROOVE</SMALL> command. See the summary below for more details.
+
+<P>
 
 <H1><A NAME="SECTION001810000000000000000">
 Skew</A>
@@ -175,10 +181,10 @@ Skew</A>
 
 <P>
 S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> has an additional option, S<SMALL>KEW</SMALL>. This factor is
-used to create the &#8220;81&#8221; and &#8220;82&#8221; note lengths (see
+used to create the ``81'' and ``82'' note lengths (see
 <A HREF="node4.html#notelength">here</A>). By default the value
-&#8220;66&#8221; is used. This simply means that the note length &#8220;81&#8221; is
-assigned 66% of the value of an eight note, and &#8220;82&#8221; is assigned
+``66'' is used. This simply means that the note length ``81'' is
+assigned 66% of the value of an eight note, and ``82'' is assigned
 34%.
 
 <P>
@@ -203,7 +209,7 @@ will set a 60/40 setting.
 
 <P>
 If you want to experiment, find a G<SMALL>ROOVE</SMALL> with note lengths of
-&#8220;81&#8221; and &#8220;82&#8221; (&#8220;swing&#8221; is as good a choice as any). Now, put a
+``81'' and ``82'' (``swing'' is as good a choice as any). Now, put a
 S<SMALL>WING</SMALL>M<SMALL>ODE </SMALL>S<SMALL>KEW=</SMALL>V<SMALL>ALUE</SMALL> directive at the top of your song file
 (before selecting any G<SMALL>ROOVE</SMALL>s). Compile and play the song with
 different values to hear the effects.
@@ -241,11 +247,12 @@ Accent</A>
 <P>
 It's natural for musicians to emphasize swing notes by making the
 first (the longer one) a bit louder than the second. By default 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  uses the internal/default volumes for both notes. However, you can
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 
+uses the internal/default volumes for both notes. However, you can
 change this with the A<SMALL>CCENT</SMALL> option. The option takes a pair of
 values joined by a single comma. The first value sets the percentage
-change for the &#8220;on-the-beat&#8221; notes; the second set the adjustment
-for the &#8220;off-the-beat&#8221; notes. For example:
+change for the ``on-the-beat'' notes; the second set the adjustment
+for the ``off-the-beat'' notes. For example:
 
 <P>
 
@@ -269,8 +276,8 @@ Delay</A>
 <P>
 By default, the logic for setting the start positions of each note generated by
 S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> is that the first note of the pair doesn't move and
-the second is set at the duration of a &#8220;81&#8221; note from the first
-(remember, &#8220;81&#8221; is set by the S<SMALL>KEW</SMALL> value).
+the second is set at the duration of a ``81'' note from the first
+(remember, ``81'' is set by the S<SMALL>KEW</SMALL> value).
 
 <P>
 However, you can move either or both notes forward to backwards with
@@ -316,8 +323,8 @@ notes as well:
       </Table>
 
 <P>
-The only permitted values for N<SMALL>OTES</SMALL> are &#8220;8&#8221; (the default) and
-&#8220;16&#8221;. This is, probably, only useful in very slow tempo settings.
+The only permitted values for N<SMALL>OTES</SMALL> are ``8'' (the default) and
+``16''. This is, probably, only useful in very slow tempo settings.
 
 <P>
 
@@ -326,8 +333,8 @@ Summary</A>
 </H1>
 
 <P>
-S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> is a <SPAN  CLASS="textit">Global</SPAN> setting which functions are
-patterns and solo note sequences  are defined or created. This can be
+S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> is a <SPAN  CLASS="textit">Global</SPAN> setting which functions <SPAN  CLASS="textit">when
+patterns and solo note sequences  are defined or created</SPAN>. This can be
 confusing ... you can't take an existing G<SMALL>ROOVE</SMALL> and just do a
 S<SMALL>WING</SMALL>M<SMALL>ODE</SMALL> after calling it up ... the command will have no
 effect. Instead, you'll have modify the actual library code. Or write
@@ -360,7 +367,7 @@ rate is frozen as quarter/eighth triplets.
 <P>
 If you refer to the table of note lengths
 (<A HREF="node4.html#notelength">here</A>) you will find the cryptic
-values of &#8220;81&#8221; and &#8220;82&#8221;. These notes are adjusted depending on the
+values of ``81'' and ``82''. These notes are adjusted depending on the
 S<SMALL>WING </SMALL>S<SMALL>KEW</SMALL> value. So:
 
 <P>
@@ -376,7 +383,7 @@ S<SMALL>WING </SMALL>S<SMALL>KEW</SMALL> value. So:
 <P>
 is a bit better. In this case we have set a chord on beat 1 as the
 first of an eighth note, and a chord on the off-beat as the
-second. Note how we specify the off-beats as &#8220;1+81&#8221;, etc.
+second. Note how we specify the off-beats as ``1+81'', etc.
 
 <P>
 In this example the feel of the swing will vary with the
@@ -421,26 +428,26 @@ S<SMALL>OLO</SMALL> and M<SMALL>ELODY</SMALL> tracks:
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html678"
+<A NAME="tex2html712"
   HREF="node19.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html676"
+<A NAME="tex2html710"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html670"
+<A NAME="tex2html704"
   HREF="node17.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html679"
+<B> Next:</B> <A NAME="tex2html713"
   HREF="node19.html">Volume and Dynamics</A>
-<B> Up:</B> <A NAME="tex2html677"
+<B> Up:</B> <A NAME="tex2html711"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html671"
+<B> Previous:</B> <A NAME="tex2html705"
   HREF="node17.html">Tempo and Timing</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

@@ -165,6 +165,13 @@ Chord     Sequence  *  *  * {1 2. 100}
 
 DefGroove WaltzIntro        Waltz intro with piano chords.
 
+Begin Chord-Sus
+   Groove WaltzSus
+   Sequence  { 1 2. 90 0 50 * 3 } / / {1 2 80 0 50}
+End
+
+DefGroove WaltzSusIntro    Simple intro with strings.
+
 Chord     Sequence -
 
 Begin Arpeggio
@@ -178,6 +185,9 @@ End
 
 DefGroove Waltz1Intro     Waltz intro with piano arpeggios.
 
+Chord-Sus Groove WaltzSusIntro
+
+DefGroove Waltz1SusIntro  Intro with arepeggios and strings.
 
 /////  Intro (8 bar)
 
@@ -192,6 +202,13 @@ Chord     Sequence  *  *   *   *   *   *   *  {1 2. 100}
 
 DefGroove WaltzIntro8       8 bar waltz intro with piano chords.
 
+Begin Chord-Sus
+   Groove WaltzSusIntro
+   Sequence  { 1 2. 90 0 50 * 3 } / / / / / / {1 2 80 0 50}
+End
+
+DefGroove WaltzSusIntro8    8 bar Intro with arepeggios and strings.
+
 Chord Sequence -
 
 Begin Arpeggio
@@ -203,7 +220,10 @@ Begin Arpeggio
 	Articulate 99
 End
 
-DefGroove  Waltz1intro8    8 bar wWaltz intro with piano arpeggios.
+DefGroove  Waltz1Intro8    8 bar wWaltz intro with piano arpeggios.
+
+Chord-Sus Groove WaltzSusIntro8
+DefGroove Waltz1SusIntro8   8 bar intro with arpgeggios and strings.
 
 ////////////////////////
 ///// Ending

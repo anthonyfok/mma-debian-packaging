@@ -34,8 +34,8 @@ import MMA.patSolo
 import MMA.patAria
 import MMA.grooves
 
-import gbl
-from   MMA.common import *
+from . import gbl
+from MMA.common import *
 
 trkClasses = {
     'BASS'     : MMA.patBass.Bass,
@@ -68,11 +68,10 @@ def trackAlloc(name, err):
     # Get the trackname. Can be just a type, or type-name.
 
     if '-' in name:
-        base, ext = name.split('-',1)
+        base, ext = name.split('-', 1)
     else:
         ext = None
         base = name
-
 
     """ See if there is a track class 'base'. If there is, then
         'f' points to the initialization function for the class.
@@ -81,9 +80,9 @@ def trackAlloc(name, err):
 
     try:
         f = trkClasses[base]
-    except:
+    except KeyError:
         if err:
-            error("There is no track class '%s' for trackname '%s'" % (base, name) )
+            error("There is no track class '%s' for trackname '%s'" % (base, name))
         else:
             return
 
@@ -96,11 +95,7 @@ def trackAlloc(name, err):
     for slot in MMA.grooves.glist.keys():
         newtk.saveGroove(slot)
 
-
     if gbl.debug:
-        print "Creating new track", name
+        print("Creating new track", name)
 
     return
-
-
-

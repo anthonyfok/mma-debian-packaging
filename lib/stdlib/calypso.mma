@@ -122,6 +122,62 @@ Chord-Sus Groove CalypsoSus
 
 DefGroove Calypso1Sus   4-in-a-bar bass with sustained, artifical voices.
 
+/////////////////////////
+/// Plus versions, add in guitar solo line
+
+Groove Calypso
+
+Begin Arpeggio
+     Voice JazzGuitar
+     Harmony 2Above
+     Articulate 110
+     Octave 5
+     Volume f
+     Rskip      60             /  40     60
+     Direction  Up           Down Random Down
+     Range 1.5
+     Sequence  {A4; 2.5 8 90}  /  {A4}   {A2; 2.5 8 90}
+End
+
+DefGroove CalypsoPlus   Add solo-sounding guitar.
+
+Groove CalypsoSus
+Arpeggio Groove CalypsoPlus
+DefGroove CalypsoSusPlus   Guitar and synth voice.
+
+Groove Calypso1
+Arpeggio Groove CalypsoPlus
+DefGroove Calypso1Plus    4 to the bar bass and guitar.
+
+Groove Calypso1Sus
+Arpeggio Groove CalypsoPlus
+DefGroove Calypso1SusPlus  4 to the bar bass, guitar and voice.
+
+////////////////////
+/// Intro
+
+Groove Calypso
+
+Chord         Sequence   *    *    *     C13
+
+Drum-LowBongo Sequence   *    *    D13   D1
+Drum-LowConga Sequence   *    *    D24   D12
+
+Begin Drum-Cym
+      Sequence  D1
+      Rskip 0
+End
+
+Begin Walk
+   Sequence   *    *    *     W1234
+   Articulate 70
+   Direction up
+   SeqRnd Off
+End
+
+DefGroove CalypsoIntro   Simple 4 bar intro.
+
+
 ////////////////
 // A 1 bar ending. This uses all the same instruments
 // but puts everything on the beat.
@@ -140,5 +196,6 @@ Chord          Sequence C1234
 DefGroove CalypsoEnd    A very simple, finalized ending. All \
                         the same instruments as Calypso, but \
                         all are on beats 1,2,3 and 4.
+
 
 

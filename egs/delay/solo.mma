@@ -11,6 +11,15 @@ Keysig Eb
 
 Groove FoxtrotIntro
 
+Mset Melody     /// 4 bars of melody
+ Begin Riff
+        2..e;8d;
+        2..e;8d;
+        4f;e;c;e;
+        1b-;
+  End
+EndMset
+
 // The main voice is a JazzGuitar with some simple melody notes.
 
 Begin Solo
@@ -19,37 +28,35 @@ Begin Solo
     Harmony Open
     Articulate 110
     Volume f
-    Begin Riff
-        2..e;8d;
-        2..e;8d;
-        4f;e;c;e;
-        1b-;
-    End
+    $Melody
 End
 
-// Duplicate the SOLO voice. This copies the pending RIFF data 
-// (the melody). The new voice in panned to the far left with a
-// delay of 8 MIDI ticks. The octave is pushed up by 24 notes.
+// Duplicate the SOLO voice. The new voice in panned to the far
+// left with a delay of 8 MIDI ticks. The octave is pushed up by 24 notes.
 // I think the effect here is a bit exaggerated and a delay of 4t might
 // be better in a production environment.
 
 Begin Solo-1
-    Copy Solo
     Delay 8t 
     Octave 7
     MidiPan 127
     Volume m
+    Harmony Open
+    Articulate 110
+    $Melody
 End
 
 // Do the same for the 3rd voice. This time the delay is negative
 // and the pan is to the far right.
 
 Begin Solo-2
-    Copy Solo
     Delay -8t
     Octave 7
     MidiPan 0
     Volume m
+    Harmony Open
+    Articulate 110
+    $Melody
 end
 
 // Now play the sequence over some chords.

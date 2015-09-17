@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 
 
-# Simple groove browser for MMA
+# Simple groove browser for MMA .. seems to work for python 2 and 3
 
+import sys
+PY3 = sys.version_info[0] == 3
 
-from Tkinter import *
-import tkMessageBox
+if PY3:
+    from tkinter import *
+    from tkinter import messagebox as tkMessageBox
+else:
+    from Tkinter import *
+    import tkMessageBox
+
 import os
 import subprocess
-import sys
 import pickle
 import platform
 
-# Pointer the mma executable. Normally you'll have 'mma' in your
+# Point to the mma executable. Normally you'll have 'mma' in your
 # path, so leave it as the default. If not, set a complete path.
 
 MMA = 'mma'
@@ -45,7 +51,7 @@ if platform == 'Windows':
 else:
     dirlist = ( sys.path[0], "/usr/local/share/mma", "/usr/share/mma", '.' )
     midiPlayer = ["aplaymidi"] # Must be a list!
-    sub_shell = False    
+    sub_shell = False
 
 for d in dirlist:
     moddir = os.path.join(d, 'MMA')
@@ -58,7 +64,7 @@ for d in dirlist:
 libPath = os.path.join(MMAdir, 'lib')
 
 if not os.path.isdir(libPath):
-    print "The MMA library directory was not found."
+    print("The MMA library directory was not found.")
     sys.exit(1)
 
 # these are the options passed to mma for playing a groove.
@@ -79,7 +85,6 @@ class db_Entry:
 dbName   = "browserDB"
 db = []
 
-#help_window = None   # keep track to see if help is visible
 
 #############################################################
 # Utility stuff to manage database.
@@ -88,11 +93,11 @@ def error(m=''):
     """ Universal error/termination. """
 
     if m:
-        print m
+        print(m)
     sys.exit(1)
 
 def update_groove_db(root, dir, textbox=None):
-    """ Update the list of grooves. Use mma to do work. 
+    """ Update the list of grooves. Use mma to do work.
 
         The resulting database is a dict. with the keys being the filenames.
         Each entry has 2 fields:
@@ -109,7 +114,7 @@ def update_groove_db(root, dir, textbox=None):
         path = os.path.join(root,dir,f)
         if os.path.isdir(path):
             gdict.update(update_groove_db(root, os.path.join(dir, f), textbox))
-        
+
         elif path.endswith('.mma'):
             fullFname = os.path.join(dir,f)
             if textbox:
@@ -117,7 +122,7 @@ def update_groove_db(root, dir, textbox=None):
                 textbox.insert(END,fullFname)
                 textbox.update()
             else:
-                print "Parsing", fullFname
+                print("Parsing %s" % fullFname)
 
             try:
                 pp=subprocess.Popen([MMA, '-Dbo', path],
@@ -129,21 +134,22 @@ def update_groove_db(root, dir, textbox=None):
                 if textbox:
                     tkMessageBox.showerror("Database Update", msg)
                 else:
-                    print msg 
+                    print(msg)
                 sys.exit(1)
             if pp.returncode:
                 msg = "Error in MMA. Is MMA current?\n" + output
                 if textbox:
                     tkMessageBox.showerror("Database Update", output)
                 else:
-                    print msg
+                    print(msg)
                 sys.exit(1)
-
+            
+            output = output.decode(encoding="UTF-8")  # needed for py3
             output = output.strip().split("\n")
 
             gg={}
             for i in range(1, len(output), 2):
-                gg[output[i].strip()] = output[i+1].strip() 
+                gg[output[i].strip()] = output[i+1].strip()
                 e=db_Entry( output[0].strip(), gg )
             gdict[fullFname] = e
 
@@ -159,12 +165,12 @@ def write_db(root, dbName, db, textbox=None):
     except:
         msg = "Error creating groove database file '%s'. " \
                "Do you need to be root?" % path
-    
+
     if msg:
         if textbox:
             tkMessageBox.showwarning("Database Write Error", msg)
         else:
-            print msg
+            print(msg)
         return
 
     pickle.dump(db, outpath, pickle.HIGHEST_PROTOCOL )
@@ -175,12 +181,19 @@ def read_db(root, dbName):
 
     path = os.path.join(root, dbName)
 
+    # 1st see if there is DB. If not, just return and it'll be created
+
     try:
         inpath = open(path, 'rb')
     except:
         return None
 
-    g = pickle.load(inpath)
+    # Could be incompatible (created by 3, read by 2)
+
+    try:
+        g = pickle.load(inpath)
+    except:
+        g = None
     inpath.close()
 
     return g
@@ -227,8 +240,8 @@ def makeTextBox(parent, justify=LEFT, row=0, column=0, text=''):
     ys.config(orient=VERTICAL, command=b.yview)
     ys.grid(column=0,row=0, sticky=N+S)
 
-    f.grid(row=row, column=column, sticky=E+W+N+S) 
-    f.grid_rowconfigure(0, weight=0)   
+    f.grid(row=row, column=column, sticky=E+W+N+S)
+    f.grid_rowconfigure(0, weight=0)
     f.grid_columnconfigure(1, weight=1)
 
 
@@ -247,7 +260,7 @@ def makeButtonBar(parent, row=0, column=0, buttons=(())):
 
 def makeListBox(parent, width=50, height=20, selectmode=BROWSE, row=0, column=0):
     """ Create a list box with x and y scrollbars. """
-    
+
     f=Frame(parent)
     ys=Scrollbar(f)
     xs=Scrollbar(f)
@@ -270,9 +283,9 @@ def makeListBox(parent, width=50, height=20, selectmode=BROWSE, row=0, column=0)
     lb.grid(column=1,row=0, sticky=NSEW)
 
     f.grid(row=row, column=column, sticky=NSEW)
-    f.grid_rowconfigure(0, weight=1)   
+    f.grid_rowconfigure(0, weight=1)
     f.grid_columnconfigure(1, weight=1)
-    
+
     return  lb
 
 def makeEntry(parent, label="Label", text='', column=0, row=0):
@@ -283,18 +296,18 @@ def makeEntry(parent, label="Label", text='', column=0, row=0):
     e.delete(0, END)
     e.insert(END, text)
     f.grid( column=column, row=row, sticky=W)
-    
+
     return e
 
 
 def dohelp(hw=[None]):
     """ A primitive help function. Need a volunteer to rewrite this! """
- 
+
     def delwindow():
         if hw[0]:
             hw[0].destroy()
             hw[0] = None
-            
+
     if hw[0]:
         return
 
@@ -366,12 +379,12 @@ class Application:
                                   row=0, column=1)
         self.f2.grid( column=0, row=2, sticky=W)
 
-        self.lbdesc  = makeTextBox(root, row=3, column=0, text="Current file")    
+        self.lbdesc  = makeTextBox(root, row=3, column=0, text="Current file")
         self.lb=lb   = makeListBox(root, height=15, row=4, column=0)
         self.lgvdesc = makeTextBox(root, row=5, column=0, text="Groovy")
         self.lgv=lgv = makeListBox(root, height=16, row=6, column=0)
 
-       
+
         # bindings
 
         lb.bind("<Button-1>",  self.selectFileClick)
@@ -380,7 +393,7 @@ class Application:
         lgv.bind("<Button-1>", self.selectGrooveClick)
         lgv.bind("<Double-Button-1>", self.playGroove)
         lgv.bind("<<ListboxSelect>>",  self.selectGrooveSelect)
-       
+
         # Make the listbox frames expandable
 
         root.grid_rowconfigure(2, weight=1)
@@ -441,18 +454,18 @@ class Application:
     def selectFileClick(self, w):
         self.lb.activate(self.lb.nearest(w.y))
         self.selectFile(self.lb.get(self.lb.nearest(w.y)))
-    
-    
+
+
     def showFileDoubleClick(self, w):
-		self.selectFileClick(w)
-		self.displayFile( libPath + os.sep + self.lb.get(self.lb.nearest(w.y)) )
-		
+        self.selectFileClick(w)
+        self.displayFile( libPath + os.sep + self.lb.get(self.lb.nearest(w.y)) )
+
     def selectFileSelect(self,w):
-		self.selectFile(self.lb.get(w.widget.curselection()))
-	
+        self.selectFile(self.lb.get(w.widget.curselection()))
+
     def selectGrooveSelect(self,w):
-		self.selectGroove(self.lgv.get(w.widget.curselection()))
-		 
+        self.selectGroove(self.lgv.get(w.widget.curselection()))
+
 
     def selectFileRet(self, w):
         self.selectFile(self.lb.get(ACTIVE) )
@@ -499,63 +512,63 @@ class Application:
 
         db = update_groove_db(libPath, '', self.lbdesc )
         if not db:
-            print "No data read"
+            print("No data read")
             sys.exit(1)
         write_db(libPath, dbName, db, self.lbdesc)
         self.updateFileList()
-        
-        
+
+
     def generateMMAFile(self):
-	    opt_tempo = self.e_tempo.get()
-	    opt_keysig = self.e_keysig.get()
-	    opt_chords = self.e_chords.get()
-	    opt_chords = opt_chords.replace('  ', ' ')
-	    opt_chords = opt_chords.replace(' ', ',')
-	    opt_count = self.e_count.get()
-	    
-	    fileName = self.extractGrooveName(self.selectedFile) + "_demo.mma"
-	    print "Generating " + fileName + " in dir " + os.getcwd()
-	    fileName = os.getcwd() + os.sep + fileName
+        opt_tempo = self.e_tempo.get()
+        opt_keysig = self.e_keysig.get()
+        opt_chords = self.e_chords.get()
+        opt_chords = opt_chords.replace('  ', ' ')
+        opt_chords = opt_chords.replace(' ', ',')
+        opt_count = self.e_count.get()
 
-	    grooveList = sorted(db[self.selectedFile].grooveList)
-	    
-	    chordList = opt_chords.split(",")
-	    chordList = chordList[:int(opt_count)]
+        fileName = self.extractGrooveName(self.selectedFile) + "_demo.mma"
+        print("Generating " + fileName + " in dir " + os.getcwd())
+        fileName = os.getcwd() + os.sep + fileName
 
-	    file = open(fileName, "w")
-	    file.write("KeySig " +  opt_keysig + "\n")
-	    file.write("Tempo " +  opt_tempo + "\n")
-	    file.write("\n\n")
-	    
-	    barCount = 1
-	    for groove in grooveList:
-	        file.write("Groove " + groove + "\n")    
-	        for chord in chordList:
-				file.write(str(barCount) + " " + chord + "\n")
-				barCount = barCount+1
-	      
-	        # Inserts silent bar
-	        barCount = barCount+1
-	        file.write(str(barCount) + " z!\n\n")
-			
-	    file.close()
-	    
-	    self.generateMidiFile(fileName)
-	    
-	    
+        grooveList = sorted(db[self.selectedFile].grooveList)
+
+        chordList = opt_chords.split(",")
+        chordList = chordList[:int(opt_count)]
+
+        fp = open(fileName, "w")
+        fp.write("KeySig " +  opt_keysig + "\n")
+        fp.write("Tempo " +  opt_tempo + "\n")
+        fp.write("\n\n")
+
+        barCount = 1
+        for groove in grooveList:
+            fp.write("Groove " + groove + "\n")
+            for chord in chordList:
+                fp.write(str(barCount) + " " + chord + "\n")
+                barCount = barCount+1
+
+                # Inserts silent bar
+                barCount = barCount+1
+                fp.write(str(barCount) + " z!\n\n")
+
+        fp.close()
+
+        self.generateMidiFile(fileName)
+
+
     def extractGrooveName(self, input):
-	    slashLoc = input.find("/")+1
-	    pointLoc = input.find(".")
-	    output = input[slashLoc:pointLoc]
-	    return output
-	    
-	    
+            slashLoc = input.find("/")+1
+            pointLoc = input.find(".")
+            output = input[slashLoc:pointLoc]
+            return output
+
+
     def generateMidiFile(self, fileName):
-		self.launchSubprocess("MMA interpreter", MMA, fileName);
-	
-	    
+                self.launchSubprocess("MMA interpreter", MMA, fileName);
+
+
     def displayFile(self, fileName, win=[None,None]):
-        
+
         w,b = win
 
         if not w:
@@ -577,26 +590,26 @@ class Application:
         w.title( "MMA Groove Browser: %s" % fileName )
 
     def launchSubprocess(self, processTitle, processCommand, fileName):
-	    try:
-	        p=subprocess.Popen([processCommand, fileName],
+            try:
+                p=subprocess.Popen([processCommand, fileName],
                 stderr=subprocess.PIPE, shell=sub_shell)
-	        output = p.communicate()[0]
-	    except:
-	        tkMessageBox.showerror(processTitle + " Error",
+                output = p.communicate()[0]
+            except:
+                tkMessageBox.showerror(processTitle + " Error",
                  "Error calling " + processTitle + " \n" \
                  "Check your installation!\n" \
                  "Executable set to '%s'. Is that right?" % processCommand)
-	        sys.exit(1)
+                sys.exit(1)
 
-	    if p.returncode:
-	        if not output:
-				msg = "Error ... can't find " + processTitle + " set to %s" % processCommand
-	        else:
-				msg = output
-	        tkMessageBox.showwarning(processTitle + " Error", msg)
-	        if not output:
-				sys.exit(1)
-				
+            if p.returncode:
+                if not output:
+                                msg = "Error ... can't find " + processTitle + " set to %s" % processCommand
+                else:
+                                msg = output
+                tkMessageBox.showwarning(processTitle + " Error", msg)
+                if not output:
+                                sys.exit(1)
+
 
     def quitall(self):
         sys.exit()
@@ -609,7 +622,7 @@ if not db:
     db = update_groove_db(libPath, '', None)
 
     if not db:
-        print "No data in database"
+        print("No data in database")
         sys.exit(1)
 
     write_db(libPath, dbName, db, None)
@@ -617,12 +630,9 @@ if not db:
 root = Tk()
 
 root.title("MMA Groove Browser")
-root.option_add("*Dialog.msg.wrapLength", "15i") 
+root.option_add("*Dialog.msg.wrapLength", "15i")
 if gbl_font:
     root.option_add('*font', gbl_font)
 app=Application()
 
 root.mainloop()
-
-
-    

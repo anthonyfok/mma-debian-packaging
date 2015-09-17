@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 
 # create tex files of the mma midi constants
+# works with python 2 and 3
 
-import sys, os, commands
+import sys, os
 
-sys.path.insert(0, "/usr/local/share/mma/MMA/")
+# quick and dirty ... just insert possible mma locations into
+# sys.path. We're just interested in loading miditables.py and
+# chordtable.py so we can get the constant data we need.
+
+sys.path = ["/usr/local/share/mma/MMA", "/usr/share/mma/MMA", 
+      "/home/bob/src/bv/mma/MMA/"] + sys.path
+
 from miditables import *
 from chordtable import chordlist
 
-err, version = commands.getstatusoutput( "mma -v")
-if err:
-    print "Can't get MMA version ... strange error!"
-    sys.ex
+#########################
+# Functions
 
 def dodrums(order):
     """ Print LaTex table of drum names. """
@@ -52,12 +57,14 @@ def doinsts(order):
 
     if order == "m":
         for a in sorted(voiceNames.keys()):
+            if a>127: continue  # we don't want "none" to appear
             n = voiceNames[a].replace('&', '\&')
             outfile.write("\\insline{%s} {%s}\n" % (a, n))
 
     else:
         for a in sorted(voiceInx.keys()):
             v=voiceInx[a]
+            if v>127: continue  # we don't want "none" to appear
             n=voiceNames[v].replace('&', '\&')
             outfile.write( "\\insline{%s} {%s}\n" % (n, v))
 
@@ -72,19 +79,19 @@ def dochords():
 
         outfile.write( "\\insline{%s}{%s}\n" % (nm, chordlist[n][2]) )
 
+###############################
+# Main program
 
-for a,f,o in (
-    ('m', docrtls, 'ctrlmidi.AUTO'),
-    ('a', docrtls, 'ctrlalpha.AUTO'),
-    ('m', dodrums, 'drumsmidi.AUTO'),
-    ('a', dodrums, 'drumsalpha.AUTO'),
-    ('m', doinsts, 'instmidi.AUTO'),
-    ('a', doinsts, 'instalpha.AUTO') ):
-        outfile = file(o, 'w')
+for a, f, o in ( ('m', docrtls, 'ctrlmidi.AUTO'),
+                 ('a', docrtls, 'ctrlalpha.AUTO'),
+                 ('m', dodrums, 'drumsmidi.AUTO'),
+                 ('a', dodrums, 'drumsalpha.AUTO'),
+                 ('m', doinsts, 'instmidi.AUTO'),
+                 ('a', doinsts, 'instalpha.AUTO') ):
+        outfile = open(o, 'w')
         f(a)
         outfile.close()
 
-outfile = file("chordnames.AUTO", 'w')
+outfile = open("chordnames.AUTO", 'w')
 dochords()
 outfile.close()
-

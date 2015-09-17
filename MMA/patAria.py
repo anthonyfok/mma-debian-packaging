@@ -1,4 +1,3 @@
-
 # patAria.py
 
 """
@@ -25,12 +24,14 @@ Bob van der Poel <bob@mellowood.ca>
 
 import random
 
-import MMA.notelen 
+import MMA.notelen
 import MMA.harmony
+from MMA.keysig import keySig
+import MMA.chords
 
-import gbl
-from   MMA.common import *
-from   MMA.pat import PC
+from . import gbl
+from MMA.common import *
+from MMA.pat import PC, Pgroup
 
 
 class Aria(PC):
@@ -40,11 +41,15 @@ class Aria(PC):
     notes = []
     selectDir = [1]
     noteptr = 0
-    dirptr  = 0
+    dirptr = 0
     lastChord = None
-    lastStype = None
-    lastRange = None
+    deplete = [0]
 
+    def setSeqSize(self):
+        """ Expand existing pattern list. """
+
+        self.deplete = seqBump(self.deplete)
+        PC.setSeqSize(self)
 
     def restoreGroove(self, gname):
         """ Grooves are not saved/restored for aria tracks. But, seqsize is honored! """
@@ -54,7 +59,6 @@ class Aria(PC):
         """ No save done for grooves. """
         pass
 
-
     def getPgroup(self, ev):
         """ Get group for aria pattern.
 
@@ -63,36 +67,46 @@ class Aria(PC):
         """
 
         if len(ev) != 3:
-            error("There must be n groups of 3 in a pattern definition, "
-                  "not <%s>" % ' '.join(ev) )
+            error("%s: There must be n groups of 3 in a pattern definition, "
+                  "not <%s>" % (self.name, ' '.join(ev)))
 
-        a = struct()
+        a = Pgroup()
 
-        a.offset   = self.setBarOffset(ev[0])
-        a.duration = MMA.notelen.getNoteLen( ev[1] )
-        a.vol =  stoi(ev[2], "Note volume in Aria definition not int")
+        a.offset = self.setBarOffset(ev[0])
+        a.duration = MMA.notelen.getNoteLen(ev[1])
+        a.vol = stoi(ev[2], "Note volume in Aria definition not int")
 
         return a
-
 
     def setScaletype(self, ln):
         """ Set scale type. """
 
         ln = lnExpand(ln, "%s ScaleType" % self.name)
         tmp = []
+        dlpt = []
 
         for n in ln:
             n = n.upper()
-            if not n in ( 'CHROMATIC', 'SCALE', 'AUTO', 'CHORD'):
-                error("Unknown %s ScaleType. Only Chromatic, Scale (Auto) and Chord are valid" % self.name)
+            if n.endswith('-'):
+                dlpt.append(1)
+                n = n[:-1]
+            else:
+                dlpt.append(0)
+
+            if not n in ('CHROMATIC', 'SCALE', 'AUTO', 'CHORD', 'KEY'):
+                error("%s ScaleType: Only Chromatic, Scale (Auto) Chord "
+                      "and Key are valid." % self.name)
             tmp.append(n)
 
         self.scaleType = seqBump(tmp)
+        self.deplete = seqBump(dlpt)
+        self.restart()
 
         if gbl.debug:
-            print "Set %s ScaleType: " % self.name,
-            printList(self.scaleType)
-
+            msg = ["Set %s ScaleType:" % self.name]
+            for a in self.scaleType:
+                msg.append(a)
+            print(' '.join(msg))
 
     def setDirection(self, ln):
         """ Set direction for melody creation.
@@ -104,28 +118,32 @@ class Aria(PC):
         """
 
         if not len(ln):
-            error("There must be at least one value for %s Direction." % self.name)
-        
+            error("%s Direction: There must be at least one value." % self.name)
+
         self.selectDir = []
         for a in ln:
             if set(a.upper()) == set('R'):    # is direction 'r', 'rr', 'rrr', etc.
                 if len(a) > 4:
-                    error("Aria Direction has too much randomness"
-                          "(Maximum of 4 r's, got %d)." % len(a))
+                    error("%s Direction: too much randomness"
+                          "(Maximum of 4 r's, got %d)." % (self.name, len(a)))
                 self.selectDir.append(a.upper())
             else:   # not random, has to be an integer -4 ... 4
-                a=stoi(a, "Expecting integer value or 'r*'.")
+                a = stoi(a, "Expecting integer value or 'r*'.")
                 if a < -4 or a > 4:
-                    error("Aria direction must be 'r' or -4 to 4, not '%s'" % a)
+                    error("%s Direction: args must be 'r' or -4 to 4, not '%s'" % (self.name, a))
                 self.selectDir.append(a)
 
+        self.restart()
+
         if gbl.debug:
-            print "Set %s Direction:" % self.name,
-            printList(self.selectDir)
+            msg = ["Set %s Direction:" % self.name]
+            for a in self.selectDir:
+                msg.append(str(a))
+            print(' '.join(msg))
 
     def restart(self):
         self.ssvoice = -1
- 
+        self.notes = []
 
     def trackBar(self, pattern, ctable):
         """ Do the aria bar.
@@ -147,85 +165,93 @@ class Aria(PC):
             stype = self.scaleType[sc]
             chrange = self.chordRange[sc]
 
-            ### Generate notelist if nesc.
+            # Generate notelist if nesc. Note that in the keysig, scale and
+            # range funcs restart() is called ... self.notes is reset.
 
-            if self.lastChord != thisChord or self.lastStype != stype or \
-                    self.lastRange != chrange:
+            if stype == 'CHORD' and (not self.notes or self.lastChord != thisChord):
+                notelist = ct.chord.noteList
+                self.notes = []
 
-                self.lastChord = thisChord
-                self.lastStype = stype
-                self.lastRange = chrange
+            elif stype == 'CHROMATIC' and (not self.notes or self.lastChord != thisChord):
+                notelist = [ct.chord.rootNote + x for x in range(0, 12)]
+                self.notes = []
 
-                if stype == 'CHORD':
-                    notelist = ct.chord.noteList
-                elif stype == 'CHROMATIC':
-                    notelist = [ ct.chord.rootNote + x for x in range(0,12)]
-                else:
-                    notelist = list(ct.chord.scaleList)
+            elif stype == 'KEY' and not self.notes:
+                k = keySig.getKeysig()
+                ch, t = k.split()
+                if t.lower() == 'minor':
+                    ch += "m"
+                notelist = list(MMA.chords.ChordNotes(ch).scaleList)
 
-                o=0
-                self.notes=[]
+            elif (stype == 'SCALE' or stype == 'AUTO') and \
+                    (not self.notes or self.lastChord != thisChord):
+                notelist = list(ct.chord.scaleList)
+                self.notes = []
 
+            self.lastChord = thisChord
+
+            # we have the base list of notes (scale, chord, etc) and
+            # now we make it the right length & octave.
+            if not self.notes:
+                o = 0
                 while chrange >= 1:
                     for a in notelist:
-                        self.notes.append(a+o)
-                    o+=12
-                    chrange-=1
+                        self.notes.append(a + o)
+                    o += 12
+                    chrange -= 1
 
-                if chrange>0 and chrange<1:  # for fractional scale lengths
+                if chrange > 0 and chrange < 1:  # for fractional scale lengths
                     chrange = int(len(notelist) * chrange)
                     if chrange < 2:   # important, must be at least 2 notes in a scale
-                        chrange=2
+                        chrange = 2
                     for a in notelist[:chrange]:
-                        self.notes.append(a+o)
-            
+                        self.notes.append(a + o)
+
             # grab a note from the list
 
             if self.dirptr >= len(self.selectDir):
-                self.dirptr=0
-            
+                self.dirptr = 0
+
             # the direction ptr is either an int(-4..4) or a string of 'r', 'rr, etc.
 
             a = self.selectDir[self.dirptr]
-  
-            if type(a) == type(1):
+
+            if isinstance(a, int):
                 self.noteptr += a
             else:
-                self.noteptr += random.choice( range(-len(a), len(a)+1 ))
+                a = random.choice(range(-len(a), len(a) + 1))
+                self.noteptr += a
 
             if self.noteptr >= len(self.notes):
+
                 if a > 0:
                     self.noteptr = 0
                 else:
-                    self.noteptr = len(self.notes)-1
+                    self.noteptr = len(self.notes) - 1
             elif self.noteptr < 0:
                 if a < 0:
-                    self.noteptr = len(self.notes)-1
+                    self.noteptr = len(self.notes) - 1
                 else:
                     self.noteptr = 0
 
             note = self.notes[self.noteptr]
-            self.dirptr  += 1
+
+            # delete note just selected if that's the mode
+            if self.deplete[sc]:
+                self.notes.remove(note)
+            self.dirptr += 1
 
             # output
 
             if not self.harmonyOnly[sc]:
-                self.sendNote(
-                    p.offset,
-                    self.getDur(p.duration),
-                    self.adjustNote(note),
-                    self.adjustVolume(p.vol, p.offset))
+                notelist = [(note, p.vol)]
+            else:
+                notelist = []
 
             if self.harmony[sc]:
                 h = MMA.harmony.harmonize(self.harmony[sc], note, ct.chord.noteList)
-                
-                strumOffset = self.getStrum(sc)
+                harmlist = list(zip(h, [p.vol * self.harmonyVolume[sc]] * len(h)))
+            else:
+                harmlist = []
 
-                for n in h:
-                    self.sendNote(
-                        p.offset + strumOffset,
-                        self.getDur(p.duration),
-                        self.adjustNote(n),
-                        self.adjustVolume(p.vol * self.harmonyVolume[sc], -1))
-
-                    strumOffset += self.getStrum(sc)
+            self.sendChord(notelist + harmlist, p.duration, p.offset)

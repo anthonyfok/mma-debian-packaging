@@ -1,4 +1,3 @@
-
 # patBass.py
 
 """
@@ -28,17 +27,16 @@ import MMA.notelen
 import MMA.harmony
 import MMA.ornament
 
-import gbl
-from   MMA.common import *
-from   MMA.pat import PC
+from . import gbl
+from MMA.common import *
+from MMA.pat import PC, Pgroup
 
 
 class Bass(PC):
     """ Pattern class for a bass track. """
- 
 
     vtype = 'BASS'
-    
+
     def getPgroup(self, ev):
         """ Get group for bass pattern.
 
@@ -48,39 +46,38 @@ class Bass(PC):
 
         if len(ev) != 4:
             error("There must be n groups of 4 in a pattern definition, "
-                  "not <%s>" % ' '.join(ev) )
+                  "not <%s>" % ' '.join(ev))
 
-        a = struct()
+        a = Pgroup()
 
-        a.offset   = self.setBarOffset(ev[0])
-        a.duration = MMA.notelen.getNoteLen( ev[1] )
+        a.offset = self.setBarOffset(ev[0])
+        a.duration = MMA.notelen.getNoteLen(ev[1])
 
         offset = ev[2]
-        n=offset[0]
+        n = offset[0]
         if n in "1234567":
-            a.noteoffset = int(n)-1
+            a.noteoffset = int(n) - 1
         else:
-            error("Note offset in Bass must be '1'...'7', not '%s'" % n )
+            error("Note offset in Bass must be '1'...'7', not '%s'" % n)
 
         n = offset[1:2]
         if n == "#":
             a.accidental = 1
             ptr = 2
-        elif n == 'b' or n == '&':
+        elif n == 'B' or n == '&':
             a.accidental = -1
             ptr = 2
         else:
             a.accidental = 0
             ptr = 1
 
-        a.addoctave  = 0
+        a.addoctave = 0
 
         for n in ev[2][ptr:]:
             if n == '+':
                 a.addoctave += 12
             elif n == '-':
                 a.addoctave -= 12
-
             else:
                 error("Only '- + # b &' are permitted after a noteoffset, not '%s'" % n)
 
@@ -90,7 +87,6 @@ class Bass(PC):
 
     def restart(self):
         self.ssvoice = -1
-
 
     def trackBar(self, pattern, ctable):
         """ Do the bass bar.
@@ -110,19 +106,20 @@ class Bass(PC):
             note = ct.chord.scaleList[p.noteoffset] + p.addoctave + p.accidental
 
             if not self.harmonyOnly[sc]:
-                notelist = [(note,  p.vol)]
+                notelist = [(note, p.vol)]
             else:
                 notelist = []
 
             if self.harmony[sc]:
-                h =  MMA.harmony.harmonize(self.harmony[sc], note, ct.chord.noteList)
-                harmlist = zip(h, [p.vol * self.harmonyVolume[sc]] * len(h))
+                h = MMA.harmony.harmonize(self.harmony[sc], note, ct.chord.noteList)
+                harmlist = list(zip(h, [p.vol * self.harmonyVolume[sc]] * len(h)))
             else:
                 harmlist = []
 
+            offset = p.offset
             if self.ornaments['type']:
-                MMA.ornament.doOrnament(self, notelist, 
-                         self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                offset = MMA.ornament.doOrnament(self, notelist,
+                                        self.getChordInPos(offset, ctable).chord.scaleList, p)
                 notelist = []
 
-            self.sendChord( notelist + harmlist, p.duration, p.offset)
+            self.sendChord(notelist + harmlist, p.duration, offset)

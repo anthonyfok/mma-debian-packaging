@@ -34,8 +34,8 @@ MMA handles these by:
    A,B,C,D,E,F,G becomes C,D,E,F,G,A,B.
 
 This may OR MAY NOT effect the output, especially if you have enabled
-MODE=OPTIMAL which may do chord rotation on its own. In most cases the
-bass notes will be effected.
+Voicing MODE=OPTIMAL, KEY, etc. which may do chord rotation on its own.
+In most cases the bass notes will be effected.
 
 
 The next case encountered is a slash note which is not in the chord,

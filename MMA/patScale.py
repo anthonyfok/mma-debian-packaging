@@ -27,26 +27,27 @@ import random
 import MMA.harmony
 import MMA.notelen
 import MMA.ornament
-from   MMA.pat  import PC
+from MMA.pat  import PC, Pgroup
 
-import gbl
-from   MMA.common import *
+from . import gbl
+from MMA.common import *
 
 import copy
+
 
 class Scale(PC):
     """ Pattern class for a Scale track. """
 
     vtype = 'SCALE'
 
-    lastNote   = -1
-    lastChord  = None
-    lastStype  = None
+    lastNote = -1
+    lastChord = None
+    lastStype = None
     lastDirect = 1
-    lastRange  = 0
-    sOffset    = 0
-    notes      = None
-    dirfact    = 1
+    lastRange = 0
+    sOffset = 0
+    notes = None
+    dirfact = 1
 
     def __init__(self, ln):
         
@@ -62,24 +63,21 @@ class Scale(PC):
 
         PC.restoreGroove(self, gname)
 
-
     def getPgroup(self, ev):
         """ Get group for scale patterns.
 
             Fields - start, length, volume
         """
 
-
         if len(ev) != 3:
             error("There must be at exactly 3 items in each group "
                   "in a Scale definition, not <%s>." % ' '.join(ev))
 
-        a = struct()
+        a = Pgroup()
 
-        a.offset   = self.setBarOffset(ev[0])
+        a.offset = self.setBarOffset(ev[0])
         a.duration = MMA.notelen.getNoteLen(ev[1])
-        a.vol      = stoi(ev[2], "Type error in Scale definition")
-
+        a.vol = stoi(ev[2], "Type error in Scale definition")
 
         return a
 
@@ -100,8 +98,8 @@ class Scale(PC):
         self.scaleType = seqBump(tmp)
 
         if gbl.debug:
-            print "Set %s ScaleType to " % self.name,
-            printList(ln)
+            print("Set %s ScaleType to: %s" %
+                  (self.name, ' '.join(self.scaleType)))
         
     def restart(self):
         self.ssvoice = -1
@@ -242,13 +240,15 @@ class Scale(PC):
             if self.harmony[sc]:
                 ch = self.getChordInPos(p.offset, ctable).chord.noteList
                 h = MMA.harmony.harmonize(self.harmony[sc], note, ch)
-                harmlist =  zip(h, [p.vol * self.harmonyVolume[sc]] * len(h))
+                harmlist =  list(zip(h, [p.vol * self.harmonyVolume[sc]] * len(h)))
             else:
                 harmlist = []
 
+            offset = p.offset
             if self.ornaments['type']:
-                MMA.ornament.doOrnament(self, nlist, self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                offset = MMA.ornament.doOrnament(self, nlist,
+                                        self.getChordInPos(offset, ctable).chord.scaleList, p)
                 nlist = []
 
-            self.sendChord(nlist+harmlist, p.duration, p.offset)
+            self.sendChord(nlist+harmlist, p.duration, offset)
 

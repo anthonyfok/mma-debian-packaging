@@ -24,26 +24,25 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-import gbl
-from   MMA.common import *
+from . import gbl
+from MMA.common import *
 
 noteLenTable = {
-    '0'  : 1,                   # special 0==1 midi tick
-    '1'  : gbl.BperQ * 4,       # whole note
-    '2'  : gbl.BperQ * 2,       # 1/2
-    '23' : gbl.BperQ * 4 / 3,   # 1/2 triplet
-    '4'  : gbl.BperQ,           # 1/4
-    '43' : gbl.BperQ * 2 / 3,   # 1/4 triplet
-    '8'  : gbl.BperQ / 2,       # 1/8
-    '81' : None,                # short 1/8, set by swing skew
-    '82' : None,                # long 1/8, set by swing skew
-    '16' : gbl.BperQ / 4,       # 1/16
-    '32' : gbl.BperQ / 8,       # 1/32
-    '64' : gbl.BperQ / 16,      # 1/64
-    '6'  : gbl.BperQ / 6,       # 1/16 note triplet
-    '3'  : gbl.BperQ / 3,       # 1/8 note triplet
-    '5'  : gbl.BperQ / 5 }      # 1/8 note quintuplet
-
+    '0': 1,                   # special 0==1 midi tick
+    '1': gbl.BperQ * 4,       # whole note
+    '2': gbl.BperQ * 2,       # 1/2
+    '23': gbl.BperQ * 4 // 3,  # 1/2 triplet
+    '4': gbl.BperQ,           # 1/4
+    '43': gbl.BperQ * 2 // 3,  # 1/4 triplet
+    '8': gbl.BperQ // 2,       # 1/8
+    '81': None,               # short 1/8, set by swing skew
+    '82': None,               # long 1/8, set by swing skew
+    '16': gbl.BperQ // 4,      # 1/16
+    '32': gbl.BperQ // 8,      # 1/32
+    '64': gbl.BperQ // 16,     # 1/64
+    '6': gbl.BperQ // 6,       # 1/16 note triplet
+    '3': gbl.BperQ // 3,       # 1/8 note triplet
+    '5': gbl.BperQ // 5}       # 1/8 note quintuplet
 
 
 def getNoteLen(n):
@@ -58,26 +57,26 @@ def getNoteLen(n):
     length = 0
 
     if n.endswith('T') or n.endswith('t'):
-        n=n[:-1]
+        n = n[:-1]
         if not n:
             error("Specifying a note length in MIDI Ticks requires a value")
-        n=stoi(n)
+        n = stoi(n)
         if n == 0:
             n = 1
-        if n<1:
+        if n < 1:
             error("MIDI note length cannot be negative.")
         return n
 
-    n=n.replace('-', '+-')    # change "2-4" to "2+-4" for easier parsing
-    n=n.replace('++-', '+-')  # and in case we already used "+-", take out 2nd "+"
+    n = n.replace('-', '+-')    # change "2-4" to "2+-4" for easier parsing
+    n = n.replace('++-', '+-')  # and in case we already used "+-", take out 2nd "+"
 
     for a in str(n).split('+'):
         if a.endswith('..'):
             dot = 2
-            a=a[:-2]
+            a = a[:-2]
         elif a.endswith('.'):
             dot = 1
-            a=a[:-1]
+            a = a[:-1]
         else:
             dot = 0
 
@@ -88,12 +87,12 @@ def getNoteLen(n):
                 i = noteLenTable[a]
 
         except:
-            error("Unknown note duration %s" % n )
+            error("Unknown note duration %s" % n)
 
         if dot == 2:
-            i += i/2 + i/4
+            i += i / 2 + i / 4
         elif dot == 1:
-            i += i/2
+            i += i / 2
         length += i
 
-    return length
+    return int(length)

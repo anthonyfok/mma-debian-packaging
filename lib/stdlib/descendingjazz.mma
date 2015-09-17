@@ -17,6 +17,7 @@ Include stdpats
 ////////////////////////////
 /// Pattern definitions
 
+/// This is for chording. We add in harmony 3below to get triads
 Begin Bass Define
 	Down1   1 4. 5 90; 2.5 8 5 70; 3 4. 3 90; 4.5 8 3 70 
     Down2   1 4. 2 90; 2.5 8 2 70; 3 4. 1 90; 4.5 8 1 70 

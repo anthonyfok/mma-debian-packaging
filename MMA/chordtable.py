@@ -57,7 +57,7 @@ chordlist = {
     'M':    ((C,    E,      G ),
              (C, D, E, F, G, A, B),
              "Major triad. This is the default and is used in  "
-             "the absense of any other chord type specification."),
+             "the absence of any other chord type specification."),
 
     '(b5)':  ((C,    E,      Gb ),
              (C, D, E, F, Gb, A, B),
@@ -131,7 +131,7 @@ chordlist = {
              (C, Db, Eb, F, G, Ab, Bb),
              "Minor 7th with added flat 9th."),
 
-    'm7#9': ((C,     Eb,    G,     Bb, Ds+12 ),
+    'm7#9': ((C,     Eb,    G,     Bb, Ds+12 ),  # Eb == D# 
              (C, Ds, Eb, F, G, Ab, Bb),
              "Minor 7th with added sharp 9th."),
 
@@ -139,6 +139,9 @@ chordlist = {
              (C, D, E, F, G, A, Bb),
              "7th."),
 
+    '7(6)':    ((C,    E,      G, A,   Bb ),
+             (C, D, E, F, G, A, Bb),
+             "7th with added 6th."),
     '7b5':    ((C,    E,      Gb,    Bb ),
              (C, D, E, F, Gb, A, Bb),
              "7th, flat 5."),
@@ -265,9 +268,17 @@ chordlist = {
              (C, D, E, F, G, A, Bb),
              "9th chord plus 11th (3rd not voiced)."),
 
+    '11+':    ((C,   C,    Gs,    Bb, D+12, F+12 ),
+             (C, D, E, F, Gs, A, Bb),
+             "Augmented 11th (sharp 5)."),
+    
     'm11':    ((C,    Eb,    G,     Bb, D+12, F+12 ),
              (C, D, Eb, F, G, Ab, Bb),
              "9th with minor 3rd,  plus 11th."),
+
+    'M11':    ((C,    E,    G,   B, D+12, F+12 ),
+             (C, D, E, F, G, Ab, B),
+             "Major 9th plus 11th."),
 
     'm7(add11)':    ((C,    Eb,    G,    Bb, F+12 ),
              (C, D, Eb, F, G, Ab, Bb),
@@ -442,6 +453,7 @@ chordlist = {
 """
 
 aliases = (
+    ('11#5',     '11+',      ''),
     ('aug9',     '9#5',      ''),
     ('9+',       '9#5',      ''),
     ('+9',       '9#5',      ''),
@@ -458,6 +470,7 @@ aliases = (
     ('m7(#9)',   'm7#9',     ''),
     ('9+5',      '9#5',      ''),
     ('m+5',      'm#5',      ''),
+    ('m+',       'm#5',      ''),
     ('M6',       '6',        ''),
     ('m7-5',     'm7b5',     ''),
     ('m7(omit5)','m7omit5',  ''),
@@ -474,7 +487,7 @@ aliases = (
     ('M7-5',     'M7b5',     ''),
     ('M7+5',     'M7#5',     ''),
     ('M7(add13)','13b9',     ''),
-    ('7alt',     '7b5b9',    ''),
+    ('7alt',     '7b5b9',    'Uses a 7th flat 5, flat 9. Probably not correct, but works (mostly).'),
     ('7sus4',    '7sus',     ''),
     ('7+',       'aug7',     ''),
     ('7#5',      'aug7',     ''),
@@ -488,6 +501,8 @@ aliases = (
     ('min(maj7)','mM7',      ''),
     ('min#7',    'mM7',      ''),
     ('m#7',      'mM7',      ''),
+    ('msus',     'msus4',    ''),
+    ('m7sus',    'm7sus4',   ''),
     ('dim',      'dim7',     'A dim7, not a triad!'),
     (chr(176),   'dim7',     'A dim7 using a degree symbol'),
     (chr(176)+'3', 'mb5',   'A dim3 (triad) using a degree symbol'),
@@ -497,14 +512,14 @@ aliases = (
     ('9-5',      '9b5',      ''),
     ('dim3',     'mb5',      'Diminished triad (non-standard notation).'),
     ('omit3(add9)','omit3add9', ''),
-    ('9sus4',    'sus9',     '')
+    ('9sus4',    'sus9',     ''),
+    ('7b9sus',   '7susb9',   '')
     )
 
-for a,b,d in aliases:
-    n=chordlist[b][0]
-    s=chordlist[b][1]
+for a, b, d in aliases:
+    n = chordlist[b][0]
+    s = chordlist[b][1]
     if not d:
-        d=chordlist[b][2]
+        d = chordlist[b][2]
 
     chordlist[a] = (n, s, d)
-

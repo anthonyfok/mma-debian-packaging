@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html638"
+<A NAME="tex2html672"
   HREF="node16.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html636"
+<A NAME="tex2html670"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html630"
+<A NAME="tex2html664"
   HREF="node14.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html639"
+<B> Next:</B> <A NAME="tex2html673"
   HREF="node16.html">Ornament</A>
-<B> Up:</B> <A NAME="tex2html637"
+<B> Up:</B> <A NAME="tex2html671"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html631"
+<B> Previous:</B> <A NAME="tex2html665"
   HREF="node14.html">Chord Voicing</A>
 <BR>
 <BR></DIV>
@@ -51,11 +51,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html640"
+<LI><A NAME="tex2html674"
   HREF="node15.html#SECTION001510000000000000000">Harmony</A>
-<LI><A NAME="tex2html641"
+<LI><A NAME="tex2html675"
   HREF="node15.html#SECTION001520000000000000000">HarmonyOnly</A>
-<LI><A NAME="tex2html642"
+<LI><A NAME="tex2html676"
   HREF="node15.html#SECTION001530000000000000000">HarmonyVolume</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -83,7 +83,7 @@ creator when it comes to harmonies, don't be fooled.
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 's ideas of
 harmony are quite facile. It determines harmony notes by finding a
 note lower or higher than the current note being sounded within the
-current chord. And its notion of &#8220;open&#8221; is certainly not that of
+current chord. And its notion of ``open'' is certainly not that of
 traditional music theory. But, the sound isn't too bad.
 
 <P>
@@ -111,7 +111,10 @@ You can set a different harmony method for each bar in your sequence.
 <P>
 The following are valid harmony methods:
 
-<P><DL>
+<P>
+<DL COMPACT>
+<DT></DT>
+<DD><DL>
 <DT><STRONG>2 or 2Below</STRONG></DT>
 <DD>Two part harmony. The harmony note
     selected is lower (on the scale).
@@ -125,13 +128,13 @@ The following are valid harmony methods:
 <P>
 </DD>
 <DT><STRONG>2Above</STRONG></DT>
-<DD>The same as &#8220;2&#8221;, but the harmony note is raised an
+<DD>The same as ``2'', but the harmony note is raised an
     octave.
 
 <P>
 </DD>
 <DT><STRONG>28Above</STRONG></DT>
-<DD>The same as &#8220;2Above&#8221;, but the harmony note is raised by
+<DD>The same as ``2Above'', but the harmony note is raised by
     two octaves.
 
 <P>
@@ -143,43 +146,43 @@ The following are valid harmony methods:
 <P>
 </DD>
 <DT><STRONG>3Above</STRONG></DT>
-<DD>The same as &#8220;3&#8221;, but both notes are raised an
+<DD>The same as ``3'', but both notes are raised an
     octave.
 
 <P>
 </DD>
 <DT><STRONG>38Above</STRONG></DT>
-<DD>Same as &#8220;3&#8221;, but the two harmony notes are raised
+<DD>Same as ``3'', but the two harmony notes are raised
     by two octaves.
 
 <P>
 </DD>
 <DT><STRONG>38Below</STRONG></DT>
-<DD>Same as &#8220;3&#8221;, but the two harmomy notes are lowered
+<DD>Same as ``3'', but the two harmomy notes are lowered
     by two octaves.
 
 <P>
 </DD>
 <DT><STRONG>Open or OpenBelow</STRONG></DT>
 <DD>Two part harmony, however the gap
-    between the two notes is larger than in &#8220;2&#8221;.
+    between the two notes is larger than in ``2''.
 
 <P>
 </DD>
 <DT><STRONG>Open8Below</STRONG></DT>
-<DD>Same as &#8220;OpenBelow&#8221;, but the harmony note is lowered by
+<DD>Same as ``OpenBelow'', but the harmony note is lowered by
     an additional octave.
 
 <P>
 </DD>
 <DT><STRONG>OpenAbove</STRONG></DT>
-<DD>Same as &#8220;Open&#8221;, but the added note is above the
+<DD>Same as ``Open'', but the added note is above the
     original.
 
 <P>
 </DD>
 <DT><STRONG>Open8Above</STRONG></DT>
-<DD>Same as &#8220;OpenAbove&#8221;, but the added note is
+<DD>Same as ``OpenAbove'', but the added note is
     raised by an additional octave.
 
 <P>
@@ -217,14 +220,19 @@ The following are valid harmony methods:
 <P>
 </DD>
 </DL>
+</DD>
+</DL>
 
 <P>
-You can combine any of the above harmony modes by using a &#8220;+&#8221;. For
+You can combine any of the above harmony modes by using a ``+''. For
 example:
 
-<P><DL>
+<P>
+<DL COMPACT>
+<DT></DT>
+<DD><DL>
 <DT><STRONG>OPEN+8Below</STRONG></DT>
-<DD>will produce harmony notes with an &#8220;Open&#8221;
+<DD>will produce harmony notes with an ``Open''
     harmony and a note an octave below the current note.
 
 <P>
@@ -242,6 +250,8 @@ example:
 <P>
 </DD>
 </DL>
+</DD>
+</DL>
 
 <P>
 There is no limit to the number of modes you can concatenate. Any
@@ -251,7 +261,7 @@ duplicate notes generated will be ignored.
 All harmonies are created using the current chord.
 
 <P>
-To disable harmony use a &#8220;0&#8221;, &#8220;-&#8221; or &#8220;None&#8221;.
+To disable harmony use a ``0'', ``-'' or ``None''.
 
 <P>
 Be careful in using harmonies. They can make your song sound heavy,
@@ -274,7 +284,7 @@ the previous section, it is possible to set a track so that it
 <SPAN  CLASS="textit">only</SPAN> plays the harmony notes. For example, you might want to
 set up two arpeggio tracks with one playing quarter notes on a piano
 and a harmony track playing half notes on a violin. The following
-snippet is extracted from the song file &#8220;Cry Me A River&#8221; and sets up
+snippet is extracted from the song file ``Cry Me A River'' and sets up
 2 different choir voices:
 
 <P>
@@ -311,8 +321,7 @@ End   </B>
 <P>
 Just like the H<SMALL>ARMONY</SMALL> command, above, you can have different
 settings for each bar in your sequence. Setting a bar (or the entire
-sequence) to '`-&#8221; or &#8220;0&#8221; disables both the H<SMALL>ARMONY</SMALL> and
-H<SMALL>ARMONY</SMALL>O<SMALL>NLY</SMALL> settings.
+sequence) to ``-'', ``None'' or ``0'' disables the H<SMALL>ARMONY</SMALL>O<SMALL>NLY</SMALL> settings.
 
 <P>
 The command has no effect in D<SMALL>RUM</SMALL> or C<SMALL>HORD</SMALL> tracks.
@@ -352,34 +361,34 @@ End   </B>
 
 <P>
 You can specify different values for each bar in the sequence. The
-values are percentages and must be greater than 0 (large values works
+values are percentages and must be greater than 0 (large values work
 just fine if you want the harmony louder than the original).  The
-command has no effect in D<SMALL>RUM</SMALL> or C<SMALL>HORD</SMALL> tracks.
+command has no effect in D<SMALL>RUM</SMALL> or P<SMALL>LECTRUM</SMALL> tracks.
 
 <P>
 
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html638"
+<A NAME="tex2html672"
   HREF="node16.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html636"
+<A NAME="tex2html670"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html630"
+<A NAME="tex2html664"
   HREF="node14.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html639"
+<B> Next:</B> <A NAME="tex2html673"
   HREF="node16.html">Ornament</A>
-<B> Up:</B> <A NAME="tex2html637"
+<B> Up:</B> <A NAME="tex2html671"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html631"
+<B> Previous:</B> <A NAME="tex2html665"
   HREF="node14.html">Chord Voicing</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2012-01-01
+2015-01-27
 </ADDRESS>
 </BODY>
 </HTML>

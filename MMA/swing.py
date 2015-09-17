@@ -1,4 +1,3 @@
-
 # swing.py
 
 """
@@ -24,31 +23,33 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-import gbl
-from   MMA.common import *
+from . import gbl
+from MMA.common import *
 
 from MMA.notelen import noteLenTable
 
-
-mode   =  0      # defaults to 0, set to 1 for swing mode
-skew   =  None   # this is just for $_SwingMode macro
+mode = 0      # defaults to 0, set to 1 for swing mode
+skew = None   # this is just for $_SwingMode macro
 accent1 = 1      # velocity % adjustments for 1st/2nd notes of swing pattern
 accent2 = 1
-delay1  = 0      # value, in ticks, for additional delay
-delay2  = 0
+delay1 = 0      # value, in ticks, for additional delay
+delay2 = 0
 noteValue = 8    # this can be 8 or 16 for 8th swing or 16th swing
 
 # These 2 funcs are called by the groove save/restore funcs. They
 # are used just to make the groove code a bit more readable.
 
+
 def gsettings():
     return (mode, skew, accent1, accent2, delay1, delay2, noteLenTable['81'], noteLenTable['82'], noteValue)
+
 
 def grestore(s):
     global mode, skew, accent1, accent2, delay1, delay2, noteValue
 
     mode, skew, accent1, accent2, delay1, delay2, \
-       noteLenTable['81'], noteLenTable['82'], noteValue = s
+        noteLenTable['81'], noteLenTable['82'], noteValue = s
+
 
 def swingMode(ln):
     """ Enable/Disable Swing timing mode. """
@@ -77,32 +78,32 @@ def swingMode(ln):
     for v, o in opts:
         if v == 'SKEW':
             skew = o
-            a = int( stoi(o) * gbl.BperQ / 100)
+            a = int(stoi(o) * gbl.BperQ / 100)
             noteLenTable['81'] = a
             noteLenTable['82'] = gbl.BperQ - a
 
         elif v == 'ACCENT':
             if o.count(',') != 1:
                 error("Swingmode: ACCENT expecting comma separated values, not '%s'." % o)
-            a1,a2 = o.split(',')
+            a1, a2 = o.split(',')
             a1 = stoi(a1)
             a2 = stoi(a2)
             if a1 < 1 or a1 > 200 or a2 < 1 or a2 > 200:
-                error("Swingmode: Both ACCENT values must be 1..200, not %s,%s." \
-                   % (a1, a2)) 
+                error("Swingmode: Both ACCENT values must be 1..200, not %s,%s."
+                      % (a1, a2))
 
-            accent1 = a1/100.
-            accent2 = a2/100.
+            accent1 = a1 / 100.
+            accent2 = a2 / 100.
 
         elif v == 'DELAY':
             if o.count(',') != 1:
                 error("Swingmode: DELAY expecting comma separated values, not '%s'." % o)
-            a1,a2 = o.split(',')
+            a1, a2 = o.split(',')
             a1 = stoi(a1)
             a2 = stoi(a2)
             if a1 < -20 or a1 > 20 or a2 < -20 or a2 > 20:
-                error("Swingmode: Both DELAY values must be -20..20, not %s,%s." \
-                   % (a1, a2)) 
+                error("Swingmode: Both DELAY values must be -20..20, not %s,%s."
+                      % (a1, a2))
 
             delay1 = a1
             delay2 = a2
@@ -110,7 +111,7 @@ def swingMode(ln):
         elif v == 'NOTES':
             o = stoi(o)
 
-            if o not in (8,16):
+            if o not in (8, 16):
                 error("Swingmode: NOTES expecting 8 or 16, not '%s'." % o)
 
             noteValue = o
@@ -119,10 +120,11 @@ def swingMode(ln):
             error(emsg)
 
     if gbl.debug:
-        print "SwingMode: Status=%s; Accent=%s,%s; Delay=%s,%s; Skew Note lengths: " \
-                  "%s and %s ticks. Notes=%s" % \
-                  (mode, int(accent1*100), int(accent2*100), delay1, delay2,
-                   noteLenTable['81'], noteLenTable['82'], noteValue)
+        print("SwingMode: Status=%s; Accent=%s,%s; Delay=%s,%s; Skew Note lengths: " 
+            "%s and %s ticks. Notes=%s" % 
+            (mode, int(accent1 * 100), int(accent2 * 100), delay1, delay2,
+             noteLenTable['81'], noteLenTable['82'], noteValue))
+
 
 def settings():
     """ Return string of current settings. For macros. """
@@ -133,7 +135,7 @@ def settings():
         a = "Off"
 
     return "%s Accent=%s,%s Delay=%s,%s Skew=%s Notes=%s" % \
-        (a, int(accent1*100), int(accent2*100), delay1, delay2, skew, noteValue)
+        (a, int(accent1 * 100), int(accent2 * 100), delay1, delay2, skew, noteValue)
 
 
 def getBeats():
@@ -155,8 +157,8 @@ def getBeats():
         rng *= 2
         cnt /= 2
 
-    onBeats  = [ x * cnt for x in range(rng)]
-    offBeats = [ (x * cnt + len8) for x in range(rng)]
+    onBeats = [x * cnt for x in range(rng)]
+    offBeats = [(x * cnt + len8) for x in range(rng)]
 
     return (len8, len81, len82, onBeats, offBeats)
 
@@ -166,15 +168,14 @@ def pattern(plist, vtype):
 
     len8, len81, len82, onBeats, offBeats = getBeats()
 
-
     for p in plist:
-        if p.duration == len8 or ( vtype=="DRUM" and p.duration==1 ):
+        if p.duration == len8 or (vtype == "DRUM" and p.duration == 1):
             if p.offset in onBeats:
                 if p.duration == len8:
                     p.duration = len81
                     adj = accent1
-                    if type(p.vol) == type([]):
-                        p.vol = [ x * adj for x in p.vol]
+                    if isinstance(p.vol, list):
+                        p.vol = [x * adj for x in p.vol]
                     else:
                         p.vol *= adj
                     p.offset += delay1
@@ -183,19 +184,20 @@ def pattern(plist, vtype):
                 if p.duration == len8:
                     p.duration = len82
                     adj = accent2
-                    if type(p.vol) == type([]):
-                        p.vol = [ x * adj for x in p.vol]
+                    if isinstance(p.vol, list):
+                        p.vol = [x * adj for x in p.vol]
                     else:
                         p.vol *= adj
-                i=offBeats.index(p.offset)
+                i = offBeats.index(p.offset)
                 p.offset = onBeats[i] + len81 + delay2
 
     return plist
 
+
 def swingSolo(notes):
     """ Adjust an entire bar of solo note chords for swingmode.
 
-        Check each chord in the array of chords for a bar for 
+        Check each chord in the array of chords for a bar for
         successive 8ths on & off the beat. If found, the first is
         converted to 'long' 8th, the 2nd to a 'short'
         and the offset for the 2nd is adjusted to comp. for the 'long'.
@@ -207,21 +209,21 @@ def swingSolo(notes):
     """
 
     len8, len81, len82, onBeats, offBeats = getBeats()
- 
+
     nl = sorted(notes)   # list of offsets
 
-    for i in range(len(nl)-1):
+    for i in range(len(nl) - 1):
 
         # Check for successive note event offsets on 8th note positions
- 
-        if nl[i] in onBeats and nl[i+1] == nl[i]+len8:
+
+        if nl[i] in onBeats and nl[i + 1] == nl[i] + len8:
             beat0 = nl[i]
-            beat1 = nl[i+1]
- 
+            beat1 = nl[i + 1]
+
             # check that all notes are 8ths by comparing a set of all
             # the durations in both offsets with set([len8])
 
-            if set([nev.duration for nev in notes[beat0]+notes[beat1] ]) == set([len8]):
+            if set([nev.duration for nev in notes[beat0] + notes[beat1]]) == set([len8]):
 
                 # lengthen notes on-the-beat
 
@@ -234,7 +236,7 @@ def swingSolo(notes):
                 # the whole array by the correct value.
 
                 if delay1:
-                    notes[beat0+delay1]=notes[beat0]
+                    notes[beat0 + delay1] = notes[beat0]
                     del notes[beat0]
 
                 # shorten notes off-the-beat
@@ -246,17 +248,15 @@ def swingSolo(notes):
 
                 # move notes off-the-beat to the proper offset.
                 src = beat1
-                dest = beat0+len81+delay2
+                dest = beat0 + len81 + delay2
                 if src != dest:
                     notes[dest] = notes[src]
                     del notes[src]
-                    
+
     return notes
 
 
 # This forces our skew value default and in the process
 # it sets the durations for the 81/82 notes
 
-swingMode(['Skew=66'])    
-
-
+swingMode(['Skew=66'])

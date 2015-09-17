@@ -129,6 +129,21 @@ DefGroove BluesTripleL  Same as BluesTriple with triplets on beats 1 and 2.
 Chord-Sus Groove BluesSus
 DefGroove BluesTripleLSus  Same as BluesTripleSus with triplets on beats 1 and 2.
 
+/// Right side triplet
+
+Groove Blues
+
+Begin Chord
+	Sequence  {1 4 90; 2 4 90; 3 3 90; 3.33 3 80; 3.66 3 80; 4 8 90; 4.33 3 80; 4.66 3 80}
+	Octave 5
+End
+
+DefGroove BluesTripleR  Same as BluesTriple with triplets on beats 3 and 4.
+
+
+Chord-Sus Groove BluesSus
+DefGroove BluesTripleRSus  Same as BluesTripleSus with triplets on beats 3 and 4.
+
 //////////////////////////////////////
 // Alternate with piano
 
@@ -137,6 +152,7 @@ Groove Blues
 Begin Arpeggio
 	Voice $_Chord_Voice
 	Volume mf
+    Octave 4
 	Articulate 80
 	RSkip 40
 	Sequence Swing8

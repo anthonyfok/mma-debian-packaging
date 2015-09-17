@@ -26,7 +26,7 @@ This module contains functions for setting various path variables.
 
 import os
 
-import gbl
+from . import gbl
 from MMA.common import *
 import MMA.auto
 import MMA.grooves
@@ -34,96 +34,222 @@ import MMA.exits
 
 outfile = ''
 
-##################################
-# These routines set various filepaths in gbl
+libPath = []
+libDirs = []
+incPath = []
 
+mmaStart = []
+mmaEnd   = []
+mmaRC    = None
+
+def init():
+    """ Called from main. In mma.py we checked for known directories and
+        inserted the first found 'mma' directory into the sys.path list and
+        set MMAdir. Now, set the lib/inc lists.
+    """
+
+    setLibPath([os.path.join(gbl.MMAdir, 'lib')], user=0)
+    if not libPath or not os.path.isdir(libPath[0]):
+        print("Warning: Library directory not found (check mma.py).")
+
+    setIncPath([os.path.join(gbl.MMAdir, 'includes')])
+    if not incPath or not os.path.isdir(incPath[0]):
+        print("Warning: Include directory not found.")
+
+
+##################################
+# Set up the mma start/end paths
 
 def mmastart(ln):
     """ Set/append to the mmastart list. """
 
     if not ln:
-        error ("Use: MMAstart FILE [file...]")
+        error("Use: MMAstart FILE [file...]")
 
     for a in ln:
         gbl.mmaStart.append(MMA.file.fixfname(a))
 
     if gbl.debug:
-        print "MMAstart set to:",
-        for a in gbl.mmaStart:
-            print "'%s'" % a,
-        print
-
+        print("MMAstart set to: %s" % gbl.mmaStart)
 
 def mmaend(ln):
     """ Set/append to the mmaend list. """
 
     if not ln:
-        error ("Use: MMAend FILE [file...]")
+        error("Use: MMAend FILE [file...]")
 
     for a in ln:
         gbl.mmaEnd.append(MMA.file.fixfname(a))
 
     if gbl.debug:
-        print "MMAend set to:",
-        for a in gbl.mmaEnd:
-            print "'%s'" % a,
-        print
+        print("MMAend set to: %s" % gbl.mmaEnd)
+
+def setRC(f):
+    """ Set a rc file from the command line."""
+    
+    global mmaRC
+
+    mmaRC = f
+
+######################################
+# process the RC, mmastart and mmaend files. Called from main.py
+
+def readRC():
+    """ Process all RC files. """
+
+    docOption = gbl.createDocs   # Disable doc printing for RC file
+    gbl.createDocs = 0
+
+    if mmaRC:
+        rcfiles = [mmaRC]
+    else:
+        rcfiles = ('mmarc', 'c:\\mma\\mmarc', '~/.mmarc', '/usr/local/etc/mmarc', '/etc/mmarc')
+
+    readDone = 0
+    for i in rcfiles:
+        f = MMA.file.locFile(i, None)
+        if f:
+            if gbl.showrun:
+                print("Reading RC file '%s'" % f)
+            MMA.parse.parseFile(f)
+            readDone = 1
+            break
+        else:
+            if mmaRC:
+                error("Specified init file '%s' not found" % mmaRC)
+
+    if not readDone and gbl.debug:
+        gbl.lineno = -1
+        warning("No RC file was found or processed")
+
+    gbl.createDocs = docOption   # Restore doc options
 
 
-def setLibPath(ln):
+def dommaStart():
+    """ Process all the mma start files. """
+
+    for f in mmaStart:
+        fn = findIncFile(f)
+        if not fn:
+            warning("MmaStart file '%s' not found/processed" % f)
+        else:
+            MMA.parse.parseFile(fn)
+        gbl.lineno = -1   # reset for real code
+
+
+def dommaEnd():
+    """ Process all the mma end files."""
+
+    for f in mmaStart:
+        fn = findIncFile(f)
+        if not fn:
+            warning("MmaStart file '%s' not found/processed" % f)
+        else:
+            MMA.parse.parseFile(fn)
+        gbl.lineno = -1   # reset for real code
+
+
+#######################################
+# Search the paths for a file.
+
+
+def findIncFile(fn):
+    """ Find an INC file. Returns complete path or NULL."""
+
+    global incPath
+
+    for lib in incPath:
+        path = MMA.file.locFile(fn, lib)
+        if path:
+            return path
+
+    return None
+
+
+def findLibFile(fn):
+    """ Find a LIB file. Returns complete path or NULL."""
+
+    global libDirs
+
+    if not libDirs:
+        expandLib()
+
+    for lib in libDirs:
+        path = MMA.file.locFile(fn, lib)
+        if path:
+            return path
+
+    return None
+
+
+##############################################
+# Set up the lib/inc paths
+
+def setLibPath(ln, user=1):
     """ Set the LibPath variable.  """
 
-    if len(ln) > 1:
-        error("Only one path can be entered for LibPath")
+    global libPath, libDirs
+    libPath = []
+    libDirs = []
 
-    f = MMA.file.fixfname(ln[0])
-    gbl.libPath = f
+    for l in ln:
+        f = MMA.file.fixfname(l)
+        libPath.append(f)
+
+    expandLib(user)
+
+    if gbl.debug:
+        print("LibPath set: %s" % ' '.join(libPath))
+
+
+def expandLib(user=0):
+    """ Expand the library paths from the list in libdir. """
+
+    global libPath, libDirs
+
+    scount = 0
+
+    # Parse all the lib trees. Root trees are included into our list
+
+    libDirs = []
+    for f in libPath:
+        for root, dir, files in os.walk(f):
+            if root not in libDirs:
+                if os.path.basename(root) == 'stdlib':
+                    scount += 1
+                    if not user:  # system init, stdlib goes first
+                        libDirs.insert(0, root)
+                    else:
+                        libDirs.append(root)
+                    continue
+                libDirs.append(root)
+
+    if not scount and not user:
+        warning("Your library set does not have a 'stdlib'.")
 
     # forget about previously loaded mma lib databases
 
     MMA.auto.grooveDB = []
-    MMA.grooves.glist = {}
-    MMA.grooves.lastGroove = ''
-    MMA.grooves.currentGroove = ''
 
     if gbl.debug:
-        print "LibPath set to '%s'" % gbl.libPath
-
-
-def setAutoPath(ln):
-    """ Set the autoPath variable.    """
-
-    if not ln:
-        error("SetAutoLibPath: At least one filename is needed.")
-
-    gbl.autoLib = []
-    for l in ln:
-        gbl.autoLib.append( MMA.file.fixfname(l))
-
-    # delete previous auto groove list. We'll read again when needed.
-
-    MMA.auto.grooveDB = []
-        
-    # To avoid conflicts, delete all existing grooves (current seq not effected)
-
-    MMA.grooves.glist = {}
-    MMA.grooves.lastGroove = ''
-    MMA.grooves.currentGroove = ''
-    
-    if gbl.debug:
-        print "AutoLibPath set to '%s'" %  gbl.autoLib
+        print("LibPath expansion set to:", ' '.join(libDirs))
 
 
 def setIncPath(ln):
     """ Set the IncPath variable.  """
 
-    if len(ln)>1:
-        error("Only one path is permitted in SetIncPath")
+    global incPath
+    incPath = []
 
-    gbl.incPath = MMA.file.fixfname(ln[0])
+    for l in ln:
+        f = MMA.file.fixfname(l)
+        incPath.append(f)
 
     if gbl.debug:
-        print "IncPath set to '%s'" %  gbl.incPath
+        print("IncPath set: %s" % ' '.join(incPath))
+
+###########################################
+# Output pathname
 
 
 def setOutPath(ln):
@@ -133,19 +259,18 @@ def setOutPath(ln):
         gbl.outPath = ""
 
     elif len(ln) > 1:
-        error ("Use: SetOutPath PATH")
+        error("Use: SetOutPath PATH")
 
     else:
         gbl.outPath = MMA.file.fixfname(ln[0])
 
     if gbl.debug:
-        print "OutPath set to '%s'" % gbl.outPath
-
+        print("OutPath set to '%s'" % gbl.outPath)
 
 
 def createOutfileName(extension):
-   """ Create the output filename.
-    
+    """ Create the output filename.
+
        Called from the mainline, below and from lyrics karmode.
 
        If outfile was specified on cmd line then leave it alone.
@@ -153,23 +278,23 @@ def createOutfileName(extension):
          1. strip off the extension if it is .mma,
          2. append .mid
    """
-   
-   global outfile
 
-   if gbl.playFile and gbl.outfile:
-       error("You cannot use the -f option with -P")
+    global outfile
 
-   if gbl.outfile:
-       outfile = gbl.outfile
+    if gbl.playFile and gbl.outfile:
+        error("You cannot use the -f option with -P")
 
-   elif gbl.playFile:
-       outfile = "MMAtmp%s.mid" % os.getpid()
-       MMA.exits.files.append(outfile)
+    if gbl.outfile:
+        outfile = gbl.outfile
 
-   else:
-       outfile, ext = os.path.splitext(gbl.infile)
-       if ext != gbl.ext:
-           outfile=gbl.infile
-       outfile += extension
+    elif gbl.playFile:
+        outfile = "MMAtmp%s.mid" % os.getpid()
+        MMA.exits.files.append(outfile)
 
-   outfile=MMA.file.fixfname(outfile)
+    else:
+        outfile, ext = os.path.splitext(gbl.infile)
+        if ext != gbl.EXT:
+            outfile = gbl.infile
+        outfile += extension
+
+    outfile = MMA.file.fixfname(outfile)

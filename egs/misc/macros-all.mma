@@ -30,7 +30,6 @@ Print LastDebug:     $_LastDebug
 Print VExpand:       $_Vexpand
 Print MIDISplit:     $_MIDISplit
 Print SeqRndWeight:  $_SeqRndWeight
-Print AutoLibPath:   $_AutoLibPath
 Print LibPath:       $_LibPath
 Print IncPath:       $_IncPath
 Print VoiceTr:       $_VoiceTr

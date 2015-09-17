@@ -1,4 +1,3 @@
-
 # patArpeggio.py
 
 """
@@ -25,22 +24,22 @@ Bob van der Poel <bob@mellowood.ca>
 
 import random
 
-import MMA.notelen 
+import MMA.notelen
 import MMA.harmony
 
-import gbl
-from   MMA.common import *
-from   MMA.pat import PC
+from . import gbl
+from MMA.common import *
+from MMA.pat import PC, Pgroup
+
 
 class Arpeggio(PC):
     """ Pattern class for an arpeggio track. """
 
-    vtype         = 'ARPEGGIO'
-    arpOffset     = -1
-    arpDirection  = 1
-    lastRange     = 999
+    vtype = 'ARPEGGIO'
+    arpOffset = -1
+    arpDirection = 1
+    lastRange = 999
     lastDirection = 999
-    
 
     def getPgroup(self, ev):
         """ Get group for apreggio pattern.
@@ -48,23 +47,22 @@ class Arpeggio(PC):
             Fields - start, length, volume
         """
 
-        a = struct()
+        a = Pgroup()
         if len(ev) != 3:
             error("There must be exactly 3 items in each group "
-                  "for apreggio define, not '%s'" % ' '.join(ev) )
+                  "for apreggio define, not '%s'" % ' '.join(ev))
 
-        a.offset    = self.setBarOffset(ev[0])
-        a.duration  = MMA.notelen.getNoteLen(ev[1])
-        a.vol       = stoi(ev[2], "Type error in Arpeggio definition")
+        a.offset = self.setBarOffset(ev[0])
+        a.duration = MMA.notelen.getNoteLen(ev[1])
+        a.vol = stoi(ev[2], "Type error in Arpeggio definition")
 
         return a
 
-
     def restart(self):
         self.ssvoice = -1
-        self.arpOffset=-1
-        self.arpDirection=1
-        lastRange     = 999
+        self.arpOffset = -1
+        self.arpDirection = 1
+        lastRange = 999
         lastDirection = 999
 
     def trackBar(self, pattern, ctable):
@@ -78,14 +76,14 @@ class Arpeggio(PC):
 
         direct = self.direction[sc]
         if direct != self.lastDirection:
-            self.arpOffset=-1
-            self.arpDirection=1
+            self.arpOffset = -1
+            self.arpDirection = 1
             self.lastDirection = direct
 
         range = self.chordRange[sc]
         if range != self.lastRange:
-            self.arpOffset=-1
-            self.arpDirection=1
+            self.arpOffset = -1
+            self.arpDirection = 1
             self.lastRange = range
 
         for p in pattern:
@@ -116,23 +114,23 @@ class Arpeggio(PC):
             ourChord = []
             while ln >= 1:
                 for a in tb.chord.noteList:
-                    ourChord.append(a+o)
+                    ourChord.append(a + o)
                 ln -= 1
                 o += 12
 
             if ln > 0 and ln < 1:      # for fractional  lengths
                 ln = int(tb.chord.noteListLen * ln)
                 if ln < 2:   # important, min of 2 notes in arp.
-                    ln=2
+                    ln = 2
                 for a in tb.chord.noteList[:ln]:
-                    ourChord.append(a+o)
+                    ourChord.append(a + o)
 
             if direct == 'BOTH':
                 if self.arpOffset < 0:
                     self.arpOffset = 1
                     self.arpDirection = 1
                 elif self.arpOffset >= len(ourChord):
-                    self.arpOffset = len(ourChord)-2
+                    self.arpOffset = len(ourChord) - 2
                     self.arpDirection = -1
 
             elif direct == 'UP':
@@ -142,36 +140,34 @@ class Arpeggio(PC):
 
             elif direct == 'DOWN':
                 if self.arpOffset < 0 or self.arpOffset >= len(ourChord):
-                    self.arpOffset = len(ourChord)-1
+                    self.arpOffset = len(ourChord) - 1
                     self.arpDirection = -1
 
             if direct == 'RANDOM':
-                note  = random.choice(ourChord)
+                note = random.choice(ourChord)
             else:
                 note = ourChord[self.arpOffset]
 
             self.arpOffset += self.arpDirection
-            
-            
+
             if not self.harmonyOnly[sc]:
                 notelist = [(note, p.vol)]
             else:
                 notelist = []
 
             if self.harmony[sc]:
-                h =  MMA.harmony.harmonize(self.harmony[sc], note, ourChord)
+                h = MMA.harmony.harmonize(self.harmony[sc], note, ourChord)
                 vol = p.vol * self.harmonyVolume[sc]
-                harmlist = zip(h, [vol] * len(h))
+                harmlist = list(zip(h, [vol] * len(h)))
             else:
                 harmlist = []
 
+            offset = p.offset
             if self.ornaments['type']:
-                MMA.ornament.doOrnament(self, notelist, 
-                         self.getChordInPos(p.offset, ctable).chord.scaleList, p)
+                offset = MMA.ornament.doOrnament(self, notelist,
+                                        self.getChordInPos(offset, ctable).chord.scaleList, p)
                 notelist = []
 
-            self.sendChord( notelist+harmlist, p.duration, p.offset)
-                
+            self.sendChord(notelist + harmlist, p.duration,offset)
+
             tb.chord.reset()    # important, other tracks chord object
-
-

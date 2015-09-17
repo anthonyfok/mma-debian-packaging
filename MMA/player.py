@@ -1,4 +1,3 @@
-
 # player.py
 
 """
@@ -28,14 +27,16 @@ import subprocess
 import re
 
 from MMA.common import *
-import MMA.gbl
+from . import gbl
+import MMA.file
 
-# Just in case the player is NOT set in mma.py we wrap the import
-# in a try/except. Set it to '' if the import fails.
-try:
-    from __main__ import midiPlayer
-except:
-    midiPlayer = ['']
+# Initialize the default midi player.
+if gbl.platform == 'Windows':
+    midiPlayer = ['']   # must be a list!
+elif gbl.platform == 'Darwin':
+    midiPlayer = ['open']   # must be a list!
+else:
+    midiPlayer = ["aplaymidi"] # Must be a list!
 
 # We run in background in windows, foreground in linux
 if gbl.platform == 'Windows':
@@ -45,43 +46,45 @@ else:
 
 waitTime = 5  # default time to wait after forking in background
 
+
 def setMidiPlayer(ln):
     """ Set the MIDI file player (used with -P and -V). """
 
     global midiPlayer, waitTime, inBackGround
-    
+
     if not ln:
         ln = ['']
-    
+
     n = []
     for l in ln:   # parse out optional args
         if '=' in l and l[0].isalpha():
-            a,b = l.upper().split('=', 1)
+            a, b = l.upper().split('=', 1)
             if a == 'DELAY':
                 b = stof(b, "SetMidiPlayer: Delay must be value, not '%s'." % b)
                 waitTime = b
 
             elif a == "BACKGROUND":
-                if b in ('1','YES'):
+                if b in ('1', 'YES'):
                     inBackGround = 1
                 elif b in ('0', 'NO'):
                     inBackGround = 0
                 else:
                     error("SetMidiPlayer: Background must be 'yes'"
-                              "or 'no', not '%s'." % b)
-            
-            else: error("SetMidiPlayer: unknown option '%s'." % a)
-        
+                          "or 'no', not '%s'." % b)
+
+            else:
+                error("SetMidiPlayer: unknown option '%s'." % a)
+
         else:
             n.append(MMA.file.fixfname(l))
 
     if not n:
-        n=['']
+        n = ['']
     midiPlayer = n
 
     if gbl.debug:
-        print "MidiPlayer set to '%s' Background=%s Delay=%s." % \
-            (' '.join(midiPlayer), inBackGround, waitTime)
+        print("MidiPlayer set to '%s' Background=%s Delay=%s." %
+            (' '.join(midiPlayer), inBackGround, waitTime))
 
 
 def playMidi(file):
@@ -92,44 +95,41 @@ def playMidi(file):
 
     if not pl and gbl.platform != "Windows":
         error("No MIDI file player defined, temp files will be deleted.")
-        
-   
+
     if not pl:
         m = "default windows MIDI player"
     else:
         m = pl
-    print "Playing MIDI '%s' with %s." % (file, m)
+    print("Playing MIDI '%s' with %s." % (file, m))
 
     if gbl.platform == "Windows":
-         sh = True
+        sh = True
     else:
-       sh = False
- 
+        sh = False
+
     cmd = [pl]
     if opts:
-        cmd.append(' '.join(opts))
+    #    cmd.append(' '.join(opts))  # puts all opts into one string, not right??
+        cmd.extend(opts)
     cmd.append(file)
 
-    t=time.time()
+    t = time.time()
 
     # fork our player.
     try:
         pid = subprocess.Popen(cmd, shell=sh)
-    except OSError, e:
-        print  e
+    except OSError as e:
+        print(e)
         msg = "MidiPlayer fork error."
         if re.search("[\'\"]", ''.join(cmd)):
             msg += " Using quotes in the MidiPlayer name/opts might be your problem."
         error(msg)
 
-
     if inBackGround:    # if the background option set, do a sleep
-        print "Play in progress ... file will be deleted."        
+        print("Play in progress ... file will be deleted.")
         time.sleep(waitTime)
-    
+
     else:   # foreground player ... wait for process to finish
         pid.wait()
-        print "Play complete (%.2f min), file has been deleted." \
-            % ((time.time()-t)/60)
-
-
+        print("Play complete (%.2f min), MIDI file has been deleted." 
+            % ((time.time() - t) / 60))

@@ -1,4 +1,3 @@
-
 # file.py
 
 """
@@ -25,12 +24,14 @@ Bob van der Poel <bob@mellowood.ca>
 
 import sys
 import os
-
-import gbl
+from . import gbl
 from   MMA.common import *
 
+PY3 = sys.version_info[0] == 3
+
+
 def fixfname(f):
-    """ Convert embedded space characters in filename to real spaces. 
+    """ Convert embedded space characters in filename to real spaces.
 
         Originally this was done with .decode("string-escape") but that
         doesn't work with windows path names. So, now we just replace
@@ -39,6 +40,7 @@ def fixfname(f):
 
     f = f.replace('\\x20', ' ')
     return os.path.expanduser(f)
+
 
 def locFile(name, lib):
     """ Locate a filename.
@@ -50,24 +52,24 @@ def locFile(name, lib):
           name
     """
 
-    ext=gbl.ext
+    ext = gbl.EXT
     exists = os.path.exists
 
-    name=fixfname(name)  # for ~ expansion only
-
+    name = fixfname(name)  # for ~ expansion only
+    
     if lib:
         if not name.endswith(ext):
-            t=os.path.join(lib, name + ext)
+            t = os.path.join(lib, name + ext)
             if exists(t):
                 return t
-        t=os.path.join(lib, name)
+        t = os.path.join(lib, name)
         if exists(t):
             return t
-    
+
     if not name.endswith(ext):
         t = name + ext
         if exists(t):
-            return    t
+            return t
 
     if exists(name):
         return name
@@ -88,30 +90,35 @@ class ReadFile:
         """
 
         def __init__(self, lnum, data, label):
-            self.lnum=lnum
-            self.data=data
-            self.label=label
-
+            self.lnum = lnum
+            self.data = data
+            self.label = label
 
     def __init__(self, fname):
 
-        self.fdata=fdata=[]
+        self.fdata = fdata = []
         self.lastline = None
         self.lineptr = None
         self.fname = None
 
-        self.que    = []     # que for pushed lines (mainly for REPEAT)
-        self.qnums  = []
+        self.que = []     # que for pushed lines (mainly for REPEAT)
+        self.qnums = []
 
-        dataStore = self.FileData # shortcut to avoid '.'s
+        dataStore = self.FileData  # shortcut to avoid '.'s
 
-        try:
-            inpath = file(fname, 'r')
-        except:
-            error("Unable to open '%s' for input" % fname)
-
+        if fname == 1:
+            inpath = sys.stdin
+        else:
+            try:
+                if PY3:
+                    inpath = open(fname, 'r', encoding='cp1252')
+                else:
+                    inpath = open(fname, 'r')
+            except IOError:
+                error("Unable to open '%s' for input" % fname)
+ 
         if gbl.debug or gbl.showFilenames:
-            print "Opening file '%s'." % fname
+            print("Opening file '%s'." % fname)
 
         self.fname = fname
 
@@ -122,47 +129,68 @@ class ReadFile:
              - create line numbers
         """
 
-        lcount=0
-        label=''
-        labs=[]        # track label defs, error if duplicate in same file
-        nlabs=[]    # track linenumber label defs
+        lcount = 0
+        label = ''
+        labs = []     # track label defs, error if duplicate in same file
+        nlabs = []    # track linenumber label defs
+        inComment = False  # multiline comment flag
 
         while 1:
             l = inpath.readline()
 
             if not l:        # EOF
+                if inComment:
+                    error("Multiline comment (/* */) not terminated.")
                 break
 
-            l= l.strip()
+            l = l.strip()
             lcount += 1
 
             if not l:
                 continue
 
-            # join lines ending in '\' (the strip() makes this the last char
-          
+            # join lines ending in '\' - the strip() makes this the last char
+
             while l[-1] == '\\':
                 l = l[0:-1] + ' ' + inpath.readline().strip()
-                lcount +=1
+                lcount += 1
 
             """ input cleanup ... for now the only cleanup is to convert
                 0xa0 (non-breakable space) to 0x20 (regular space).
             """
 
-            l=l.replace('\xa0', '\x20')
-            
-            """ This next line splits the line at the first found
-                comment '//', drops the comment, and splits the
-                remaining line into tokens using whitespace delimiters.
+            l = l.replace('\xa0', '\x20')
+
+            # multiline comments
+            if inComment:
+                if "/*" in l:
+                    warning ("Block comment start '/*' found inside comment.")
+                if "*/" in l:
+                    _, _, l = l.partition("*/")
+                    inComment = False
+                else:
+                    continue
+
+            l = l.split('//', 1)[0]  # Strip off line comment
+
+            while "/*" in l:
+                if "*/" in l:
+                    t1, _, t2 = l.partition("/*")
+                    t3, _, t4 = t2.partition("*/")
+                    l = t1 + t4
+                else:
+                    l = l.split("/*")[0]
+                    inComment = True
+
+            """ Splits the remaining line into tokens using whitespace delimiters.
                 Note that split() will strip off trailing and leading
                 spaces, so a strip() is not needed here.
             """
 
-            l = l.split('//',1)[0].split()
+            l = l.split()
 
             if not l:
                 continue
-
 
             """ Parse out label lines. There are 2 different kinds of labels:
                 - LABEL XXX
@@ -170,7 +198,7 @@ class ReadFile:
                 - NNN
 
                 The first kind is treated as an exclusive. If a NNN label or previous
-                XXX duplicates, and error is generated.
+                XXX duplicates, an error is generated.
 
                 The LINE NUMBER type is not exclusive. If a duplicate NNN is found, the
                 last one is used.
@@ -181,12 +209,12 @@ class ReadFile:
                 with only a NNN.
             """
 
-            if l[0].upper()=='LABEL':
-                if len(l) !=2:
+            if l[0].upper() == 'LABEL':
+                if len(l) != 2:
                     gbl.lineno = lcount
                     error("Usage: LABEL <string>")
-                label=l[1].upper()
-                if label[0]=='$':
+                label = l[1].upper()
+                if label[0] == '$':
                     gbl.lineno = lcount
                     error("Variables are not permitted as labels")
                 if label in labs:
@@ -198,7 +226,7 @@ class ReadFile:
                 labs.append(label)
 
             elif l[0].isdigit():
-                label=l[0]
+                label = l[0]
 
                 if label in labs:
                     gbl.lineno = lcount
@@ -209,30 +237,26 @@ class ReadFile:
                 else:
                     for i, a in enumerate(fdata):
                         if a.label == label:
-                            fdata[i].label=''
+                            fdata[i].label = ''
 
             else:
                 label = None
 
-
             # Save the line, linenumber and (maybe) the label.
 
-            fdata.append( dataStore(lcount, l, label))
-
+            fdata.append(dataStore(lcount, l, label))
 
         inpath.close()
 
         self.lineptr = 0
         self.lastline = len(fdata)
 
-
     def toEof(self):
         """ Move pointer to End of File. """
 
-        self.lineptr=self.lastline+1
+        self.lineptr = self.lastline+1
         self.que = []
         self.qnums = []
-
 
     def goto(self, l):
         """ Do a goto jump.
@@ -253,15 +277,14 @@ class ReadFile:
             error("No label specified")
 
         if self.que:
-            self.que=[]
+            self.que = []
 
-        for i,a in enumerate(self.fdata):
+        for i, a in enumerate(self.fdata):
             if a.label == l:
-                self.lineptr=i
+                self.lineptr = i
                 return
 
         error("Label '%s' has not be set" % l)
-
 
     def push(self, q, nums):
         """ Push a list of lines back into the input stream.
@@ -277,8 +300,7 @@ class ReadFile:
 
         if not self.que:
             self.que = ['']
-            self.qnums=[gbl.lineno]
-
+            self.qnums = [gbl.lineno]
 
         q.reverse()
         self.que.extend(q)
@@ -307,13 +329,11 @@ class ReadFile:
                 return ln
 
             # Return the next line in the file.
-            if self.lineptr>=self.lastline:
-                return None        ####  EOF
+            if self.lineptr >= self.lastline:
+                return None  # EOF
 
-            ln=self.fdata[self.lineptr].data
+            ln = self.fdata[self.lineptr].data
             gbl.lineno = self.fdata[self.lineptr].lnum
-            self.lineptr +=1
+            self.lineptr += 1
 
             return ln
-
-

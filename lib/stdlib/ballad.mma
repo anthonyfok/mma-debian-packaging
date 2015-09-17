@@ -1,4 +1,3 @@
-
 // ballad
 
 Doc A rock ballad in 4.
@@ -174,7 +173,7 @@ Begin Chord-Harp
 	Rvolume 30 
 	Octave 4 5
 	SeqRnd On
-	Volume p	
+	Volume mp	
 End
 
 DefGroove Ballad1      Arpeggios replaced with block chords.
@@ -211,6 +210,39 @@ Arpeggio Sequence -
 
 DefGroove BalladFill    1 bar fill, good for endings.
 
+/////////////
+/// Plus versions, sort of a guitar solo thingie
+
+Groove Ballad
+
+Begin Arpeggio-Plus
+   Voice CleanGuitar
+   Octave 5
+   Articulate 120
+   Volume mf
+   Rtime 10
+   Rskip 40
+   Harmony 3Below
+   Rvolume 10
+   Range 2
+   Direction Random
+   Ornament Type=Grace Place=Below Bars=1,3 Beats=1,3 Duration=40 Pad=40 Rskip=40
+   Sequence  {1 4 90; 2 4 90; 3 4 90; 3.5 8 90; 4. 8 90 } {1.5 8 90; 2.5 8 90; 3 4 90; 4 4 90}
+End
+
+DefGroove BalladPlus   Ballad with a bit of solo guitar.
+
+Groove BalladSus
+Arpeggio-Plus Groove BalladPlus
+DefGroove BalladSusPlus   Ballad with strings and guitar solo.
+
+Groove Ballad1
+Arpeggio-Plus Groove BalladPlus
+DefGroove Ballad1Plus   Block chord ballad with guitar solo.
+
+Groove Ballad1Sus 
+Arpeggio-Plus Groove BalladPlus
+DefGroove Ballad1SusPlus   Block chord ballad with strings and guitar.
 
 ///////////////////
 /// 4 bar Intro

@@ -1,5 +1,5 @@
 
-// rhumba
+// jazzrhumba
 
 Begin Doc
 
@@ -111,7 +111,7 @@ End
 Begin Chord
 	Sequence	C134  C123 { C1; C34 Shift .5 }	{ C2; C34 Shift .5 } 
 	Accent 1 20 3 10
-	Voicing Mode=Optimal
+	Voicing Mode=Key
 	SeqRnd On
 	Rvolume 10
 	Voice Piano2
