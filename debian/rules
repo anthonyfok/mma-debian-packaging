@@ -1,21 +1,22 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+%:
+	dh $@ --with python2
+
+override_dh_clean:
+	dh_clean -X#
 
 override_dh_install:
-	dh_install
-	mkdir -p                debian/mma/usr/bin
-	cp mma.py               debian/mma/usr/bin/mma
-	cp util/mma-mnx.py      debian/mma/usr/bin/mma-mnx
-	cp util/mma-rm2std.py   debian/mma/usr/bin/mma-rm2std
-	cp util/mma-splitrec.py debian/mma/usr/bin/mma-splitrec
-	cp util/mup2mma.py      debian/mma/usr/bin/mup2mma
-	cp util/pg2mma.py       debian/mma/usr/bin/pg2mma
-	cp util/synthsplit.py   debian/mma/usr/bin/synthsplit
+	dh_install -X.mmaDB -X#
+
+override_dh_installdocs:
+	dh_installdocs -X# -XCOPYING
 
 override_dh_installchangelogs:
-	dh_installchangelogs text/CHANGES-1.7
+	dh_installchangelogs text/CHANGES-14
 
-%:
-	dh $@
+override_dh_installexamples:
+	dh_installexamples -X#
+
+#override_dh_python3:
+#	dh_python3 --shebang=/usr/bin/python3

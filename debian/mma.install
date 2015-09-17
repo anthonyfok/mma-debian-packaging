@@ -1,4 +1,10 @@
-mma-*    usr/bin
-lib      usr/share/mma
-includes usr/share/mma
-MMA/*.py usr/share/mma/MMA
+#!/usr/bin/dh-exec
+mma.py => usr/bin/mma
+mma-gb mma-libdoc mma-renum mma-splitrec usr/bin
+util/mma-mnx.py => usr/bin/mma-mnx
+util/mma-rm2std.py => usr/bin/mma-rm2std
+util/mma-splitrec.py => usr/bin/mma-splitrec
+util/mup2mma.py => usr/bin/mup2mma
+util/pg2mma.py => usr/bin/pg2mma
+util/synthsplit.py => usr/bin/synthsplit
+lib includes MMA usr/share/mma
