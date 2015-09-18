@@ -1,3 +1,22 @@
+mma (15.01-1) unstable; urgency=medium
+
+  * Initial release (Closes: #655441) after its somewhat mistaken
+    removal request from Debian in September 2010 (See #595093).
+     - It was orphaned in Debian (#465165), but far from dead upstream;
+       rather, upstream had simply moved its current website,
+       started a new forum, and had just released MMA 1.6b in June 2010.
+  * New packaging from dh_make, with reference to:
+     - Debian last official package of mma (0.12-2) from year 2008,
+     - Joel Roth's unfinished packaging in year 2012,
+     - and upstream author's recent mma_15.01_all.deb package.
+  * Patch mma-gb to create its "browserDB" file in ~/.cache/mma/
+    instead of /usr/share/mma/lib/.
+  * Patch mma-splitrec so it does not fail with Python 3.
+  * Set "Debian Multimedia Maintainers" as the Maintainer,
+    and me as an Uploader.
+
+ -- Anthony Fok <foka@debian.org>  Thu, 17 Sep 2015 15:57:28 -0600
+
 mma (12.01-1) UNRELEASED; urgency=low
 
   * New Upstream Release (Closes: #655441).
