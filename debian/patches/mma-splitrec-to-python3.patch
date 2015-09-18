@@ -1,0 +1,142 @@
+Description: Patch mma-splitrec to support both Python 3 and Python 2.6
+Author: Anthony Fok <foka@debian.org>
+Origin: vendor
+Forwarded: no
+Last-Update: 2015-09-17
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/mma-splitrec
++++ b/mma-splitrec
+@@ -6,6 +6,7 @@
+ 
+ # bvdp  Jan/2011
+ 
++from __future__ import print_function
+ import sys
+ import os
+ import subprocess
+@@ -81,7 +82,7 @@
+             excludelist.append(a.upper())
+ 
+         else:
+-            print "Unknown option: %s %s" % (o, a)
++            print("Unknown option: %s %s" % (o, a))
+             usage()
+ 
+     if excludelist and onlylist:
+@@ -96,13 +97,13 @@
+ 
+ 
+ def usage():
+-    print "mma-splitrec, (c) Bob van der Poel"
+-    print "Create multi-track wav files from MMA."
+-    print "Usage: mma-splitrec [opts] mmafile [opts]"
+-    print "Options:"
++    print("mma-splitrec, (c) Bob van der Poel")
++    print("Create multi-track wav files from MMA.")
++    print("Usage: mma-splitrec [opts] mmafile [opts]")
++    print("Options:")
+     for a in optmsg:
+-        print a
+-    print
++        print(a)
++    print()
+     sys.exit(1)
+ 
+ 
+@@ -117,9 +118,9 @@
+ 
+ 
+ def error(m, e=None):
+-    print "Error - mma-splitrec: %s" % m
++    print("Error - mma-splitrec: %s" % m)
+     if e:
+-        print "       ", e
++        print("       ", e)
+     sys.exit(1)
+ 
+ 
+@@ -130,15 +131,15 @@
+         and aplaymidi in the foreground to play the midi file.
+     """
+ 
+-    print "Creating: %s.wav" % trackname
++    print("Creating: %s.wav" % trackname)
+ 
+     # start recording
+ 
+     cmd = [recorder ] + recordopts.split() + ["%s.wav" % trackname]
+-    print cmd
++    print(cmd)
+     try:
+         recpid = subprocess.Popen(cmd, shell=False)
+-    except OSError, e:
++    except OSError as e:
+         error("Can't fork recorder.", e)
+ 
+     # start playing midi
+@@ -147,7 +148,7 @@
+ 
+     try:
+         midpid = subprocess.Popen(cmd, shell=False)
+-    except OSError, e:
++    except OSError as e:
+         recpid.kill()  # stop recorder
+         error("Can't fork midi player.", e)
+ 
+@@ -155,20 +156,20 @@
+ 
+     try:
+         recpid.terminate()       # stop recorder
+-    except OSError, e:
++    except OSError as e:
+         error("Can't stop recorder.", e)
+ 
+ 
+ def tim2wav(trackname, midifile):
+     """ Use timidity to create wav file.  """
+ 
+-    print "Creating: %s.wav with timidity" % trackname
++    print("Creating: %s.wav with timidity" % trackname)
+ 
+     cmd = [timidity] + timopts.split() + [ "-o%s.wav" % trackname,  midifile ]
+     
+     try:
+         midpid = subprocess.Popen(cmd, shell=False)
+-    except OSError, e:
++    except OSError as e:
+         recpid.kill()  # stop recorder
+         error("Can't fork midi player.", e)
+ 
+@@ -185,7 +186,7 @@
+ 
+     try:
+         pid = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=False)
+-    except OSError, e:
++    except OSError as e:
+         error("Can't fork mma.", e)
+ 
+     data, err = pid.communicate()
+@@ -236,10 +237,10 @@
+     if onlylist and a not in onlylist: continue
+     tracklist.append(a)
+ 
+-print "MMA file '%s' being split to: " % mmafile,
++print("MMA file '%s' being split to: " % mmafile, end=' ')
+ for a in tracklist:
+-    print a,
+-print
++    print(a, end=' ')
++print()
+ 
+ 
+ # Now we have a list of tracks ... do the magic.
+@@ -253,7 +254,7 @@
+     
+     if err or retcode:
+         if txt.find("No data created") >= 0:
+-            print "NO DATA for '%s', skipping" % trackname
++            print("NO DATA for '%s', skipping" % trackname)
+             continue
+         else:
+             error("MMA parsing error.", e)
