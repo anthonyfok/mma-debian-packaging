@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+
+# Running py3compile first so that "mma -G" would skip its own attempt of
+# byte-compiling its Python source.
+
+#DEBHELPER#
+
+case "$1" in
+    configure)
+        mma -G
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0
