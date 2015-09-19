@@ -1,0 +1,39 @@
+Description: Fix anchor href to logo.png in MMA Reference Manual (HTML)
+Author: Anthony Fok <foka@debian.org>
+Origin: vendor
+Last-Update: 2015-09-19
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/docs/html/ref/index.html
++++ b/docs/html/ref/index.html
+@@ -52,7 +52,7 @@
+ <P>
+ <H1 ALIGN="CENTER"><IMG
+  WIDTH="730" HEIGHT="314" ALIGN="BOTTOM" BORDER="0"
+- SRC="../../logo/logo.png"
++ SRC="../logo.png"
+  ALT="LOST LOGO">
+ 
+ <P>
+--- a/docs/html/ref/mma.html
++++ b/docs/html/ref/mma.html
+@@ -52,7 +52,7 @@
+ <P>
+ <H1 ALIGN="CENTER"><IMG
+  WIDTH="730" HEIGHT="314" ALIGN="BOTTOM" BORDER="0"
+- SRC="../../logo/logo.png"
++ SRC="../logo.png"
+  ALT="LOST LOGO">
+ 
+ <P>
+--- a/docs/html/ref/node36.html
++++ b/docs/html/ref/node36.html
+@@ -47,7 +47,7 @@
+ </H1>
+  <STRONG><IMG
+  WIDTH="730" HEIGHT="314" ALIGN="BOTTOM" BORDER="0"
+- SRC="../../logo/logo.png"
++ SRC="../logo.png"
+  ALT="LOST LOGO">
+ 
+ <P>
