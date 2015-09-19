@@ -1,3 +1,10 @@
+mma (15.09-1) UNRELEASED; urgency=medium
+
+  * Imported Upstream version 15.09
+  * Update to PDF documentation from MMA 15.09
+
+ -- Anthony Fok <foka@debian.org>  Fri, 18 Sep 2015 22:00:05 -0600
+
 mma (15.01-1) unstable; urgency=medium
 
   * Initial release (Closes: #655441) after its somewhat mistaken
