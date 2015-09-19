@@ -62,7 +62,7 @@ def opts(l=None):
 
     try:
         opts, args = getopt.gnu_getopt(l,
-                                       "b:B:dpsS:ri:wneom:f:M:cgGvVD:01PT:", [])
+                                       "b:B:dpsS:ri:wneom:f:M:cLgGvVD:01PT:", [])
     except getopt.GetoptError:
         usage()
 
@@ -104,6 +104,9 @@ def opts(l=None):
 
         elif o == '-c':
             gbl.chshow = gbl.Lchshow = 1
+
+        elif o == '-L':
+            gbl.printProcessed = True
 
         elif o == '-f':
             gbl.outfile = a
@@ -291,6 +294,7 @@ def usage(msg=''):
         " -g    update Groove dependency database",
         " -G    create Groove dependency database",
         " -i <file> specify init (mmarc) file",
+        " -L    show order of bars processed",
         " -m <x> set Maxbars (default == 500)",
         " -M <x> set SMF to 0 or 1",
         " -n    No generation of midi output",

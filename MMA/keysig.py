@@ -187,3 +187,114 @@ class KeySig:
         self.accList = acc
 
 keySig = KeySig()    # single instance
+
+
+def getTranspose(ln, err):
+    """ Calc transpose. Used by global TRANSPOSE and Lyric Transpose= """
+
+    # interval notation accepts Up-Perfect-Four (with hypens)
+    if len(ln) == 1 and ln[0].count('-') == 2:
+        ln = ln[0].split('-')
+        
+    # Simple semi-tone transpose. Just make sure it's 0 to 12
+    if len(ln) == 1:
+        value = stoi(ln[0], "%s: Argument must be an integer, not '%s'" % (err, ln[0]))
+        if value < -12 or value > 12:
+            error("%s: %s out-of-range; must be -12..12" % (err, value))
+
+    # interval transposition uses "up/down interval
+    # this needs exactly 3 args. eg: "Up Perfect 3"
+    # Note: This does NOT properly set key name spellings (ie: C# vrs Db)
+    elif len(ln) == 3:
+
+        
+        # see if the input is a unique abrev. At some point we should put
+        # this in common.py ... if we decide to do more abrev. matching.
+        def getAbrev(i, tb):
+            mcount = 0
+            i = i.upper()
+            for f in tb:
+                if f.startswith(i):
+                    mcount += 1
+                    match = f
+            if mcount > 1:
+                error("%s: '%s' is not a unique abreviation." % (err, i))
+            if mcount < 1:
+                error("%s: '%s' is unregonized for interval notation." % (err,i))
+            return match
+
+        num2text = {"1": "UNISON",
+                    "2": "SECOND",
+                    "3": "THIRD",
+                    "4": "FOURTH",
+                    "5": "FIFTH",
+                    "6": "SIXTH",
+                    "7": "SEVENTH",
+                    "8": "OCTAVE"}
+        
+        ttable = {"PERFECT UNISON":     0,
+                  "DIMINISHED SECOND":  0,
+                  "AUGMENTED UNISON":   1,
+                  "MINOR SECOND":       1,
+                  "MAJOR SECOND":       2,
+                  "DIMINISHED THIRD":   2,
+                  "AUGMENTED SECOND":   3,
+                  "MINOR THIRD":        3,
+                  "MAJOR THIRD":        4,
+                  "DIMINISHED FOURTH":  4,
+                  "AUGMENTED THIRD":    5,
+                  "PERFECT FOURTH":     5,
+                  "AUGMENTED FOURTH":   6,
+                  "DIMINISHED FIFTH":   6,
+                  "PERFECT FIFTH":      7,
+                  "DIMINISHED SIXTH":   7,
+                  "AUGMENTED FIFTH":    8,
+                  "MINOR SIXTH":        8,
+                  "MAJOR SIXTH":        9,
+                  "DIMINISHED SEVENTH": 9,
+                  "AUGMENTED SIXTH":   10,
+                  "MINOR SEVENTH":     10,
+                  "MAJOR SEVENTH":     11,
+                  "DIMINISHED OCTAVE": 11,
+                  "PERFECT OCTAVE":    12 }
+
+        # Each token might be an abrev. Convert them to full spellings.
+
+        # 1st, get direction
+        dir = getAbrev(ln[0], ('UP', 'DOWN'))
+        if dir == 'UP':
+            mul = 1
+        elif dir == 'DOWN':
+            mul = -1
+        else:
+            error("%s: Interval transpose needs 'UP/DOWN' as first arg, not '%s'." % (err, dir))
+
+        # Get the interval
+
+        if ln[2] in num2text:
+            ln[2] = num2text[ln[2]]
+            
+        interval = '%s %s' % (getAbrev(ln[1], set([ a.split()[0] for a in ttable.keys()])),
+                getAbrev(ln[2], set([ a.split()[1] for a in ttable.keys()])))
+       
+        if interval in ttable:
+            value = ttable[interval]
+        else:
+            error("%s: Unknown/invalid interval '%s'. Valid keys are: %s." % \
+                  (err, interval, ', '.join(ttable.keys())))
+
+        value *= mul
+        
+    else:
+        error("%s: Use single value for semitones (-3, 4) or proper "
+              "interval ('Up Maj 3'), not '%s'." % (err, ' '.join(ln)))
+
+    return value
+
+def transpose(ln):
+    """ Set transpose value. """
+
+    gbl.transpose = getTranspose(ln, "Transpose")
+
+    if gbl.debug:
+        print("Set Transpose to %s" % gbl.transpose)

@@ -28,14 +28,13 @@ import MMA.paths
 
 
 class Lyric:
-
     textev = None    # set if TEXT EVENTS (not recommended)
     barsplit = None    # set if lyrics NOT split into sep. events for bar
     versenum = 1       # current verse number of lyric
     dupchords = 0       # set if we want chords as lyric events
     transpose = 0       # tranpose chord names (for dupchords only)
     karmode = 0       # in kar mode use textevents, split at hyphens
-
+    enabled = True    # set true/false 
     pushedLyrics = []
 
     transNames = (('C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'),
@@ -164,15 +163,10 @@ class Lyric:
                     error("Lyric: CHORDS expecting 'ON' or 'OFF', not %s'" % v)
 
             elif o == 'TRANSPOSE':
-                v = stoi(v, "Lyric: Tranpose expecting value, not %s" % v)
-
-                if v < -12 or v > 12:
-                    error("Lyric: Tranpose %s out-of-range; must be -12..12" % v)
-
-                self.transpose = v
+                self.transpose = MMA.keysig.getTranspose([v], "Lyric Transpose")
 
                 if gbl.debug:
-                        print("Lyric: Chord names transposed %s steps." % v)
+                        print("Lyric: Chord names transposed %s steps." % self.transpose)
 
             elif o == 'CNAMES':
                 if v in ('#', 'SHARP'):
@@ -182,7 +176,7 @@ class Lyric:
                     self.transKey = 0
 
                 else:
-                    error("Lyric CNames expecting 'Sharp' or 'Flat', not '%s'" % v )
+                    error("Lyric CNames: expecting 'Sharp' or 'Flat', not '%s'" % v )
 
                 if gbl.debug:
                     msg = "Lyric: Chord names favor "
@@ -220,7 +214,7 @@ class Lyric:
                 elif v in ('OFF', '0'):
                     self.karmode = 0
                 else:
-                    error("Lyric Kar expecting On, 1, Off or 0, not '%s'." % v)
+                    error("Lyric Kar: expecting On, 1, Off or 0, not '%s'." % v)
 
                 if gbl.debug:
                     msg = "Lyric: Karmode",
@@ -232,23 +226,34 @@ class Lyric:
 
             else:
                 error("Usage: Lyric expecting EVENT, SPLIT, VERSE, CHORDS, TRANSPOSE,"
-                      "CNAMES, KAR or SET, not '%s'" % o)
+                      "CNAMES, KAR, ENABLE or SET, not '%s'" % o)
 
         # All the opt=value options have been taken care of. ln can now only
-        # contain "Set ..." Anything else is an error.
+        # contain "On", "OFF" or "Set ..." Anything else is an error.
 
-        if not ln:
-            return
+        while 1:
+            if not ln:
+                return
 
-        if ln[0].upper() != "SET":
-            error("Lyric: Unknown option '%'." % ln[0])
+            if ln[0].upper() == 'OFF':
+                enable = False
+                ln.pop(0)
 
-        s = ' '.join(ln[1:]).strip()
+            elif ln[0].upper() == 'ON':
+                enable = True
+                ln.pop(0)
 
-        if not s.startswith('['):
-            s = '[' + s + ']'
+            elif ln[0].upper() == "SET":
+                s = ' '.join(ln[1:]).strip()
 
-        self.pushedLyrics.append(s)
+                if not s.startswith('['):
+                    s = '[' + s + ']'
+
+                self.pushedLyrics.append(s)
+                ln = []
+
+            else:
+                error("Lyric: Unknown option '%s'." % ln[0])
 
     def leftovers(self):
         """ Just report leftovers on stack."""
@@ -384,10 +389,11 @@ class Lyric:
                     a += ' '
 
                 p = getOffset(beat * gbl.BperQ)
-                if self.textev or self.karmode:
-                    gbl.mtrks[0].addText(p, a)
-                else:
-                    gbl.mtrks[0].addLyric(p, a)
+                if self.enabled:
+                    if self.textev or self.karmode:
+                        gbl.mtrks[0].addText(p, a)
+                    else:
+                        gbl.mtrks[0].addLyric(p, a)
 
             beat += bstep
 

@@ -64,7 +64,6 @@ def error(msg):
 
     sys.exit(1)
 
-
 def warning(msg):
     """ Print warning message and return. """
 
@@ -224,7 +223,7 @@ def opt2pair(ln, toupper=0):
 
     # This is very useful when the user wants to use a macro expansion:
     #     Beats = $Macro1 , $Macro2
-    # since macros need have spaces around them.
+    # since macros need to have spaces around them.
 
     ln = ' '.join(ln)
     ln = ln.replace('  ', ' ')  # strip double spaces

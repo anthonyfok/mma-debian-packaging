@@ -28,6 +28,8 @@ from MMA.chordtable import chordlist
 import MMA.roman
 from MMA.keysig import keySig  # needed for voicing mode keycenter()
 
+slashPrinted = []  # for slash chord error message
+
 ####################################################
 # Convert a roman numeral chord to standard notation
 
@@ -199,7 +201,7 @@ class ChordNotes:
                 ch.noteList     = [21, 12, 16]
 
     compress() - Compresses the range of a chord to a single octave. This is
-                 done inplace and return None. Eg:
+                 done inplace and returns None. Eg:
 
                  ch=Chord("A13")
                  ch.noteList == [1, 5, 8, 11, 21]
@@ -302,10 +304,13 @@ class ChordNotes:
         if name.find('/') > 0:
             name, slash = name.split('/')
 
+        # Name stars with roman (I, V, i, v) then assume
+        # rest of name is valid roman. Convert to "standard"
         if name[0] in ("I", "V", "i", "v"):
             n = name
             name = MMA.roman.convert(name)
 
+        # Split chord name (A,B..) and type (minor, dim)
         if name[1:2] in ('#b'):
             tonic = name[0:2]
             ctype = name[2:]
@@ -316,6 +321,8 @@ class ChordNotes:
         if not ctype:        # If no type, make it a Major
             ctype = 'M'
 
+        # Now we get the notes for this chord. Just based on the type.
+        # Adjust it up/down for the tonic (c,d...)
         try:
             notes = chordlist[ctype][0]
             adj = cdAdjust[tonic] + octave
@@ -343,11 +350,7 @@ class ChordNotes:
         if slash:   # convert Roman or Arabic to name of note from chord scale
             if slash[0] in ('I', 'i', 'V', 'v') or slash[0].isdigit():
                 n = MMA.roman.rvalue(slash)
-                n = self.scaleList[n]           # midi value
-                while n >= 12:
-                    n -= 12
-                while n < 0:
-                    n += 12
+                n = self.scaleList[n] % 12   # midi value 
 
                 slash = ('C', 'C#', 'D', 'D#', 'E', 'F',
                          'F#', 'G', 'G#', 'A', 'A#', 'B')[n]
@@ -358,7 +361,11 @@ class ChordNotes:
 
             # If the slash note is in the chord we invert
             # the chord so the slash note is in root position.
+            # NOTE: 'r' is the value of the slash note. NOTE:
+            # this is a true rotate, the self.invert() routine
+            # fakes it by changing note octaves.
 
+            # Check the slash note against the chord notes
             c_roted = 0
             s = self.noteList
             for octave in [0, 12, 24]:
@@ -367,14 +374,16 @@ class ChordNotes:
                     for i in range(rot):
                         s.append(s.pop(0)+12)
                     if s[0] >= 12:
-                        for i, v in enumerate(s):
-                            s[i] = v-12
-                            self.noteList = s
+                        s = [v-12 for v in s]
+                    self.noteList = s
                     self.bnoteList = tuple(s)
                     self.rootNote = self.noteList[0]
                     c_roted = 1
                     break
 
+            # Check against the scale notes. If the note is in
+            # the scale we rotate the scale to force the slash note
+            # to the root position. 
             s_roted = 0
             s = list(self.scaleList)
             for octave in [0, 12, 24]:
@@ -382,26 +391,34 @@ class ChordNotes:
                     rot = s.index(r+octave)
                     for i in range(rot):
                         s.append(s.pop(0)+12)
-                        if s[0] > 12:
-                            for i, v in enumerate(s):
-                                s[i] = v-12
-                        self.scaleList = tuple(s)
+                    if s[0] >= 12:
+                        s = [ v-12 for v in s ]
+                    self.scaleList = tuple(s)
                     s_roted = 1
                     break
 
+            # Slash note is not in the chord or scale. This is
+            # not an error ... but the note is ignored. So, print
+            # a message and list out alternate chords to use.
             if not c_roted and not s_roted:
-                wmessage = "The slash chord note '%s' not in chord or scale" % slash
-                if not gbl.rmShow:
-                    warning(wmessage)
+                wmessage = "The slash chord note '%s' not in chord or scale '%s'" % \
+                         (slash, name)
 
-            elif not c_roted:
-                wmessage = "The slash chord note '%s' not in chord '%s'" % (slash, name)
-                if not gbl.rmShow:
-                    warning(wmessage)
+                t = "%s/%s" % (name, slash )
+                if t not in slashPrinted:
+                    note = r % 12
+                    ll = []
+                    for c in chordlist:
+                        if ord(c[0]) > 128:  # skip dim. symbol
+                            continue
+                        # We need 'adj' to convert the chords from "C" to the current tonic.
+                        adj = cdAdjust[self.tonic]
+                        if note in  [(x % 12) + adj for x in chordlist[c][0]]:
+                            ll.append("%s%s" % (self.tonic, c))
+                    if ll:
+                        wmessage += "\nChords with '%s': %s" % (slash, ' '.join(sorted(ll)))
 
-            elif not s_roted:    # Probably will never happen :)
-                wmessage = "The slash chord note '%s' not in scale for the chord '%s'" \
-                    % (slash, name)
+                    slashPrinted.append(t)  # only print this chord/slash once
                 if not gbl.rmShow:
                     warning(wmessage)
 
@@ -418,19 +435,19 @@ class ChordNotes:
             self.noteListLen = len(self.noteList)
             self.bnoteList = tuple(self.noteList)
 
-        if gbl.rmShow:
+        if gbl.rmShow:  # Display roman debug (Debug=Roman)
             if slash:
-                a = '/'+slash
+                a = '/' + slash
             else:
                 a = ''
             if wmessage:
                 a += '   ' + wmessage
             print(" %03s] %-09s -> %s%s" % (gbl.lineno, startingName, name, a))
-
+        
     def reset(self):
         """ Restores notes array to original, undoes mangling. """
 
-        self.noteList     = list(self.bnoteList[:])
+        self.noteList = list(self.bnoteList[:])
         self.noteListLen = len(self.noteList)
 
 
@@ -445,15 +462,15 @@ class ChordNotes:
         """
 
         if n:
-            c=self.noteList[:]
+            c = self.noteList[:]
 
-            while n>0:        # Rotate up by adding 12 to lowest note
+            while n > 0:        # Rotate up by adding 12 to lowest note
                 n -= 1
-                c[c.index(min(c))]+=12
+                c[c.index(min(c))] += 12
 
-            while n<0:        # Rotate down, subtract 12 from highest note
+            while n < 0:        # Rotate down, subtract 12 from highest note
                 n += 1
-                c[c.index(max(c))]-=12
+                c[c.index(max(c))] -= 12
 
             self.noteList = c
 
@@ -462,23 +479,18 @@ class ChordNotes:
 
 
     def compress(self):
-        """ Compress a chord to one ocatve.
+        """ Compress a chord to one ocatve. """
 
-
-        Get max permitted value. This is the lowest note
-        plus 12. Note: use the unmodifed value bnoteList!
-        """
-
-        mx = self.bnoteList[0] + 12
+        # Get the max value in the chord list. This is the
+        # lowest note in the chord + 12. Note: use the unmodifed value bnoteList!
+        mx = min(self.bnoteList) + 12
         c=[]
-
-        for i, n in enumerate(self.noteList):
+        for n in self.noteList:
             if n > mx:
                 n -= 12
             c.append(n)
 
         self.noteList = c
-
         return None
 
 

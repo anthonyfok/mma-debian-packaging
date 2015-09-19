@@ -204,6 +204,10 @@ Chord         Sequence * * C1234  L2
 
 DefGroove SlowBoleroIntro   A simple introduction.
 
+Groove SlowBoleroIntro
+ Chord-Sus Groove SlowBoleroSus
+DefGroove SlowBoleroIntroSus  Intro with sustained voices.
+
 //////  Ending
 
 Groove SlowBolero

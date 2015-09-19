@@ -1,0 +1,89 @@
+Changes file for the 2015 series
+
+This reflects changes to MMA since the release of version 15.01.
+
+================================
+
+Added macro variables $_Track_Delay, $_Track_HarmonyOnly,
+  $_Track_MidiVolume and $_Track_StrumAdd.
+
+Fixed bugs in GRACE notes. When fixing the code which ensured that all
+  the notes in a chord ended up with the same duration, we forgot that
+  GRACE notes were supposed to be different. Well, they are now!
+
+Harmony was NOT being applied to chords with grace notes. Fixed.
+
+Solo note volume adjustments weren't working properly.
+
+February 8, 2015
+Released 15.01a
+
+---------------------------------------------
+
+Added RPITCH command. Modifies notes on-the-fly for random "mistakes".
+ Actually makes some bass lines, etc sound quite natural. See the
+ docs for details.
+
+Added donated instrument file for Roland-mt32 in includes. Thanks 
+ so much Hanno Behrens!
+
+Added alternate spelling for TRANSPOSE and LYRICS TRANSPOSE. Both now accept
+ interval syntax like "Up Minor Third", etc.
+
+May 13, 2015
+Released 15.01b
+
+---------------------------------------------------
+
+
+Added Subroutines. See the manual for details. This could be quite useful.
+
+
+May 19, 2015
+Released 15.01c
+
+----------------------------------------------------
+
+Fixed Transpose so that "Up Major 2" is the same as "Up Major Second".
+
+Fixed the warning messages for slash chords so that things like C/B
+ do not print warnings. The manual for slash chords has been
+ (hopefully) clarified.
+
+In the manual and code the COMPRESS option took values 0 (off), 1, ... 5.
+ I have no idea why. The actual code only compresses once and the value
+ is ignored. Docs and code are updated to reflect reality.
+
+July 10, 2015
+Released 15.01d
+
+----------------------------------------------------------
+
+Added Lyric option On or Off.
+
+Fixed import error for python3.
+
+Added fretnoise option in plectrum tracks. See the docs and a short
+ example in egs/misc.
+
+August 29, 2015
+Released 15.01f
+
+------------------------------------------------------------
+
+Added -L option to report label/lines proceesed order.
+
+CHANGED fretnoise strings are now numbered in the correct mode.
+ String 1 is the highest sounding, just like a real guitar.
+
+BUGFIX: fretnoise now looks for chord change instead of just string change.
+
+September 9, 2015
+Released  15.01g
+
+---------------------------------------------------------------
+
+
+Modified -L option to show '?' for bars without labels.
+
+Fixed MIDIINC which was crashing when importing a file with lyrics.

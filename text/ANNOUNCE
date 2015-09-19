@@ -1,15 +1,16 @@
 
-A stable release, version 15.01, of MMA--Musical MIDI Accompaniment
+A stable release, version 15.09, of MMA--Musical MIDI Accompaniment
 is available for downloading. In addition to a number of bug fixes
 and optimizations, MMA now features:
 
  - Works with Python 2.7 or 3.x
  - Number of minor bug fixes
- - TRIGGER function 
- - STICKY tracks which override grooves
- - ORNAMENT enhancements and fixes
+ - Added RPITCH for random "mistakes"
+ - Added SUBROUTINES
+ - Added FretNoise option for Plectrum tracks
+ - Other minor enhancements
 
-Please read the file text/CHANGES-14 for a complete list of changes.
+Please read the file text/CHANGES-15 for a complete list of changes.
   
 MMA is a accompaniment generator -- it creates midi tracks
 for a soloist to perform with. User supplied files contain
