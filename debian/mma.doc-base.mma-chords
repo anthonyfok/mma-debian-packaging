@@ -1,0 +1,10 @@
+Document: mma-chords
+Title: “MMA—Musical MIDI Accompaniment” Chord Reference Manual
+Author: Bob van der Poel
+Abstract: An auxiliary PDF document listing in both text and
+ standard music notation all the chords (91 main, plus 60 aliases)
+ and scales supported in MMA.
+Section: Sound
+
+Format: PDF
+Files: /usr/share/doc/mma/pdf/chords.pdf
