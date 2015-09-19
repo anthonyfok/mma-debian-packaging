@@ -18,5 +18,8 @@ override_dh_installchangelogs:
 override_dh_installexamples:
 	dh_installexamples -X#
 
+override_dh_compress:
+	dh_compress -X.pdf
+
 #override_dh_python3:
 #	dh_python3 --shebang=/usr/bin/python3
