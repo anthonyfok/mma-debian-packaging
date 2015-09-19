@@ -1,0 +1,14 @@
+Document: mma-tutorial
+Title: “MMA—Musical MIDI Accompaniment” Tutorial
+Author: Bob van der Poel
+Abstract: This document is provided as an aid for the new MMA user
+ to get started in a easy, gentle manner. It is a supplement to
+ the main reference manual.
+Section: Sound
+
+Format: HTML
+Index: /usr/share/doc/mma/html/tut/index.html
+Files: /usr/share/doc/mma/html/tut/*.html
+
+Format: PDF
+Files: /usr/share/doc/mma/pdf/mma-tutorial.pdf

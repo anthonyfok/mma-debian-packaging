@@ -1,0 +1,16 @@
+Document: mma-lib
+Title: “MMA—Musical MIDI Accompaniment” The Standard Library Reference
+Author: Bob van der Poel
+Abstract: This document, which is provided as a supplement to
+ the MMA Reference, lists all of the commands in the program and
+ helpful information which can be used to create your own "style"
+ files.  If you are a newcomer to MMA, you should also have a look
+ at the MMA Tutorial for some "getting started" information.
+Section: Sound
+
+Format: HTML
+Index: /usr/share/doc/mma/html/lib/index.html
+Files: /usr/share/doc/mma/html/lib/*/*.html
+
+Format: PDF
+Files: /usr/share/doc/mma/pdf/mma-lib.pdf

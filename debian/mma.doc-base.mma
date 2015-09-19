@@ -1,0 +1,12 @@
+Document: mma
+Title: “MMA—Musical MIDI Accompaniment” Reference Manual
+Author: Bob van der Poel
+Abstract: The definitive source for all your questions about MMA
+Section: Sound
+
+Format: HTML
+Index: /usr/share/doc/mma/html/ref/mma.html
+Files: /usr/share/doc/mma/html/ref/*.html
+
+Format: PDF
+Files: /usr/share/doc/mma/pdf/mma.pdf
