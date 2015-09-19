@@ -99,7 +99,7 @@ class Bass(PC):
 
         for p in pattern:
             ct = self.getChordInPos(p.offset, ctable)
-
+            
             if ct.bassZ:
                 continue
 

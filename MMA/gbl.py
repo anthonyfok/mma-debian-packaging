@@ -22,7 +22,7 @@ Bob van der Poel <bob@mellowood.ca>
 
 """
 
-version = "15.01"        # Version -- Jan 27/2015
+version = "15.09"        # Version -- September/2015
 
 """ A few globals are actually set in the calling stub, mma.py. This is
     done to make future ports and platform specific settings a bit easier.
@@ -109,6 +109,7 @@ transpose   =  0      # Transpose is global (ignored by drum tracks)
 
 lineno      = -1      # used for error reporting
 
+barLabels   = []      # a list of bar (number) labels as encountered
 barNum      =  0      # Current line number
 
 barPtrs     = {}      # for each bar, pointers to event start/end
@@ -149,6 +150,8 @@ chshow         =     Lchshow        = 0
 plecShow       =     LplecShow  = 0  # not a command line setting
 rmShow         =     LrmShow    = 0  # not command
 gvShow         =     LgvShow    = 0
+
+printProcessed = False  # command line flag -L sets this
 
 outfile        =     None
 infile         =     None

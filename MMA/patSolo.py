@@ -52,6 +52,9 @@ class NoteEvent:
 
 accValues = {'#': 1, "&": -1, 'n': 0}
 
+# used when extracting solo notes.
+defaultVelocity = 90
+
 ##############################
 
 
@@ -390,7 +393,7 @@ class Melody(PC):
             barEnd = gbl.barLen
 
         duration = self.getNoteLen('4')    # default note length
-        velocity = 90               # intial/default velocity for solo notes
+        velocity = defaultVelocity         # intial/default velocity for solo notes
         articulation = 1            # additional articulation for solo notes
 
         notes = {}   # NoteEvent list, keys == offset
@@ -475,6 +478,9 @@ class Melody(PC):
 
                     vv = vv.upper().strip()
 
+                    # We have an default offset for grace notes of 2.
+                    # So, if what have a GRACE without a offset, convert
+                    # the command to that.
                     if vv == 'GRACE':
                         vv = 'GRACE=2'
 
@@ -485,7 +491,7 @@ class Melody(PC):
 
                     if vc == 'VOLUME':
                         if vo in MMA.volume.vols:   # arg was a volume 'FF, 'mp', etc.
-                            velocity *= MMA.volume.vols[vo]
+                            velocity = defaultVelocity * MMA.volume.vols[vo]
                         else:
                             error("%s: No volume '%s'." % (self.name, vo))
 
@@ -590,7 +596,6 @@ class Melody(PC):
             lastc = a     # save last chord for next loop
 
             # add note event(s) to note{}
-
             if not offset in notes:
                 notes[offset] = []
             notes[offset].extend(evts)
@@ -614,6 +619,7 @@ class Melody(PC):
         if MMA.swing.mode:
             notes = MMA.swing.swingSolo(notes)
 
+ 
         return notes
 
     def followAdjust(self, notes, ctable):
@@ -635,7 +641,9 @@ class Melody(PC):
         return notes
 
     def addHarmony(self, notes, ctable):
-        """ Add harmony to solo notes. """
+        """ Add harmony to solo notes. We need to be careful
+            since the chords can contain grace and NULL notes.
+        """
 
         sc = self.seq
 
@@ -645,28 +653,38 @@ class Melody(PC):
         for offset in notes:
             nn = notes[offset]
 
-            if (len(nn) == 1) and (nn[0].pitch is not None) and (nn[0].isgrace is not True):
-                tb = self.getChordInPos(offset, ctable)
-
-                if tb.chordZ:
+            pitch = None
+            count = 0
+            for n in nn:
+                if n.isgrace or not n.pitch:
                     continue
+                pitch = n.pitch
+                duration = n.duration
+                articulation = n.articulation
+                velocity = n.defvelocity
+                count += 1  # signals multiple notes, don't harmonize
 
-                h = MMA.harmony.harmonize(harmony, nn[0].pitch, tb.chord.bnoteList)
+                if harmOnly:
+                    n.pitch = None
 
-                duration = nn[0].duration
-                articulation = nn[0].articulation
-                velocity = nn[0].defvelocity
+            # The chord might have no notes, have more than one, or be all grace
+            if pitch == None or count != 1:
+                continue
 
-                if harmOnly:  # remove melody note if harmony only
-                    nn.pop(0)  # DON'T use nn=[] that would release the ptr.
+            tb = self.getChordInPos(offset, ctable)
 
-                for n in h:
-                    e = NoteEvent(n,
-                                  self.adjustVolume(velocity * self.harmonyVolume[sc],
-                                                    offset), False)
-                    e.duration = duration
-                    e.articulation = articulation
-                    nn.append(e)
+            if tb.chordZ:
+                continue
+
+            h = MMA.harmony.harmonize(harmony, pitch, tb.chord.bnoteList)
+
+            for n in h:
+                e = NoteEvent(n,
+                        self.adjustVolume(velocity * self.harmonyVolume[sc], offset),
+                        False)
+                e.duration = duration
+                e.articulation = articulation
+                nn.append(e)
 
     def trackBar(self, pat, ctable):
         """ Do the solo/melody line. Called from self.bar() """
@@ -686,35 +704,54 @@ class Melody(PC):
         unify = self.unify[sc]
 
         rptr = self.mallet
+
         for offset in sorted(notes.keys()):
             nn = notes[offset]
-
+            
             # the "None" test is important. Arp doesn't like rests.
             if self.arpRate and nn[0].pitch is not None:
                 self.trackArp(nn, offset)
                 continue
 
-            dur = None  # default duration for notes in chord
+            # For each chord we process 2x. First time finds all the grace
+            # notes and sends them to the midi machine; 2nd time normal notes.
+            # Has to be done this was so we don't force grace note adjustments
+            # (durations) onto normal notes. Grace notes ignore strum!
 
-            strumAdjust = self.getStrum(sc)
-            strumAdd = self.strumAdd[sc]
-            strumOffset = 0
-
+            # grace
             for nev in nn:
                 n = nev.pitch
-                if n is None:     # skip rests
+                if n is None or not nev.isgrace:     # skip rests and non-grace
                     continue
 
                 if not self.drumType:        # no octave/transpose for drums
                     n = self.adjustNote(n)
 
-                if nev.isgrace:
-                    off = int(offset - (nev.duration // nev.isgrace))
-                else:
-                    off = offset + strumOffset
+                # Note that each grace note has it's own offset and duration
+                self.sendNote(int(offset - (nev.duration // nev.isgrace)),
+                              self.getDur(int(nev.duration * nev.articulation)),
+                              n, int(nev.velocity))
 
+            # normal notes.
+
+            strumAdjust = self.getStrum(sc)
+            strumAdd = self.strumAdd[sc]
+            strumOffset = 0
+
+            dur = None  # default duration for notes in chord
+
+            for nev in nn:
+                n = nev.pitch
+                if n is None or nev.isgrace:     # skip rests and grace
+                    continue
+
+                if not self.drumType:        # no octave/transpose for drums
+                    n = self.adjustNote(n)
+
+                off = offset + strumOffset
+                
                 # Set duration for this chord. Only do it once so they are
-                # all the same length. The call to getDur() adjust for RDURATION.
+                # all the same length. The call to getDur() adjusts for RDURATION.
                 if dur is None:
                     dur = self.getDur(int(nev.duration * nev.articulation))
 

@@ -30,8 +30,6 @@ import random
 
 import MMA.midiC
 import MMA.translate
-import MMA.patSolo
-import MMA.patAria
 import MMA.volume
 import MMA.grooves
 import MMA.parse
@@ -40,6 +38,7 @@ import MMA.seqrnd
 import MMA.midinote
 import MMA.swing
 import MMA.ornament
+import MMA.rpitch
 
 from . import gbl
 from MMA.keysig import keySig
@@ -85,7 +84,7 @@ class Macros:
 
     def sysvar(self, s):
         """ Create an internal macro. """
-
+        
         # Simple/global     system values
 
         if s == 'KEYSIG':
@@ -249,6 +248,9 @@ class Macros:
         elif func == 'COMPRESS':
             return ' '.join([str(x) for x in t.compress])
 
+        elif func == 'DELAY':
+            return ' '.join([str(x) for x in t.delay])
+
         elif func == 'DIRECTION':
             if t.vtype == 'ARIA':
                 return ' '.join([str(x) for x in t.selectDir])
@@ -260,8 +262,14 @@ class Macros:
                 error("Only CHORD tracks have DUPROOT")
             return t.getDupRootSetting()
 
+        elif func == 'FRETNOISE':
+            return t.getFretNoiseOptions()
+
         elif func == 'HARMONY':
             return ' '.join([str(x) for x in t.harmony])
+
+        elif func == 'HARMONYONLY':
+            return ' '.join([str(x) for x in t.harmonyOnly])
 
         elif func == 'HARMONYVOLUME':
             return ' '.join([str(int(i * 100)) for i in t.harmonyVolume])
@@ -279,6 +287,9 @@ class Macros:
 
         elif func == 'MIDINOTE':
             return MMA.midinote.mopts(t)
+
+        elif func == 'MIDIVOLUME':
+            return "%s" % t.cVolume
 
         elif func == 'OCTAVE':
             return ' '.join([str(i//12) for i in t.octave])
@@ -331,6 +342,10 @@ class Macros:
                     tmp.append('%s,%s' % (a1, a2))
             return ' '.join(tmp)
 
+        elif func == 'RPITCH':
+            return MMA.rpitch.getOpts(t)
+            
+                    
         elif func == 'SEQUENCE':
             tmp = []
             for a in range(gbl.seqSize):
@@ -369,6 +384,9 @@ class Macros:
                         r.append("%s,%s" % (a, b))
 
             return ' '.join(r)
+
+        elif func == 'STRUMADD':
+            return ' '.join([str(x) for x in t.strumAdd])
 
         elif func == 'TRIGGER':
             return MMA.trigger.getTriggerOptions(t)

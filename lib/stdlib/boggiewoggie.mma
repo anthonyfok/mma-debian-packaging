@@ -128,3 +128,12 @@ DefGroove BoggieWoggieEnd Same bass line but bar 1 has chords on 1/3 and \
 
 
 
+////////////////////////
+/// Intro
+
+Groove BoggieWoggie
+
+Bass   Sequence B4-1 B4-2 B1234  B1
+Chord  Sequence *    *    *      C13
+
+DefGroove BoggieWoggieIntro  Simple 4 bar introduction.

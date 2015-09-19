@@ -33,7 +33,7 @@ If it doesn't, stop and figure it out. Read the manual, etc.
 Timidity works by using something called a soundfont. Using this it
 converts each MIDI sound instruction into an audio signal. Don't worry
 about how it does that ... but, remember that quality of the generated
-sound relies on the quality for the soundfont. The default distributions
+sound relies on the quality of the soundfont. The default distributions
 I've seen have some pretty crappy sounds.
 
 So, upgrade the sounds by installing a better font. I've installed something

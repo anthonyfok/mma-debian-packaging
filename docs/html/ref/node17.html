@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html695"
+<A NAME="tex2html711"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html709"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html687"
+<A NAME="tex2html703"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html696"
+<B> Next:</B> <A NAME="tex2html712"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html694"
+<B> Up:</B> <A NAME="tex2html710"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html688"
+<B> Previous:</B> <A NAME="tex2html704"
   HREF="node16.html">Ornament</A>
 <BR>
 <BR></DIV>
@@ -51,19 +51,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html697"
+<LI><A NAME="tex2html713"
   HREF="node17.html#SECTION001710000000000000000">Tempo</A>
-<LI><A NAME="tex2html698"
+<LI><A NAME="tex2html714"
   HREF="node17.html#SECTION001720000000000000000">Time</A>
-<LI><A NAME="tex2html699"
+<LI><A NAME="tex2html715"
   HREF="node17.html#SECTION001730000000000000000">Truncate</A>
-<LI><A NAME="tex2html700"
+<LI><A NAME="tex2html716"
   HREF="node17.html#SECTION001740000000000000000">TimeSig</A>
-<LI><A NAME="tex2html701"
+<LI><A NAME="tex2html717"
   HREF="node17.html#SECTION001750000000000000000">BeatAdjust</A>
-<LI><A NAME="tex2html702"
+<LI><A NAME="tex2html718"
   HREF="node17.html#SECTION001760000000000000000">Fermata</A>
-<LI><A NAME="tex2html703"
+<LI><A NAME="tex2html719"
   HREF="node17.html#SECTION001770000000000000000">Cut</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -118,7 +118,7 @@ to increase or decrease the current rate by including a leading ``+'',
 will increase the current rate to 130 beats/minute.
 
 <P>
-The tempo can be changed series of beats, much like a rit. or accin
+The tempo can be changed series of beats, much like a ritardando  or accelerando in
 real music. Assuming that a time signature of <SPAN  CLASS="textbf">4/4</SPAN>, the current tempo
 is 120, and there are 4 beats in a bar, the command:
 
@@ -134,7 +134,7 @@ is 120, and there are 4 beats in a bar, the command:
 <P>
 will cause 4 tempo entries to be placed in the current bar (in the
 MIDI meta track). The start of the bar will be 115, the 2nd beat will
-be at 110, the 3rd at 105 and the last at 100. Note: the value of
+be at 110, the 3rd at 105 and the last at 100. Note: the value of the macro
 $_T<SMALL>EMPO</SMALL> will reflect the final value, not the intermediates.
 
 <P>
@@ -238,8 +238,8 @@ chords (without using the extended ``@'' notation,
 <P>
 Changing the time also cancels all existing sequences. So, after a
 time directive you'll need to set up your sequences or load a new
-groove.<A NAME="tex2html67"
-  HREF="#foot8420"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>
+groove.<A NAME="tex2html71"
+  HREF="#foot8785"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>
 <P>
 
 <H1><A NAME="SECTION001730000000000000000"></A> <A NAME="truncate"></A>
@@ -475,7 +475,7 @@ A few caveats:
 
 <P>
 </LI>
-<LI>You can not use T<SMALL>RUNCATE</SMALL> to lengthen a bar. If you need
+<LI>You cannot use T<SMALL>RUNCATE</SMALL> to lengthen a bar. If you need
   to lengthen a bar (perhaps a <SPAN  CLASS="textbf">5/4</SPAN> bar in a <SPAN  CLASS="textbf">4/4</SPAN>
   song you just need to create a bar with the additional beats (in
   this case a 1 beat bar).
@@ -953,8 +953,8 @@ thought. The symbol is also referred to as ``railroad tracks''.
 
 <P>
 The idea is to stop the music on all tracks, pause briefly, and
-resume.<A NAME="tex2html68"
-  HREF="#foot8632"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+resume.<A NAME="tex2html72"
+  HREF="#foot8997"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  provides the C<SMALL>UT</SMALL> command to help deal with this
@@ -1165,16 +1165,16 @@ If the offset is omitted, the current bar position will be used. This
 the same as using an offset value of 0.
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot8420">...
+<DT><A NAME="foot8785">...
 groove.</A><A
- HREF="node17.html#tex2html67"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+ HREF="node17.html#tex2html71"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The time value is saved/restored with grooves so
   setting a time is redundant in this case.
 
 </DD>
-<DT><A NAME="foot8632">...
+<DT><A NAME="foot8997">...
 resume.</A><A
- HREF="node17.html#tex2html68"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
+ HREF="node17.html#tex2html72"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>The answer to the music theory question of whether
   the ``pause'' takes time <SPAN  CLASS="textit">from</SPAN> the current beat or is treated
   as a ``fermata'' is not clear--but as far as 
@@ -1185,26 +1185,26 @@ resume.</A><A
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html695"
+<A NAME="tex2html711"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html693"
+<A NAME="tex2html709"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html687"
+<A NAME="tex2html703"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html696"
+<B> Next:</B> <A NAME="tex2html712"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html694"
+<B> Up:</B> <A NAME="tex2html710"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html688"
+<B> Previous:</B> <A NAME="tex2html704"
   HREF="node16.html">Ornament</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2015-01-27
+2015-09-18
 </ADDRESS>
 </BODY>
 </HTML>

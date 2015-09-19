@@ -120,7 +120,7 @@ Plectrum Sequence  {1.0  +1   80   90    90   90   90   80;
                     {1.0 +4 80}
 Bass     Sequence   B11  /  /  B1
 
-DefGroove PopSpiritualIntro
+DefGroove PopSpiritualIntro  4 bar introduction
 
 //////////////////////////////////////////////////////////
 /// Ending

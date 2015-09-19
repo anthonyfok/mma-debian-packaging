@@ -43,6 +43,7 @@ import MMA.midinote
 import MMA.grooves
 import MMA.docs
 import MMA.auto
+import MMA.func
 import MMA.translate
 import MMA.patSolo
 import MMA.mdefine
@@ -59,6 +60,7 @@ import MMA.trigger
 import MMA.tempo
 import MMA.tweaks
 import MMA.options
+import MMA.rpitch
 
 from MMA.lyric import lyric
 from MMA.macro import macros
@@ -125,7 +127,8 @@ def parse(inpath):
             break
 
         l = macros.expand(curline)
-        if not l:     # macro expansion created empty line (empty macros do this)
+        if not l:
+            
             continue
 
         """ Handle BEGIN and END here. This is outside of the Repeat/End
@@ -311,12 +314,19 @@ def parse(inpath):
             else:
                 nextOffset = gbl.barLen
 
+            # barPtrs is used by the -B/b options to strip unwanted sections. 
             gbl.barPtrs[gbl.barNum + 1] = [gbl.barLabel, gbl.tickOffset,
                                            gbl.tickOffset + nextOffset - 1]
 
             gbl.totTime += float(nextOffset / gbl.BperQ) / gbl.tempo
 
             gbl.tickOffset += nextOffset
+
+            if gbl.printProcessed:
+                if gbl.barLabel:
+                    gbl.barLabels.append(gbl.barLabel)
+                else:
+                    gbl.barLabels.append('?')
 
             gbl.barNum += 1
             gbl.seqCount = (gbl.seqCount + 1) % gbl.seqSize
@@ -753,22 +763,6 @@ def rndseed(ln):
         random.seed(stof(ln[0]))
 
 
-def transpose(ln):
-    """ Set transpose value. """
-
-    if len(ln) != 1:
-        error("Use: Transpose N")
-
-    t = stoi(ln[0], "Argument for Tranpose must be an integer, not '%s'" % ln[0])
-    if t < -12 or t > 12:
-            error("Tranpose %s out-of-range; must be -12..12" % t)
-
-    gbl.transpose = t
-
-    if gbl.debug:
-        print("Set Transpose to %s" % t)
-
-
 def lnPrint(ln):
     """ Print stuff in a "print" command. """
 
@@ -1161,6 +1155,13 @@ def trackMOctave(name, ln):
     gbl.tnames[name].setMOctave(ln)
 
 
+def trackRpitch(name, ln):
+    """ Set random pitch adjustment for specific track. """
+
+    if not ln:
+        error("Use: %s RPitch N [...]" % name)
+    gbl.tnames[name].setRPitch(ln)
+
 def trackStrum(name, ln):
     """ Set all specified track strum. """
 
@@ -1216,7 +1217,7 @@ def trackHarmonyVolume(name, ln):
 
 
 #######################################
-# Plectrum stuff
+# Plectrum only stuff
 
 def trackPlectrumTuning(name, ln):
     """ Define the number of strings and tuning for
@@ -1251,6 +1252,18 @@ def trackPlectrumCapo(name, ln):
         warning("CAPO: not permitted in %s tracks. Arg '%s' ignored." %
                 (g.vtype, ' '.join(ln)))
 
+
+def trackPlectrumFretNoise(name, ln):
+    """ Define fret noise options.
+    """
+
+    g = gbl.tnames[name]
+
+    if hasattr(g, "setPlectrumFretNoise"):
+        g.setPlectrumFretNoise(ln)
+    else:
+        warning("FRETNOISE: not permitted in %s tracks. Arg '%s' ignored." %
+                (g.vtype, ' '.join(ln)))
 
 #######################################
 # MIDI setting
@@ -1421,6 +1434,7 @@ simpleFuncs = {'ADJUSTVOLUME': MMA.volume.adjvolume,
                'AUTHOR': MMA.docs.docAuthor,
                'AUTOSOLOTRACKS': MMA.patSolo.setAutoSolo,
                'BEATADJUST': MMA.tempo.beatAdjust,
+               'CALL': MMA.func.callFunction,
                'CHANNELPREF': MMA.midifuncs.setChPref,
                'CHORDADJUST': MMA.chords.chordAdjust,
                'CMDLINE': MMA.options.cmdLine,
@@ -1432,6 +1446,7 @@ simpleFuncs = {'ADJUSTVOLUME': MMA.volume.adjvolume,
                'DECRESC': MMA.volume.setDecresc,
                'DEFALIAS': MMA.grooves.grooveAlias,
                'DEFCHORD': MMA.chords.defChord,
+               'DEFCALL': MMA.func.defCall,
                'DEFGROOVE': MMA.grooves.grooveDefine,
                'DELETE': deleteTrks,
                'DOC': MMA.docs.docNote,
@@ -1511,7 +1526,7 @@ simpleFuncs = {'ADJUSTVOLUME': MMA.volume.adjvolume,
                'VOICEVOLTR': MMA.translate.voiceVolTable.set,
                'VOICETR': MMA.translate.vtable.set,
                'VOLUME': MMA.volume.setVolume,
-               'TRANSPOSE': transpose}
+               'TRANSPOSE': MMA.keysig.transpose}
 
 trackFuncs = {
     'ACCENT': trackAccent,
@@ -1534,6 +1549,7 @@ trackFuncs = {
     'DRUMTYPE': trackDrumType,
     'DUPROOT': trackDupRoot,
     'FORCEOUT': trackForceOut,
+    'FRETNOISE': trackPlectrumFretNoise,
     'GROOVE': MMA.grooves.trackGroove,
     'HARMONY': trackHarmony,
     'HARMONYONLY': trackHarmonyOnly,
@@ -1565,6 +1581,7 @@ trackFuncs = {
     'RSKIP': trackRskip,
     'RTIME': trackRtime,
     'RVOLUME': trackRvolume,
+    'RPITCH':  MMA.rpitch.setRPitch,
     'SCALETYPE': trackScaletype,
     'SEQCLEAR': MMA.sequence.trackSeqClear,
     'SEQRND': MMA.sequence.trackSeqRnd,

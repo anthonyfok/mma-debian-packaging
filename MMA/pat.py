@@ -25,7 +25,6 @@ Bob van der Poel <bob@mellowood.ca>
 
 import copy
 import random
-import math
 
 import MMA.notelen
 import MMA.translate
@@ -38,6 +37,8 @@ import MMA.seqrnd
 import MMA.truncate
 import MMA.ornament
 import MMA.trigger
+import MMA.rpitch
+import MMA.debug
 
 from . import gbl
 from MMA.common import *
@@ -48,8 +49,10 @@ pats = {}        # Storage for all pattern defines
 class Pgroup:
     pass
 
+
 defaultDrum = 0
 defaultVoice = 0
+currentChord = None
 
 def getIncDec(v):
     """ See if 'v' starts with -/+. Strip and return. """
@@ -170,12 +173,17 @@ class PC:
 
         for n in ln:
 
-            n = stoi(n, "Argument for %s Compress must be a value"
-                        % self.name)
+            if n.upper() in ("ON", "TRUE"):
+                n = "1"
+            if n.upper() in ("OFF", "FALSE"):
+                n = "0"
+            if n not in ("0", "1"):
+                error("%s Compress: Argument 0, 1, True, False, not '%s'." % (self.name, n))
 
-            if n < 0 or n > 5:
-                error("Compress %s out-of-range; must be 0 to 5" % n)
-
+            if n == '1':
+                n = 1
+            else:
+                n = 0
             if n and self.vtype == 'CHORD' and self.voicing.mode:
                 vwarn = 1
 
@@ -187,8 +195,7 @@ class PC:
             warning("Compress is ignored in %s tracks" % self.vtype)
 
         if gbl.debug:
-            print("Set %s Compress to: %s" %
-                  (self.name, ' '.join([str(a) for a in self.compress])))
+            MMA.debug.trackSet(self.name, "Compress")
 
     def setRange(self, ln):
         """ set range. """
@@ -215,8 +222,7 @@ class PC:
             self.restart()
 
         if gbl.debug:
-            print("Set %s Range to: %s" % 
-                  (self.name, ' '.join([str(a) for a in self.chordRange])))
+            MMA.debug.trackSet(self.name, "Range")
 
     def setVoicing(self, ln):
         """ set the Voicing Mode options.
@@ -258,8 +264,7 @@ class PC:
         self.delay = seqBump(tmp)
 
         if gbl.debug:
-            print("Set %s Delay set to: %s" % 
-                  (self.name, ' '.join([str(a) for a in self.delay])))
+            MMA.debug.trackSet(self.name, "Delay")
 
     def setDupRoot(self, ln):
         """ set/unset root duplication.
@@ -321,8 +326,7 @@ class PC:
         self.chord = seqBump(clist)
 
         if gbl.debug:
-            print("%s: Chords for track set to: %s" % 
-                  (self.name, ' '.join( ["{%s}" % ' '.join(l) for l in self.chord])))
+            MMA.debug.trackSet(self.name, "Chords")
 
     def setChordLimit(self, ln):
         """ set/unset the chordLimit flag. """
@@ -338,7 +342,7 @@ class PC:
             warning("%s Limit is ignored in %s tracks" % (self.name, self.vtype))
 
         if gbl.debug:
-            print("Set %s Limit to %s" % (self.name, n))
+            MMA.debug.trackSet(self.name, "Limit")
 
     def setChannel(self, ln=None):
         """ Set the midi-channel number for a track.
@@ -501,7 +505,8 @@ class PC:
             error("%s Sticky: '%s' is not a valid option." % (self.name, arg))
 
         if gbl.debug:
-            print("%s Sticky %s" % (self.name, self.sticky))
+            MMA.debug.trackSet(self.name, "Sticky")
+
         
     def setStrum(self, ln):
         """ Set Strum time. """
@@ -535,7 +540,7 @@ class PC:
             warning("Strum has no effect in %s tracks" % self.name)
 
         if gbl.debug:
-            print("%s Strum set to %s" % (self.name, self.strum))
+            MMA.debug.trackSet(self.name, "Strum")
 
     def setStrumAdd(self, ln):
         """ Additional options for strum. """
@@ -550,7 +555,7 @@ class PC:
         self.strumAdd = seqBump(tmp)
 
         if gbl.debug:
-            print("%s StrumAdd set to %s." % (self.name, self.strumAdd))
+            MMA.debug.trackSet(self.name, "StrumAdd")
 
     def getStrum(self, sc):
         """ Returns the strum factor. Note that if strum==(0,0) a 0 is returned."""
@@ -604,16 +609,9 @@ class PC:
         self.rVolume = seqBump(tmp)
 
         if gbl.debug:
-            msg = ["%s Rvolume:" % self.name]
-            for n1, n2 in self.rVolume:
-                n1 = int(n1 * 100)
-                n2 = int(n2 * 100)
-                if abs(n1) == n2:
-                    msg.append("%s" % n2)
-                else:
-                    msg.append("%s,%s" % (n1, n2))
-            print(' '.join(msg))
+            MMA.debug.trackSet(self.name, "RVolume")
 
+         
     def setRSkip(self, ln):
         """ Set the note random skip factor for a track. """
 
@@ -655,12 +653,8 @@ class PC:
         self.rSkip = seqBump(tmp)
 
         if gbl.debug:
-            msg =["%s set to:" % msg]
-            if self.rSkipBeats:
-                msg.append("Beats=%s" % ','.join(['%g' % (i / float(gbl.BperQ) + 1)
-                                                  for i in self.rSkipBeats]))
-            msg.append(' '.join([str(int(n * 100)) for n in self.rSkip]))
-            print(' '.join(msg))
+            MMA.debug.trackSet(self.name, "RSkip")
+
 
     def setRDuration(self, ln):
         """ Set the duration randomizer for a track. """
@@ -676,13 +670,8 @@ class PC:
         self.rDuration = seqBump(tmp)
 
         if gbl.debug:
-            msg = ["%s:" % msg]
-            for n1, n2 in self.rDuration:
-                if abs(n1) == n2:
-                    msg.append("%s " % (n2 * 100))
-                else:
-                    msg.append("%s,%s " % (n1 * 100, n2 * 100))
-            print(' '.join(msg))
+            MMA.debug.trackSet(self.name, "RDuration")
+
 
     def setRTime(self, ln):
         """ Set the timing randomizer for a track. """
@@ -698,13 +687,7 @@ class PC:
         self.rTime = seqBump(tmp)
 
         if gbl.debug:
-            msg = ["%s:" % msg]
-            for n1, n2 in self.rTime:
-                if abs(n1) == n2:
-                    msg.append("%s" % n2)
-                else:
-                    msg.append("%s,%s" % (n1, n2))
-            print(' '.join(msg))
+            MMA.debug.trackSet(self.name, "RTime")
 
     def setDirection(self, ln):
         """ Set scale direction. """
@@ -725,9 +708,7 @@ class PC:
             self.lastNote = -1
 
         if gbl.debug:
-            print("Set %s Direction to: %s" %
-                  (self.name, ' '.join(self.direction)))
-
+            MMA.debug.trackSet(self.name, "Direction")
 
     def setScaletype(self, ln):
         """ Set scale type.
@@ -767,8 +748,7 @@ class PC:
             warning("Setting both Voicing Mode and Invert is not a good idea")
 
         if gbl.debug:
-            print("Set %s Invert to: %s" % 
-                  (self.name, ' '.join([str(a) for a in self.invert])))
+            MMA.debug.trackSet(self.name, "Invert")
 
     def setOctave(self, ln):
         """ Set the octave for a track. Use 0-10, -x, +x. """
@@ -1292,6 +1272,7 @@ class PC:
             'RTIME': copy.deepcopy(self.rTime),
             'RDURATION': copy.deepcopy(self.rDuration),
             'RVOLUME': copy.deepcopy(self.rVolume),
+            'RPITCH': copy.deepcopy(self.rPitch),
             'SCALE': self.scaleType[:],
             'SEQ': self.sequence[:],
             'SEQRND': self.seqRnd,
@@ -1325,6 +1306,7 @@ class PC:
         self.rTime = g['RTIME']
         self.rDuration = g['RDURATION']
         self.rVolume = g['RVOLUME']
+        self.rPitch = g['RPITCH']
         self.rSkip = g['RSKIP']
         self.rSkipBeats = g['RSKIPBEATS']
         self.strum = g['STRUM']
@@ -1384,6 +1366,7 @@ class PC:
             self.seqRndWeight = [1]
             self.scaleType = ['AUTO']
             self.rVolume = [[0, 0]]
+            self.rPitch = None
             self.rSkip = [0]
             self.rSkipBeats = []
             self.rTime = [[0, 0]]
@@ -1896,6 +1879,8 @@ class PC:
         for c in ctabs:
             if offset < c.chEnd:
                 break
+        self.currentChord = c  # for others who might need chord (RPITCH)
+        
         return c
 
     def adjustVolume(self, v, beat):
@@ -2057,7 +2042,8 @@ class PC:
 
     def sendNote(self, offset, duration, note, velocity):
         """ Send a note to the MIDI machine. This is called from all
-            track classes and handles niceties like mallet-repeat and delay.
+            track classes and handles niceties like mallet-repeat, rpitch
+            and delay.
         """
 
         if not velocity:
@@ -2065,6 +2051,8 @@ class PC:
 
         sc = self.seq
 
+        if self.rPitch:
+            note = MMA.rpitch.doRpitch(self, note)
         rptr = self.mallet
         if rptr and duration > rptr:
             ll = self.getDur(rptr)
@@ -2121,7 +2109,6 @@ class PC:
         strumOffset = 0  # 1st note in list is not offset-strummed
 
         duration = self.getDur(duration)
-
         for n, vol in chord:
             self.sendNote(
                 int(offset + strumOffset),

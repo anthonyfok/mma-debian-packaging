@@ -268,6 +268,9 @@ for n in sorted(gbl.mtrks.keys())[1:]:     # check all but 0 (meta)
     if len(gbl.mtrks[n].miditrk) > 1:
         trackCount += 1
 
+if gbl.printProcessed:
+    print( "Bars processed: %s" % ' '.join(gbl.barLabels))
+
 if trackCount == 1:  # only meta track
     if fileExist:
         print("\n")
