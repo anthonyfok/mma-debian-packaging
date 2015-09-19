@@ -1,2 +1,3 @@
 mma-gb-write-browserDB-to-personal-cache-directory.patch
 mma-splitrec-to-python3.patch
+fix-logo-link-in-mma-ref-html.patch
