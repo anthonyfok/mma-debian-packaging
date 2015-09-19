@@ -1,9 +1,20 @@
-mma (15.09-1) UNRELEASED; urgency=medium
+mma (15.09-1) unstable; urgency=medium
 
-  * Imported Upstream version 15.09
+  * New upstream release:
+     - Works with Python 2.7 or 3.x
+     - Number of minor bug fixes and optimizations
+     - Added RPITCH for random "mistakes"
+     - Added SUBROUTINES
+     - Added FretNoise option for Plectrum tracks
+     - Other minor enhancements
   * Update to PDF documentation from MMA 15.09
+  * Leave PDF documentation in /usr/share/doc/mma/pdf/ uncompressed
+    for easier access
+  * Separate debian/mma.doc-base into four files
+  * Fix anchor href to logo.png in MMA Reference Manual
+  * Bump X-Python-Version to >= 2.7
 
- -- Anthony Fok <foka@debian.org>  Fri, 18 Sep 2015 22:00:05 -0600
+ -- Anthony Fok <foka@debian.org>  Sat, 19 Sep 2015 01:04:28 -0600
 
 mma (15.01-1) unstable; urgency=medium
 
