@@ -1,7 +1,8 @@
 
-Enhance STRUM to vary the rate so that it can speed up or slow down
-   over the duration of a chord. Perhaps a syntax like Strum 5>10?
-   This should be relatively easy to do in pat.py/sendChord().
+Add a "BeatSize" command. Currently MMA thinks all beats set with TIME
+   are quarternotes. This causes problems with notation editors looking
+   at the timesigs and with solo notation (we "fix" this in solo with
+   the STRETCH option.
 
 Add a "Output On/Off" so that generation can be toggled inside a
    script. Gotta be careful in doing this so that key info is skipped,
@@ -32,7 +33,6 @@ Would be nice to have a keyword thing which would let the user switch
 
 Add a multi-line allgroove command ... using begin/end is slow.
 
-Add FF 02 copyright message option
 
 Enhance the html groove docs to <play> a sample for a clicked groove.
 
@@ -57,6 +57,3 @@ Add Nashville chord notation in addition to roman.
 There is a bug in the Optimal Voicing code which makes the Centering
    option useless.
 
-To my ear it appears that that when using the -b command line option
-   the last bar is truncated. I need to examine the result and the
-   code. Might be a one-off problem.

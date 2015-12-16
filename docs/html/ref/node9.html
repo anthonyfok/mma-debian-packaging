@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html570"
+<A NAME="tex2html583"
   HREF="node10.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html568"
+<A NAME="tex2html581"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html562"
+<A NAME="tex2html575"
   HREF="node8.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html571"
+<B> Next:</B> <A NAME="tex2html584"
   HREF="node10.html">Solo and Melody Tracks</A>
-<B> Up:</B> <A NAME="tex2html569"
+<B> Up:</B> <A NAME="tex2html582"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html563"
+<B> Previous:</B> <A NAME="tex2html576"
   HREF="node8.html">Musical Data Format</A>
 <BR>
 <BR></DIV>
@@ -51,28 +51,30 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html572"
+<LI><A NAME="tex2html585"
   HREF="node9.html#SECTION00910000000000000000">Lyric Options</A>
 <UL>
-<LI><A NAME="tex2html573"
-  HREF="node9.html#SECTION00911000000000000000">Event Type</A>
-<LI><A NAME="tex2html574"
-  HREF="node9.html#SECTION00912000000000000000">Kar File Mode</A>
-<LI><A NAME="tex2html575"
-  HREF="node9.html#SECTION00913000000000000000">Word Splitting</A>
+<LI><A NAME="tex2html586"
+  HREF="node9.html#SECTION00911000000000000000">Enable</A>
+<LI><A NAME="tex2html587"
+  HREF="node9.html#SECTION00912000000000000000">Event Type</A>
+<LI><A NAME="tex2html588"
+  HREF="node9.html#SECTION00913000000000000000">Kar File Mode</A>
+<LI><A NAME="tex2html589"
+  HREF="node9.html#SECTION00914000000000000000">Word Splitting</A>
 </UL>
 <BR>
-<LI><A NAME="tex2html576"
+<LI><A NAME="tex2html590"
   HREF="node9.html#SECTION00920000000000000000">Chord Name Insertion</A>
 <UL>
-<LI><A NAME="tex2html577"
+<LI><A NAME="tex2html591"
   HREF="node9.html#SECTION00921000000000000000">Chord Transposition</A>
 </UL>
 <BR>
-<LI><A NAME="tex2html578"
+<LI><A NAME="tex2html592"
   HREF="node9.html#SECTION00930000000000000000">Setting Lyrics</A>
 <UL>
-<LI><A NAME="tex2html579"
+<LI><A NAME="tex2html593"
   HREF="node9.html#SECTION00931000000000000000">Limitations</A>
 </UL></UL>
 <!--End of Table of Child-Links-->
@@ -99,7 +101,7 @@ Meta-event:
 <SPAN  CLASS="textbf">FF 05 len text <SPAN  CLASS="textit">Lyric</SPAN>.</SPAN>  A
   lyric to be sung. Generally, each syllable will will be a separate
   lyric event which begins at the event's time.<A NAME="tex2html39"
-  HREF="#foot4528"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></BLOCKQUOTE>
+  HREF="#foot4556"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></BLOCKQUOTE>
 <P>
 
 <P>
@@ -114,7 +116,12 @@ needed).
 If you want to read the word from the source, refer to the official
 MIDI lyrics documentation at
 <TT><A NAME="tex2html41"
-  HREF="http://www.midi.org/about-midi/smf/rp017.shtml">http://www.midi.org/about-midi/smf/rp017.shtml</A></TT>.
+  HREF="http://www.midi.org/about-midi/smf/rp017.shtml">http://www.midi.org/about-midi/smf/rp017.shtml</A></TT>. In addition, you
+may want to look at <TT><A NAME="tex2html42"
+  HREF=" http://www.midi.org/techspecs/rp26.php">http://www.midi.org/techspecs/rp26.php</A></TT> which
+discusses valid character sets in MIDI. For the most part, 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  doesn't care what character set you use. But, to be safe, you should
+restrict yourself to using US ASCII (CP-1252).
 
 <P>
 
@@ -131,6 +138,41 @@ pairs with the option name and the setting joined with an ``=''.
 <P>
 
 <H2><A NAME="SECTION00911000000000000000">
+Enable</A>
+</H2>
+
+<P>
+By default the setting of lyrics is enabled. You can toggle this
+behavior with the O<SMALL>N</SMALL> or O<SMALL>FF</SMALL> option. For example:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Lyric Off  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+disables the setting of lyrics, and:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Lyric On  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+restores lyric creation. This option may be handy when you are inserting
+automatic chord names into the lyric track.
+
+<P>
+
+<H2><A NAME="SECTION00912000000000000000">
 Event Type</A>
 </H2>
 
@@ -166,7 +208,7 @@ warning message.
 
 <P>
 
-<H2><A NAME="SECTION00912000000000000000">
+<H2><A NAME="SECTION00913000000000000000">
 Kar File Mode</A>
 </H2>
 
@@ -229,7 +271,7 @@ generating proper lyric breaks.
 
 <P>
 
-<H2><A NAME="SECTION00913000000000000000">
+<H2><A NAME="SECTION00914000000000000000">
 Word Splitting</A>
 </H2>
 
@@ -323,8 +365,8 @@ in the L<SMALL>YRIC</SMALL> command:
 
 <P>
 Please note that the Lyrics code does <SPAN  CLASS="textit">not</SPAN> look at the global
-T<SMALL>RANSPOSE</SMALL> setting.<A NAME="tex2html42"
-  HREF="#foot4451"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+T<SMALL>RANSPOSE</SMALL> setting.<A NAME="tex2html43"
+  HREF="#foot4474"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  isn't too smart in it's transposition and will often display the
@@ -351,6 +393,11 @@ You can (and may well need to) change the CN<SMALL>AMES</SMALL> setting
 in a number of different places in the song.
 
 <P>
+This command supports the use of interval settings like the
+global <SMALL>TRANSPOSE</SMALL> (<A HREF="node27.html#sec-transpose">detailed here)</A> setting does; however, you must use hyphens
+to join the words (eg. Up-Perfect-Fourth).
+
+<P>
 
 <H1><A NAME="SECTION00930000000000000000">
 Setting Lyrics</A>
@@ -362,8 +409,8 @@ things, there is more than one way to do it.
 
 <P>
 Lyrics can be set for a bar in-between a pair of <SPAN  CLASS="textbf">[]</SPAN>s
-somewhere in a data bar.<A NAME="tex2html43"
-  HREF="#foot4459"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A> For
+somewhere in a data bar.<A NAME="tex2html44"
+  HREF="#foot4487"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A> For
 example:
 
 <P>
@@ -552,8 +599,8 @@ a lyric just include a dummy to keep
       </Table>
 
 <P>
-<A HREF="#eg:twk">This example</A><A NAME="tex2html44"
-  HREF="#foot4534"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A> shows a complete
+<A HREF="#eg:twk">This example</A><A NAME="tex2html45"
+  HREF="#foot4562"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A> shows a complete
 song with lyrics. You should also examine the file
 <TT><SPAN  CLASS="textbf">egs/lyrics.mma</SPAN></TT> for an alternate example.
 
@@ -636,7 +683,7 @@ A few combinations are not permitted:
 </UL>
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot4528">... time.</A><A
+<DT><A NAME="foot4556">... time.</A><A
  HREF="node9.html#tex2html39"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>I am quoting
     from ``MIDI Documentation'' distributed with the TSE Library. Pete
@@ -645,22 +692,22 @@ A few combinations are not permitted:
   HREF="http://tse3.sourceforge.net/docs.html">http://tse3.sourceforge.net/docs.html</A></TT>
 
 </DD>
-<DT><A NAME="foot4451">... setting.</A><A
- HREF="node9.html#tex2html42"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
+<DT><A NAME="foot4474">... setting.</A><A
+ HREF="node9.html#tex2html43"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>This is a feature! It permits you
   to have separate control over music generation and chord symbol
   display.
 
 </DD>
-<DT><A NAME="foot4459">... bar.</A><A
- HREF="node9.html#tex2html43"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
+<DT><A NAME="foot4487">... bar.</A><A
+ HREF="node9.html#tex2html44"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">3</SPAN></SUP></A></DT>
 <DD>Although the lyric can be placed
   anywhere in the bar, it is recommended that you only place the lyric
   at the end of the bar. All the examples follow this style.
 
 </DD>
-<DT><A NAME="foot4534">...eg:twk</A><A
- HREF="node9.html#tex2html44"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A></DT>
+<DT><A NAME="foot4562">...eg:twk</A><A
+ HREF="node9.html#tex2html45"><SUP><SPAN CLASS="arabic">9</SPAN>.<SPAN CLASS="arabic">4</SPAN></SUP></A></DT>
 <DD>Included in
   this distribution as <TT><SPAN  CLASS="textbf">songs/twinkle.mma</SPAN></TT>.
 
@@ -668,26 +715,26 @@ A few combinations are not permitted:
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html570"
+<A NAME="tex2html583"
   HREF="node10.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html568"
+<A NAME="tex2html581"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html562"
+<A NAME="tex2html575"
   HREF="node8.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html571"
+<B> Next:</B> <A NAME="tex2html584"
   HREF="node10.html">Solo and Melody Tracks</A>
-<B> Up:</B> <A NAME="tex2html569"
+<B> Up:</B> <A NAME="tex2html582"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html563"
+<B> Previous:</B> <A NAME="tex2html576"
   HREF="node8.html">Musical Data Format</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2015-01-27
+2015-09-18
 </ADDRESS>
 </BODY>
 </HTML>

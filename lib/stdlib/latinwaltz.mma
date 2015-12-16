@@ -139,6 +139,42 @@ Groove LatinWaltzSus
 Arpeggio Groove LatinWaltzPlus
 DefGroove LatinWaltzSusPlus  Guitar background and sustained strings.
 
+//////////////////////////
+/// Fill
+
+Groove LatinWaltz
+
+SeqSize 1
+
+Alltracks SeqRnd Off
+
+Begin Drum-CowBell
+	Sequence   D123
+    Volume mf
+End
+
+Begin Drum-LowConga
+    Sequence   D123
+	Rskip 0
+End
+Begin Drum-HighConga
+	Sequence  D13
+	Rskip 0
+End
+
+Begin Drum-Maraca
+	Sequence D6
+    volume f
+    Rskip 20
+End
+
+Drum-Claves   Sequence  D1
+Chord         Sequence 	{C123 * 2} 
+Bass          Sequence  - 
+Walk          Sequence  W123
+
+DefGroove LatinWaltzFill  Single bar fill, can be used in endings.
+
 ////////////////////////////////////////////
 /// Intro
 

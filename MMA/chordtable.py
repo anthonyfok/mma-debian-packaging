@@ -304,6 +304,10 @@ chordlist = {
              (C, D, E, F, Gs, A, Bb),
              "7th plus 9th with sharp 5th (same as aug9)."),
 
+    '9b6':   ((C,   E,  Ab, D+12 ),
+              (C, D, E, F, Ab, B, D+12),
+              "9th with flat 6 (no 5th or 7th)."),
+    
     '9#11': ((C,    E,     G,    Bb, D+12, Fs+12 ),
              (C, D, E, Fs, G, A, Bb),
              "7th plus 9th and sharp 11th."),
@@ -447,10 +451,10 @@ chordlist = {
 }
 
 
-""" Extend our table with common synomyns. These are real copies,
-    not pointers. This is done so that a user redefine only affects
-    the original.
-"""
+# Extend our table with common synomyns. These are real copies,
+#   not pointers. This is done so that a user redefine only affects
+#   the original. There is no way to tell if a chordlist[] entry is
+#   from above or if it's an added alias or defChord.
 
 aliases = (
     ('11#5',     '11+',      ''),
@@ -523,3 +527,4 @@ for a, b, d in aliases:
         d = chordlist[b][2]
 
     chordlist[a] = (n, s, d)
+

@@ -211,6 +211,18 @@ Chord-Guitar Sequence C13 / C1234  L1
 
 DefGroove SambaIntro1         Alternate 4 bar introduction.
 
+// an 8 bar version
+Groove SambaIntro
+Seqsize 8
+
+Drum-Shaker  Sequence   D8 / / / / / D16 {D12; D12 Shift .5}
+
+Bass         Sequence B13 / / / / / / {1 4 5 100; 2 4 3 100; 3 4 3 110; 4 4 2 120 }
+Chord-Piano  Sequence {C1234; C24 Shift .5} / / / / / / L1
+Chord-Guitar Sequence C13 / / / / / / L1
+
+DefGroove SambaIntro8   8 bar introduction.
+
 //////////////////////////////////////
 ///// Ending
 

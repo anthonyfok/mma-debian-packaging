@@ -30,8 +30,20 @@ from . import gbl
 from MMA.common import *
 from MMA.pat import PC, Pgroup
 
+import copy
+
 class PlecStruct:
     pass
+
+class Fnoise():   # fretnoise options
+    def __init__(self):
+        self.track = None
+        self.strings = []
+        self.duration = 192   # 1/4 note default duration in ticks
+        self.octave = 0  # octave adjustment
+        self.max = 1  # max number of noises per beat
+        self.beats = []  # beat filter, []=all
+        self.bars = []   # bar filter, []=all
 
 class Plectrum(PC):
     """ Pattern class for a Raw MIDI track. """
@@ -43,10 +55,13 @@ class Plectrum(PC):
 
         # We have vibrating strings (a string in python refers to text not a guitar string)
         self._vibrating = []
+        self._lastOff = []
         self._tuning = []
         self.strumCenter = 0  # default to use 'start'
         self._capoFretNo = 0  # The number that the capo is on (0 for open strings)
         self.setPlectrumTuning(['e-', 'a-', 'd', 'g', 'b', 'e+'])
+        self.fretNoise = None
+        self.lastChord = None
 
     def saveGroove(self, gname):
         """ Save special/local variables for groove. """
@@ -78,6 +93,121 @@ class Plectrum(PC):
         if self.channel != 0:
             self.grooveFinish(0)
         PC.doMidiClear(self)
+
+    def getFretNoiseOptions(self):
+        """ Return options. Used in setPlectrumFretNoise() and macros. """
+
+        o = self.fretNoise
+
+        if o.bars:
+            bars = ','.join([str(i + 1) for i in o.bars])
+        else:
+            bars = 'ALL'
+
+        if not o.beats:
+            beats = 'All'
+        else:
+            beats = ','.join([str(1 + (i / float(gbl.BperQ))) for i in o.beats])
+
+        return "%s FretNoise Track=%s Duration=%sT Octave=%s Strings=%s Max=%s Beats=%s Bars=%s" \
+            % (self.name, o.track, o.duration, 
+             o.octave / 12, 
+               ','.join([str(abs(x-len(self._tuning))) for x in o.strings]), 
+             o.max,
+             beats, bars )
+
+
+    def setPlectrumFretNoise(self, l):
+        """ Set up the fretnoise stuff. """
+        
+        if not l or len(l)==1 and ( l[0].upper()=='OFF' or l[0].upper()=='NONE'):
+            self.fretNoise = None
+            if gbl.debug or 1:
+                print("%s FretNoise Off" % self.name)
+            return
+
+        self.fretNoise = Fnoise()  # new fret noise object
+        scount = len(self._tuning)
+
+        notopt, optpair = opt2pair(l, toupper=True)
+
+        if notopt:
+            error("%s FretNoise: All options are Key=Value, not '%s'." % \
+                  (self.name, ' '.join(notopt)))
+
+        o= self.fretNoise
+        for cmd, opt in optpair:
+
+            if cmd == 'BEATS':
+               o.beats = []
+               if opt != 'ALL':
+                   for t in opt.split(','):
+                       z = self.name  # this is for error msg in setBarOffset()
+                       self.name = "%s FretNoise Beats" % z
+                       o.beats.append(self.setBarOffset(t))
+                       self.name = z
+
+            elif cmd == 'BARS':
+                o.bars = []
+                if opt != 'ALL':
+                    for t in opt.split(','):
+                        i = stoi(t)
+                        if i < 1 or i > gbl.seqSize:
+                            warning("%s FretNoise Bars: setting of %s may be "
+                                "ignored since SeqSize is %s." %
+                                (self.name, i, gbl.seqSize))
+                        o.bars.append(i - 1)
+
+            elif cmd == 'DURATION':
+                o.duration = MMA.notelen.getNoteLen(opt)
+
+            elif cmd == 'MAX':
+                i = stoi(opt)
+                if i < 1 or i > scount:
+                    error("%s FretNoise Max must be 1..%s, not '%s'." % \
+                          (self.name, scount, opt))
+                o.max = i
+
+            elif cmd == 'STRINGS':
+                o.strings = []
+                for i in opt.split(','):
+                    #i = stoi(i) - 1
+                    i = abs(stoi(i)-scount)  # convert 1-6 to 6-1
+                    if i < 0 or i > scount:
+                        error("%s FretNoise STRING must be 1-%s, not %s." % \
+                              (self.name, scount, i))
+                    if i not in o.strings:
+                        o.strings.append(i)
+
+            elif cmd == 'TRACK':
+                MMA.alloc.trackAlloc(opt, 0)
+                if gbl.tnames[opt].vtype != 'BASS':
+                    error("%s FretNoise Track must be a BASS track, not %s." % \
+                          (self.name, gbl.tnames[opt].vtype))
+                o.track = opt
+                if not gbl.tnames[opt].channel:
+                    gbl.tnames[opt].setForceOut()
+
+            elif cmd == 'OCTAVE':
+                i = stoi(opt)
+                if i < -8 or i > 8:
+                    error("%s FretNoise Octave: adjustment must be -8 to 8, not '%s'." 
+                          % (self.name, i))
+                o.octave = i * 12
+
+            else:
+                error("%s FretNoise: Unknown option '%s'." % (self.name, cmd))
+
+
+        # no strings specified, set to the top 3
+        if not o.strings:
+            o.strings = range(0, 3)
+            # Adjust to fit tuning
+            o.strings=o.strings[0:scount]
+                
+        if gbl.debug or 1:
+            print(self.getFretNoiseOptions())
+        
 
     def setStrum(self, l):
         """ Called frm parser CENTER option. Sets strum to bar center, start or end.
@@ -113,6 +243,7 @@ class Plectrum(PC):
 
         self._tuning = []
         self._vibration = []
+        self.fretNoise = None  # turn off fret noise (could be string count diff)
 
         for pitchName in stringPitchNames:
             midiPitch = noteNameToMidiPitch(pitchName)
@@ -124,6 +255,8 @@ class Plectrum(PC):
             vibration.note = None       # None means the string not vibrating
             vibration.offset = None 
             self._vibrating.append(vibration)
+
+        self._lastOff = [None] * len(self._vibrating)
 
     def setPlectrumCapo(self, capoFretNo):
         """ Set a capo value. Called from main parser. """
@@ -226,6 +359,47 @@ class Plectrum(PC):
     def restart(self):
         self.ssvoice = -1
 
+    def doFretNoise(self, stringNo, note, offset):
+        """ Add in a fret noise note. """
+
+        if self._lastOff[stringNo] == None or \
+           self._lastOff[stringNo].note == note:
+            return
+
+        trk = gbl.tnames[self.fretNoise.track]
+
+        # Let user override fretnoise for track by setting a RIFF,
+        # or TRIGGER is the bass track.
+        if trk.disable or \
+           trk.riff or \
+           trk.trigger.mode:
+            return
+
+        o = self.fretNoise
+
+        # skip if incorrect beat/bar setting
+        if (o.beats and offset not in o.beats) \
+            or (o.bars and gbl.seqCount not in o.bars):
+            return
+
+        # use the plectrum track's seq (the BASS doesn't set it)
+        trk.seq = self.seq
+
+        # Use same volume as the string on
+        volume = self._lastOff[stringNo].volume
+        # We bypass the sendChord() so volume isn't adjusted. Do it anyway!
+        volume = trk.adjustVolume(volume, offset)
+
+        # octave adjustment
+        note += o.octave
+        while note > 127:
+            note -= 12
+        while note < 0:
+            note += 12
+        # Add the noise.
+        trk.sendNote(offset, o.duration, note, volume)
+
+
     def endVibration(self, stringNo, offset):
         """ kill the vibration on the string by sending out a note off """
 
@@ -243,8 +417,15 @@ class Plectrum(PC):
             o += 1
 
         gbl.mtrks[self.channel].addNoteOnToTrack(o, vibration.note, 0)  # v=0 ==note off
+
+        # save the turn-off point for fret noise function
+        self._lastOff[stringNo] = copy.copy(vibration) # this gets the note, volume
+        self._lastOff[stringNo].offset = o + gbl.tickOffset # offset into track
+
+
         vibration.note = None
         vibration.offset = None
+
 
     def grooveFinish(self, offset):
         """ End all vibrations (ie output all outstanding note off). """
@@ -346,11 +527,11 @@ class Plectrum(PC):
         """
 
         sc = self.seq
-
+        
         for p in pattern:
             try:
                 ct = self.getChordInPos(p.offset, ctable)
-                chordList = ct.chord.noteList   # catch the case when there is no noteList attribute
+                chordList = ct.chord.noteList   # catch no noteList attribute
             except AttributeError:
                 continue
 
@@ -385,6 +566,7 @@ class Plectrum(PC):
 
             notes = self.fretboardNotes(chordList, chordBarreFretNo)
 
+            fretNoiseCount = 0
             for stringNo, vol in enumerate(p.pluckVol):
                 if p.strum:
                     if self.strumCenter == 0:
@@ -430,10 +612,21 @@ class Plectrum(PC):
 
                     self._vibrating[stringNo].note = note
                     self._vibrating[stringNo].offset = ontime  # save the start time
+                    self._vibrating[stringNo].volume = outputVolume # and volume
                     if outputVolume == 0:
                         self._vibrating[stringNo].note = None
 
+                    # Do fretnoise stuff if enabled
+                    
+                    if self.lastChord != ct.name and self.fretNoise \
+                       and outputVolume and stringNo in self.fretNoise.strings:
+                        if fretNoiseCount < self.fretNoise.max:
+                            self.doFretNoise(stringNo, note, strumOffset)
+                            fretNoiseCount += 1
+
                     plectrumNoteOnList.append(note)  # for debugging only
+
+                self.lastChord = ct.name
 
             if gbl.debug:
                 print("%s: channel=%s offset=%s chordList=%s NoteOn=%s." % 

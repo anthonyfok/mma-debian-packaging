@@ -324,7 +324,7 @@ class MidiData:
                             self.offset += l
 
                         elif a == 0x05:  # lyric
-                            lyricEvents.append([tm, self.strs(self.mvarlen())])
+                            self.lyricEvents.append([tm, self.strs(self.mvarlen())])
 
                         elif a == 0x06:  # marker
                             l = self.mvarlen()

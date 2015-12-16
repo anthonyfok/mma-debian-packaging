@@ -159,7 +159,6 @@ def makeTriggerSequence(self, ctable, pattern):
                    barEnd = gbl.barLen
                maxd = barEnd - tpats[i].offset
            tpats[i].duration = min(tpats[i].duration, maxd)
-
     return tpats
 
 
@@ -292,8 +291,7 @@ def setTrigger(name, ln):
             error("%s Trigger '%s' is an unknown command." % (self.name, cmd))
 
     if gbl.debug:
-        print("Set %s Trigger: %s" % (self.name, getTriggerOptions(self)))
-
+        MMA.debug.trackSet(self.name, "TRIGGER")
 
 def getTriggerOptions(self):
     """ Called from setTrigger() and macro. Returns string with current options. """

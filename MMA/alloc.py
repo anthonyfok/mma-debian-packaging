@@ -96,6 +96,6 @@ def trackAlloc(name, err):
         newtk.saveGroove(slot)
 
     if gbl.debug:
-        print("Creating new track", name)
+        print("Creating new track %s" % name)
 
     return

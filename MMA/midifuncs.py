@@ -28,7 +28,6 @@ from . import gbl
 import MMA.mdefine
 from   MMA.common import *
 
-
 # Storage for midi channel init commands (MidiInit). Commands are added
 # from the functions setMidiInt and trackSetMidiInit in this module.
 # They are dumped out in parse.py as channels are assigned to tracks.
@@ -391,7 +390,7 @@ def trackMidiVolume(name, ln):
     gbl.tnames[name].cVolume = v
 
     if gbl.debug:
-        print("Set %s MidiVolume to %s" % (name, v))
+        MMA.debug.trackSet(name, 'MIDIVolume')
 
 
 def trackMidiCresc(name, ln):

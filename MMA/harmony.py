@@ -23,7 +23,7 @@ Bob van der Poel <bob@mellowood.ca>
 """
 
 from MMA.common import *
-
+import MMA.debug
 
 def setHarmony(self, ln):
     """ Set the harmony. """
@@ -44,12 +44,7 @@ def setHarmony(self, ln):
         warning("Harmony setting for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        msg = ["Set %s Harmony to:" % self.name]
-        for a in self.harmony:
-            if not a:
-                a = 'None'
-            msg.append(a)
-        print(' '.join(msg))
+        MMA.debug.trackSet(self.name, "Harmony")
 
 
 def setHarmonyOnly(self, ln):
@@ -72,12 +67,7 @@ def setHarmonyOnly(self, ln):
         warning("HarmonyOnly setting for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        msg = ["Set %s HarmonyOnly to:" % self.name]
-        for a in self.harmonyOnly:
-            if not a:
-                a='None'
-            msg.append(a)
-        print(' '.join(msg))
+        MMA.debug.trackSet(self.name, 'HarmonyOnly')
 
 
 def setHarmonyVolume(self, ln):
@@ -99,10 +89,7 @@ def setHarmonyVolume(self, ln):
         warning("HarmonyVolume adjustment for %s track ignored" % self.vtype)
 
     if gbl.debug:
-        msg = ["Set %s HarmonyVolume to:" % self.name]
-        for a in self.harmonyVolume:
-            msg.append(str(a*100))
-        print(' '.join(msg))
+        MMA.debug.trackSet(self.name, "HarmonyVolume")
 
 
 ##########################################################
