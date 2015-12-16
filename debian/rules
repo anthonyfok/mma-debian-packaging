@@ -12,9 +12,6 @@ override_dh_install:
 override_dh_installdocs:
 	dh_installdocs -X# -XCOPYING
 
-override_dh_installchangelogs:
-	dh_installchangelogs text/CHANGES-14
-
 override_dh_installexamples:
 	dh_installexamples -X#
 
