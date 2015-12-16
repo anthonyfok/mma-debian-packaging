@@ -417,7 +417,7 @@ def htmlGraph(f):
             vv = v = ''
         strm = []
         for z in trk.strum:
-            if z == None:
+            if z is None:
                 strm.append( "None")
             else:
                 strm.append( getAbsPair(z[0], z[1]))

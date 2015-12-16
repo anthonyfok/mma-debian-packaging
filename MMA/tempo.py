@@ -25,43 +25,127 @@ Bob van der Poel <bob@mellowood.ca>
 from . import gbl
 from MMA.common import *
 from MMA.midiM import packBytes, byte3ToInt
+from MMA.timesig import timeSig
 from struct import unpack
+from MMA.parseCL import setChordTabs
+
+import MMA.midi
 
 ######################################
 # Tempo/timing
 
+timeTable = { 
+    # duple times
+    '2/2': (4,    (1, 3)), 
+    '2/4': (2,    (1, 2)),
+    '6/4': (6,    (1, 4)),
+    '6/8': (3,    (1, 2.5)),
+
+    # triple
+    '3/2': (6,    (1, 3, 5)),
+    '3/4': (3,    (1, 2, 3)),
+    '3/8': (1.5,  (1, 1.5, 2)),
+    '9/8': (4.5,  (1, 2.5, 4)),
+    
+    # quadruple
+    '4/4': (4,    (1, 2, 3, 4) ),
+    '12/8':(6,    (1, 2.5, 4, 5.5)),
+
+    # quintuple
+    '5/4': (5,    (1, 2, 3, 4, 5) ),
+    '5/8': (2.5,  (1, 1.5, 2, 2.5, 3 ) ), 
+
+    # septuple
+    '7/4': (7,    (1, 2, 3, 4, 5, 6, 7) )
+ }
+
 def setTime(ln):
-    """ Set the 'time sig'.
+    """ Set the 'time' value. This is NOT a time sig, it
+        is the number of quarters/beat.
 
         We do restrict the time setting to the range of 1..12.
         No particular reason, but we do need some limit? Certainly
         it has to be greater than 0.
     """
 
+    tabList = []
+    defaultTabs = (1,2,3,4,5,6,7,8,9,10,11,12)
+    sigSet = False
+
+    ln, options = opt2pair(ln, 1)
+
+    for cmd, opt in options:
+        if cmd == 'TABS':
+            tabList = [ stof(i) for i in opt.split(',')]
+            if tabList != sorted(tabList):
+                error("Time: Tabs must be in order, not %s." % tabList)
+            if len(tabList) != len(set(tabList)):
+                error("Time: Tabs must not contain duplicates, %s" % tabList)
+            if tabList[0] != 1:
+                error("Time: First tab must be 1, not %s." % tabList[0])
+        else:
+            error("TIME: Unknown option '%s'." % cmd)
+        
     if len(ln) != 1:
-        error("Time: Expecting single argument (integer)")
+        error("Time: Too many options. Use TIME BperBar [Tabs=xx].")
 
-    n = stoi(ln[0], "Time: Argument must be integer.")
+    # is this a timesig?
 
-    if n < 1 or n > 12:
-        error("Time: Value must be 1..12")
+    n = ln[0]
+    if n.upper() == 'COMMON':
+        n = '4/4'
+    elif n.upper() == 'CUT':
+        n = '2/2'
+
+    if n in timeTable:
+        i = timeTable[n]
+        timeSig.setSig([n])
+        n = i[0]
+        if not tabList:
+            tabList = i[1]
+        sigSet = True
+    else:
+        if '/' in n:  # unknown time sig
+            error("Time: Unknown timesignature '%s'. You may need to set TIME and TIMESIG separately." % n) 
+        n = stof(n)
+
+        if n < 1 or n > 12:
+            error("Time: Value must be 1..12.")
 
     # If no change, just ignore this.
 
     origTime = gbl.QperBar
     if origTime != n:
-        gbl.QperBar = int(n)
-        gbl.barLen = gbl.QperBar * gbl.BperQ
+        gbl.QperBar = n
+        gbl.barLen =  int(gbl.QperBar * gbl.BperQ)
 
         # Time changes zap all predfined sequences
 
         for a in gbl.tnames.values():
             if a.riff:
-                warning("Time: Change from %s to %s deleting %s riffs." % (origTime, n, a.name))
+                warning("Time: Change from %s to %s deleting %s riffs." %
+                        (origTime, n, a.name))
                 a.riff = []
             a.clearSequence()
 
+    if not tabList:
+        tabList = (1,2,3,4,5,6,7,8,9,10,11,12)[:int(gbl.QperBar)]
 
+    # need to do this after setting time.
+    if (tabList[-1]-1) * gbl.BperQ >= gbl.barLen:
+        error("Time: Last tab must be < %s, not '%s'." % 
+              (float(gbl.barLen/gbl.BperQ)+1, tabList[-1]))
+
+    setChordTabs(tabList)
+
+    if gbl.debug:
+        if sigSet:
+            sig =  "TimeSig %s " % timeSig.getAscii()
+        else:
+            sig = ''
+        print ("Time: Time %s %sTabs=%s." % 
+               (gbl.QperBar, sig,  ','.join([str(x) for x in tabList])))
+            
 def tempo(ln):
     """ Set tempo.
 

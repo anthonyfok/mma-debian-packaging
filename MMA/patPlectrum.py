@@ -122,7 +122,7 @@ class Plectrum(PC):
         
         if not l or len(l)==1 and ( l[0].upper()=='OFF' or l[0].upper()=='NONE'):
             self.fretNoise = None
-            if gbl.debug or 1:
+            if gbl.debug:
                 print("%s FretNoise Off" % self.name)
             return
 
@@ -180,7 +180,7 @@ class Plectrum(PC):
                         o.strings.append(i)
 
             elif cmd == 'TRACK':
-                MMA.alloc.trackAlloc(opt, 0)
+                MMA.alloc.trackAlloc(opt, 1)
                 if gbl.tnames[opt].vtype != 'BASS':
                     error("%s FretNoise Track must be a BASS track, not %s." % \
                           (self.name, gbl.tnames[opt].vtype))
@@ -205,7 +205,10 @@ class Plectrum(PC):
             # Adjust to fit tuning
             o.strings=o.strings[0:scount]
                 
-        if gbl.debug or 1:
+        if not o.track:
+            error("%s Fretnoise: No track was set. Use 'Track=some-bass-track' option." % self.name)
+
+        if gbl.debug:
             print(self.getFretNoiseOptions())
         
 
@@ -362,7 +365,7 @@ class Plectrum(PC):
     def doFretNoise(self, stringNo, note, offset):
         """ Add in a fret noise note. """
 
-        if self._lastOff[stringNo] == None or \
+        if self._lastOff[stringNo] is None or \
            self._lastOff[stringNo].note == note:
             return
 
@@ -387,8 +390,15 @@ class Plectrum(PC):
 
         # Use same volume as the string on
         volume = self._lastOff[stringNo].volume
+
         # We bypass the sendChord() so volume isn't adjusted. Do it anyway!
         volume = trk.adjustVolume(volume, offset)
+
+        # bypassing voice set, do it here
+        trk.insertVoice(self.seq)
+
+        # bypass even more
+        trk.clearPending()
 
         # octave adjustment
         note += o.octave
@@ -618,7 +628,7 @@ class Plectrum(PC):
 
                     # Do fretnoise stuff if enabled
                     
-                    if self.lastChord != ct.name and self.fretNoise \
+                    if self.lastChord != ct.name and self.fretNoise  \
                        and outputVolume and stringNo in self.fretNoise.strings:
                         if fretNoiseCount < self.fretNoise.max:
                             self.doFretNoise(stringNo, note, strumOffset)

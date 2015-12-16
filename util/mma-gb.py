@@ -3,6 +3,9 @@
 
 # Simple groove browser for MMA .. seems to work for python 2 and 3
 
+# modified by Anthony Fok <foka@debian.org> to move the database files
+# to .cache in the usr's root directory instead of in the library tree.
+
 import sys
 PY3 = sys.version_info[0] == 3
 
@@ -66,6 +69,16 @@ libPath = os.path.join(MMAdir, 'lib')
 if not os.path.isdir(libPath):
     print("The MMA library directory was not found.")
     sys.exit(1)
+
+if sys.platform.startswith(('linux', 'gnu', 'freebsd', 'netbsd', 'openbsd')):
+    HOME = os.path.expanduser('~')
+    XDG_CACHE_HOME = os.environ.get("XDG_CACHE_HOME", os.path.join(HOME, ".cache"))
+    cachePath = os.path.join(XDG_CACHE_HOME, 'mma')
+else:
+    cachePath = libPath
+
+if not os.path.exists(cachePath):
+    os.makedirs(cachePath)
 
 # these are the options passed to mma for playing a groove.
 # they are modified by the entryboxes at the top of screen
@@ -514,7 +527,7 @@ class Application:
         if not db:
             print("No data read")
             sys.exit(1)
-        write_db(libPath, dbName, db, self.lbdesc)
+        write_db(cachePath, dbName, db, self.lbdesc)
         self.updateFileList()
 
 
@@ -617,7 +630,7 @@ class Application:
 
 # Start the tk stuff.
 
-db = read_db(libPath, dbName)
+db = read_db(cachePath, dbName)
 if not db:
     db = update_groove_db(libPath, '', None)
 
@@ -625,7 +638,7 @@ if not db:
         print("No data in database")
         sys.exit(1)
 
-    write_db(libPath, dbName, db, None)
+    write_db(cachePath, dbName, db, None)
 
 root = Tk()
 

@@ -35,9 +35,11 @@ import MMA.notelen
 import MMA.auto
 import MMA.volume
 import MMA.parse
+import MMA.parseCL
 import MMA.seqrnd
 import MMA.docs
 
+from MMA.timesig import timeSig
 from . import gbl
 from   MMA.common import *
 
@@ -136,9 +138,10 @@ def grooveDefineDo(slot):
         'QPERBAR':   gbl.QperBar,
         'BARLEN':    gbl.barLen,
         'SEQRND':    MMA.seqrnd.seqRnd[:],
-        'TIMESIG':   MMA.midi.timeSig.get(),
+        'TIMESIG':   timeSig.get(),
         'SWINGMODE': MMA.swing.gsettings(),
-        'VRATIO':    (MMA.volume.vTRatio, MMA.volume.vMRatio)}
+        'VRATIO':    (MMA.volume.vTRatio, MMA.volume.vMRatio),
+        'CTABS':     MMA.parseCL.chordTabs[:] }
 
 
 def grooveAlias(ln):
@@ -263,9 +266,10 @@ def grooveDo(slot):
     gbl.QperBar = g['QPERBAR']
     gbl.barLen  = g['BARLEN']
     MMA.seqrnd.seqRnd = g['SEQRND']
-    MMA.midi.timeSig.set(*g['TIMESIG'])  # passing tuple as 2 args.
+    timeSig.set(*g['TIMESIG'])  # passing tuple as 2 args.
     MMA.swing.grestore(g['SWINGMODE'])
     MMA.volume.vTRatio, MMA.volume.vMRatio = g['VRATIO']
+    MMA.parseCL.chordTabs = g['CTABS']
 
     for n in gbl.tnames.values():
         if n.sticky:
@@ -306,6 +310,8 @@ def reportFutureVols():
 
     volerrs = []
     for n in gbl.tnames.values():
+        if n.vtype in ("SOLO", "ARIA"):  # not saved in grooves
+            continue
         if len(n.futureVols) > 1:
             volerrs.append(n.name)
         n.futureVols = []     # don't want leftover future vols a track level!
@@ -351,7 +357,7 @@ def nextGroove():
         If there is more than 1 entry in the groove list,
         advance (circle). We don't have to qualify grooves
         since they were verified when this list was created.
-        groovesList==None if there is only one groove (or none).
+        groovesList is None if there is only one groove (or none).
     """
 
     global lastGroove, currentGroove, groovesCount

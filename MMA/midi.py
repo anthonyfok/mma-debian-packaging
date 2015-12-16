@@ -258,7 +258,9 @@ class Mtrk:
         """
 
         cmd = packBytes(0xff, 0x58)
-        self.delDup(offset, cmd)   # NEEDED???
+        # we might have several different timesigs on the same offset,
+        # so take time to delete any. 
+        self.delDup(offset, cmd)
         self.addToTrack(offset, packBytes(cmd, (0x04, nn, dd, cc, bb)))
 
     def addKeySig(self, offset, n, mi):
@@ -667,35 +669,6 @@ class Mtrk:
         else:
             tr[offset] = [event]
 
-
-
-class TimeSig:
-    """ Track and set the current time signature.
-
-        Timesigs are completely optional and are inserted into
-        the MIDI file by addTimeSig(). MMA routines ignore timesig
-        settings.
-    """
-
-    def __init__(self):
-        """ Initialze to null value, user will never set to this."""
-
-        self.lastsig = (None, None)
-
-    def set(self, nn, dd):
-        """ Set timesig. If no change from last value, ignore. """
-
-        if self.lastsig != (nn, dd):
-            gbl.mtrks[0].addTimeSig(gbl.tickOffset, nn, dd, 48, 8)
-            self.lastsig = (nn, dd)
-
-    def get(self):
-        """ Return existing timesig. """
-
-        return self.lastsig
-
-
-timeSig = TimeSig()
 
 
 def stripRange():

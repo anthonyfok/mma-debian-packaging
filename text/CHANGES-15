@@ -81,9 +81,83 @@ BUGFIX: fretnoise now looks for chord change instead of just string change.
 September 9, 2015
 Released  15.01g
 
+Released 15-09
+
 ---------------------------------------------------------------
 
 
 Modified -L option to show '?' for bars without labels.
 
 Fixed MIDIINC which was crashing when importing a file with lyrics.
+
+Fixed longstanding bug in the html docs which didn't show the MMA
+ logo. A simple path issue. Thanks Anthony Fok.
+
+Change to mma-gb so that that the database file is now stored 
+ in ~/.cache (user's local directory). Thanks Anthony Fok.
+
+Changes to mma-splitrec to make it work with python3. Thanks
+ Anthony Fok.
+
+The -G option now force deletes existing .mmaDB files. Should solve a
+ problem with out-of-control recursion when a database is really
+ screwed up.
+
+Added $_TimeSig variable.
+
+The TIME command has been expanded to include the option to set
+  the time signature and a new concept of "Chord Tabs". This
+  should make life easier if you use "odd" times and/or use
+  notation editors to read MMA putput.
+
+TIME now supports fractional settings. This makes it possible to do
+  real compound times like 5/8 (Time 2.5), etc.
+
+Note durations can be specified as tuplet ratios. An 8th note triplet
+  could always be set as '3', you can now use '3:4'. No biggie, but
+  you can also do stuff like '6:1' ( one sixth of a whole note).
+
+Added new macro $_NoteLen(note). Returns the duration
+  of the note in MIDI ticks.
+
+October 10, 2015
+Released 15-09a
+
+------------------------------------------------------------
+
+MidiPan: Added a 'm' option to the beat count. 
+
+When grooves are restored (via a GROOVE command) a check is made
+ for any unprocessed (DE)CRESC stacks. This means that you can
+ force a gradual change over a Groove change ... this makes sense
+ since a Groove will have it's own volume. However, SOLO and ARIA
+ tracks don't get saved/restored with grooves ... so it doesn't
+ make sense to NOT permit a solo/aria (de)cresc over a groove
+ change. Done.
+
+Added variable $_Ctabs.
+
+Added "Add" option to transpose so we can change the current value.
+ For the lyric option you need to append (or prepend) the "add"
+ keyword to the transposition value.
+
+A large number of library files were missing (the docs were there,
+ but the porch light wasn't on). The entire library should now be there!
+
+November 12, 2015
+Released 15-09b
+
+----------------------------------------------------------------------
+
+If you create a database with Python3 and then attempt to read it with Python2
+ an error is reported. Seems py3 has pickle protocols which py2 doesn't know.
+ This is now trapped and the user is advised to run mma -G as root.
+
+Fretnoise: Trapped bug to check for lack of a bass track being set; trapped 
+ non-existent track error, fixed voice change in slave track
+
+Cleaned up docs for ornament. Hopefully this is more readable now.
+
+December 15, 2015
+Release 15-12
+

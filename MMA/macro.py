@@ -33,6 +33,7 @@ import MMA.translate
 import MMA.volume
 import MMA.grooves
 import MMA.parse
+import MMA.parseCL
 import MMA.player
 import MMA.seqrnd
 import MMA.midinote
@@ -41,11 +42,12 @@ import MMA.ornament
 import MMA.rpitch
 
 from . import gbl
+from MMA.notelen import getNoteLen
 from MMA.keysig import keySig
+from MMA.timesig import timeSig
 from MMA.lyric import lyric
 from MMA.common import *
 from MMA.safe_eval import safe_eval
-
 
 def sliceVariable(p, sl):
     """ Slice a variable. Used by macro expand. """
@@ -92,6 +94,12 @@ class Macros:
 
         elif s == 'TIME':
             return str(gbl.QperBar)
+
+        elif s == 'CTABS':
+            return ','.join([ str((float(x) / gbl.BperQ) + 1) for x in MMA.parseCL.chordTabs])
+
+        elif s == 'TIMESIG':
+            return timeSig.getAscii()
 
         elif s == 'TEMPO':
             return str(gbl.tempo)
@@ -177,11 +185,15 @@ class Macros:
         elif s == "MIDISPLIT":
             return ' '.join([str(x) for x in MMA.midi.splitChannels])
 
+        elif s.startswith("NOTELEN(") and s.endswith(")"):
+            return "%sT" % getNoteLen(s[8:-1])
+            
         elif s == 'SEQRNDWEIGHT':
             return ' '.join([str(x) for x in MMA.seqrnd.seqRndWeight])
 
         elif s == 'AUTOLIBPATH':
             return ' '.join(MMA.paths.libDirs)
+
         elif s == 'LIBPATH':
             return ' '.join(MMA.paths.libPath)
 

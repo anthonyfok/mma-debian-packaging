@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Bob van der Poel <bob@mellowood.ca>
 
-   Define and execute simple function calls.
+   Define and execute simple function / subroutine calls.
 
 """
 

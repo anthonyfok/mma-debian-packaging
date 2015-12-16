@@ -1,8 +1,4 @@
 
-Add a "BeatSize" command. Currently MMA thinks all beats set with TIME
-   are quarternotes. This causes problems with notation editors looking
-   at the timesigs and with solo notation (we "fix" this in solo with
-   the STRETCH option.
 
 Add a "Output On/Off" so that generation can be toggled inside a
    script. Gotta be careful in doing this so that key info is skipped,

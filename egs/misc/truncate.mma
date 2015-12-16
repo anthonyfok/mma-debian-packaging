@@ -1,6 +1,6 @@
 Keysig C
 Tempo 100
-goto foo
+
 // Test the TRUNCATE command
 
 // So we can hear the difference between side=left/right
@@ -77,7 +77,7 @@ G                     //  4 beats of jazz guitar
 // Here we create a 3/4 bar in the middle of some 4/4 swing bars.
 // And just for fun, we make the 3/4 bar 1.5, 1.5 and 1 beats.
 // Sounds awful in this case ... need better eg!
-label foo
+
 Groove Swing
 C
 Truncate 1.5

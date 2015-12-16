@@ -31,6 +31,7 @@ import MMA.file
 import MMA.options
 import MMA.auto
 import MMA.docs
+import MMA.tempo
 
 from . import gbl
 from MMA.common import *
@@ -51,9 +52,8 @@ MMA.paths.init()   # initialize the lib/include paths
 
 MMA.options.opts()
 
-#  LibPath and IncPath are set before option parsing ... Debug setting
-#  wasn't set so check it now.
-
+#  LibPath and IncPath are set before option parsing, but
+#  debug setting wasn't. So we need to do the debug for this now
 if gbl.debug:
     print("Initialization has set LibPath set to %s" % MMA.paths.libPath)
     print("Initialization has set IncPath set to %s" % MMA.paths.incPath)
@@ -71,10 +71,9 @@ if gbl.infile:
             m.addText(0, "Created by MMA. Input filename: %s" % fileName)
 
 
-m.addTempo(0, gbl.tempo)              # most user files will override this
-MMA.midifuncs.setTimeSig(['4', '4'])  # most stdlib (and/or user) files will override this
-
-
+m.addTempo(0, gbl.tempo)      # most user files will override this
+MMA.tempo.setTime(['4/4'])    # and this. IMPORTANT! Sets default chordTabs[]
+   
 # Read RC files
 MMA.paths.readRC()
 

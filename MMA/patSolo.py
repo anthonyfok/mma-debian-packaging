@@ -534,7 +534,7 @@ class Melody(PC):
 
             i = 0
             while i < len(a):
-                if not a[i] in '1234567890.+-tT':
+                if not a[i] in '1234567890.+-tT:':
                     break
                 else:
                     i += 1
@@ -668,7 +668,7 @@ class Melody(PC):
                     n.pitch = None
 
             # The chord might have no notes, have more than one, or be all grace
-            if pitch == None or count != 1:
+            if pitch is None or count != 1:
                 continue
 
             tb = self.getChordInPos(offset, ctable)

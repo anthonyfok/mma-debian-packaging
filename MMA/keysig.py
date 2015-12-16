@@ -294,7 +294,14 @@ def getTranspose(ln, err):
 def transpose(ln):
     """ Set transpose value. """
 
-    gbl.transpose = getTranspose(ln, "Transpose")
+    if len(ln) and ln[0].upper() == 'ADD':
+        ln = ln[1:]
+        gbl.transpose += getTranspose(ln, "Transpose")
+        if gbl.transpose < -12 or gbl.transpose > 12:
+            error("Transose: Add option results in setting of '%s', must be -12 to 12." %
+                  gbl.transpose)
+    else:
+        gbl.transpose = getTranspose(ln, "Transpose")
 
     if gbl.debug:
         print("Set Transpose to %s" % gbl.transpose)
