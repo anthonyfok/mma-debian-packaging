@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html711"
+<A NAME="tex2html712"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html709"
+<A NAME="tex2html710"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html703"
+<A NAME="tex2html704"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html712"
+<B> Next:</B> <A NAME="tex2html713"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html710"
+<B> Up:</B> <A NAME="tex2html711"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html704"
+<B> Previous:</B> <A NAME="tex2html705"
   HREF="node16.html">Ornament</A>
 <BR>
 <BR></DIV>
@@ -51,19 +51,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html713"
-  HREF="node17.html#SECTION001710000000000000000">Tempo</A>
 <LI><A NAME="tex2html714"
-  HREF="node17.html#SECTION001720000000000000000">Time</A>
+  HREF="node17.html#SECTION001710000000000000000">Tempo</A>
 <LI><A NAME="tex2html715"
-  HREF="node17.html#SECTION001730000000000000000">Truncate</A>
+  HREF="node17.html#SECTION001720000000000000000">Time</A>
 <LI><A NAME="tex2html716"
-  HREF="node17.html#SECTION001740000000000000000">TimeSig</A>
+  HREF="node17.html#SECTION001730000000000000000">TimeSig</A>
 <LI><A NAME="tex2html717"
-  HREF="node17.html#SECTION001750000000000000000">BeatAdjust</A>
+  HREF="node17.html#SECTION001740000000000000000">Truncate</A>
 <LI><A NAME="tex2html718"
-  HREF="node17.html#SECTION001760000000000000000">Fermata</A>
+  HREF="node17.html#SECTION001750000000000000000">BeatAdjust</A>
 <LI><A NAME="tex2html719"
+  HREF="node17.html#SECTION001760000000000000000">Fermata</A>
+<LI><A NAME="tex2html720"
   HREF="node17.html#SECTION001770000000000000000">Cut</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -77,8 +77,8 @@ Tempo and Timing
 
 <P>
 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  has a rich set of commands to adjust and vary the timing of your
-song.
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  has a rich set of commands to adjust and vary the timing of
+your song.
 
 <P>
 
@@ -87,8 +87,8 @@ Tempo</A>
 </H1>
 
 <P>
-The tempo of a piece is set in Quarter Beats per Minute with the ``Tempo''
-directive.
+The tempo of a piece is set in Quarter Beats per Minute with the
+``Tempo'' directive.
 
 <P>
 
@@ -118,9 +118,10 @@ to increase or decrease the current rate by including a leading ``+'',
 will increase the current rate to 130 beats/minute.
 
 <P>
-The tempo can be changed series of beats, much like a ritardando  or accelerando in
-real music. Assuming that a time signature of <SPAN  CLASS="textbf">4/4</SPAN>, the current tempo
-is 120, and there are 4 beats in a bar, the command:
+The tempo can be changed series of beats, much like a ritardando or
+accelerando in real music. Assuming that a time signature of
+<SPAN  CLASS="textbf">4/4</SPAN>, the current tempo is 120, and there are 4 beats in a
+bar, the command:
 
 <P>
 
@@ -134,8 +135,9 @@ is 120, and there are 4 beats in a bar, the command:
 <P>
 will cause 4 tempo entries to be placed in the current bar (in the
 MIDI meta track). The start of the bar will be 115, the 2nd beat will
-be at 110, the 3rd at 105 and the last at 100. Note: the value of the macro
-$_T<SMALL>EMPO</SMALL> will reflect the final value, not the intermediates.
+be at 110, the 3rd at 105 and the last at 100. Note: the value of the
+macro $_T<SMALL>EMPO</SMALL> will reflect the final value, not the
+intermediates.
 
 <P>
 You can also vary an existing rate using a ``+'', ``-'' or ``*'' in
@@ -180,7 +182,7 @@ and to return:
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>Temp *.5  </B> 
+    <B>Tempo *.5  </B> 
    
 	    </td></tr>
       </Table>
@@ -192,14 +194,19 @@ any value, but will be converted to integer for the final setting.
 
 <P>
 
-<H1><A NAME="SECTION001720000000000000000"></A>  <A NAME="time"></A>
+<H1><A NAME="SECTION001720000000000000000"></A> <A NAME="time"></A>
 <BR>
 Time
-</H1>
+</H1> 
+
+<P>
+Before we go further with the T<SMALL>IME</SMALL> command: It really should be
+called <SPAN  CLASS="textit">Number Of Quarter Notes In A Bar</SPAN>, or something equally
+verbose.
 
 <P>
 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  doesn't really understand time signatures. It just cares about
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  <SPAN  CLASS="textit">doesn't</SPAN> understand time signatures. It just cares about
 the number of quarter note beats in a bar. So, if you have a piece in
 <SPAN  CLASS="textbf">4/4</SPAN> time you would use:
 
@@ -213,7 +220,7 @@ the number of quarter note beats in a bar. So, if you have a piece in
       </Table>
 
 <P>
-For  <SPAN  CLASS="textbf">3/4</SPAN> use:
+For <SPAN  CLASS="textbf">3/4</SPAN> use:
 
 <P>
 
@@ -225,35 +232,309 @@ For  <SPAN  CLASS="textbf">3/4</SPAN> use:
       </Table>
 
 <P>
+T<SMALL>IME</SMALL> can accept fractional values. This can be useful if you
+have, for example, a piece in something like <SPAN  CLASS="textbf">5/8</SPAN>. You could
+always use T<SMALL>IME 5</SMALL> and use 5 quarters/bar instead of 5 eights.
+But, if you used Time 2.5 you end up with 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  expecting 2.5
+quarters, which is the same as 5 eights. This makes other programs
+expecting time signatures very happy.
+
+<P>
 For <SPAN  CLASS="textbf">6/8</SPAN> it's easiest to use ``6''. You could use ``2'' or
-``3'', but you do need to remember that this setting also sets the
-chord offset defaults. So, if you set T<SMALL>IME 2</SMALL> you would set
-chords (without using the extended ``@'' notation,
+``3'', but you do need to remember that this also sets the chord
+offset (used in chord data lines) defaults. So, if you set T<SMALL>IME
+  2</SMALL> you would set chords (without using the extended ``@'' notation,
 <A HREF="node8.html#chord-position">here</A>) on beats
 1 and 2. If you use the recommended ``6'' you will also need to double
- your T<SMALL>EMPO</SMALL> setting since <SPAN  CLASS="textbf">6/8</SPAN> is about eighth notes
- and 
+your T<SMALL>EMPO</SMALL> setting since <SPAN  CLASS="textbf">6/8</SPAN> is about eighth notes
+and 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  really likes quarters.
 
 <P>
 Changing the time also cancels all existing sequences. So, after a
 time directive you'll need to set up your sequences or load a new
-groove.<A NAME="tex2html71"
-  HREF="#foot8785"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>
+groove.
+
+<P>
+An optional setting for T<SMALL>IME</SMALL> is T<SMALL>ABS</SMALL>. This option
+defines the chord position stops used when parsing a chord data line.
+Assuming a T<SMALL>IME 6</SMALL> (for a <SPAN  CLASS="textbf">6/8</SPAN> section) you would set
+chords with lines like:
+
 <P>
 
-<H1><A NAME="SECTION001730000000000000000"></A> <A NAME="truncate"></A>
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Time 6
 <BR>
-Truncate
+1  C  /  /  G
+<BR>
+2 C / / G7  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+In this case we are changing chords on beats 1 and 4. All those extra
+'/'s are a bit of a pain and distracting. As an alternative, try:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Time 6 Tabs=1,4
+<BR>
+1  C   G
+<BR>
+2 C G7  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+The end result is the same, but with much less typing.
+
+<P>
+The T<SMALL>ABS</SMALL> command requires a comma separated list of tab stops.
+The first stop must always be 1 and the last must be less or equal to
+the integer value of T<SMALL>IME</SMALL>.
+
+<P>
+As a convenience you can combine the setting of T<SMALL>IME</SMALL>,
+T<SMALL>IME</SMALL>S<SMALL>IG</SMALL> and T<SMALL>ABS</SMALL> easily for common time signatures.
+Simply use a known time signature as the sole argument. For example,
+to set up for a waltz:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Time 3/4  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+This will set the beats per bar to 3, the time signature meta
+event to ``3/4'' and the chord tabs to 1,2,3. The following table
+shows the known time signatures, etc.<A NAME="tex2html71"
+  HREF="#foot9158"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+
+<P>
+<DIV ALIGN="CENTER">
+  
+		<Table CellSpacing=0 Width="80%" Align="Center" CellPadding=10 BGColor="#dddddd" Border=3>
+           <tr> <td>
+	       <TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><B><SPAN  CLASS="textit">TimeSig</SPAN> </B></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textit">Beats/Bar</SPAN></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">Tabs</SPAN></TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=3><SPAN><B>Duple</B></SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">2/2</SPAN> </B></TH>
+<TD ALIGN="CENTER">4</TD>
+<TD ALIGN="LEFT">1, 3</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">2/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">2</TD>
+<TD ALIGN="LEFT">1, 2</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">6/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">6</TD>
+<TD ALIGN="LEFT">1, 4</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">6/8</SPAN> </B></TH>
+<TD ALIGN="CENTER">3</TD>
+<TD ALIGN="LEFT">1, 2.5</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=3><SPAN><B>Triple</B></SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">3/2</SPAN> </B></TH>
+<TD ALIGN="CENTER">6</TD>
+<TD ALIGN="LEFT">1, 3, 5</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">3/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">3</TD>
+<TD ALIGN="LEFT">1, 2, 3</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">3/8</SPAN> </B></TH>
+<TD ALIGN="CENTER">1.5</TD>
+<TD ALIGN="LEFT">1, 1.5, 2</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">9/8</SPAN> </B></TH>
+<TD ALIGN="CENTER">4.5</TD>
+<TD ALIGN="LEFT">1, 2.25, 4</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=3><SPAN><B>Quadruple</B></SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">4/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">4</TD>
+<TD ALIGN="LEFT">1, 2, 3, 4</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">12/8</SPAN> </B></TH>
+<TD ALIGN="CENTER">6</TD>
+<TD ALIGN="LEFT">1, 2.5, 4, 5.5</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=3><SPAN><B>Quintuple</B></SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">5/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">5</TD>
+<TD ALIGN="LEFT">1, 2, 3, 4, 5</TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">5/8</SPAN> </B></TH>
+<TD ALIGN="CENTER">2.5</TD>
+<TD ALIGN="LEFT">1, 1.5, 2, 2.5, 3</TD>
+</TR>
+<TR><TD ALIGN="LEFT" COLSPAN=3><SPAN><B>Septuple</B></SPAN></TD>
+</TR>
+<TR><TH ALIGN="CENTER"><B><SPAN  CLASS="textbf">7/4</SPAN> </B></TH>
+<TD ALIGN="CENTER">7</TD>
+<TD ALIGN="LEFT">1, 2, 3, 4, 5, 6, 7</TD>
+</TR>
+</TABLE> 
+	
+           </td></tr>
+        </Table>
+ 
+</DIV>
+
+<P>
+Many time signatures can have different meters. For example, in
+<SPAN  CLASS="textbf">6/8</SPAN> you could have 6 or 2 beats/measure. In these cases we
+leave it to you to set the T<SMALL>ABS</SMALL> to the correct values for your
+piece.
+
+<P>
+In addition to the above values, 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  also recognizes the special
+time signature ``Cut'' and ``Common''. They are internally translated
+to <SPAN  CLASS="textbf">2/2</SPAN> and <SPAN  CLASS="textbf">4/4</SPAN>.
+
+<P>
+If the time signature you need isn't listed above you can set it in
+the following manner: Assuming <SPAN  CLASS="textbf">13/4</SPAN>:
+
+<OL>
+<LI>Set the MIDI meta event 
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>TimeSig 13/4  </B> 
+   
+	    </td></tr>
+      </Table>
+
+</LI>
+<LI>Set the Time 
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>Time 13  </B> 
+   
+	    </td></tr>
+      </Table>
+
+</LI>
+<LI>Optionally, in the same command as the T<SMALL>IME</SMALL>, set the
+  chord tabs if desired. By default they'll be a 1,2...13.
+</LI>
+</OL>
+
+<P>
+<SPAN  CLASS="textit">Important: The T<SMALL>IME</SMALL>, T<SMALL>ABS</SMALL> and T<SMALL>IME</SMALL>S<SMALL>IG</SMALL>
+  values are saved and restored with grooves!</SPAN> If, in your song, you
+set T<SMALL>IME 3</SMALL> and then load a G<SMALL>ROOVE</SMALL> created with a
+T<SMALL>IME 4</SMALL> setting you will have 4 beats per bar. Not the 3 beats
+you are expecting. In most cases you do not want to use T<SMALL>IME</SMALL> in
+a song file ... leave it for libraries.
+
+<P>
+
+<H1><A NAME="SECTION001730000000000000000">
+TimeSig</A>
 </H1>
 
 <P>
-It is not uncommon to find that the time signature in a song
-changes. Most often this is to generate a short (or long) bar in the
-middle of a phrase. <A HREF="#eg:trunc">This example</A>
-shows a few bars of a popular song which changes from cut time to
+Even though 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  doesn't use Time Signatures, some MIDI sequencer
+and notation programs do recognize and use them. So, here's a command which will
+let you insert a Time Signature in your MIDI output:
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>TimeSig NN/DD  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+or (<SPAN  CLASS="textit">not recommended</SPAN>, use the ``/''):
+
+<P>
+
+      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
+        <tr><td>
+    <B>TimeSig NN DD  </B> 
+   
+	    </td></tr>
+      </Table>
+
+<P>
+The NN parameter is the time signature numerator (the number of beats
+per bar). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to ``3''.
+
+<P>
+The DD parameter is the time signature denominator (the length of the
+note getting a single beat). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to
+``4''.
+
+<P>
+Note that the single slash character is optional.
+
+<P>
+The NN value must be an integer in the range of 1 to 126. The DD value
+must be one of 1, 2, 4, 8, 16, 32 or 64.
+
+<P>
+
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  assumes that all songs are in <SPAN  CLASS="textbf">4/4</SPAN> and places that
+MIDI event at offset 0 in the Meta track.
+
+<P>
+The T<SMALL>IME</SMALL>S<SMALL>IG</SMALL> value is remembered by G<SMALL>ROOVE</SMALL>s and is
+properly set when grooves are switched. You should probably have a
+time signature in any groove library files you create (the supplied
+files all do).
+
+<P>
+The common time signatures ``common'' and ``cut'' are supported. They
+are translated by 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to <SPAN  CLASS="textbf">4/4</SPAN> and <SPAN  CLASS="textbf">2/2</SPAN>.
+
+<P>
+Important: <SPAN  CLASS="textit">this command does not have any effect on internal
+  timing in 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> .</SPAN> It only sets a Meta event in the generated MIDI
+  file. You must set the time (beats per bar) with the T<SMALL>IME</SMALL>
+  command.
+
+<P>
+
+<H1><A NAME="SECTION001740000000000000000"></A> <A NAME="truncate"></A>
+<BR>
+Truncate
+</H1> 
+
+<P>
+It is not uncommon to find that the time signature in a song changes.
+Most often this is to generate a short (or long) bar in the middle of
+a phrase. <A HREF="#eg:trunc">This example</A> shows a
+few bars of a popular song which changes from cut time to
 <SPAN  CLASS="textbf">2/4</SPAN> as well as 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  code to generate the correct MIDI file.
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  code to generate the correct MIDI
+file.
 
 <P>
 
@@ -292,7 +573,7 @@ Bb
    
 	    </td></tr>
       </Table>
-
+ 
 	
 	       </td> </tr>
         </Table>
@@ -313,7 +594,7 @@ specified number of beats. For example:
       </Table>
 
 <P>
-will create a bar 3 beats long. 
+will create a bar 3 beats long.
 
 <P>
 T<SMALL>RUNCATE</SMALL> works by shortening the duration and deleting the
@@ -369,7 +650,7 @@ The option S<SMALL>IDE=2</SMALL> will convert the S<SMALL>EQUENCE</SMALL> to be:
 
       <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
         <tr><td>
-    <B>Chord Sequence 1.5  8 90;   </B> 
+    <B>Chord Sequence 1.5 8 90;   </B> 
    
 	    </td></tr>
       </Table>
@@ -394,16 +675,16 @@ Groove PopBallad
 C // 1 beat bar 
 <BR>
 Groove PopHits 
-<BR>/ // second 1 beat bar 
+<BR>  / // second 1 beat bar 
 <BR>
 Groove PopFill 
-<BR>/  // third 1 beat bar 
+<BR>  /  // third 1 beat bar 
 <BR>
 Groove PopBalladSus 
-<BR>/  // final 1 beat bar 
+<BR>  /  // final 1 beat bar 
 <BR>
 Groove PopBallad 
-<BR>/  //  normal 4 beat bar   </B> 
+<BR>  / // normal 4 beat bar   </B> 
    
 	    </td></tr>
       </Table>
@@ -411,12 +692,12 @@ Groove PopBallad
 <P>
 You can specify both the number of beats and the S<SMALL>IDE</SMALL> as
 fractional values. This can be handy when your song is in a compound
-time. For example, the song `` Theme From Mahogany'' is in <SPAN  CLASS="textbf">4/4</SPAN>
-time, but one bar is in <SPAN  CLASS="textbf">5/8</SPAN> time. We have 4 beats in each
-bar, and don't really have an 8 beat time to use (we could, but it makes our input a bit more
-complicated), we simply convert the second time to
-<SPAN  CLASS="textbf">2.5/4</SPAN> (not a legal time signature!). This is cleanly handled
-by the following snippet:
+time. For example, the song `` Theme From Mahogany'' is in
+<SPAN  CLASS="textbf">4/4</SPAN> time, but one bar is in <SPAN  CLASS="textbf">5/8</SPAN> time. We have 4
+beats in each bar, and don't really have an 8 beat time to use (we
+could, but it makes our input a bit more complicated), we simply
+convert the second time to <SPAN  CLASS="textbf">2.5/4</SPAN> (not a legal time
+signature!). This is cleanly handled by the following snippet:
 
 <P>
 
@@ -442,14 +723,13 @@ The arguments for the S<SMALL>IDE</SMALL> option are:
 <DL COMPACT>
 <DT><SPAN  CLASS="textbf">Left</SPAN></DT>
 <DD>the start of the pattern (the default),
- 
 </DD>
 <DT><SPAN  CLASS="textbf">Right</SPAN></DT>
 <DD>the end of the pattern,
- 
 </DD>
 <DT><SPAN  CLASS="textbf">Value</SPAN></DT>
-<DD>an offset into the pattern in beats (can be fractional).
+<DD>an offset into the pattern in beats (can be
+  fractional).
 </DD>
 </DL>
 
@@ -459,8 +739,8 @@ A few caveats:
 <P>
 
 <UL>
-<LI>Both the S<SMALL>IDE</SMALL> and C<SMALL>OUNT</SMALL> options are value
-  pairs joined with a single ``=''.
+<LI>Both the S<SMALL>IDE</SMALL> and C<SMALL>OUNT</SMALL> options are value pairs
+  joined with a single ``=''.
 
 <P>
 </LI>
@@ -475,102 +755,47 @@ A few caveats:
 
 <P>
 </LI>
-<LI>You cannot use T<SMALL>RUNCATE</SMALL> to lengthen a bar. If you need
-  to lengthen a bar (perhaps a <SPAN  CLASS="textbf">5/4</SPAN> bar in a <SPAN  CLASS="textbf">4/4</SPAN>
+<LI>You cannot use T<SMALL>RUNCATE</SMALL> to lengthen a bar. If you need to
+  lengthen a bar (perhaps a <SPAN  CLASS="textbf">5/4</SPAN> bar in a <SPAN  CLASS="textbf">4/4</SPAN>
   song you just need to create a bar with the additional beats (in
   this case a 1 beat bar).
+
+<P>
+</LI>
+<LI>If your sequencer or other destination (perhaps you are using a
+  notation program to read 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> 's output) uses T<SMALL>IME</SMALL>S<SMALL>IG</SMALL>
+  information (see below), you may need to update it before and after
+  a truncated section.
 
 <P>
 </LI>
 </UL>
 
 <P>
-The example file <TT><SPAN  CLASS="textbf">egs/truncate.mma</SPAN></TT> shows some examples of this command.
-
-<P>
-
-<H1><A NAME="SECTION001740000000000000000">
-TimeSig</A>
-</H1>
-
-<P>
-Even though 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  doesn't really use Time Signatures, some MIDI
-programs do recognize and use them. So, here's a command which will
-let you insert a Time Signature in your MIDI output:
-
-<P>
-
-      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
-        <tr><td>
-    <B>TimeSig NN DD  </B> 
-   
-	    </td></tr>
-      </Table>
-
-<P>
-or 
-
-<P>
-
-      <Table Hspace="40%" CellSpacing=0 CellPadding=10 BGColor="OldLace" Border=3>
-        <tr><td>
-    <B>TimeSig NN/DD  </B> 
-   
-	    </td></tr>
-      </Table>
-
-<P>
-The NN parameter is the time signature numerator (the number of beats
-per bar). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to ``3''.
-
-<P>
-The DD parameter is the time signature denominator (the length of the
-note getting a single beat). In <SPAN  CLASS="textbf">3/4</SPAN> you would set this to
-``4''.
-
-<P>
-Note that the signal slash character is optional.
-
-<P>
-The NN value must be an integer in the range of 1 to 126. The DD value
-must be one of 1, 2, 4, 8, 16, 32 or 64.
-
-<P>
-
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  assumes that all songs are in <SPAN  CLASS="textbf">4/4</SPAN> and places that
-MIDI event at offset 0 in the Meta track.
-
-<P>
-The T<SMALL>IME</SMALL>S<SMALL>IG</SMALL> value is remembered by G<SMALL>ROOVE</SMALL>s and is
-properly set when grooves are switched. You should probably have a
-time signature in any groove library files you create (the supplied
-files all do).
-
-<P>
-The common time signatures ``common'' and ``cut'' are supported. They
-are translated by 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  to <SPAN  CLASS="textbf">4/4</SPAN> and <SPAN  CLASS="textbf">2/2</SPAN>.
+The example file <TT><SPAN  CLASS="textbf">egs/misc/truncate.mma</SPAN></TT> shows some examples of
+this command.
 
 <P>
 
 <H1><A NAME="SECTION001750000000000000000"></A> <A NAME="beatadjust"></A>
 <BR>
 BeatAdjust
-</H1>
+</H1> 
 
 <P>
 Internally, 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  tracks its position in a song according to beats.
 For example, in a <SPAN  CLASS="textbf">4/4</SPAN> piece the beat position is
-incremented by 4 beats after each bar is processed. For the most part, this
-works fine; however, there are some conditions when it would be nice
-to manually adjust the beat position:
+incremented by 4 beats after each bar is processed. For the most part,
+this works fine; however, there are some conditions when it would be
+nice to manually adjust the beat position:
 
 <P>
 
 <UL>
-<LI>Insert some extra (silent) beats at the end of bar to simulate a pause,
+<LI>Insert some extra (silent) beats at the end of bar to simulate a
+  pause,
 
 <P>
 </LI>
@@ -586,13 +811,13 @@ to manually adjust the beat position:
 
 <P>
 Each problem will be dealt with in turn. In <A HREF="#eg-pause">this
-  example</A>  a pause is simulated at the end of bar
-10. One problem with this logic is that the inserted beat will be
+  example</A> a pause is simulated at the end of
+bar 10. One problem with this logic is that the inserted beat will be
 silent, but certain notes (percussive things like piano) often will
 continue to sound (this is related to the decay of the note, not that
 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  has not turned off the note). Frankly, this really doesn't
-work too well ... which is why the F<SMALL>ERMATA</SMALL>
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  has not turned off the note). Frankly, this really doesn't work
+too well ... which is why the F<SMALL>ERMATA</SMALL>
 (<A HREF="#fermata">details here</A>) was added.
 
 <P>
@@ -677,12 +902,13 @@ Note that the adjustment factor can be a partial beat. For example:
 will insert half of a beat between the current bars.
 
 <P>
-Finally in <A HREF="#eg-overlap">this example</A>, the problem of
-overlapping bars is handled. We want to change the G<SMALL>ROOVE</SMALL>
-in the middle of a bar. So, we create the third bar two times. The first one
-has a ``z!'' (silence) for beats 3 and 4; the second has ``z!'' for beats 1 and 2. This
-permits the two halves to overlap without conflict. The B<SMALL>EAT</SMALL>A<SMALL>DJUST</SMALL>
-forces the two bars to overlap completely.
+Finally in <A HREF="#eg-overlap">this example</A>, the
+problem of overlapping bars is handled. We want to change the
+G<SMALL>ROOVE</SMALL> in the middle of a bar. So, we create the third bar two
+times. The first one has a ``z!'' (silence) for beats 3 and 4; the
+second has ``z!'' for beats 1 and 2. This permits the two halves to
+overlap without conflict. The B<SMALL>EAT</SMALL>A<SMALL>DJUST</SMALL> forces the two bars to
+overlap completely.
 
 <P>
 
@@ -728,10 +954,10 @@ to handle with the T<SMALL>RUNCATE</SMALL> command, <A HREF="#truncate">here</A>
 
 <P>
 
-<H1><A NAME="SECTION001760000000000000000"></A>   <A NAME="fermata"></A>
+<H1><A NAME="SECTION001760000000000000000"></A> <A NAME="fermata"></A>
 <BR>
 Fermata
-</H1>
+</H1> 
 
 <P>
 A ``fermata'' or ``pause'' in written music tells the musician to hold
@@ -747,7 +973,7 @@ In standard music notation it is represented by a
 above a note.
 
 <P>
-To indicate all this  
+To indicate all this 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  uses a command like:
 
 <P>
@@ -830,14 +1056,14 @@ Fermata 3 1 200
 C 
 <BR>
 Gm7 
-<BR>   
+<BR>     
 <BR>    // After bar, the right way! 
 <BR>
 C 
 <BR>
 Fermata -1 1 200 
 <BR>
-Gm7    </B> 
+Gm7   </B> 
    
 	    </td></tr>
       </Table>
@@ -940,10 +1166,10 @@ what you expect a held note to sound like.
 
 <P>
 
-<H1><A NAME="SECTION001770000000000000000"></A>  <A NAME="cut"></A>
+<H1><A NAME="SECTION001770000000000000000"></A> <A NAME="cut"></A>
 <BR>
 Cut
-</H1>
+</H1> 
 
 <P>
 This command was born of the need to simulate a ``cut'' or, more
@@ -954,7 +1180,7 @@ thought. The symbol is also referred to as ``railroad tracks''.
 <P>
 The idea is to stop the music on all tracks, pause briefly, and
 resume.<A NAME="tex2html72"
-  HREF="#foot8997"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+  HREF="#foot9175"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  provides the C<SMALL>UT</SMALL> command to help deal with this
@@ -963,9 +1189,9 @@ diversion: just how is a note or chord sustained in a MIDI file?
 
 <P>
 Assume that a 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  input file (and the associated library)
-files dictates that some notes are to be played from beat 2 to beat 4
-in an arbitrary bar. What 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  input file (and the associated library) files
+dictates that some notes are to be played from beat 2 to beat 4 in an
+arbitrary bar. What 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  does is:
 
 <P>
@@ -1001,8 +1227,8 @@ you use to instruct
 is ``it depends''. Again, the answers will consist of some examples.
 
 <P>
-In this first case you wish to stop the track in the middle of the last
-bar. The simplest answer is:
+In this first case you wish to stop the track in the middle of the
+last bar. The simplest answer is:
 
 <P>
 
@@ -1051,9 +1277,9 @@ achieved by placing:
 <SPAN  CLASS="textit">before</SPAN> the final bar.
 
 <P>
-In this second example  a tiny bit of silence is desired between bars 4 and
-5 (this might be the end of a musical introduction). The following bit should
-work:
+In this second example a tiny bit of silence is desired between bars 4
+and 5 (this might be the end of a musical introduction). The following
+bit should work:
 
 <P>
 
@@ -1165,46 +1391,47 @@ If the offset is omitted, the current bar position will be used. This
 the same as using an offset value of 0.
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot8785">...
-groove.</A><A
+<DT><A NAME="foot9158">... etc.</A><A
  HREF="node17.html#tex2html71"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
-<DD>The time value is saved/restored with grooves so
-  setting a time is redundant in this case.
+<DD>These are known to 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT> .
+  There are many more valid time signatures. Gardner Read lists over
+  100 of them in  <SPAN  CLASS="textit">Music Notation</SPAN>.
 
 </DD>
-<DT><A NAME="foot8997">...
+<DT><A NAME="foot9175">...
 resume.</A><A
  HREF="node17.html#tex2html72"><SUP><SPAN CLASS="arabic">17</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>The answer to the music theory question of whether
   the ``pause'' takes time <SPAN  CLASS="textit">from</SPAN> the current beat or is treated
   as a ``fermata'' is not clear--but as far as 
-<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is concerned the
-  command has no effect on timing.
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  is concerned
+  the command has no effect on timing.
 
 </DD>
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html711"
+<A NAME="tex2html712"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html709"
+<A NAME="tex2html710"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html703"
+<A NAME="tex2html704"
   HREF="node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html712"
+<B> Next:</B> <A NAME="tex2html713"
   HREF="node18.html">Swing</A>
-<B> Up:</B> <A NAME="tex2html710"
+<B> Up:</B> <A NAME="tex2html711"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html704"
+<B> Previous:</B> <A NAME="tex2html705"
   HREF="node16.html">Ornament</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2015-09-18
+2015-12-15
 </ADDRESS>
 </BODY>
 </HTML>

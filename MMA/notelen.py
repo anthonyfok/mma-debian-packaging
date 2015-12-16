@@ -52,6 +52,7 @@ def getNoteLen(n):
     Notes can be dotted or double dotted.
     Notes can be combined: 1+4 == 5 beats, 4. or 4+8 == dotted 1/4
                            1-4 == 3 beats, 1-0 == 4 beats less a midi tick
+    Tuples can be set using (count,base).
     """
 
     length = 0
@@ -82,11 +83,18 @@ def getNoteLen(n):
 
         try:
             if a.startswith('-'):
-                i = noteLenTable[a[1:]] * -1
+                mult = -1
+                a=a[1:]
+            else:
+                mult = 1
+            if ':' in a:
+                i = getTupleValue(a)
             else:
                 i = noteLenTable[a]
+            i *= mult
 
         except:
+            # This also catches things like "4..." 
             error("Unknown note duration %s" % n)
 
         if dot == 2:
@@ -96,3 +104,21 @@ def getNoteLen(n):
         length += i
 
     return int(length)
+
+def getTupleValue(a):
+    """ Grab a tuplet value from note 'xx:yy' We've already verified that
+        the string has a ':'
+    """
+
+    dd, nn = a.split(':')
+    if nn not in ('1', '2', '4', '8', '16', '32', '64'):
+        error("Illegal duration value for tuplet. Must be a note "
+              "(1,2,4...), not %s." % nn)
+    
+    nn = noteLenTable[nn]
+
+    # validate the divisor a bit
+    dd = stoi(dd)
+    if dd<1 or dd>128:
+        error("The count value for the tuplet '%s' is out of range." % a)
+    return  nn // dd

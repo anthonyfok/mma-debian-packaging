@@ -350,7 +350,7 @@ def midiinc(ln):
     disc = 0
 
     for tr, ch, riffmode, printriff in channels:
-
+        onNotes = []
         if gbl.tnames[tr].disable:   # skip if disabled track
 
             if verbose:
@@ -412,13 +412,28 @@ def midiinc(ln):
                     if x == 0x8:
                         velocity = 0
                     riff.append([offset, pitch, velocity])
+
                 else:
                     offset = gbl.tickOffset + (delta-istart)
                     # add note on/off, key pressure, etc.
                     track.addToTrack(offset, packBytes(ev[1] | channel-1, *ev[2:]))
+
+                    # Track on/off events to avoid stuck midi notes.
+                    x = ev[1] >> 4
+                    if x == 0x09 and ev[3] and ev[2] not in onNotes:
+                        onNotes.append(ev[2])  # append this pitch to onNotes
+                    if x == 0x09 and not ev[3] or x == 0x08 and ev[2] in onNotes:
+                        onNotes.remove(ev[2])  # remove this as being ON
+                        
                 inst += 1
             else:
                 disc += 1
+
+        if onNotes:
+            for x in onNotes:
+                track.addToTrack(offset, packBytes(0x90 | channel-1, [x,0]))
+            warning("MidiINC: Stuck MIDI note(s) '%s' turned off in %s." % 
+                    (', '.join([str(x) for x in onNotes]), tr))
 
         if riffmode:
             evlist = createRiff(riff, tr, riffTranspose)

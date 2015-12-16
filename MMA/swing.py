@@ -147,7 +147,7 @@ def getBeats():
     len81 = noteLenTable['81']
     len82 = noteLenTable['82']
 
-    rng = gbl.QperBar
+    rng = int(gbl.QperBar)
     cnt = gbl.BperQ
 
     if noteValue == 16:

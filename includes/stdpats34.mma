@@ -60,6 +60,11 @@ End
 
 Begin Walk Define
     W1      1 4 90            // Walk 1 per bar
+    W2      W1 Shift 1        //  1 per bar on 2
+    W3      W1 Shift 2        //  1 per bar on 3
+    W12     W1; W2            //  2 per bar on 1 and 2
+    W13     W1; W3            //  2 per bar on 1 and 3
+    W23     W1; W3            //  2 per bar on 2 and 3
 	W123	1 2. 90 * 3       // Walk quarters on 1, 2 and 3       
 End
 

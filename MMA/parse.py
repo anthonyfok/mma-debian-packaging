@@ -62,35 +62,15 @@ import MMA.tweaks
 import MMA.options
 import MMA.rpitch
 
+from MMA.timesig import timeSig
+from MMA.parseCL import parseChordLine
 from MMA.lyric import lyric
 from MMA.macro import macros
 from MMA.alloc import trackAlloc
 from MMA.keysig import keySig
 
-lastChord = None   # tracks last chord for "/ /" data lines.
-
 beginData = []      # Current data set by a BEGIN statement
 beginPoints = []    # since BEGINs can be nested, we need ptrs for backing out of BEGINs
-
-""" This table is passed to the track classes. It has
-    an instance for each chord in the current bar.
-"""
-
-
-class CTable:
-    name = None        # Chord name (used by plectrum track)
-    chord = None       # A pointer to the chordNotes structures
-    lastchord = None   # chord from previous ctable. Used by trigger()
-    chStart = None     # where in the bar the chord starts (in ticks, 0..)
-    chEnd = None       # where it ends (in ticks)
-    chordZ = None      # set if chord is tacet
-    arpeggioZ = None   # set if arpeggio is tacet
-    walkZ = None       # set if walking bass is tacet
-    drumZ = None       # set if drums are tacet
-    bassZ = None       # set if bass is tacet
-    scaleZ = None      # set if scale track is tacet
-    ariaZ = None       # set if aria track is tacet
-    plectrumZ = None   # set if plectrum is tacet
 
 
 ########################################
@@ -184,22 +164,25 @@ def parse(inpath):
             3. It's really a chord action
         """
 
-        if not action in gbl.tnames:
-            trackAlloc(action, 0)    # ensure that track is allocated
+        if not action in gbl.tnames:  # no track allocated?
+            trackAlloc(action, 0)     # Try to create. Always returns.
 
         if action in gbl.tnames:     # BASS/DRUM/APEGGIO/CHORD
-
             name = action
             if len(l) < 2:
                 error("Expecting argument after '%s'" % name)
             action = l[1].upper()
 
-            if action in trackFuncs:
+            # Got trackname and action
+            if action in trackFuncs:  # perfect, execute
                 trackFuncs[action](name, l[2:])
-            else:
-                error("Don't know '%s'" % curline)
+                continue
 
-            continue
+            elif action in simpleFuncs:  # opps, not track func
+                error("%s is not a track function. Use global form." % action)
+            else:  # opps, not any kind of func
+                error("%s is not a %s track function." % (action, name))
+
 
         ### Gotta be a chord data line!
 
@@ -345,134 +328,6 @@ def parse(inpath):
                 else:
                     ly = ''      # no lyric
                 print("%3d: %s %s" % (gbl.barNum, ' '.join(l), ly))
-
-
-def parseChordLine(l):
-    """ Parse a line of chord symbols and determine start/end points. """
-
-    global lastChord
-
-    ctable = []               # an entry for each chord in the bar
-    quarter = gbl.BperQ       # ticks in a quarter note (== 1 beat)
-    if MMA.truncate.length:
-        endTime = MMA.truncate.length
-    else:
-        endTime = (quarter * gbl.QperBar)  # number of ticks in bar
-
-    p = 0                    # our beat counter --- points to beat 1,2, etc in ticks
-
-    for x in l:
-        if "@" in x:  # we have something like "Cm@3.2"
-            ch, beat = x.split("@", 1)
-            beat = stof(beat, "Expecting an value after the @ in '%s'" % x)
-            if beat < 1:
-                error("Beat after @ must be 1 or greater, not '%s'." % beat)
-            if beat >= gbl.QperBar + 1:
-                error("Beat after @ must be less than %s, not '%s'." % (gbl.QperBar + 1, beat))
-            p = int(int(beat) * quarter)  # floor of @x, current full beat in ticks
-            beat = int((beat - 1) * quarter)  # tick offset for this chord
-        else:
-            ch = x
-            beat = p
-
-        p += quarter       # for next loop. Always a full beat.
-
-        if ch in '-/':      # handle continuation chords
-            if not ctable:
-                if lastChord:
-                    ch = lastChord
-                else:
-                    error("No previous chord for '/' or '-' at line start")
-            else:         # '/' other than at start just increment the beat counter
-                continue
-
-        if ctable:
-            if ctable[-1].name == ch:  # skip duplicate chords
-                continue
-
-            if ctable[-1].chStart >= beat:
-                error("Chord positions out of order")
-
-        else:    # first entry
-            if beat != 0:
-                error("The first chord must be at beat 1, not %s." % ((beat / quarter) + 1))
-
-        ctab = CTable()
-        ctab.name = ch
-        ctab.chStart = beat
-        if ctable:
-            ctab.lastchord = ctable[-1].name
-        else:
-            ctab.lastchord = lastChord
-
-        """ If the chord we just extracted has a 'z' in it then we do the
-            following ugly stuff to figure out which tracks to mute. 'ch'
-            will be a chord name or 'z' when this is done.
-        """
-
-        if 'z' in ch:
-            c, r = ch.split('z', 1)
-
-            if not c:   # no chord specified
-                c = 'z'        # dummy chord name to keep chordnotes() happy
-                if r == '!':    # mute all
-                    r = 'DCAWBSRP'
-                elif not r:     # mute all tracks except Drum
-                    r = 'CBAWSRP'
-                else:
-                    error("To mute individual tracks you must "
-                          "use a chord/z combination not '%s'" % ch)
-
-            else:    # illegal construct -- 'Cz!'
-                if r == '!':
-                    error("'%s' is illegal. 'z!' mutes all tracks "
-                          "so you can't include the chord." % ch)
-
-                elif not r:
-                    error("'%s' is illegal. You must specify tracks "
-                          "if you use a chord." % ch)
-
-            ch = c   # this will be 'z' or the chord part
-
-            # note this indent ... we do it always!
-            for v in r:   # 'r' must be a list of track specifiers
-                if v == 'C':
-                    ctab.chordZ = 1
-                elif v == 'B':
-                    ctab.bassZ = 1
-                elif v == 'A':
-                    ctab.arpeggioZ = 1
-                elif v == 'W':
-                    ctab.walkZ = 1
-                elif v == 'D':
-                    ctab.drumZ = 1
-                elif v == 'S':
-                    ctab.scaleZ = 1
-                elif v == 'R':
-                    ctab.ariaZ = 1
-                elif v == 'P':
-                    ctab.plectrumZ = 1
-                else:
-                    error("Unknown track '%s' for muting in '%s'" % (v, ch))
-
-        ctab.chord = MMA.chords.ChordNotes(ch)  # Derive chord notes (or mute)
-
-        ctable.append(ctab)
-
-    # Test to see that all chords are in range.
-    if ctable[-1].chStart >= endTime:
-        error("Maximum offset for chord '%s' must be less than %s, not '%s'." %
-              (ctable[-1].name, endTime / quarter + 1, ctable[-1].chStart / quarter + 1))
-
-    # Done all chords in line, fix up some pointers.
-
-    for i, v in enumerate(ctable[:-1]):  # set end range for each chord
-        ctable[i].chEnd = ctable[i + 1].chStart
-
-    ctable[-1].chEnd = endTime      # set end of range for last chord
-    lastChord = ctable[-1].name     # remember chord at end of this bar for next
-    
-    return ctable
 
 
 ##################################################################
@@ -1515,7 +1370,7 @@ simpleFuncs = {'ADJUSTVOLUME': MMA.volume.adjvolume,
                'SYNCHRONIZE': synchronize,
                'TEMPO': MMA.tempo.tempo,
                'TIME': MMA.tempo.setTime,
-               'TIMESIG': MMA.midifuncs.setTimeSig,
+               'TIMESIG': timeSig.setSig,
                'TONETR': MMA.translate.dtable.set,
                'TRUNCATE': MMA.truncate.setTruncate,
                'TWEAKS': MMA.tweaks.setTweak,

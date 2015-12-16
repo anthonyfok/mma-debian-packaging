@@ -144,17 +144,37 @@ DefGroove BasicRock4Sus   Our 4/4 version with strings.
 
 Groove BasicRock
 Seqsize 4
+AllTracks SeqRnd Off
 
 Drum-Kick    Sequence  *    *    *   D13
 Drum-Snare   Sequence  *    *    *   D123
 // Drum-OHH
 Drum-Tam     Sequence  *    *    *   {D12; D12 shift .25; D12 shift .5; D12 shift .75}
-Bass         Sequence  *    *    *   B13
+Begin Bass
+      SeqRnd Off
+      Sequence  *    *    *   B13
+End
 Chord-Clean  Sequence  *    *    *   C13
 Chord-Clean2 Sequence  *    *    *   L1
 Chord-Dist   Sequence  *    *    *   L1
 
 DefGroove    BasicRockIntro   4 bar intro.
+
+Groove BasicRock4
+Seqsize 4
+AllTracks SeqRnd Off
+
+Drum-Kick    Sequence  *    *    *   D1
+Drum-Snare   Sequence  *    *    *   D1
+// Drum-OHH
+Drum-Tam     Sequence  *    *    *   {D12; D12 shift .25; D12 shift .5; D12 shift .75}
+Bass         Sequence  *    *    *   {1 4 1 90; 2 4 2 90; 3 4 3 90; 4 4 5 90}
+Chord-Clean  Sequence  *    *    *   C1
+Chord-Clean2 Sequence  *    *    *   L1
+Chord-Dist   Sequence  *    *    *   L1
+
+DefGroove    BasicRock4Intro   4 bar intro with 4-feel.
+
 
 ////////////////////////////////
 /// Ending

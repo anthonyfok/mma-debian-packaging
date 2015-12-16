@@ -87,6 +87,21 @@ def libUpdate():
                 grooveDB = [[lib, g]]
                 gdDate = os.path.getmtime(os.path.join(lib, mmadir))
 
+        # -G
+        # If the database is really screwed up it's possible to
+        # have old links not deleted. Easy way is to completely
+        # delete each .mmaDB file as we progress. If we can't delete
+        # it,it's probably due to a permission error. So, just dump out.
+
+        elif gbl.makeGrvDefs == 2:
+            file = os.path.join(lib, mmadir)
+            if os.path.exists(file):
+                try:
+                    os.remove(file)
+                except:
+                    error("Unable to delete existing database file '%s'. Are you root?" \
+                            % file)
+
         db = grooveDB[0][1]
 
         print("     Processing library directory '%s'." % lib)
@@ -206,10 +221,15 @@ def loadDB(d):
         f.close()
     except IOError:
         g = {}
+    except ValueError:
+        error("Incompatible database found. Probably a result"
+              "  of using different versions of python to"
+              "  create and read. Please recreate database"
+              "  by using 'mma -G' as root.")
 
     # If we can't find the directory, advise user to recreate the DB
     # Note, not an error ... should it be? Note, the compile will probably
-    # end fast anyway since mma won't be able to find the requested groove.
+    # end soon anyway since mma won't be able to find the requested groove.
 
     dirs = [os.path.dirname(i) for i in g.keys()]
 

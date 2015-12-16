@@ -163,10 +163,26 @@ class Lyric:
                     error("Lyric: CHORDS expecting 'ON' or 'OFF', not %s'" % v)
 
             elif o == 'TRANSPOSE':
-                self.transpose = MMA.keysig.getTranspose([v], "Lyric Transpose")
+                addTrans = False
+                for t in v.split(','):
+                    if t.upper() == 'ADD': # keyword
+                        addTrans=True
+                    else:  # either int or up-maj-3, etc.
+                        v = MMA.keysig.getTranspose([t], "Lyric Transpose")
+
+                if addTrans:
+                    self.transpose += v
+                else:
+                    self.transpose = v
 
                 if gbl.debug:
-                        print("Lyric: Chord names transposed %s steps." % self.transpose)
+                    print("Lyric: Chord names transposed %s steps." % self.transpose)
+
+            elif o == 'ADDTRANSPOSE':
+                self.transpose += MMA.keysig.getTranspose([v], "Lyric AddTranspose")
+
+                if gbl.debug:
+                    print("Lyric: Chord names transposed %s steps." % self.transpose)
 
             elif o == 'CNAMES':
                 if v in ('#', 'SHARP'):

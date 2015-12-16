@@ -28,21 +28,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <BODY  bgcolor="#ffffff">
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html536"
+<A NAME="tex2html537"
   HREF="node7.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html534"
+<A NAME="tex2html535"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html528"
+<A NAME="tex2html529"
   HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html537"
+<B> Next:</B> <A NAME="tex2html538"
   HREF="node7.html">Riffs</A>
-<B> Up:</B> <A NAME="tex2html535"
+<B> Up:</B> <A NAME="tex2html536"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html529"
+<B> Previous:</B> <A NAME="tex2html530"
   HREF="node5.html">Sequences</A>
 <BR>
 <BR></DIV>
@@ -51,26 +51,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A NAME="tex2html538"
-  HREF="node6.html#SECTION00610000000000000000">Creating A Groove</A>
 <LI><A NAME="tex2html539"
+  HREF="node6.html#SECTION00610000000000000000">Creating A Groove</A>
+<LI><A NAME="tex2html540"
   HREF="node6.html#SECTION00620000000000000000">Using A Groove</A>
 <UL>
-<LI><A NAME="tex2html540"
-  HREF="node6.html#SECTION00621000000000000000">Extended Groove Notation</A>
 <LI><A NAME="tex2html541"
+  HREF="node6.html#SECTION00621000000000000000">Extended Groove Notation</A>
+<LI><A NAME="tex2html542"
   HREF="node6.html#SECTION00622000000000000000">Overlay Grooves</A>
 </UL>
 <BR>
-<LI><A NAME="tex2html542"
-  HREF="node6.html#SECTION00630000000000000000">Groove Aliases</A>
 <LI><A NAME="tex2html543"
-  HREF="node6.html#SECTION00640000000000000000">AllGrooves</A>
+  HREF="node6.html#SECTION00630000000000000000">Groove Aliases</A>
 <LI><A NAME="tex2html544"
-  HREF="node6.html#SECTION00650000000000000000">Deleting Grooves</A>
+  HREF="node6.html#SECTION00640000000000000000">AllGrooves</A>
 <LI><A NAME="tex2html545"
-  HREF="node6.html#SECTION00660000000000000000">Sticky</A>
+  HREF="node6.html#SECTION00650000000000000000">Deleting Grooves</A>
 <LI><A NAME="tex2html546"
+  HREF="node6.html#SECTION00660000000000000000">Sticky</A>
+<LI><A NAME="tex2html547"
   HREF="node6.html#SECTION00670000000000000000">Library Issues</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -128,7 +128,7 @@ command:
 A groove name can include any character, including digits and
 punctuation. However, it cannot include a space character (used as a
 delimiter), a colon ``:'' or a '/'<A NAME="tex2html35"
-  HREF="#foot2908"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+  HREF="#foot2918"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 In normal operation the documentation strings are ignored. However,
@@ -376,7 +376,7 @@ list which changes the G<SMALL>ROOVE</SMALL> after each bar the sequence
 number is reset after each bar ... with one exception: if the same
 G<SMALL>ROOVE</SMALL> is being used for two or more bars the sequence will not
 be reset.<A NAME="tex2html36"
-  HREF="#foot3103"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
+  HREF="#foot3120"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A>
 <P>
 Another way to select G<SMALL>ROOVE</SMALL>s is to use a list of grooves with
 a leading value. This lets you select the G<SMALL>ROOVE</SMALL> to use based
@@ -443,6 +443,16 @@ Extended groove names, in just about all cases, eliminate the need for
 the U<SMALL>SE</SMALL> command. For a complete understanding you should also
 read the PATHS section, <A HREF="node30.html#lib-files">here</A>,
 of this manual.
+
+<P>
+<SPAN  CLASS="textit">Important</SPAN>: The filename to the left of the ``:'' is a system
+pathname, not a 
+<FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  variable. As such it <SPAN  CLASS="textit">must match the case</SPAN>
+for the filename/path on your system. If, for example, you have a file
+<TT><SPAN  CLASS="textbf">casio/poprock1.mma</SPAN></TT> and attempt to access it with G<SMALL>ROOVE</SMALL>
+<TT><SPAN  CLASS="textbf">Casio/Poprock1:PopRock1End</SPAN></TT> it will not work. You must use the
+form G<SMALL>ROOVE</SMALL> <TT><SPAN  CLASS="textbf">casio/poprock1:PopRock1End</SPAN></TT>. The case of the
+data to the right of the ``:'' is not important.
 
 <P>
 When using an extended name, you (probably) only need to use the full
@@ -1106,13 +1116,13 @@ This issue in covered in more detail <A HREF="node30.html#library-maint">here in
 <P>
 <BR><HR><H4>Footnotes</H4>
 <DL>
-<DT><A NAME="foot2908">... '/'</A><A
+<DT><A NAME="foot2918">... '/'</A><A
  HREF="node6.html#tex2html35"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
 <DD>The '/' and ':' are used
   in extended names.
 
 </DD>
-<DT><A NAME="foot3103">... reset.</A><A
+<DT><A NAME="foot3120">... reset.</A><A
  HREF="node6.html#tex2html36"><SUP><SPAN CLASS="arabic">6</SPAN>.<SPAN CLASS="arabic">2</SPAN></SUP></A></DT>
 <DD>Actually, 
 <FONT Face="Serif"  Color="Navy"><I>MMA</I></FONT>  checks to see the next
@@ -1123,26 +1133,26 @@ This issue in covered in more detail <A HREF="node30.html#library-maint">here in
 </DL>
 <DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
-<A NAME="tex2html536"
+<A NAME="tex2html537"
   HREF="node7.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html534"
+<A NAME="tex2html535"
   HREF="mma.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html528"
+<A NAME="tex2html529"
   HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A>   
 <BR>
-<B> Next:</B> <A NAME="tex2html537"
+<B> Next:</B> <A NAME="tex2html538"
   HREF="node7.html">Riffs</A>
-<B> Up:</B> <A NAME="tex2html535"
+<B> Up:</B> <A NAME="tex2html536"
   HREF="mma.html">Reference Manual</A>
-<B> Previous:</B> <A NAME="tex2html529"
+<B> Previous:</B> <A NAME="tex2html530"
   HREF="node5.html">Sequences</A></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
 Bob van der Poel
-2015-09-18
+2015-12-15
 </ADDRESS>
 </BODY>
 </HTML>

@@ -493,6 +493,7 @@ aliases = (
     ('M7(add13)','13b9',     ''),
     ('7alt',     '7b5b9',    'Uses a 7th flat 5, flat 9. Probably not correct, but works (mostly).'),
     ('7sus4',    '7sus',     ''),
+    ('13sus4',   '13sus',    ''),
     ('7+',       'aug7',     ''),
     ('7#5',      'aug7',     ''),
     ('7+5',      'aug7',     ''),
