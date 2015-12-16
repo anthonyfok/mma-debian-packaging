@@ -7,7 +7,7 @@ override_dh_clean:
 	dh_clean -X#
 
 override_dh_install:
-	dh_install -X.mmaDB -X#
+	dh_install -X.mmaDB -Xlib-files.tar.gz -X#
 
 override_dh_installdocs:
 	dh_installdocs -X# -XCOPYING
