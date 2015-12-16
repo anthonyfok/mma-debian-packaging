@@ -1,3 +1,17 @@
+mma (15.12-1) unstable; urgency=medium
+
+  * New upstream release:
+     - Lots of minor bug fixes
+     - Much better keysignature handling
+     - A "whole wack" of library files which were missing are now in the distro
+     - Other minor enhancements
+  * Update PDF documentation to that from MMA 15.12
+  * Remove debian/patches because upstream has merged all our patches
+  * Prevent the new lib/lib-files.tar.gz from being installed
+  * Make changelog.gz a symlink to text/CHANGES-15.gz
+
+ -- Anthony Fok <foka@debian.org>  Tue, 15 Dec 2015 22:09:03 -0700
+
 mma (15.09-1) unstable; urgency=medium
 
   * New upstream release:
